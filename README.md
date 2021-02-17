@@ -1,16 +1,19 @@
 # ShatteredPD-DetailedDesc
+
 A private mod of ShatteredPixelDungeon (Evan) working as a dictionary and a tester.
 
 Aim to help dungeon players know the data and mechanics of game, and have a platform to test game items/mechanics/creatures.
 
-NOTE THAT:
+*****************NOTE THAT*****************
+
 All the description are only available in CHINESE. 
 
 Currently this version is ONLY distributed in Tencent PD groups in China.
 
 v091 is not where this mod started. It started from Shattered ~v072, but it was very messy and much less functional until Shattered ~v081.
 
-Main Features
+*****************Main Features*****************
+
 -Detailed descrption for most items, creatures, plants etc. and important mechanics of game.
 
 -TestMode that has convinet access to most items and can travel between floors.
@@ -19,7 +22,8 @@ Main Features
 
 -And other parts of the game is TOTALLY UNCHANGED to keep inline with the original ShatterdPD.
 
-More
+*****************More*****************
+
 -This project is built with Androud Studio. 
 
 -Update (usually) each time when ShatteredPD releases a major version.
