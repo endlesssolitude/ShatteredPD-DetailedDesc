@@ -1,10 +1,14 @@
-ShatteredPD-DetailedDesc
-A private mod of ShatteredPD working as a dictionary and a tester.
+#ShatteredPD-DetailedDesc
+A private mod of ShatteredPixelDungeon (Evan) working as a dictionary and a tester.
 
 Aim to help dungeon players know the data and mechanics of game, and have a platform to test game items/mechanics/creatures.
 
 NOTE THAT:
-all the description are only available in CHINESE. currently this version is only distributed in Tencent PD groups in China.
+All the description are only available in CHINESE. 
+
+Currently this version is ONLY distributed in Tencent PD groups in China.
+
+v091 is not where this mod started. It started from Shattered ~v072.
 
 Main Features
 -Detailed descrption for most items, creatures, plants etc. and important mechanics of game.
@@ -15,7 +19,9 @@ Main Features
 
 -And other parts of the game is TOTALLY UNCHANGED to keep inline with the original ShatterdPD.
 
--Update (usually) each time when ShatteredPD releases a major version
+More
+-This project is built with Androud Studio. 
 
-Advice
+-Update (usually) each time when ShatteredPD releases a major version.
+
 -Since the gameplay is almost the same to original ShPD, you can just regard it as a dictionary.
