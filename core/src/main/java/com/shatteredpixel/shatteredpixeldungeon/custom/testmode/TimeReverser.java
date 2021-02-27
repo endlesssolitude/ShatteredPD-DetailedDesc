@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import static com.shatteredpixel.shatteredpixeldungeon.actors.Actor.TICK;
 
-public class TimeReverser extends BossRushItem {
+public class TimeReverser extends TestItem {
     {
         image = ItemSpriteSheet.ARTIFACT_HOURGLASS;
         defaultAction = AC_REVERSE_TIME;

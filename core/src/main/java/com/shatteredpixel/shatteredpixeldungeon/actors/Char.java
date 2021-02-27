@@ -24,7 +24,6 @@ package com.shatteredpixel.shatteredpixeldungeon.actors;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Electricity;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ToxicGas;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Adrenaline;
@@ -40,7 +39,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corrosion;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Doom;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.EarthImbue;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FireImbue;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Frost;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FrostImbue;
@@ -64,12 +62,14 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vulnerable;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Weakness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Elemental;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.AntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Potential;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfElements;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRetribution;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfPsionicBlast;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAggression;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfFireblast;
@@ -157,7 +157,15 @@ public abstract class Char extends Actor {
 	}
 
 	public boolean canInteract(Char c){
-		return Dungeon.level.adjacent( pos, c.pos );
+		if (Dungeon.level.adjacent( pos, c.pos )){
+			return true;
+		} else if (c instanceof Hero
+				&& alignment == Alignment.ALLY
+				&& Dungeon.level.distance(pos, c.pos) <= 3*Dungeon.hero.pointsInTalent(Talent.ALLY_WARP)){
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	//swaps places by default
@@ -179,8 +187,16 @@ public abstract class Char extends Actor {
 			|| c.properties().contains(Property.LARGE) && !Dungeon.level.openSpace[pos]){
 			return true;
 		}
-		
+
 		int curPos = pos;
+
+		//warp instantly with allies in this case
+		if (Dungeon.hero.hasTalent(Talent.ALLY_WARP)){
+			ScrollOfTeleportation.appear(this, Dungeon.hero.pos);
+			ScrollOfTeleportation.appear(Dungeon.hero, curPos);
+			Dungeon.observe();
+			return true;
+		}
 		
 		moveSprite( pos, Dungeon.hero.pos );
 		move( Dungeon.hero.pos );
@@ -286,8 +302,8 @@ public abstract class Char extends Actor {
 			
 			int effectiveDamage = enemy.defenseProc( this, dmg );
 			if(Dungeon.isChallenged(Challenges.ELITE_BOSSES)) effectiveDamage = Math.max( effectiveDamage - dr, Math.round(effectiveDamage/8f) );
-			else{effectiveDamage = Math.max( effectiveDamage - dr, 0 );}
-
+			else effectiveDamage = Math.max( effectiveDamage - dr, 0 );
+			
 			if ( enemy.buff( Vulnerable.class ) != null){
 				effectiveDamage *= 1.33f;
 			}
@@ -308,12 +324,8 @@ public abstract class Char extends Actor {
 
 			enemy.damage( effectiveDamage, this );
 
-			if (buff(FireImbue.class) != null)
-				buff(FireImbue.class).proc(enemy);
-			if (buff(EarthImbue.class) != null)
-				buff(EarthImbue.class).proc(enemy);
-			if (buff(FrostImbue.class) != null)
-				buff(FrostImbue.class).proc(enemy);
+			if (buff(FireImbue.class) != null)  buff(FireImbue.class).proc(enemy);
+			if (buff(FrostImbue.class) != null) buff(FrostImbue.class).proc(enemy);
 
 			if (enemy.isAlive() && prep != null && prep.canKO(enemy)){
 				enemy.HP = 0;
@@ -352,7 +364,7 @@ public abstract class Char extends Actor {
 				String defense = enemy.defenseVerb();
 				enemy.sprite.showStatus( CharSprite.NEUTRAL, defense );
 
-				//TODO enemy.defenseSound? currently miss plays for monks/crab even when the parry
+				//TODO enemy.defenseSound? currently miss plays for monks/crab even when they parry
 				Sample.INSTANCE.play(Assets.Sounds.MISS);
 			}
 			
@@ -633,7 +645,9 @@ public abstract class Char extends Actor {
 	public synchronized void add( Buff buff ) {
 		
 		buffs.add( buff );
-		Actor.add( buff );
+		//EVAN IS BUGGY!!!
+		//if (Actor.chars().contains(this))
+			Actor.add( buff );
 
 		if (sprite != null && buff.announced)
 			switch(buff.type){
@@ -793,8 +807,6 @@ public abstract class Char extends Actor {
 		DEMONIC,
 		INORGANIC ( new HashSet<Class>(),
 				new HashSet<Class>( Arrays.asList(Bleeding.class, ToxicGas.class, Poison.class) )),
-		BLOB_IMMUNE ( new HashSet<Class>(),
-				new HashSet<Class>( Arrays.asList(Blob.class) )),
 		FIERY ( new HashSet<Class>( Arrays.asList(WandOfFireblast.class, Elemental.FireElemental.class)),
 				new HashSet<Class>( Arrays.asList(Burning.class, Blazing.class))),
 		ICY ( new HashSet<Class>( Arrays.asList(WandOfFrost.class, Elemental.FrostElemental.class)),

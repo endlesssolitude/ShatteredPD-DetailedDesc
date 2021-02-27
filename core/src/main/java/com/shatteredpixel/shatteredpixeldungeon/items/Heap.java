@@ -175,6 +175,12 @@ public class Heap implements Bundlable {
 		int index = items.indexOf( a );
 		if (index != -1) {
 			items.remove( index );
+			for (Item i : items) {
+				if (i.isSimilar( b )) {
+					i.merge( b );
+					return;
+				}
+			}
 			items.add( index, b );
 		}
 	}
@@ -204,8 +210,8 @@ public class Heap implements Bundlable {
 			} else if (item instanceof Dewdrop) {
 				items.remove( item );
 				evaporated = true;
-			} else if (item instanceof MysteryMeat) {
-				replace( item, ChargrilledMeat.cook( (MysteryMeat)item ) );
+			} else if (item instanceof MysteryMeat || item instanceof FrozenCarpaccio) {
+				replace( item, ChargrilledMeat.cook( item.quantity ) );
 				burnt = true;
 			} else if (item instanceof Bomb) {
 				items.remove( item );
@@ -349,7 +355,11 @@ public class Heap implements Bundlable {
 		switch(type){
 			case FOR_SALE:
 				Item i = peek();
-				return Messages.get(this, "for_sale", Shopkeeper.sellPrice(i), i.toString());
+				if (size() == 1) {
+					return Messages.get(this, "for_sale", Shopkeeper.sellPrice(i), i.toString());
+				} else {
+					return i.toString();
+				}
 			case CHEST:
 			case MIMIC:
 				return Messages.get(this, "chest");

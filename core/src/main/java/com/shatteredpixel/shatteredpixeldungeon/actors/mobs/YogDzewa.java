@@ -21,7 +21,6 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
@@ -42,6 +41,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.TargetedCell;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.PurpleParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
+import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -93,25 +93,10 @@ public class YogDzewa extends Mob {
 	private ArrayList<Class> fistSummons = new ArrayList<>();
 	{
 		Random.pushGenerator(Dungeon.seedCurDepth());
-		if(Dungeon.isChallenged(Challenges.ELITE_BOSSES)){
-			fistSummons.add(YogFist.BurningFist.class);
-			fistSummons.add(YogFist.SoiledFist.class);
-			fistSummons.add(YogFist.RottingFist.class);
-			fistSummons.add(YogFist.RustedFist.class);
-			fistSummons.add(YogFist.BrightFist.class);
-			fistSummons.add(YogFist.DarkFist.class);
-			fistSummons.add(YogFist.BurningFist.class);
-			fistSummons.add(YogFist.SoiledFist.class);
-			fistSummons.add(YogFist.RottingFist.class);
-			fistSummons.add(YogFist.RustedFist.class);
-			fistSummons.add(YogFist.BrightFist.class);
-			fistSummons.add(YogFist.DarkFist.class);
-		}else {
 			fistSummons.add(Random.Int(2) == 0 ? YogFist.BurningFist.class : YogFist.SoiledFist.class);
 			fistSummons.add(Random.Int(2) == 0 ? YogFist.RottingFist.class : YogFist.RustedFist.class);
 			fistSummons.add(Random.Int(2) == 0 ? YogFist.BrightFist.class : YogFist.DarkFist.class);
-		}
-		Random.shuffle(fistSummons);
+			Random.shuffle(fistSummons);
 		Random.popGenerator();
 	}
 
@@ -207,7 +192,6 @@ public class YogDzewa extends Mob {
 			if (abilityCooldown <= 0){
 
 				int beams = 1 + (HT - HP)/400;
-				if(Dungeon.isChallenged(Challenges.ELITE_BOSSES)) beams = 3;
 				HashSet<Integer> affectedCells = new HashSet<>();
 				for (int i = 0; i < beams; i++){
 
@@ -286,8 +270,8 @@ public class YogDzewa extends Mob {
 
 		}
 
-		if (summonCooldown > 0) summonCooldown--; if(Dungeon.isChallenged(Challenges.ELITE_BOSSES)) summonCooldown--;
-		if (abilityCooldown > 0) abilityCooldown--; if(Dungeon.isChallenged(Challenges.ELITE_BOSSES)) abilityCooldown--;
+		if (summonCooldown > 0) summonCooldown--;
+		if (abilityCooldown > 0) abilityCooldown--;
 
 		//extra fast abilities and summons at the final 100 HP
 		if (phase == 5 && abilityCooldown > 2){
@@ -312,7 +296,6 @@ public class YogDzewa extends Mob {
 
 	@Override
 	public void damage( int dmg, Object src ) {
-		if(Dungeon.isChallenged(Challenges.ELITE_BOSSES)) dmg *= 0.6f;
 
 		int preHP = HP;
 		super.damage( dmg, src );
@@ -333,11 +316,9 @@ public class YogDzewa extends Mob {
 
 		if (phase < 4 && HP <= HT - 300*phase){
 
-			Dungeon.level.viewDistance = Math.max(1, Dungeon.level.viewDistance-1);
-			if (Dungeon.hero.buff(Light.class) == null){
-				Dungeon.hero.viewDistance = Dungeon.level.viewDistance;
-			}
-			Dungeon.observe();
+			phase++;
+
+			updateVisibility(Dungeon.level);
 			GLog.n(Messages.get(this, "darkness"));
 			sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "invulnerable"));
 
@@ -362,21 +343,26 @@ public class YogDzewa extends Mob {
 
 			GameScene.add(fist, 4);
 			Actor.addDelayed( new Pushing( fist, Dungeon.level.exit, fist.pos ), -1 );
-
-			if(Dungeon.isChallenged(Challenges.ELITE_BOSSES)){
-				YogFist fist_1 = (YogFist) Reflection.newInstance(fistSummons.remove(0));
-				fist_1.pos = this.pos + 1;
-				GameScene.add(fist_1, 4);
-				YogFist fist_2 = (YogFist) Reflection.newInstance(fistSummons.remove(0));
-				fist_2.pos = this.pos - 1;
-				GameScene.add(fist_2, 4);
-			}
-			phase++;
 		}
 
 		LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
 		if (lock != null) lock.addTime(dmgTaken);
 
+	}
+
+	public void updateVisibility( Level level ){
+		if (phase > 1 && isAlive()){
+			level.viewDistance = 4 - (phase-1);
+		} else {
+			level.viewDistance = 4;
+		}
+		level.viewDistance = Math.max(1, level.viewDistance);
+		if (Dungeon.hero != null) {
+			if (Dungeon.hero.buff(Light.class) == null) {
+				Dungeon.hero.viewDistance = level.viewDistance;
+			}
+			Dungeon.observe();
+		}
 	}
 
 	private YogFist findFist(){
@@ -412,10 +398,7 @@ public class YogDzewa extends Mob {
 			}
 		}
 
-		Dungeon.level.viewDistance = 4;
-		if (Dungeon.hero.buff(Light.class) == null){
-			Dungeon.hero.viewDistance = Dungeon.level.viewDistance;
-		}
+		updateVisibility(Dungeon.level);
 
 		GameScene.bossSlain();
 		Dungeon.level.unseal();
@@ -523,7 +506,6 @@ public class YogDzewa extends Mob {
 			maxLvl = -2;
 
 			properties.add(Property.DEMONIC);
-
 		}
 
 		@Override
@@ -533,7 +515,7 @@ public class YogDzewa extends Mob {
 
 		@Override
 		public int damageRoll() {
-			return Math.round(Random.NormalIntRange( 15, 25 )*(1f+0.1f*Dungeon.level.mobs.size()));
+			return Random.NormalIntRange( 15, 25 );
 		}
 
 		@Override
@@ -545,9 +527,5 @@ public class YogDzewa extends Mob {
 
 	//used so death to yog's ripper demons have their own rankings description and are more aggro
 	public static class YogRipper extends RipperDemon {
-		@Override
-		public int damageRoll() {
-			return Math.round(super.damageRoll()*(1f+0.1f*Dungeon.level.mobs.size()));
-		}
 	}
 }

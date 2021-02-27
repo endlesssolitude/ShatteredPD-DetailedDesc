@@ -26,6 +26,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.custom.challenges.mimic.MimicScroll;
+import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.AlchemizeSimulator;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.BackpackCleaner;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.CustomWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.ImmortalShieldAffecter;
@@ -34,6 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.TestBag;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.TimeReverser;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.TrapPlacer;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.WandOfReflectDisintegration;
+import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.generator.LazyTest;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.generator.TestArmor;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.generator.TestArtifact;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.generator.TestMelee;
@@ -45,7 +47,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.DewVial;
 import com.shatteredpixel.shatteredpixeldungeon.items.Dewdrop;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClothArmor;
-import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.AlchemistsToolkit;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.PotionBandolier;
@@ -151,10 +152,8 @@ public enum HeroClass {
 			hero.belongings.armor.affixSeal(new BrokenSeal());
 		}
 
-		if(!Dungeon.isChallenged(Challenges.TEST_MODE)) {
-			new PotionBandolier().collect();
-			Dungeon.LimitedDrops.POTION_BANDOLIER.drop();
-		}
+		new PotionBandolier().collect();
+		Dungeon.LimitedDrops.POTION_BANDOLIER.drop();
 
 		new PotionOfHealing().identify();
 		new ScrollOfRage().identify();
@@ -170,10 +169,8 @@ public enum HeroClass {
 
 		Dungeon.quickslot.setSlot(0, staff);
 
-		if (!Dungeon.isChallenged(Challenges.TEST_MODE)){
-			new ScrollHolder().collect();
-			Dungeon.LimitedDrops.SCROLL_HOLDER.drop();
-		}
+		new ScrollHolder().collect();
+		Dungeon.LimitedDrops.SCROLL_HOLDER.drop();
 
 		new ScrollOfUpgrade().identify();
 		new PotionOfLiquidFlame().identify();
@@ -192,10 +189,8 @@ public enum HeroClass {
 		Dungeon.quickslot.setSlot(0, cloak);
 		Dungeon.quickslot.setSlot(1, knives);
 
-		if(!Dungeon.isChallenged(Challenges.TEST_MODE)) {
-			new VelvetPouch().collect();
-			Dungeon.LimitedDrops.VELVET_POUCH.drop();
-		}
+		new VelvetPouch().collect();
+		Dungeon.LimitedDrops.VELVET_POUCH.drop();
 
 		new ScrollOfMagicMapping().identify();
 		new PotionOfInvisibility().identify();
@@ -209,10 +204,8 @@ public enum HeroClass {
 
 		Dungeon.quickslot.setSlot(0, bow);
 
-		if(!Dungeon.isChallenged(Challenges.TEST_MODE)) {
-			new VelvetPouch().collect();
-			Dungeon.LimitedDrops.VELVET_POUCH.drop();
-		}
+		new VelvetPouch().collect();
+		Dungeon.LimitedDrops.VELVET_POUCH.drop();
 
 		new PotionOfMindVision().identify();
 		new ScrollOfLullaby().identify();
@@ -339,7 +332,9 @@ public enum HeroClass {
 
 			new LevelTeleporter().collect();
 
-			new ScrollOfIdentify().identify();
+			new AlchemizeSimulator().collect();
+
+			new LazyTest().collect();
 
 			new TestArmor().collect();
 			new TestArtifact().collect();
@@ -362,11 +357,6 @@ public enum HeroClass {
 			new MagicalHolster().collect();
 			Dungeon.LimitedDrops.MAGICAL_HOLSTER.drop();
 
-			AlchemistsToolkit toolkit = new AlchemistsToolkit();
-			toolkit.identify().collect();
-			toolkit.cursed = false;
-			toolkit.absorbEnergy(65535);
-
 			DewVial dewVial = new DewVial();
 			dewVial.collect();
 			for(int p=0;p<20;p++){
@@ -375,6 +365,8 @@ public enum HeroClass {
 			}
 
 			new WandOfReflectDisintegration().identify().collect();
+
+
 		}
 
 		if(Dungeon.isChallenged(Challenges.MIMIC_DUNGEON)){

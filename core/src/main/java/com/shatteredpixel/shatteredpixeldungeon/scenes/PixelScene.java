@@ -121,8 +121,7 @@ public class PixelScene extends Scene {
 		}
 		//asian languages have many more unique characters, so increase texture size to anticipate that
 		if (
-				Messages.lang() == Languages.CHINESE
-			){
+				Messages.lang() == Languages.CHINESE ){
 			renderedTextPageSize *= 2;
 		}
 		Game.platform.setupFontGenerators(renderedTextPageSize, SPDSettings.systemFont());
@@ -214,7 +213,8 @@ public class PixelScene extends Scene {
 		banner.camera = uiCamera;
 		banner.x = align( banner.camera, (banner.camera.width - banner.width) / 2 );
 		banner.y = align( banner.camera, (banner.camera.height - banner.height) / 3 );
-		Game.scene().add( banner );
+		Scene s = Game.scene();
+		if (s != null) s.add( banner );
 	}
 	
 	protected static class Fader extends ColorBlock {

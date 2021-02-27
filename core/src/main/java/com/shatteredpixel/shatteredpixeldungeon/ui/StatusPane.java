@@ -151,7 +151,6 @@ public class StatusPane extends Component {
 
 		add( pickedUp = new Toolbar.PickedUpItem());
 
-
 		if(!Dungeon.isChallenged(Challenges.TEST_MODE)){version = new BitmapText( "v" + Game.version , PixelScene.pixelFont);version.alpha( 0.5f );}
 		else{
 			version = new BitmapText("v" + Game.version + "-TEST", PixelScene.pixelFont){

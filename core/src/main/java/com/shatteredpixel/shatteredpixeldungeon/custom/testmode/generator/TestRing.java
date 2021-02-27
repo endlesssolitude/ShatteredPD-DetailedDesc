@@ -253,7 +253,7 @@ public class TestRing extends TestGenerator {
             t_selected.text();
             add(t_selected);
 
-            o_level = new OptionSlider(Messages.get(this, "level"), "0", "10", 0, 12) {
+            o_level = new OptionSlider(Messages.get(this, "level"), "0", "12", 0, 12) {
                 @Override
                 protected void onChange() {
                     levelToGen = getSelectedValue();

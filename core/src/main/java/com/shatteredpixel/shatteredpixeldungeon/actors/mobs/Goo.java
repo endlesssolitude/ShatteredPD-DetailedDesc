@@ -21,21 +21,17 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Ooze;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vulnerable;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.SkeletonKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.GooBlob;
-import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
@@ -43,7 +39,6 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.GooSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BossHealthBar;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Camera;
-import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
@@ -59,15 +54,6 @@ public class Goo extends Mob {
 		properties.add(Property.BOSS);
 		properties.add(Property.DEMONIC);
 		properties.add(Property.ACIDIC);
-
-		adjustStatus();
-	}
-
-	protected void adjustStatus(){
-		if(Dungeon.isChallenged(Challenges.ELITE_BOSSES)){
-			HT *= 1.2;
-			HP = HT;
-		}
 	}
 
 	private int pumpedUp = 0;
@@ -78,7 +64,6 @@ public class Goo extends Mob {
 		int max = (HP*2 <= HT) ? 12 : 8;
 		if (pumpedUp > 0) {
 			pumpedUp = 0;
-			Sample.INSTANCE.play( Assets.Sounds.BURNING );
 			return Random.NormalIntRange( min*3, max*3 );
 		} else {
 			return Random.NormalIntRange( min, max );
@@ -107,27 +92,18 @@ public class Goo extends Mob {
 	public boolean act() {
 
 		if (Dungeon.level.water[pos] && HP < HT) {
-			sprite.emitter().burst( Speck.factory( Speck.HEALING ), 1 );
+			if (Dungeon.level.heroFOV[pos] ){
+				sprite.emitter().burst( Speck.factory( Speck.HEALING ), 1 );
+			}
 			if (HP*2 == HT) {
 				BossHealthBar.bleed(false);
 				((GooSprite)sprite).spray(false);
 			}
 			HP++;
-
-			if(Dungeon.isChallenged(Challenges.ELITE_BOSSES)){
-				if(HP*2<HT){
-					HP++;
-				}
-			}
 		}
 		
 		if (state != SLEEPING){
 			Dungeon.level.seal();
-		}
-
-
-		if(Dungeon.isChallenged(Challenges.ELITE_BOSSES)){
-			Dungeon.level.setCellToWater(true, pos);
 		}
 
 		return super.act();
@@ -146,10 +122,6 @@ public class Goo extends Mob {
 			enemy.sprite.burst( 0x000000, 5 );
 		}
 
-		if(Dungeon.isChallenged(Challenges.ELITE_BOSSES)){
-			Buff.prolong(enemy, Vulnerable.class, 6f);
-		}
-
 		if (pumpedUp > 0) {
 			Camera.main.shake( 3, 0.2f );
 		}
@@ -165,23 +137,12 @@ public class Goo extends Mob {
 			((GooSprite)sprite).pumpUp( pumpedUp );
 		}
 	}
-	@Override
-	public float speed(){
-		if(Dungeon.isChallenged(Challenges.ELITE_BOSSES)){
-			if(Dungeon.level.map[pos] == Terrain.WATER){
-				return super.speed() * 1.33f;
-			}
-		}
-		return super.speed();
-	}
-
 
 	@Override
 	protected boolean doAttack( Char enemy ) {
 		if (pumpedUp == 1) {
 			((GooSprite)sprite).pumpUp( 2 );
 			pumpedUp++;
-			Sample.INSTANCE.play( Assets.Sounds.CHARGEUP );
 
 			spend( attackDelay() );
 
@@ -198,6 +159,7 @@ public class Goo extends Mob {
 				}
 			} else {
 				attack( enemy );
+				((GooSprite)sprite).triggerEmitters();
 			}
 
 			spend( attackDelay() );
@@ -213,7 +175,6 @@ public class Goo extends Mob {
 			if (Dungeon.level.heroFOV[pos]) {
 				sprite.showStatus( CharSprite.NEGATIVE, Messages.get(this, "!!!") );
 				GLog.n( Messages.get(this, "pumpup") );
-				Sample.INSTANCE.play( Assets.Sounds.CHARGEUP, 1f, 0.8f );
 			}
 
 			spend( attackDelay() );

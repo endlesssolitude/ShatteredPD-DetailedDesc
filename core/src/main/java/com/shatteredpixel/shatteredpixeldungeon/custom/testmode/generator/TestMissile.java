@@ -161,7 +161,7 @@ public class TestMissile extends TestGenerator {
             t_select.setPos(0, buttonList.get(buttonList.size() - 1).bottom() + GAP);
             add(t_select);
 
-            o_level = new OptionSlider(Messages.get(this, "level"), "0", "8", 0, 12) {
+            o_level = new OptionSlider(Messages.get(this, "level"), "0", "12", 0, 12) {
                 @Override
                 protected void onChange() {
                     levelToGen = getSelectedValue();

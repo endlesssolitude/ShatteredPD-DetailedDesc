@@ -48,7 +48,7 @@ import com.watabou.utils.Bundle;
 
 import java.util.ArrayList;
 
-public class TrapPlacer extends BossRushItem {
+public class TrapPlacer extends TestItem {
     {
         image = ItemSpriteSheet.RECLAIM_TRAP;
         defaultAction = AC_PLACE;

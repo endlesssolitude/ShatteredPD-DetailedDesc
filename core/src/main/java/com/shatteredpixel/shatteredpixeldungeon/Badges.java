@@ -142,12 +142,12 @@ public class Badges {
 		VICTORY_HUNTRESS,
 		VICTORY_ALL_CLASSES         ( 98, true ),
 		GAMES_PLAYED_3              ( 99, true ),
-		CHAMPION_1                  ( 100, true ),
+		CHAMPION_1                  ( 100 ),
 
 		//diamond
 		GAMES_PLAYED_4              ( 112, true ),
-		CHAMPION_2                  ( 113, true ),
-		CHAMPION_3                  ( 114, true );
+		CHAMPION_2                  ( 113 ),
+		CHAMPION_3                  ( 114 );
 
 		public boolean meta;
 
@@ -262,6 +262,11 @@ public class Badges {
 				ShatteredPixelDungeon.reportException(e);
 			}
 		}
+	}
+
+	public static int unlocked(boolean global){
+		if (global) return Badges.global.size();
+		else        return Badges.local.size();
 	}
 
 	public static void validateMonstersSlain() {
@@ -821,6 +826,7 @@ public class Badges {
 			}
 			badge = Badge.CHAMPION_3;
 		}
+		local.add(badge);
 		displayBadge( badge );
 	}
 	

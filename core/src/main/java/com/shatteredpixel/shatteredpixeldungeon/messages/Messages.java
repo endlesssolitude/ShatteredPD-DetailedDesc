@@ -65,6 +65,7 @@ public class Messages {
 			Assets.Messages.SCENES,
 			Assets.Messages.UI,
 			Assets.Messages.WINDOWS,
+
 			Assets.Messages.CUSTOM
 	};
 

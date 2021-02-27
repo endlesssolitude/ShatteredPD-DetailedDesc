@@ -56,9 +56,9 @@ public class MimicForChallenge extends Mimic {
     {
         immunities.add(Grim.class);
         immunities.add(Corruption.class);
-        immunities.add(ScrollOfRetribution.class);
-        immunities.add(Paralysis.class);
-        immunities.add(Terror.class);
+        resistances.add(ScrollOfRetribution.class);
+        resistances.add(Paralysis.class);
+        resistances.add(Terror.class);
         resistances.add(Amok.class);
         resistances.add(ScrollOfPsionicBlast.class);
         flying=true;
@@ -756,8 +756,8 @@ public class MimicForChallenge extends Mimic {
         switch (level){
             case 0: default: return 1f;
             case 1: return 1.25f;
-            case 2: return 1.6f;
-            case 3: return 2f;
+            case 2: return 1.55f;
+            case 3: return 1.9f;
         }
     }
 
@@ -786,7 +786,9 @@ public class MimicForChallenge extends Mimic {
            lvl = (trickMod>>(2*i))&0x3;
            power*=specialModPower(lvl);
        }
+
        return power;
+
    }
 
     @Override
@@ -814,9 +816,10 @@ public class MimicForChallenge extends Mimic {
 
     @Override
     protected void generatePrize(){
+
         Item reward = null;
         float power = showPower();
-        //power = Math.min(9 + level/2, power);
+        power = Math.min(7f + level/2f, power);
         if(power<2.3f){
             if(Random.Int(4)<3){
                 do {

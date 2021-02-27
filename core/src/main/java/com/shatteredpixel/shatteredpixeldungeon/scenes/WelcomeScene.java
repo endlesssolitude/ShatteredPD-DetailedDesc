@@ -39,11 +39,9 @@ import com.watabou.noosa.Game;
 import com.watabou.noosa.Image;
 import com.watabou.utils.FileUtils;
 
-import java.util.ArrayList;
-
 public class WelcomeScene extends PixelScene {
 
-	private static final int LATEST_UPDATE = ShatteredPixelDungeon.v0_9_1;
+	private static final int LATEST_UPDATE = ShatteredPixelDungeon.v0_9_2;
 
 	@Override
 	public void create() {
@@ -161,7 +159,6 @@ public class WelcomeScene extends PixelScene {
 	private void updateVersion(int previousVersion){
 
 		//update rankings, to update any data which may be outdated
-		//FIXME this is set to true temporarily as we want to run this no matter what, to ensure the v0.9.0a- badges bug is fixed
 		if (previousVersion < LATEST_UPDATE){
 			int highestChalInRankings = 0;
 			try {
@@ -193,6 +190,18 @@ public class WelcomeScene extends PixelScene {
 				Badges.saveGlobal();
 			}
 		}
+
+		//resetting language preference back to native for finnish speakers if they were on english
+		//This is because Finnish was unmaintained for quite a while
+		/*
+		if ( previousVersion <= 500
+				&& Languages.matchLocale(Locale.getDefault()) == Languages.FINNISH
+				&& Messages.lang() == Languages.ENGLISH) {
+			SPDSettings.language(Languages.FINNISH);
+			Messages.setup(Languages.FINNISH);
+		}
+
+		 */
 		
 		SPDSettings.version(ShatteredPixelDungeon.versionCode);
 	}

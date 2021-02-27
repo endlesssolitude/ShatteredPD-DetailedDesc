@@ -9,7 +9,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 import java.util.ArrayList;
 
-public class PVCTester extends BossRushItem {
+public class PVCTester extends TestItem {
     {
         image = ItemSpriteSheet.WAND_DISINTEGRATION;
         defaultAction = AC_SHOOT;

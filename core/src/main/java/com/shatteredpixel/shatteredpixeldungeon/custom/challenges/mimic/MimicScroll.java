@@ -57,7 +57,6 @@ public class MimicScroll extends Item {
                         TargetHealthIndicator.instance.target(null);
 
                         GameScene.add(mimic);
-                        Dungeon.level.mobs.add(mimic);
                     }
                 }
             }

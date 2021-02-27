@@ -11,8 +11,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vulnerable;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
-import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.LloydsBeacon;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.SkeletonKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.GooBlob;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
@@ -263,10 +263,10 @@ public class GooHard extends Boss{
             do {
                 ofs = PathFinder.NEIGHBOURS8[Random.Int(8)];
             } while (!Dungeon.level.passable[pos + ofs]);
-            Dungeon.level.drop( new GooBlob(), pos + ofs ).sprite.drop( pos );
+            Dungeon.level.drop( new GooBlob(), pos + ofs ).sprite.drop();
         }
 
-        Dungeon.level.drop( new Gold().quantity(Random.Int(800, 1200)), pos ).sprite.drop( pos );
+        Dungeon.level.drop(new LloydsBeacon(), pos).sprite.drop();
 
         Badges.validateBossSlain();
 

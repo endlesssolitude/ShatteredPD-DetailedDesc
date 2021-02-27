@@ -4,6 +4,8 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.watabou.utils.Point;
 import com.watabou.utils.PointF;
 
+import java.util.ArrayList;
+
 public class GameMathExtension {
     public static int gate(int min, int value, int max){
         if (value < min) {
@@ -15,12 +17,17 @@ public class GameMathExtension {
         }
     }
 
+    public static int[] NEIGHBOURS5(){
+        int w = Dungeon.level.width();
+        return new int[]{0, -1, 1, w, -w};
+    }
+
     public static int[] NEIGHBOURS12(){
         int w = Dungeon.level.width();
         return new int[]{-1, -2, 1, 2, w, -w, -2*w, 2*w, w+1, w-1, -w+1, -w-1};
     }
 
-    public static int [] NEIGHBOURS20(){
+    public static int[] NEIGHBOURS20(){
         int w = Dungeon.level.width();
         return new int[]{
                 1, -1, w, -w, 1+w, 1-w, -1+w, -1-w, 2, -2, -2*w, 2*w,
@@ -36,5 +43,31 @@ public class GameMathExtension {
     }
     protected static PointF pointToF(Point p){
         return new PointF(p.x, p.y);
+    }
+
+    //WARNING: return TRUE coords, NO need to +pos.
+    public static int[] rectBuilder(int pos, int w, int h){
+        if(w<0 || h<0) return null;
+        int width = Dungeon.level.width();
+        int height = Dungeon.level.height();
+        ArrayList<Integer> cell = new ArrayList<>();
+
+        int posX = pos%width;
+        int posY = pos/width;
+        for(int i=-w;i<w+1;++i){
+            //if one tile is outside, then the column is outside
+            if(posX + i <= 0 || posX + i >= width - 1) continue;
+            for(int j=-h;j<h+1;++j){
+                //exclude tile outside of map
+                if(posY + j <= 0 || posY + j >= height - 1) continue;
+                cell.add(pos + i * width + j);
+            }
+        }
+
+        int le = cell.size();
+        int[] result=new int[le];
+        for(int i=0;i<le;++i) result[i]=cell.get(i);
+
+        return result;
     }
 }

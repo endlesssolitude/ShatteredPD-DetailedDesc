@@ -35,10 +35,11 @@ public class Challenges {
 	public static final int DARKNESS			= 32;
 	public static final int NO_SCROLLS		    = 64;
 	public static final int CHAMPION_ENEMIES	= 128;
+	//Dungeon.newLevel, Char.attack (for min damage), Hero.speed(for speed limit), Goo and Yog spawning
 	public static final int ELITE_BOSSES		= 256;
 	public static final int TEST_MODE			= 512;
+	//hero.live for buff, mimic spawning
 	public static final int MIMIC_DUNGEON 		= 1024;
-
 
 	public static final int MAX_VALUE           = 2047;
 

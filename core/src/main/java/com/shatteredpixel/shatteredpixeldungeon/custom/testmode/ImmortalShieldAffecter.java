@@ -8,7 +8,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 import java.util.ArrayList;
 
-public class ImmortalShieldAffecter extends BossRushItem{
+public class ImmortalShieldAffecter extends TestItem {
     {
         image = ItemSpriteSheet.ROUND_SHIELD;
         defaultAction = AC_SWITCH;

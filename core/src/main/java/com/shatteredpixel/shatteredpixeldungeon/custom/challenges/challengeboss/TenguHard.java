@@ -36,6 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.TomeOfMastery;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.LloydsBeacon;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfBlink;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
@@ -65,7 +66,7 @@ public class TenguHard extends Boss{
     {
         spriteClass = TenguSprite.class;
 
-        initBaseStatus(6, 14, 20, 14, 220, 2, 3);
+        initBaseStatus(6, 13, 20, 14, 200, 2, 3);
         initStatus(44);
 
         HUNTING = new Hunting();
@@ -80,9 +81,9 @@ public class TenguHard extends Boss{
     @Override
     public boolean act(){
         if(((HardTenguLevel)(Dungeon.level)).state() == HardTenguLevel.State.FIGHT_ARENA) {
-            if(HP <= HT * 5 / 11) {
+            if(HP <= 80) {
                 if (buff(BackgroundBeamCounter.class) == null) {
-                    Buff.affect(this, BackgroundBeamCounter.class);
+                    Buff.affect(this, BackgroundBeamCounter.class).setDensity(7, 7, 2, 3);
                     yell(Messages.get(this, "more_interesting"));
                 }
             }
@@ -136,7 +137,7 @@ public class TenguHard extends Boss{
         }
 
         if(src instanceof Buff || src instanceof Blob || src instanceof Wand || src instanceof MissileWeapon){
-            dmg = Math.round(dmg*0.6f);
+            dmg = Math.round(dmg*0.75f);
         }
 
         HardTenguLevel.State state = ((HardTenguLevel)Dungeon.level).state();
@@ -178,8 +179,8 @@ public class TenguHard extends Boss{
         }
 
         //phase 1 of the fight is over
-        if (state ==HardTenguLevel.State.FIGHT_START && HP <= HT * 8 / 11){
-            HP = HT * 8 / 11;
+        if (state ==HardTenguLevel.State.FIGHT_START && HP <= 140){
+            HP = 140;
             yell(Messages.get(this, "interesting"));
             ((HardTenguLevel)Dungeon.level).progress();
             BossHealthBar.bleed(true);
@@ -202,8 +203,9 @@ public class TenguHard extends Boss{
             Dungeon.level.drop( new TomeOfMastery(), pos ).sprite.drop();
         }
 
-        Dungeon.level.drop(new Gold().quantity(Random.Int(1400,2000)), pos).sprite.drop();
-        Dungeon.level.drop( new Bomb().quantity(Random.Int(5, 9)), pos ).sprite.drop();
+        Dungeon.level.drop(new Gold().quantity(Random.Int(1000,1400)), pos).sprite.drop();
+        Dungeon.level.drop(new Bomb().quantity(Random.Int(5, 9)), pos ).sprite.drop();
+        Dungeon.level.drop(new StoneOfBlink().quantity(3), pos).sprite.drop();
 
         GameScene.bossSlain();
         super.die( cause );
@@ -349,7 +351,7 @@ public class TenguHard extends Boss{
         super.notice();
         if (!BossHealthBar.isAssigned()) {
             BossHealthBar.assignBoss(this);
-            if (HP <= HT * 5 / 11) BossHealthBar.bleed(true);
+            if (HP <= 80) BossHealthBar.bleed(true);
             if (HP == HT) {
                 yell(Messages.get(this, "notice_gotcha", Dungeon.hero.name()));
                 for (Char ch : Actor.chars()){
@@ -396,7 +398,7 @@ public class TenguHard extends Boss{
         comboSinceJump = bundle.getInt( COMBO );
 
         BossHealthBar.assignBoss(this);
-        if (HP <= HT/2) BossHealthBar.bleed(true);
+        if (HP <= 80) BossHealthBar.bleed(true);
     }
 
     //don't bother bundling this, as its purely cosmetic
@@ -524,10 +526,12 @@ public class TenguHard extends Boss{
 
     private float towerWeight(){
         if(towerThrown >= 6) return 0f;
-        if(abilitiesUsed > towerThrown* towerThrown){
-            return 10f;
+        if(abilitiesUsed > towerThrown * towerThrown){
+            return 15f;
+        }else if(HP <= HT * 3 / 10 && towerThrown < 5){
+            return 15f;
         }else{
-            return 2f;
+            return 0f;
         }
     }
 
@@ -932,10 +936,11 @@ public class TenguHard extends Boss{
 
         private void beamProc(Ballistica b){
             for(int j: b.path){
+                if(j==b.sourcePos) continue;
                 Char ch = findChar(j);
                 if(ch != null){
                     if(ch.alignment != Alignment.ENEMY){
-                        ch.damage(Random.IntRange(8, 13), TenguHard.class);
+                        ch.damage(Random.IntRange(6, 10), TenguHard.class);
                         Buff.affect(ch, Cripple.class, 3f);
                         if (ch == Dungeon.hero && !ch.isAlive()) {
                             Dungeon.fail(getClass());
@@ -948,36 +953,55 @@ public class TenguHard extends Boss{
         @Override
         public boolean act() {
             PointF p = DungeonTilemap.raisedTileCenterToWorld(towerPos);
-
-            if(stateLoop == 1){
-                stateLoop ++;
-                FloatingText.show(p.x, p.y, "+", 0x5580FF);
-            } else if (stateLoop == 2){
-                int w = Dungeon.level.width();
-                int[] tile = {w, -w, 1, -1};
-                for(int i = 0; i< 4; ++i){
-                    Ballistica b = new Ballistica(towerPos, towerPos + tile[i], Ballistica.STOP_SOLID);
-                    target.sprite.parent.add(new Beam.DeathRay(DungeonTilemap.raisedTileCenterToWorld(b.sourcePos), DungeonTilemap.raisedTileCenterToWorld(b.collisionPos)));
-                    beamProc(b);
+/*
+            if(target instanceof Boss && target.HP <= target.HT * 2 /10) {
+                if(stateLoop%3==0){
+                    stateLoop++;
+                }else if(stateLoop%3 == 1){
+                    FloatingText.show(p.x, p.y, "*", 0xFF77FF);
+                    stateLoop++;
+                }else{
+                    int[] tile = PathFinder.NEIGHBOURS8;
+                    for(int i=0;i<8;++i){
+                        Ballistica b = new Ballistica(towerPos, towerPos + tile[i], Ballistica.STOP_SOLID);
+                        target.sprite.parent.add(new Beam.DeathRay(DungeonTilemap.raisedTileCenterToWorld(b.sourcePos), DungeonTilemap.raisedTileCenterToWorld(b.collisionPos)));
+                        beamProc(b);
+                    }
                 }
-                stateLoop++;
-            } else if(stateLoop == 4){
-                stateLoop ++;
-                FloatingText.show(p.x, p.y, "x", 0xFF8055);
-            }else if(stateLoop == 5){
-                int w = Dungeon.level.width();
-                int[] tile = {w + 1, w - 1, - w + 1, - w - 1};
-                for(int i = 0; i< 4; ++i){
-                    Ballistica b = new Ballistica(towerPos, towerPos + tile[i], Ballistica.STOP_SOLID);
-                    target.sprite.parent.add(new Beam.DeathRay(DungeonTilemap.raisedTileCenterToWorld(b.sourcePos), DungeonTilemap.raisedTileCenterToWorld(b.collisionPos)));
-                    beamProc(b);
-                }
-                stateLoop = 0;
-            }else if(stateLoop == 0 || stateLoop == 3){
-                stateLoop ++;
-            }else{
-                stateLoop = 0;
             }
+            else{
+
+ */
+                if (stateLoop == 1) {
+                    stateLoop++;
+                    FloatingText.show(p.x, p.y, "+", 0x5580FF);
+                } else if (stateLoop == 2) {
+                    int w = Dungeon.level.width();
+                    int[] tile = {w, -w, 1, -1};
+                    for (int i = 0; i < 4; ++i) {
+                        Ballistica b = new Ballistica(towerPos, towerPos + tile[i], Ballistica.STOP_SOLID);
+                        target.sprite.parent.add(new Beam.DeathRay(DungeonTilemap.raisedTileCenterToWorld(b.sourcePos), DungeonTilemap.raisedTileCenterToWorld(b.collisionPos)));
+                        beamProc(b);
+                    }
+                    stateLoop++;
+                } else if (stateLoop == 4) {
+                    stateLoop++;
+                    FloatingText.show(p.x, p.y, "x", 0xFF8055);
+                } else if (stateLoop == 5) {
+                    int w = Dungeon.level.width();
+                    int[] tile = {w + 1, w - 1, -w + 1, -w - 1};
+                    for (int i = 0; i < 4; ++i) {
+                        Ballistica b = new Ballistica(towerPos, towerPos + tile[i], Ballistica.STOP_SOLID);
+                        target.sprite.parent.add(new Beam.DeathRay(DungeonTilemap.raisedTileCenterToWorld(b.sourcePos), DungeonTilemap.raisedTileCenterToWorld(b.collisionPos)));
+                        beamProc(b);
+                    }
+                    stateLoop = 0;
+                } else if (stateLoop == 0 || stateLoop == 3) {
+                    stateLoop++;
+                } else {
+                    stateLoop = 0;
+                }
+           // }
 
             spend(TICK);
             return true;

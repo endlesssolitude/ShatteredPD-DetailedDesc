@@ -11,7 +11,7 @@ public class TestBag extends Bag {
 
     @Override
     public boolean canHold( Item item ) {
-        if (item instanceof BossRushItem){
+        if (item instanceof TestItem){
             return super.canHold(item);
         } else {
             return false;

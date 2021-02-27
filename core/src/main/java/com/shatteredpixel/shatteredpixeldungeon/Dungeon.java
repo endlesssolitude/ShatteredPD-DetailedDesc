@@ -27,12 +27,16 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Amok;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Awareness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Light;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MindVision;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.RevealedArea;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Blacksmith;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Ghost;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Imp;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Wandmaker;
+import com.shatteredpixel.shatteredpixeldungeon.custom.challenges.challengeboss.HardDKLevel;
+import com.shatteredpixel.shatteredpixeldungeon.custom.challenges.challengeboss.HardDM300Level;
 import com.shatteredpixel.shatteredpixeldungeon.custom.challenges.challengeboss.HardTenguLevel;
 import com.shatteredpixel.shatteredpixeldungeon.items.Ankh;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
@@ -59,7 +63,6 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.SewerBossLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.SewerLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.secret.SecretRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.SpecialRoom;
-import com.shatteredpixel.shatteredpixeldungeon.mechanics.ShadowCaster;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
@@ -150,6 +153,7 @@ public class Dungeon {
 	}
 
 	public static int challenges;
+	public static int mobsToChampion;
 
 	public static Hero hero;
 	public static Level level;
@@ -172,6 +176,7 @@ public class Dungeon {
 
 		version = Game.versionCode;
 		challenges = SPDSettings.challenges();
+		mobsToChampion = -1;
 
 		seed = DungeonSeed.randomSeed();
 
@@ -201,8 +206,7 @@ public class Dungeon {
 		droppedItems = new SparseArray<>();
 		portedItems = new SparseArray<>();
 
-		for (LimitedDrops a : LimitedDrops.values())
-			a.count = 0;
+		LimitedDrops.reset();
 		
 		chapters = new HashSet<>();
 		
@@ -242,72 +246,74 @@ public class Dungeon {
 		
 		Level level;
 		switch (depth) {
-		case 1:
-		case 2:
-		case 3:
-		case 4:
-			level = new SewerLevel();
-			break;
-		case 5:
-			level = new SewerBossLevel();
-			break;
-		case 6:
-		case 7:
-		case 8:
-		case 9:
-			level = new PrisonLevel();
-			break;
-		case 10:
-			if(Dungeon.isChallenged(Challenges.ELITE_BOSSES)) level = new HardTenguLevel();
-			else level = new NewPrisonBossLevel();
-			break;
-		case 11:
-		case 12:
-		case 13:
-		case 14:
-			level = new CavesLevel();
-			break;
-		case 15:
-			level = new NewCavesBossLevel();
-			break;
-		case 16:
-		case 17:
-		case 18:
-		case 19:
-			level = new CityLevel();
-			break;
-		case 20:
-			level = new NewCityBossLevel();
-			break;
-		case 21:
-			//logic for old city boss levels, need to spawn a shop on floor 21
-			try {
-				Bundle bundle = FileUtils.bundleFromFile(GamesInProgress.depthFile(GamesInProgress.curSlot, 20));
-				Class cls = bundle.getBundle(LEVEL).getClass("__className");
-				if (cls == NewCityBossLevel.class) {
+			case 1:
+			case 2:
+			case 3:
+			case 4:
+				level = new SewerLevel();
+				break;
+			case 5:
+				level = new SewerBossLevel();
+				break;
+			case 6:
+			case 7:
+			case 8:
+			case 9:
+				level = new PrisonLevel();
+				break;
+			case 10:
+				if(Dungeon.isChallenged(Challenges.ELITE_BOSSES)) level = new HardTenguLevel();
+				else level = new NewPrisonBossLevel();
+				break;
+			case 11:
+			case 12:
+			case 13:
+			case 14:
+				level = new CavesLevel();
+				break;
+			case 15:
+				if(Dungeon.isChallenged(Challenges.ELITE_BOSSES)) level = new HardDM300Level();
+				else level = new NewCavesBossLevel();
+				break;
+			case 16:
+			case 17:
+			case 18:
+			case 19:
+				level = new CityLevel();
+				break;
+			case 20:
+				if(Dungeon.isChallenged(Challenges.ELITE_BOSSES)) level = new HardDKLevel();
+				else level = new NewCityBossLevel();
+				break;
+			case 21:
+				//logic for old city boss levels, need to spawn a shop on floor 21
+				try {
+					Bundle bundle = FileUtils.bundleFromFile(GamesInProgress.depthFile(GamesInProgress.curSlot, 20));
+					Class cls = bundle.getBundle(LEVEL).getClass("__className");
+					if (cls == NewCityBossLevel.class || cls == HardDKLevel.class) {
+						level = new HallsLevel();
+					} else {
+						level = new LastShopLevel();
+					}
+				} catch (Exception e) {
+					ShatteredPixelDungeon.reportException(e);
 					level = new HallsLevel();
-				} else {
-					level = new LastShopLevel();
 				}
-			} catch (Exception e) {
-				ShatteredPixelDungeon.reportException(e);
+				break;
+			case 22:
+			case 23:
+			case 24:
 				level = new HallsLevel();
-			}
-			break;
-		case 22:
-		case 23:
-		case 24:
-			level = new HallsLevel();
-			break;
-		case 25:
-			level = new NewHallsBossLevel();
-			break;
-		case 26:
-			level = new LastLevel();
-			break;
-		default:
-			level = new DeadEndLevel();
-			Statistics.deepestFloor--;
+				break;
+			case 25:
+				level = new NewHallsBossLevel();
+				break;
+			case 26:
+				level = new LastLevel();
+				break;
+			default:
+				level = new DeadEndLevel();
+				Statistics.deepestFloor--;
 		}
 		
 		level.create();
@@ -451,6 +457,7 @@ public class Dungeon {
 	private static final String VERSION		= "version";
 	private static final String SEED		= "seed";
 	private static final String CHALLENGES	= "challenges";
+	private static final String MOBS_TO_CHAMPION	= "mobs_to_champion";
 	private static final String HERO		= "hero";
 	private static final String GOLD		= "gold";
 	private static final String DEPTH		= "depth";
@@ -470,6 +477,7 @@ public class Dungeon {
 			bundle.put( VERSION, version );
 			bundle.put( SEED, seed );
 			bundle.put( CHALLENGES, challenges );
+			bundle.put( MOBS_TO_CHAMPION, mobsToChampion );
 			bundle.put( HERO, hero );
 			bundle.put( GOLD, gold );
 			bundle.put( DEPTH, depth );
@@ -564,6 +572,7 @@ public class Dungeon {
 		QuickSlotButton.reset();
 
 		Dungeon.challenges = bundle.getInt( CHALLENGES );
+		Dungeon.mobsToChampion = bundle.getInt( MOBS_TO_CHAMPION );
 		
 		Dungeon.level = null;
 		Dungeon.depth = -1;
@@ -695,9 +704,9 @@ public class Dungeon {
 		Rankings.INSTANCE.submit( true, cause );
 	}
 
-	//TODO hero max vision is now separate from shadowcaster max vision. Might want to adjust.
 	public static void observe(){
-		observe( ShadowCaster.MAX_DISTANCE+1 );
+		int dist = 8 + 2*Dungeon.hero.pointsInTalent(Talent.FARSIGHT);
+		observe( dist+1 );
 	}
 	
 	public static void observe( int dist ) {
@@ -766,6 +775,14 @@ public class Dungeon {
 			GameScene.updateFog(h.pos, 2);
 		}
 
+		for (RevealedArea a : hero.buffs(RevealedArea.class)){
+			if (Dungeon.depth != a.depth) continue;
+			BArray.or( level.visited, level.heroFOV, a.pos - 1 - level.width(), 3, level.visited );
+			BArray.or( level.visited, level.heroFOV, a.pos - 1, 3, level.visited );
+			BArray.or( level.visited, level.heroFOV, a.pos - 1 + level.width(), 3, level.visited );
+			GameScene.updateFog(a.pos, 2);
+		}
+
 		GameScene.afterObserve();
 	}
 
@@ -789,7 +806,7 @@ public class Dungeon {
 		}
 
 		if (chars && Char.hasProp(ch, Char.Property.LARGE)){
-			BArray.and( pass, Dungeon.level.openSpace, passable );
+			BArray.and( passable, Dungeon.level.openSpace, passable );
 		}
 
 		if (chars) {
@@ -818,7 +835,7 @@ public class Dungeon {
 		}
 
 		if (Char.hasProp(ch, Char.Property.LARGE)){
-			BArray.and( pass, Dungeon.level.openSpace, passable );
+			BArray.and( passable, Dungeon.level.openSpace, passable );
 		}
 
 		if (chars){
@@ -843,19 +860,18 @@ public class Dungeon {
 		}
 
 		if (Char.hasProp(ch, Char.Property.LARGE)){
-			BArray.and( pass, Dungeon.level.openSpace, passable );
+			BArray.and( passable, Dungeon.level.openSpace, passable );
 		}
 
-		if (chars) {
-			for (Char c : Actor.chars()) {
-				if (visible[c.pos]) {
-					passable[c.pos] = false;
-				}
-			}
-		}
 		passable[ch.pos] = true;
-		
-		return PathFinder.getStepBack( ch.pos, from, passable );
+
+		//only consider chars impassable if our retreat path runs into them
+		int step = PathFinder.getStepBack( ch.pos, from, passable );
+		while (step != -1 && Actor.findChar(step) != null){
+			passable[step] = false;
+			step = PathFinder.getStepBack( ch.pos, from, passable );
+		}
+		return step;
 		
 	}
 

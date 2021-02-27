@@ -1,12 +1,12 @@
 package com.shatteredpixel.shatteredpixeldungeon.custom.testmode.generator;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.BossRushItem;
+import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.TestItem;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 import java.util.ArrayList;
 
-public class TestGenerator extends BossRushItem {
+public class TestGenerator extends TestItem {
     {
         bones = false;
         defaultAction = AC_GIVE;

@@ -173,7 +173,7 @@ public class GameScene extends PixelScene {
 	@Override
 	public void create() {
 		
-		if (Dungeon.hero == null){
+		if (Dungeon.hero == null || Dungeon.level == null){
 			ShatteredPixelDungeon.switchNoFade(TitleScene.class);
 			return;
 		}
@@ -468,23 +468,26 @@ public class GameScene extends PixelScene {
 						}
 					}
 				}
-
-				if (Dungeon.hero.hasTalent(Talent.ROGUES_FORESIGHT)
-						&& Dungeon.level instanceof RegularLevel){
-					int reqSecrets = Dungeon.level.feeling == Level.Feeling.SECRETS ? 2 : 1;
-					for (Room r : ((RegularLevel) Dungeon.level).rooms()){
-						if (r instanceof SecretRoom) reqSecrets--;
-					}
-					//50%/75% chance
-					if (reqSecrets <= 0 && Random.Int(4) <= Dungeon.hero.pointsInTalent(Talent.ROGUES_FORESIGHT)){
-						GLog.p(Messages.get(this, "secret_hint"));
-					}
-				}
 				
 			} else if (InterlevelScene.mode == InterlevelScene.Mode.RESET) {
 				GLog.h(Messages.get(this, "warp"));
 			} else {
 				GLog.h(Messages.get(this, "return"), Dungeon.depth);
+			}
+
+			if (Dungeon.hero.hasTalent(Talent.ROGUES_FORESIGHT)
+					&& Dungeon.level instanceof RegularLevel){
+				int reqSecrets = Dungeon.level.feeling == Level.Feeling.SECRETS ? 2 : 1;
+				for (Room r : ((RegularLevel) Dungeon.level).rooms()){
+					if (r instanceof SecretRoom) reqSecrets--;
+				}
+
+				//50%/75% chance, use level's seed so that we get the same result for the same level
+				Random.pushGenerator(Dungeon.seedCurDepth());
+					if (reqSecrets <= 0 && Random.Int(4) <= Dungeon.hero.pointsInTalent(Talent.ROGUES_FORESIGHT)){
+						GLog.p(Messages.get(this, "secret_hint"));
+					}
+				Random.popGenerator();
 			}
 
 			boolean unspentTalents = false;
@@ -529,24 +532,10 @@ public class GameScene extends PixelScene {
 	public void destroy() {
 		
 		//tell the actor thread to finish, then wait for it to complete any actions it may be doing.
-		if (actorThread != null && actorThread.isAlive()){
-			synchronized (GameScene.class){
-				synchronized (actorThread) {
-					actorThread.interrupt();
-				}
-				try {
-					GameScene.class.wait(5000);
-				} catch (InterruptedException e) {
-					ShatteredPixelDungeon.reportException(e);
-				}
-				synchronized (actorThread) {
-					if (Actor.processing()) {
-						Throwable t = new Throwable();
-						t.setStackTrace(actorThread.getStackTrace());
-						throw new RuntimeException("timeout waiting for actor thread! ", t);
-					}
-				}
-			}
+		if (!waitForActorThread( 4500 )){
+			Throwable t = new Throwable();
+			t.setStackTrace(actorThread.getStackTrace());
+			throw new RuntimeException("timeout waiting for actor thread! ", t);
 		}
 
 		Emitter.freezeEmitters = false;
@@ -564,10 +553,30 @@ public class GameScene extends PixelScene {
 			actorThread.interrupt();
 		}
 	}
+
+	public boolean waitForActorThread(int msToWait ){
+		synchronized (GameScene.class) {
+			if (actorThread == null || !actorThread.isAlive()) {
+				return true;
+			}
+			synchronized (actorThread) {
+				actorThread.interrupt();
+			}
+			try {
+				GameScene.class.wait(msToWait);
+			} catch (InterruptedException e) {
+				ShatteredPixelDungeon.reportException(e);
+			}
+			synchronized (actorThread) {
+				return !Actor.processing();
+			}
+		}
+	}
 	
 	@Override
 	public synchronized void onPause() {
 		try {
+			waitForActorThread(500);
 			Dungeon.saveAll();
 			Badges.saveGlobal();
 			Journal.saveGlobal();

@@ -18,7 +18,7 @@ import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 
 import java.util.ArrayList;
 
-public class BackpackCleaner extends BossRushItem {
+public class BackpackCleaner extends TestItem {
     {
         image = ItemSpriteSheet.BOMB;
         defaultAction = AC_CLEAR;

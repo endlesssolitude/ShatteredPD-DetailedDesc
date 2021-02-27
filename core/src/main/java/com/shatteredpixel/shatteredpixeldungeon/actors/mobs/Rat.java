@@ -50,17 +50,4 @@ public class Rat extends Mob {
 	public int drRoll() {
 		return Random.NormalIntRange(0, 1);
 	}
-
-	@Override
-	public void damage(int damage, Object src ){
-		/*
-		if(src instanceof Hero){
-			if(((Hero)src).belongings.weapon instanceof SpiritBow.SpiritArrow){
-				damage = 10000;
-			}
-		}
-		*/
-		super.damage(damage, src);
-		//GLog.i(src.getClass().toString());
-	}
 }

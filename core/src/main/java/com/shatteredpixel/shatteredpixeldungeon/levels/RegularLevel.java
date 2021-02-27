@@ -31,13 +31,13 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.GoldenMimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.custom.challenges.mimic.GoldenMimicForChallenge;
+import com.shatteredpixel.shatteredpixeldungeon.custom.challenges.mimic.MimicForChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
-import com.shatteredpixel.shatteredpixeldungeon.custom.challenges.mimic.GoldenMimicForChallenge;
-import com.shatteredpixel.shatteredpixeldungeon.custom.challenges.mimic.MimicForChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.SmallRation;
 import com.shatteredpixel.shatteredpixeldungeon.items.journal.GuidePage;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.GoldenKey;
@@ -319,7 +319,8 @@ public abstract class RegularLevel extends Level {
 		if (feeling == Feeling.LARGE){
 			nItems += 2;
 		}
-		
+
+		int triesForMimic = 1000;
 		for (int i=0; i < nItems; i++) {
 
 			Item toDrop = Generator.random();
@@ -332,8 +333,9 @@ public abstract class RegularLevel extends Level {
 			}
 
 			Heap.Type type = null;
-
 			if(Dungeon.isChallenged(Challenges.MIMIC_DUNGEON)){
+				triesForMimic--;
+				if(triesForMimic<0) break;
 				if (findMob(cell) == null){
 					if ((toDrop instanceof Artifact && Random.Int(2) == 0) ||
 							(toDrop.isUpgradable() && Random.Int(4 - toDrop.level()) == 0)){
@@ -390,7 +392,6 @@ public abstract class RegularLevel extends Level {
 
 		for (Item item : itemsToSpawn) {
 			int cell = randomDropCell();
-
 			drop( item, cell ).type = Heap.Type.HEAP;
 			if (map[cell] == Terrain.HIGH_GRASS || map[cell] == Terrain.FURROWED_GRASS) {
 				map[cell] = Terrain.GRASS;
@@ -436,15 +437,18 @@ public abstract class RegularLevel extends Level {
 			Talent.CachedRationsDropped dropped = Buff.affect(Dungeon.hero, Talent.CachedRationsDropped.class);
 			if (dropped.count() < 2 + 2*Dungeon.hero.pointsInTalent(Talent.CACHED_RATIONS)){
 				int cell;
+				int tries = 100;
 				do {
 					cell = randomDropCell(SpecialRoom.class);
-				} while (room(cell) instanceof SecretRoom);
-				if (map[cell] == Terrain.HIGH_GRASS || map[cell] == Terrain.FURROWED_GRASS) {
-					map[cell] = Terrain.GRASS;
-					losBlocking[cell] = false;
+				} while (tries-- > 0 && (room(cell) instanceof SecretRoom || room(cell) instanceof ShopRoom));
+				if (!(room(cell) instanceof SecretRoom || room(cell) instanceof ShopRoom) && cell != -1) {
+					if (map[cell] == Terrain.HIGH_GRASS || map[cell] == Terrain.FURROWED_GRASS) {
+						map[cell] = Terrain.GRASS;
+						losBlocking[cell] = false;
+					}
+					drop(new SmallRation(), cell).type = Heap.Type.CHEST;
+					dropped.countUp(1);
 				}
-				drop( new SmallRation(), cell).type = Heap.Type.CHEST;
-				dropped.countUp(1);
 			}
 		}
 
@@ -517,9 +521,13 @@ public abstract class RegularLevel extends Level {
 	}
 	
 	protected int randomDropCell( Class<?extends Room> roomType ) {
-		while (true) {
+		int tries = 100;
+		while (tries-- > 0) {
 			Room room = randomRoom( roomType );
-			if (room != null && room != roomEntrance) {
+			if (room == null){
+				return -1;
+			}
+			if (room != roomEntrance) {
 				int pos = pointToCell(room.random());
 				if (passable[pos] && !solid[pos]
 						&& pos != exit
@@ -539,6 +547,7 @@ public abstract class RegularLevel extends Level {
 				}
 			}
 		}
+		return -1;
 	}
 	
 	@Override

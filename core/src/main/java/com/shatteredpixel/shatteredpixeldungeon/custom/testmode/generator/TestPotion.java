@@ -9,6 +9,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.DewVial;
 import com.shatteredpixel.shatteredpixeldungeon.items.Dewdrop;
 import com.shatteredpixel.shatteredpixeldungeon.items.Honeypot;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.TomeOfMastery;
 import com.shatteredpixel.shatteredpixeldungeon.items.Torch;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.ArcaneBomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
@@ -461,13 +462,14 @@ public class TestPotion extends TestGenerator {
             case 5: return DewVial.class;
             case 6: return Dewdrop.class;
             case 7: default: return ArmorKit.class;
+            case 8: return TomeOfMastery.class;
         }
     }
 
     private int maxIndex(int cate){
         if(cate == 7) return 10;
         if(cate == 10) return 8;
-        if(cate == 11) return 7;
+        if(cate == 11) return 8;
         return 11;
     }
 

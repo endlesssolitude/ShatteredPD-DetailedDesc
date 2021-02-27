@@ -28,8 +28,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.custom.challenges.mimic.CrystalMimicForChallenge;
-import com.shatteredpixel.shatteredpixeldungeon.custom.challenges.mimic.MimicForChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.CrystalKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.IronKey;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
@@ -72,14 +70,15 @@ public class VaultRoom extends SpecialRoom {
 		} while (level.adjacent(i1Pos, doorPos) || level.adjacent(i2Pos, doorPos));
 
 		level.drop( i1, i1Pos ).type = Heap.Type.CRYSTAL_CHEST;
-		if(!Dungeon.isChallenged(Challenges.MIMIC_DUNGEON)) {
+
+		if(Dungeon.isChallenged(Challenges.MIMIC_DUNGEON)){
+			level.mobs.add(Mimic.spawnAt(i2Pos, i2, CrystalMimic.class));
+		}else {
 			if (Random.Int(10) == 0) {
-				level.mobs.add(Mimic.spawnAt(c + PathFinder.NEIGHBOURS8[Random.Int(8)], i2, CrystalMimic.class));
+				level.mobs.add(Mimic.spawnAt(i2Pos, i2, CrystalMimic.class));
 			} else {
-				level.drop(i2, c + PathFinder.NEIGHBOURS8[Random.Int(8)]).type = Heap.Type.CRYSTAL_CHEST;
+				level.drop(i2, i2Pos).type = Heap.Type.CRYSTAL_CHEST;
 			}
-		}else{
-			level.mobs.add(MimicForChallenge.spawnAt(c + PathFinder.NEIGHBOURS8[Random.Int(8)], i2, CrystalMimicForChallenge.class));
 		}
 		Painter.set(level, i1Pos, Terrain.PEDESTAL);
 		Painter.set(level, i2Pos, Terrain.PEDESTAL);

@@ -256,7 +256,7 @@ public class TestMelee extends TestGenerator {
             t_selectedWeapon.maxWidth(WIDTH);
             add(t_selectedWeapon);
 
-            o_level = new OptionSlider(Messages.get(this, "level"), "0", "8", 0, 12) {
+            o_level = new OptionSlider(Messages.get(this, "level"), "0", "12", 0, 12) {
                 @Override
                 protected void onChange() {
                     levelToGen = getSelectedValue();

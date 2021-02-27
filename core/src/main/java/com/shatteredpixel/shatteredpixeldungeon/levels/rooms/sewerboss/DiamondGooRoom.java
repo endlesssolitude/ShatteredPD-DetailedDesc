@@ -35,9 +35,9 @@ public class DiamondGooRoom extends GooBossRoom {
 	@Override
 	public void paint(Level level) {
 		Painter.fill( level, this, Terrain.WALL );
-
+		
 		Painter.fillDiamond( level, this, 1, Terrain.EMPTY);
-
+		
 		for (Door door : connected.values()) {
 			door.set( Door.Type.REGULAR );
 			Point dir;
@@ -50,7 +50,7 @@ public class DiamondGooRoom extends GooBossRoom {
 			} else {
 				dir = new Point(0, -1);
 			}
-
+			
 			Point curr = new Point(door);
 			do {
 				Painter.set(level, curr, Terrain.EMPTY_SP);
@@ -58,10 +58,10 @@ public class DiamondGooRoom extends GooBossRoom {
 				curr.y += dir.y;
 			} while (level.map[level.pointToCell(curr)] == Terrain.WALL);
 		}
-
+		
 		Painter.fill( level, left + width()/2 - 1, top + height()/2 - 2, 2 + width()%2, 4 + height()%2, Terrain.WATER);
 		Painter.fill( level, left + width()/2 - 2, top + height()/2 - 1, 4 + width()%2, 2 + height()%2, Terrain.WATER);
-
+		
 		setupGooNest(level);
 
 		if(Dungeon.isChallenged(Challenges.ELITE_BOSSES)){

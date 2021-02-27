@@ -3,7 +3,7 @@ package com.shatteredpixel.shatteredpixeldungeon.custom.testmode;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 
-public class BossRushItem extends Item {
+public class TestItem extends Item {
     {
         unique = true;
         bones = false;

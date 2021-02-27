@@ -22,7 +22,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.journal;
 
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
-import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.custom.dictionary.alchemy.bomb.ArcaneBD;
 import com.shatteredpixel.shatteredpixeldungeon.custom.dictionary.alchemy.bomb.BombDict;
 import com.shatteredpixel.shatteredpixeldungeon.custom.dictionary.alchemy.bomb.FireBD;
@@ -303,6 +302,7 @@ import com.shatteredpixel.shatteredpixeldungeon.custom.dictionary.weapon.WSSword
 import com.shatteredpixel.shatteredpixeldungeon.custom.dictionary.weapon.WUED;
 import com.shatteredpixel.shatteredpixeldungeon.custom.dictionary.weapon.WarHammerD;
 import com.shatteredpixel.shatteredpixeldungeon.custom.dictionary.weapon.WhipD;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.watabou.utils.Bundle;
 
 import java.util.ArrayList;
@@ -312,7 +312,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 public enum Catalog {
-
+	
 	ARMORS,
 	ARTIFACTS,
 	ALCHEMY,
@@ -338,7 +338,7 @@ public enum Catalog {
 		}
 		return true;
 	}
-
+	
 	static {
 		//armors
 		ARMORS.seen.put(ClothArmorDict.class, true);
@@ -658,8 +658,6 @@ public enum Catalog {
 		UNCLASSIFIED.seen.put(DustD.class,true);
 		UNCLASSIFIED.seen.put(GuguguD.class,true);
 	}
-
-
 
 	public static LinkedHashMap<Catalog, Badges.Badge> catalogBadges = new LinkedHashMap<>();
 	static {

@@ -27,7 +27,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.custom.challenges.mimic.MimicForChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
@@ -50,6 +49,10 @@ public class SuspiciousChestRoom extends StandardRoom {
 		Painter.fill( level, this, Terrain.WALL );
 		Painter.fill( level, this, 1 , Terrain.EMPTY );
 
+		for (Door door : connected.values()) {
+			door.set( Door.Type.REGULAR );
+		}
+
 		Item i = level.findPrizeItem();
 
 		if ( i == null ){
@@ -60,14 +63,14 @@ public class SuspiciousChestRoom extends StandardRoom {
 
 		Painter.set(level, center, Terrain.PEDESTAL);
 
-		if(!Dungeon.isChallenged(Challenges.MIMIC_DUNGEON)){
+		if(Dungeon.isChallenged(Challenges.MIMIC_DUNGEON)){
+			level.mobs.add(Mimic.spawnAt(center, i));
+		}else {
 			if (Random.Int(3) == 0) {
 				level.mobs.add(Mimic.spawnAt(center, i));
 			} else {
 				level.drop(i, center).type = Heap.Type.CHEST;
 			}
-		}else{
-			level.mobs.add(MimicForChallenge.spawnAt(center, i));
 		}
 	}
 }

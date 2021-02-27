@@ -24,14 +24,11 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.CorrosiveGas;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Doom;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LifeLink;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
@@ -77,17 +74,6 @@ public class DwarfKing extends Mob {
 
 		properties.add(Property.BOSS);
 		properties.add(Property.UNDEAD);
-
-		adjustStatus();
-	}
-
-	private boolean eliteShielded = false;
-
-	protected void adjustStatus(){
-		if(Dungeon.isChallenged(Challenges.ELITE_BOSSES)){
-			resistances.add(Burning.class);
-			resistances.add(CorrosiveGas.class);
-		}
 	}
 
 	@Override
@@ -133,7 +119,6 @@ public class DwarfKing extends Mob {
 		bundle.put( SUMMON_CD, summonCooldown );
 		bundle.put( ABILITY_CD, abilityCooldown );
 		bundle.put( LAST_ABILITY, lastAbility );
-		bundle.put( "elite_shield", eliteShielded);
 	}
 
 	@Override
@@ -144,7 +129,6 @@ public class DwarfKing extends Mob {
 		summonCooldown = bundle.getFloat( SUMMON_CD );
 		abilityCooldown = bundle.getFloat( ABILITY_CD );
 		lastAbility = bundle.getInt( LAST_ABILITY );
-		eliteShielded = bundle.getBoolean("elite_shield");
 
 		if (phase == 2) properties.add(Property.IMMOVABLE);
 	}
@@ -153,18 +137,10 @@ public class DwarfKing extends Mob {
 	protected boolean act() {
 		if (phase == 1) {
 
-			if(Dungeon.isChallenged(Challenges.ELITE_BOSSES) && !eliteShielded){
-				Buff.affect(this, Barrier.class).setShield(350);
-				eliteShielded = true;
-			}
-
 			if (summonCooldown <= 0 && summonSubject(3)){
 				summonsMade++;
 				summonCooldown += Random.NormalIntRange(MIN_COOLDOWN, MAX_COOLDOWN);
 			} else if (summonCooldown > 0){
-				summonCooldown--;
-			}
-			if(Dungeon.isChallenged(Challenges.ELITE_BOSSES)){
 				summonCooldown--;
 			}
 
@@ -199,9 +175,6 @@ public class DwarfKing extends Mob {
 
 			} else {
 				abilityCooldown--;
-				if(Dungeon.isChallenged(Challenges.ELITE_BOSSES)){
-					abilityCooldown--;
-				}
 			}
 
 		} else if (phase == 2){
@@ -221,39 +194,22 @@ public class DwarfKing extends Mob {
 					Sample.INSTANCE.play( Assets.Sounds.CHALLENGE );
 					yell(Messages.get(this, "wave_2"));
 				}
-				if(Dungeon.isChallenged(Challenges.ELITE_BOSSES)){
-					summonSubject(2, DKMonk.class);
-					summonSubject(6, DKWarlock.class);
-					summonSubject(8, DKMonk.class);
-					summonSubject(12, DKWarlock.class);
-					summonsMade=8;
-
-				}else{
-					if (summonsMade == 7){
-						summonSubject(3, Random.Int(2) == 0 ? DKMonk.class : DKWarlock.class);
-					} else {
-						summonSubject(3, DKGhoul.class);
-					}
-					summonsMade++;
+				if (summonsMade == 7){
+					summonSubject(3, Random.Int(2) == 0 ? DKMonk.class : DKWarlock.class);
+				} else {
+					summonSubject(3, DKGhoul.class);
 				}
-
+				summonsMade++;
 				spend(TICK);
 				return true;
 			} else if (shielding() <= 100 && summonsMade < 12) {
 				sprite.centerEmitter().start( Speck.factory( Speck.SCREAM ), 0.4f, 2 );
 				Sample.INSTANCE.play( Assets.Sounds.CHALLENGE );
 				yell(Messages.get(this, "wave_3"));
-				if(Dungeon.isChallenged(Challenges.ELITE_BOSSES)) {
-					summonSubject(1, DKMonk.class);
-					summonSubject(3, DKWarlock.class);
-					summonSubject(5, DKMonk.class);
-					summonSubject(7, DKWarlock.class);
-				} else {
-					summonSubject(4, DKWarlock.class);
-					summonSubject(4, DKMonk.class);
-					summonSubject(4, DKGhoul.class);
-					summonSubject(4, DKGhoul.class);
-				}
+				summonSubject(4, DKWarlock.class);
+				summonSubject(4, DKMonk.class);
+				summonSubject(4, DKGhoul.class);
+				summonSubject(4, DKGhoul.class);
 				summonsMade = 12;
 				spend(TICK);
 				return true;
@@ -269,17 +225,11 @@ public class DwarfKing extends Mob {
 	}
 
 	private boolean summonSubject( int delay ){
-		if(Dungeon.isChallenged(Challenges.ELITE_BOSSES)){
-			if(summonsMade % 5 == 2) return summonSubject(delay, DKWarlock.class);
-			if(summonsMade % 5 == 4) return summonSubject(delay, DKMonk.class);
-			else return summonSubject(delay, DKGhoul.class);
-		}else {
-			//4th summon is always a monk or warlock, otherwise ghoul
-			if (summonsMade % 4 == 3) {
-				return summonSubject(delay, Random.Int(2) == 0 ? DKMonk.class : DKWarlock.class);
-			} else {
-				return summonSubject(delay, DKGhoul.class);
-			}
+		//4th summon is always a monk or warlock, otherwise ghoul
+		if (summonsMade % 4 == 3){
+			return summonSubject( delay, Random.Int(2) == 0 ? DKMonk.class : DKWarlock.class );
+		} else {
+			return summonSubject( delay, DKGhoul.class );
 		}
 	}
 
@@ -520,30 +470,17 @@ public class DwarfKing extends Mob {
 			partnerID = -2; //no partners
 			return super.act();
 		}
-		@Override
-		public int damageRoll(){
-			return Math.round(super.damageRoll()*(1f+0.05f*Dungeon.level.mobs.size()));
-		}
 	}
 
 	public static class DKMonk extends Monk {
 		{
 			state = HUNTING;
 		}
-
-		@Override
-		public int damageRoll(){
-			return Math.round(super.damageRoll()*(1f+0.05f*Dungeon.level.mobs.size()));
-		}
 	}
 
 	public static class DKWarlock extends Warlock {
 		{
 			state = HUNTING;
-		}
-		@Override
-		public int damageRoll(){
-			return Math.round(super.damageRoll()*(1f+0.05f*Dungeon.level.mobs.size()));
 		}
 	}
 
@@ -600,7 +537,7 @@ public class DwarfKing extends Mob {
 					}
 				} else {
 					Char ch = Actor.findChar(pos);
-					ch.damage(Random.NormalIntRange(20, 40), summon);
+					ch.damage(Random.NormalIntRange(20, 40), target);
 					if (((DwarfKing)target).phase == 2){
 						target.damage(target.HT/12, new KingDamager());
 					}

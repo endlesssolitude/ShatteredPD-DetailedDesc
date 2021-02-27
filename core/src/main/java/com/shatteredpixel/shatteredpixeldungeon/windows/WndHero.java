@@ -28,11 +28,10 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bless;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.custom.challenges.StrengthAndSacrifice;
+import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfAccuracy;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEvasion;
-import com.shatteredpixel.shatteredpixeldungeon.messages.Languages;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
@@ -55,8 +54,8 @@ import java.util.Locale;
 
 public class WndHero extends WndTabbed {
 	
-	private static final int WIDTH		= 115;
-	private static final int HEIGHT		= 140;
+	private static final int WIDTH		= 120;
+	private static final int HEIGHT		= 145;
 	
 	private StatsTab stats;
 	private TalentsTab talents;
@@ -106,14 +105,18 @@ public class WndHero extends WndTabbed {
 		} );
 
 		layoutTabs();
-		
+
+		talents.setRect(0, 0, WIDTH, HEIGHT);
+		talents.pane.scrollTo(0, talents.pane.content().height() - talents.pane.height());
+		talents.layout();
+
 		select( lastIdx );
 	}
 
 	private class StatsTab extends Group {
-		
+
 		private static final int GAP = 6;
-		
+
 		private float pos;
 
 		public StatsTab() {
@@ -136,21 +139,21 @@ public class WndHero extends WndTabbed {
 			if (hero.shielding() > 0) statSlot( Messages.get(this, "health"), hero.HP + "+" + hero.shielding() + "/" + hero.HT );
 			else statSlot( Messages.get(this, "health"), (hero.HP) + "/" + hero.HT );
 			statSlot( Messages.get(this, "exp"), hero.exp + "/" + hero.maxExp() );
-			if(Messages.lang()== Languages.CHINESE){
-				if(Dungeon.hero.buff(Hunger.class)!=null){
-					statSlot( Messages.get(this, "hunger"), Dungeon.hero.buff(Hunger.class).hunger() + "/" +Hunger.STARVING);
-				}
-				statSlot( Messages.get(this, "skill") , attackskillcal() + "/" + defenseskillcal());
+
+			if(Dungeon.hero.buff(Hunger.class)!=null){
+				statSlot( Messages.get(this, "hunger"), Dungeon.hero.buff(Hunger.class).hunger() + "/" +Hunger.STARVING);
 			}
+			statSlot( Messages.get(this, "skill") , attackskillcal() + "/" + defenseskillcal());
+
 
 			pos += GAP;
 
 			statSlot( Messages.get(this, "gold"), Statistics.goldCollected );
 			statSlot( Messages.get(this, "depth"), Statistics.deepestFloor );
 			statSlot(Messages.get(this,"duration"),(int)Statistics.duration);
-			if(Messages.lang()== Languages.CHINESE){
-				statSlot( Messages.get( this, "score"), Statistics.goldCollected + Statistics.deepestFloor * hero.lvl * 100 * (Statistics.amuletObtained ? 2:1 ) );
-			}
+
+			statSlot( Messages.get( this, "score"), Statistics.goldCollected + Statistics.deepestFloor * hero.lvl * 100 * (Statistics.amuletObtained ? 2:1 ) );
+
 			pos += GAP;
 
 			pos += GAP;
@@ -195,7 +198,6 @@ public class WndHero extends WndTabbed {
 			}
 			return Math.round(defskl);
 		}
-
 
 		private void statSlot( String label, String value ) {
 			

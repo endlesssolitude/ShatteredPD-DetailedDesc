@@ -28,7 +28,7 @@ import com.watabou.utils.PathFinder;
 
 import java.util.ArrayList;
 
-public class LevelTeleporter extends BossRushItem {
+public class LevelTeleporter extends TestItem {
     {
         image = ItemSpriteSheet.AMULET;
         defaultAction = AC_DESCEND;

@@ -41,10 +41,13 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SoulMark;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Surprise;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Wound;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
+import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
@@ -594,12 +597,13 @@ public abstract class Mob extends Char {
 			
 			//physical damage that doesn't come from the hero is less effective
 			if (enemy != Dungeon.hero){
-				restoration = Math.round(restoration * 0.4f);
+				restoration = Math.round(restoration * 0.15f*Dungeon.hero.pointsInTalent(Talent.SOUL_SIPHON));
 			}
-			
-			Buff.affect(Dungeon.hero, Hunger.class).satisfy(restoration);
-			Dungeon.hero.HP = (int)Math.ceil(Math.min(Dungeon.hero.HT, Dungeon.hero.HP+(restoration*0.4f)));
-			Dungeon.hero.sprite.emitter().burst( Speck.factory(Speck.HEALING), 1 );
+			if (restoration > 0) {
+				Buff.affect(Dungeon.hero, Hunger.class).affectHunger(restoration*Dungeon.hero.pointsInTalent(Talent.SOUL_EATER)/3f);
+				Dungeon.hero.HP = (int) Math.ceil(Math.min(Dungeon.hero.HT, Dungeon.hero.HP + (restoration * 0.4f)));
+				Dungeon.hero.sprite.emitter().burst(Speck.factory(Speck.HEALING), 1);
+			}
 		}
 
 		return damage;
@@ -677,12 +681,27 @@ public abstract class Mob extends Char {
 				Buff.affect(Dungeon.hero, Talent.LethalMomentumTracker.class, 1f);
 			}
 		}
-		
+
 		if (Dungeon.hero.isAlive() && !Dungeon.level.heroFOV[pos]) {
 			GLog.i( Messages.get(this, "died") );
 		}
-		
+
+		boolean soulMarked = buff(SoulMark.class) != null;
+
 		super.die( cause );
+
+		if (!(this instanceof Wraith)
+				&& soulMarked
+				&& Random.Int(10) < Dungeon.hero.pointsInTalent(Talent.NECROMANCERS_MINIONS)){
+			Wraith w = Wraith.spawnAt(pos);
+			if (w != null) {
+				Buff.affect(w, Corruption.class);
+				if (Dungeon.level.heroFOV[pos]) {
+					CellEmitter.get(pos).burst(ShadowParticle.CURSE, 6);
+					Sample.INSTANCE.play(Assets.Sounds.CURSED);
+				}
+			}
+		}
 	}
 	
 	public void rollToDropLoot(){
@@ -715,6 +734,18 @@ public abstract class Mob extends Char {
 			Dungeon.level.drop(Lucky.genLoot(), pos).sprite.drop();
 			Lucky.showFlare(sprite);
 		}
+
+		//soul eater talent
+		if (buff(SoulMark.class) != null &&
+				Random.Int(10) < Dungeon.hero.pointsInTalent(Talent.SOUL_EATER)){
+			Talent.onFoodEaten(Dungeon.hero, 0, null);
+		}
+
+		//bounty hunter talent
+		if (Dungeon.hero.buff(Talent.BountyHunterTracker.class) != null){
+			Dungeon.level.drop(new Gold(10 * Dungeon.hero.pointsInTalent(Talent.BOUNTY_HUNTER)), pos).sprite.drop();
+		}
+
 	}
 	
 	protected Object loot = null;
@@ -817,7 +848,7 @@ public abstract class Mob extends Char {
 					if (alignment == Alignment.ENEMY && Dungeon.isChallenged(Challenges.SWARM_INTELLIGENCE)) {
 						for (Mob mob : Dungeon.level.mobs) {
 							if (mob.paralysed <= 0
-									&& Dungeon.level.distance(pos, mob.pos) <= 8 //TODO base on pathfinder distance instead?
+									&& Dungeon.level.distance(pos, mob.pos) <= 8
 									&& mob.state != mob.HUNTING) {
 								mob.beckon(target);
 							}
@@ -865,7 +896,7 @@ public abstract class Mob extends Char {
 			if (alignment == Alignment.ENEMY && Dungeon.isChallenged( Challenges.SWARM_INTELLIGENCE )) {
 				for (Mob mob : Dungeon.level.mobs) {
 					if (mob.paralysed <= 0
-							&& Dungeon.level.distance(pos, mob.pos) <= 8 //TODO base on pathfinder distance instead?
+							&& Dungeon.level.distance(pos, mob.pos) <= 8
 							&& mob.state != mob.HUNTING) {
 						mob.beckon( target );
 					}
