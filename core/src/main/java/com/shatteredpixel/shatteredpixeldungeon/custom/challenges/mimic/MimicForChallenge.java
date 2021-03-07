@@ -184,11 +184,11 @@ public class MimicForChallenge extends Mimic {
     //6 basic arguments
     protected float HealthModFactor(){
         int modlevel = (basicModFactor>>BASE_HEALTH_MOVE) & 0x7;
-        return 1f + modlevel/16f + modlevel*modlevel / 112f;
+        return 1f + modlevel/14f + modlevel*modlevel / 98f;
     }
     protected float AttackModFactor(){
         int modlevel = (basicModFactor>>BASE_ATTACK_MOVE) & 0x7;
-        return 1f + modlevel/14f + modlevel*modlevel / 98f;
+        return 1f + modlevel/12f + modlevel*modlevel / 84f;
     }
     protected float AccuracyModFactor(){
         int modlevel = (basicModFactor>>BASE_ACCURACY_MOVE) & 0x7;
@@ -204,7 +204,7 @@ public class MimicForChallenge extends Mimic {
     }
     protected float AttackSpeedFactor(){
         int modlevel = (basicModFactor>>BASE_ATTACK_SPEED_MOVE) & 0x7;
-        return 1f + modlevel/14f + modlevel*modlevel / 98f;
+        return 1f + modlevel/12f + modlevel*modlevel / 84f;
     }
 
     protected int attackMod = 0;
@@ -448,6 +448,7 @@ public class MimicForChallenge extends Mimic {
     }
 
     protected int pushBackProc(Char enemy, int damage){
+		if(enemy == null) return damage;
         int modlevel = (defendMod>>DEF_PUSH_BACK)&0x3;
         if(modlevel>0){
             if(Random.Int(2)==0) {
@@ -499,13 +500,14 @@ public class MimicForChallenge extends Mimic {
         }
     }
 
-    protected void alertProc(Char enemy){
+    protected void alertProc(Char target){
+		if(target == null) target = this;
         int modlevel = (trickMod>>TRK_ALERT)&0x3;
         if(modlevel>0){
             for(Mob m: Dungeon.level.mobs.toArray(new Mob[0])){
                 if(m.alignment == Alignment.ENEMY) {
-                    if (Random.Int(5 - modlevel) == 0) {
-                        m.beckon(enemy.pos);
+                    if (Random.Int(4 - modlevel) == 0) {
+                        m.beckon(target.pos);
                     }
                 }
             }
@@ -702,6 +704,8 @@ public class MimicForChallenge extends Mimic {
                 damage = Math.round(damage * (1f - missileRes));
             }
         }
+		
+		damage=pushBackProc(enemy, damage);
 
         return super.defenseProc(enemy,damage);
     }
@@ -727,8 +731,9 @@ public class MimicForChallenge extends Mimic {
             getHit++;
         }
         if(dmg>1) disappearProc();
+        //WARNING: enemy should not appear in damage(). Enemy may be null.
         if(dmg>1) alertProc(enemy);
-        dmg=pushBackProc(enemy, dmg);
+
         super.damage(dmg, src);
     }
 

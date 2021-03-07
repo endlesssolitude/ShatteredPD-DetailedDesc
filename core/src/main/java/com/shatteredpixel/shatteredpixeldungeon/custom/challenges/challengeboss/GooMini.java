@@ -5,7 +5,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vulnerable;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
-import com.shatteredpixel.shatteredpixeldungeon.custom.utils.GameMathExtension;
+import com.shatteredpixel.shatteredpixeldungeon.custom.utils.GME;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ElmoParticle;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -45,7 +45,7 @@ public class GooMini extends Mob {
     }
 
     protected boolean explode(boolean empower){
-        int[] area = empower ?  GameMathExtension.NEIGHBOURS20() : PathFinder.NEIGHBOURS4;
+        int[] area = empower ?  GME.NEIGHBOURS20() : PathFinder.NEIGHBOURS4;
         for(int n: area){
             if(!Dungeon.level.insideMap(n+pos)) continue;
             Char ch=findChar(n+pos);

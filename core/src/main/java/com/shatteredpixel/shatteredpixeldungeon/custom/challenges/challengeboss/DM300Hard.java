@@ -20,7 +20,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Slow;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
-import com.shatteredpixel.shatteredpixeldungeon.custom.utils.GameMathExtension;
+import com.shatteredpixel.shatteredpixeldungeon.custom.utils.GME;
 import com.shatteredpixel.shatteredpixeldungeon.custom.visuals.MissileSpriteCustom;
 import com.shatteredpixel.shatteredpixeldungeon.custom.visuals.effects.BeamCustom;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
@@ -83,7 +83,7 @@ public class DM300Hard extends Boss{
     }
 
     //0~7 phases. if health < threshold[phase], then go on.
-    private static final int[] healthThreshold = new int[]{399, 360, 310, 270, 230, 180, 130, 70, -1000000};
+    private static final int[] healthThreshold = new int[]{399, 350, 300, 250, 200, 150, 100, 50, -1000000};
 
     private int phase = 0;
 
@@ -322,7 +322,7 @@ public class DM300Hard extends Boss{
 
     protected int findRandomPlaceForCaster(){
 
-        int[] ceil = GameMathExtension.rectBuilder(pos, 4, 4);
+        int[] ceil = GME.rectBuilder(pos, 4, 4);
 
         //shuffle
         for (int i=0; i < ceil.length - 1; i++) {
@@ -428,7 +428,7 @@ public class DM300Hard extends Boss{
                 sprite, ballistica.collisionPos, new Bomb(), new Callback() {
                     @Override
                     public void call() {
-                        int[] cells = GameMathExtension.NEIGHBOURS5();
+                        int[] cells = GME.NEIGHBOURS5();
                         for(int i: cells){
                             int c = i+ballistica.collisionPos;
                             Char ch = findChar(c);

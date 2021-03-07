@@ -5,8 +5,8 @@ import com.watabou.utils.Point;
 import com.watabou.utils.PointF;
 
 import java.util.ArrayList;
-
-public class GameMathExtension {
+//GAME MATH EXTENSION
+public class GME {
     public static int gate(int min, int value, int max){
         if (value < min) {
             return min;

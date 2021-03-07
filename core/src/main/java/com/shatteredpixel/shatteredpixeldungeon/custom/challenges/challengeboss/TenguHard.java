@@ -20,7 +20,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.CustomUtils;
-import com.shatteredpixel.shatteredpixeldungeon.custom.utils.GameMathExtension;
+import com.shatteredpixel.shatteredpixeldungeon.custom.utils.GME;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
 import com.shatteredpixel.shatteredpixeldungeon.effects.BlobEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
@@ -66,6 +66,7 @@ public class TenguHard extends Boss{
     {
         spriteClass = TenguSprite.class;
 
+        initProperty();
         initBaseStatus(6, 13, 20, 14, 200, 2, 3);
         initStatus(44);
 
@@ -240,7 +241,7 @@ public class TenguHard extends Boss{
         if(comboSinceJump > 7){
             switch (comboSinceJump % 3){
                 case 0: default:
-                    Buff.affect(enemy, Poison.class).set(comboSinceJump/1.5f);
+                    Buff.affect(enemy, Poison.class).extend(comboSinceJump/1.5f);
                     break;
                 case 1:
                     Buff.affect(enemy, Chill.class, comboSinceJump/1.5f);
@@ -891,7 +892,7 @@ public class TenguHard extends Boss{
         int targetCell = -1;
 
         //Targets closest cell which is adjacent to target, and not adjacent to thrower or another shocker
-        for (int i : GameMathExtension.NEIGHBOURS20()){
+        for (int i : GME.NEIGHBOURS20()){
             int cell = target.pos + i;
             if (Dungeon.level.distance(cell, thrower.pos) >= 2 && !Dungeon.level.solid[cell]){
                 boolean validTarget = true;

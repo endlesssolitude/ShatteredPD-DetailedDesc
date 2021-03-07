@@ -15,7 +15,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.BallisticaFloat;
-import com.shatteredpixel.shatteredpixeldungeon.custom.utils.GameMathExtension;
+import com.shatteredpixel.shatteredpixeldungeon.custom.utils.GME;
 import com.shatteredpixel.shatteredpixeldungeon.custom.visuals.effects.BeamCustom;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Effects;
@@ -366,7 +366,7 @@ public abstract class SpellCaster extends Mob {
                     0x00FFFFFF));
 
             boolean terrainAffected = false;
-            int[] cells = GameMathExtension.NEIGHBOURS5();
+            int[] cells = GME.NEIGHBOURS5();
             for (int n : cells) {
                 int c = ba.collisionPos + n;
                 if (c >= 0 && c < Dungeon.level.length()) {
@@ -539,7 +539,7 @@ public abstract class SpellCaster extends Mob {
             public boolean act(){
                 if(source != -1){
                     final float[] angles = {-23f, 0f, 23f};
-                    final float sourceAngle = GameMathExtension.angle(target.pos, source);
+                    final float sourceAngle = GME.angle(target.pos, source);
                     for(float a: angles){
                         BallisticaFloat bf = new BallisticaFloat(target.pos, sourceAngle + a, 25, BallisticaFloat.STOP_SOLID);
                         Ballistica ballistica = new Ballistica(target.pos, bf.collisionPosI, Ballistica.STOP_SOLID);

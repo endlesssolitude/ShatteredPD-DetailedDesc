@@ -23,40 +23,40 @@ package com.shatteredpixel.shatteredpixeldungeon.levels;
 
 public class Terrain {
 
-	public static final int CHASM			= 0;
-	public static final int EMPTY			= 1;
-	public static final int GRASS			= 2;
-	public static final int EMPTY_WELL		= 3;
-	public static final int WALL			= 4;
-	public static final int DOOR			= 5;
-	public static final int OPEN_DOOR		= 6;
-	public static final int ENTRANCE		= 7;
-	public static final int EXIT			= 8;
-	public static final int EMBERS			= 9;
-	public static final int LOCKED_DOOR		= 10;
-	public static final int PEDESTAL		= 11;
-	public static final int WALL_DECO		= 12;
-	public static final int BARRICADE		= 13;
-	public static final int EMPTY_SP		= 14;
-	public static final int HIGH_GRASS		= 15;
-	public static final int FURROWED_GRASS	= 30;
+	public static final int CHASM			= 0;	//坑
+	public static final int EMPTY			= 1;	//普通地板
+	public static final int GRASS			= 2;	//低草
+	public static final int EMPTY_WELL		= 3;	//空井
+	public static final int WALL			= 4;	//普通墙壁
+	public static final int DOOR			= 5;	//门
+	public static final int OPEN_DOOR		= 6;	//开着的门
+	public static final int ENTRANCE		= 7;	//入口
+	public static final int EXIT			= 8;	//出口
+	public static final int EMBERS			= 9;	//灰烬
+	public static final int LOCKED_DOOR		= 10;	//锁门
+	public static final int PEDESTAL		= 11;	//基座
+	public static final int WALL_DECO		= 12;	//装饰墙壁
+	public static final int BARRICADE		= 13;	//障碍物
+	public static final int EMPTY_SP		= 14;	//地板砖
+	public static final int HIGH_GRASS		= 15;	//高草
+	public static final int FURROWED_GRASS	= 30;	//枯草
 
-	public static final int SECRET_DOOR	    = 16;
-	public static final int SECRET_TRAP     = 17;
-	public static final int TRAP            = 18;
-	public static final int INACTIVE_TRAP   = 19;
+	public static final int SECRET_DOOR	    = 16;	//隐藏门
+	public static final int SECRET_TRAP     = 17;	//隐藏陷阱
+	public static final int TRAP            = 18;	//陷阱
+	public static final int INACTIVE_TRAP   = 19;	//失效陷阱
 
-	public static final int EMPTY_DECO		= 20;
-	public static final int LOCKED_EXIT		= 21;
-	public static final int UNLOCKED_EXIT	= 22;
-	public static final int SIGN			= 23;
-	public static final int WELL			= 24;
-	public static final int STATUE			= 25;
-	public static final int STATUE_SP		= 26;
-	public static final int BOOKSHELF		= 27;
-	public static final int ALCHEMY			= 28;
+	public static final int EMPTY_DECO		= 20;	//点缀地面
+	public static final int LOCKED_EXIT		= 21;	//封锁出口
+	public static final int UNLOCKED_EXIT	= 22;	//解锁的出口
+	public static final int SIGN			= 23;	//标志牌
+	public static final int WELL			= 24;	//井
+	public static final int STATUE			= 25;	//雕像
+	public static final int STATUE_SP		= 26;	//??
+	public static final int BOOKSHELF		= 27;	//书架
+	public static final int ALCHEMY			= 28;	//锅
 
-	public static final int WATER		    = 29;
+	public static final int WATER		    = 29;	//水
 	
 	public static final int PASSABLE		= 0x01;
 	public static final int LOS_BLOCKING	= 0x02;
