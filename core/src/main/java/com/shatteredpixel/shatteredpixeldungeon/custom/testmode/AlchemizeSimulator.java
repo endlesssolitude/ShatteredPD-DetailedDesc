@@ -13,7 +13,7 @@ public class AlchemizeSimulator extends TestItem implements AlchemyScene.Alchemy
         defaultAction = AC_BREW;
     }
 
-    private static final String AC_BREW = "ac_brew";
+    private static final String AC_BREW = "brew";
 
     private int charge = 2147483647;
 

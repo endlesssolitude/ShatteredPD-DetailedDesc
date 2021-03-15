@@ -65,7 +65,7 @@ public class ThinPillarsGooRoom extends GooBossRoom {
 		
 		setupGooNest(level);
 
-		if(Dungeon.isChallenged(Challenges.ELITE_BOSSES)){
+		if(Dungeon.isChallenged(Challenges.ELITE_BOSSES_1)){
 			GooHard boss = new GooHard();
 			boss.pos = level.pointToCell(center());
 			level.mobs.add( boss );

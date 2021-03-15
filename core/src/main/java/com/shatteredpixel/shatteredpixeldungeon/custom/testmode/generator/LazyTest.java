@@ -35,6 +35,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTerror;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.ArcaneCatalyst;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfBlast;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfBlink;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfIntuition;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Greatsword;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.Dart;
@@ -115,6 +117,10 @@ public class LazyTest extends TestGenerator {
             new AlchemicalCatalyst().quantity(100).collect();
 
             new ArcaneCatalyst().quantity(100).collect();
+
+            new StoneOfBlast().quantity(4444).collect();
+
+            new StoneOfBlink().quantity(4444).collect();
 
             new Blindweed.Seed().quantity(100).identify().collect();
             new Dreamfoil.Seed().quantity(100).identify().collect();

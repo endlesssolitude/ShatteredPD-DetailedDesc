@@ -246,7 +246,7 @@ public abstract class SpellCaster extends Mob {
         protected void warn(int num) {
             //if(num==2) sprite.showStatus( 0x5050FF, "!" );
             if(num==1) {sprite.showStatus(0x5050FF, "!!!");
-            new Flare( 6, 32 ).color( 0x5050FF, true ).show(sprite, 1.6f );
+            new Flare( 6, 32 ).color( 0x5050FF, true ).show(sprite, 3f );
             }
         }
 
@@ -261,7 +261,7 @@ public abstract class SpellCaster extends Mob {
                 ch.sprite.burst( 0xFF99CCFF, 5 );
                 if(ch.alignment != Alignment.ENEMY){
                     Buff.affect(ch, Chill.class, 5f);
-                    zapDamage(ch, 9, 14, 0.45f, this);
+                    zapDamage(ch, 8, 12, 0.45f, this);
                 }
             }
             Buff.affect(this, FrostPostShoot.class).setSource(ba.collisionPos);
@@ -317,7 +317,7 @@ public abstract class SpellCaster extends Mob {
                     ch.sprite.burst( 0xFF99CCFF,  3 );
                     if(ch.alignment != Alignment.ENEMY){
                         Buff.affect(ch, Chill.class, 3f);
-                        zapDamage(ch, 6, 9, 0.9f, FrostCaster.class);
+                        zapDamage(ch, 5, 8, 0.9f, FrostCaster.class);
                     }
                 }
             }
@@ -399,7 +399,7 @@ public abstract class SpellCaster extends Mob {
 
                 Buff.affect(ch, Marked.class, 6f);
 
-                zapDamage(ch, 9, 14, 0.45f, this);
+                zapDamage(ch, 7, 12, 0.45f, this);
             }
 
             if (terrainAffected) {
@@ -413,7 +413,7 @@ public abstract class SpellCaster extends Mob {
             //if(num==2) sprite.showStatus( 0xFF7070, "!" );
             if(num==1) {
                 sprite.showStatus(0xFF7070, "!!!");
-                new Flare( 6, 32 ).color( 0xFF7070, true ).show(sprite, 1.6f );
+                new Flare( 6, 32 ).color( 0xFF7070, true ).show(sprite, 3f );
             }
         }
 
@@ -460,7 +460,7 @@ public abstract class SpellCaster extends Mob {
                         ch.sprite.centerEmitter().burst( PurpleParticle.BURST, 1 );
                         ch.sprite.flash();
                         if (ch.alignment != Alignment.ENEMY) {
-                            zapDamage(ch, 6, 9, 0.9f, ExplosionCaster.class);
+                            zapDamage(ch, 5, 7, 0.9f, ExplosionCaster.class);
                         }
                     }
                 }
@@ -493,7 +493,7 @@ public abstract class SpellCaster extends Mob {
         protected void warn(int num) {
             //if(num==2) sprite.showStatus( 0xFFFFFF, "!" );
             if(num==1){ sprite.showStatus(0xFFFFFF, "!!!");
-                new Flare( 6, 32 ).color( 0xFFFFFF, true ).show(sprite, 1.6f );}
+                new Flare( 6, 32 ).color( 0xFFFFFF, true ).show(sprite, 3f );}
 
         }
 
@@ -509,7 +509,7 @@ public abstract class SpellCaster extends Mob {
                     ch.sprite.emitter().burst(Speck.factory(Speck.LIGHT), 6 );
                     if (ch.alignment != Alignment.ENEMY) {
                         Buff.affect(ch, Blindness.class, 4f);
-                        zapDamage(ch, 11, 14, 0.6f, this);
+                        zapDamage(ch, 9, 12, 0.6f, this);
                     }
                 }
             }
@@ -559,7 +559,7 @@ public abstract class SpellCaster extends Mob {
                         ch.sprite.emitter().burst(Speck.factory(Speck.LIGHT), 4 );
                         if (ch.alignment != Alignment.ENEMY) {
                             Buff.affect(ch, Blindness.class, 2f);
-                            zapDamage(ch, 7, 10, 1.2f, LightCaster.class);
+                            zapDamage(ch, 6, 9, 1.2f, LightCaster.class);
                         }
                     }
                 }
@@ -591,7 +591,7 @@ public abstract class SpellCaster extends Mob {
         protected void warn(int num) {
             //if(num==2) sprite.showStatus( 0x30FF30, "!" );
             if(num==1) {sprite.showStatus(0x30FF30, "!!!");
-                new Flare( 6, 32 ).color( 0x30FF30, true ).show(sprite, 1.6f );}
+                new Flare( 6, 32 ).color( 0x30FF30, true ).show(sprite, 3f );}
         }
 
         @Override
@@ -605,7 +605,7 @@ public abstract class SpellCaster extends Mob {
                 CellEmitter.center(ch.pos).burst( BloodParticle.BURST, 2 );
                 if (ch.alignment != Alignment.ENEMY) {
                     Buff.affect(ch, Marked.class, 5f);
-                    zapDamage(ch, 8, 12, 0.45f, this);
+                    zapDamage(ch, 6, 9, 0.45f, this);
                 }
             }
         }
@@ -653,7 +653,7 @@ public abstract class SpellCaster extends Mob {
                         CellEmitter.center(ch.pos).burst( BloodParticle.BURST, 1 );
                         if (ch.alignment != Alignment.ENEMY) {
                             Buff.affect(ch, Marked.class, 3f);
-                            zapDamage(ch, 5, 8, 0.9f, BounceCaster.class);
+                            zapDamage(ch, 3, 6, 0.9f, BounceCaster.class);
                         }
                     }
                 }

@@ -4,7 +4,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.custom.utils.BallisticaFloat;
+import com.shatteredpixel.shatteredpixeldungeon.custom.utils.BallisticaReal;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.PurpleParticle;
@@ -33,7 +33,7 @@ public class WandOfReflectDisintegration extends WandOfDisintegration {
 
     protected static ArrayList<PointF> fxS = new ArrayList<>();
     protected static ArrayList<PointF> fxE = new ArrayList<>();
-    protected static ArrayList<BallisticaFloat> beams = new ArrayList<>();
+    protected static ArrayList<BallisticaReal> beams = new ArrayList<>();
     protected static ArrayList<Float> offset_1 = new ArrayList<>();
     private static final String AC_TEST_ZAP = "test_zap";
     private boolean isTest = false;
@@ -124,22 +124,22 @@ public class WandOfReflectDisintegration extends WandOfDisintegration {
         //GLog.i("%f,", angle);
         int scatter = offset_1.size();
         for(int i=0;i<scatter;++i){
-            addBeam(new com.shatteredpixel.shatteredpixeldungeon.custom.utils.BallisticaFloat(beam.sourcePos, angle + offset_1.get(i), 20, com.shatteredpixel.shatteredpixeldungeon.custom.utils.BallisticaFloat.STOP_SOLID | com.shatteredpixel.shatteredpixeldungeon.custom.utils.BallisticaFloat.IGNORE_SOFT_SOLID));
+            addBeam(new BallisticaReal(beam.sourcePos, angle + offset_1.get(i), 20, BallisticaReal.STOP_SOLID | BallisticaReal.IGNORE_SOFT_SOLID));
         }
         int maxRf = nReflections(this.level());
         for(int ref = 0; ref < maxRf; ++ref) {
             for (int i = 0; i < scatter; ++i) {
-                com.shatteredpixel.shatteredpixeldungeon.custom.utils.BallisticaFloat bf = new com.shatteredpixel.shatteredpixeldungeon.custom.utils.BallisticaFloat(fxE.get(i+ref*scatter), reflectAngle(fxS.get(i+ref*scatter), fxE.get(i+ref*scatter)), 20, Ballistica.STOP_SOLID | Ballistica.IGNORE_SOFT_SOLID);
-                addBeam(bf);
+                BallisticaReal br = new BallisticaReal(fxE.get(i+ref*scatter), reflectAngle(fxS.get(i+ref*scatter), fxE.get(i+ref*scatter)), 20, BallisticaReal.STOP_SOLID | BallisticaReal.IGNORE_SOFT_SOLID);
+                addBeam(br);
             }
         }
 
     }
 
-    protected void addBeam(com.shatteredpixel.shatteredpixeldungeon.custom.utils.BallisticaFloat beam){
+    protected void addBeam(BallisticaReal beam){
         beams.add(beam);
-        fxS.add(beam.sourcePosF);
-        fxE.add(beam.collisionPosF);
+        fxS.add(beam.sourceF);
+        fxE.add(beam.collisionF);
     }
 
     @Override
@@ -152,13 +152,13 @@ public class WandOfReflectDisintegration extends WandOfDisintegration {
             return;
         }
         int count = 0;
-        for(com.shatteredpixel.shatteredpixeldungeon.custom.utils.BallisticaFloat b: beams){
+        for(BallisticaReal b: beams){
             zapSingle(b, count);
             ++count;
         }
     }
 
-    protected void zapSingle(com.shatteredpixel.shatteredpixeldungeon.custom.utils.BallisticaFloat beam, int reflection){
+    protected void zapSingle(BallisticaReal beam, int reflection){
 
         int level = buffedLvl();
 
@@ -168,7 +168,7 @@ public class WandOfReflectDisintegration extends WandOfDisintegration {
 
         for (int c : beam.subPath((reflection>0?0:1), maxDistance)) {
             //prevent self_damage
-            if(c==beam.sourcePosI && c==curUser.pos) continue;
+            if(c==beam.sourceI && c==curUser.pos) continue;
 
             Char ch;
             if ((ch = Actor.findChar( c )) != null) {
@@ -226,7 +226,7 @@ public class WandOfReflectDisintegration extends WandOfDisintegration {
         for(int i=0;i<size;++i){
             //Point p = Dungeon.level.cellToPoint(fxE.get(i));
             //GLog.i("(%d, %d)", p.x, p.y);
-            curUser.sprite.parent.add(new Beam.DeathRay(com.shatteredpixel.shatteredpixeldungeon.custom.utils.BallisticaFloat.coordToScreen(fxS.get(i)), BallisticaFloat.coordToScreen( fxE.get(i) )));
+            curUser.sprite.parent.add(new Beam.DeathRay(BallisticaReal.raisedPointToScreen(fxS.get(i)), BallisticaReal.raisedPointToScreen(fxE.get(i)) ));
         }
         callback.call();
     }
@@ -257,27 +257,44 @@ public class WandOfReflectDisintegration extends WandOfDisintegration {
         //PointF realPoint = nextPF(s,e);
         float angle = -PointF.angle(s,e)/PointF.G2R;
         if(angle<0f) angle+= 360f;
-        int cell = Dungeon.level.pointToCell(new Point(Math.round(e.x), Math.round(e.y)));
         float dx = e.x - s.x;
         float dy = e.y - s.y;
-        boolean verticalWall = Dungeon.level.solid[cell + (dx>0?1:-1)];
-        boolean horizontalWall = Dungeon.level.solid[cell + (dy>0?Dungeon.level.width():-Dungeon.level.width())];
+        boolean up = dy>0;
+        boolean right = dx>0;
+        boolean horizontalWall = false;
+        boolean verticalWall = false;
+
+        int xTile=(int)e.x;
+        if(e.x-(int)e.x<1e-5 && right){
+            xTile-=1;
+        }
+        int yTile=(int)e.y;
+        if(e.y-(int)e.y<1e-5 && up){
+            yTile-=1;
+        }
+        final int[] neigh = new int[]{-1, 1, -Dungeon.level.width(), Dungeon.level.width()};
+        boolean[] isWall = new boolean[4];
+        for(int i=0; i<4; ++i){
+            isWall[i]=Dungeon.level.solid[xTile+yTile*Dungeon.level.width()+neigh[i]];
+        }
+        if(e.x-(int)e.x<1e-5){
+            verticalWall = (right && isWall[1]) || (!right && isWall[0]);
+        }
+        if(e.y-(int)e.y<1e-5){
+            horizontalWall = (up && isWall[3]) || (!up && isWall[2]);
+        }
 
         if(horizontalWall != verticalWall){
             if(horizontalWall) return horizontalReflectAngle(angle);
             else return verticalReflectAngle(angle);
-        }else if(horizontalWall & verticalWall){
+        }else if(horizontalWall && verticalWall){
             if(Math.abs(dx)<Math.abs(dy)){
                 return horizontalReflectAngle(angle);
             }else{
                 return verticalReflectAngle(angle);
             }
         }else{
-            if(Math.abs(dx)>Math.abs(dy)){
-                return horizontalReflectAngle(angle);
-            }else{
-                return verticalReflectAngle(angle);
-            }
+            return angle;
         }
     }
 

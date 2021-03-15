@@ -22,7 +22,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Electricity;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ToxicGas;
@@ -301,8 +300,7 @@ public abstract class Char extends Actor {
 			}
 			
 			int effectiveDamage = enemy.defenseProc( this, dmg );
-			if(Dungeon.isChallenged(Challenges.ELITE_BOSSES)) effectiveDamage = Math.max( effectiveDamage - dr, Math.round(effectiveDamage/8f) );
-			else effectiveDamage = Math.max( effectiveDamage - dr, 0 );
+			effectiveDamage = Math.max( effectiveDamage - dr, 0 );
 			
 			if ( enemy.buff( Vulnerable.class ) != null){
 				effectiveDamage *= 1.33f;

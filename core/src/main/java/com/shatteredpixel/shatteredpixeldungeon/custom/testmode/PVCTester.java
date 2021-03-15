@@ -4,8 +4,11 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.BallisticaFloat;
+import com.shatteredpixel.shatteredpixeldungeon.custom.utils.BallisticaReal;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
+import com.shatteredpixel.shatteredpixeldungeon.effects.TargetedCell;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 
 import java.util.ArrayList;
 
@@ -29,7 +32,7 @@ public class PVCTester extends TestItem {
     public void execute( Hero hero, String action ) {
         super.execute(hero, action);
         if(action.equals(AC_SHOOT)){
-            for(int i=0;i<11;++i) {
+            for(int i=0;i<7;++i) {
                 /*
                 int cell = PoleVectorConverter.findBestTargetCell(curUser.pos, degree, 20);
                 Ballistica b = new Ballistica(curUser.pos, cell, Ballistica.WONT_STOP);
@@ -44,12 +47,13 @@ public class PVCTester extends TestItem {
                 }
                 damageChar(b);
                 */
-                com.shatteredpixel.shatteredpixeldungeon.custom.utils.BallisticaFloat bf = new com.shatteredpixel.shatteredpixeldungeon.custom.utils.BallisticaFloat(curUser.pos, degree, 6, com.shatteredpixel.shatteredpixeldungeon.custom.utils.BallisticaFloat.WONT_STOP);
-                curUser.sprite.parent.add(new Beam.DeathRay(curUser.sprite.center(), com.shatteredpixel.shatteredpixeldungeon.custom.utils.BallisticaFloat.coordToScreen(bf.collisionPosF)));
+                BallisticaReal bf = new BallisticaReal(curUser.pos, degree, 6, BallisticaReal.STOP_SOLID);
+                curUser.sprite.parent.add(new Beam.DeathRay(DungeonTilemap.tileCenterToWorld(curUser.pos), bf.collisionF.clone().scale(DungeonTilemap.SIZE)));
+                curUser.sprite.parent.add(new TargetedCell(bf.collisionI, 0xFF0000));
                 //for (int p : bf.pathI){
                  //   curUser.sprite.parent.add(new TargetedCell(p, 0xFF0000));
                 //}
-                damageChar(bf);
+                //damageChar(bf);
                 degree += 17;
             }
         }

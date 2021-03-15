@@ -203,7 +203,7 @@ public class NewHallsBossLevel extends Level {
 
 		Dungeon.observe();
 
-		if(Dungeon.isChallenged(Challenges.ELITE_BOSSES)){
+		if(Dungeon.isChallenged(Challenges.ELITE_BOSSES_5)){
 			YogHard boss = new YogHard();
 			boss.pos = exit + width*3;
 			GameScene.add( boss );

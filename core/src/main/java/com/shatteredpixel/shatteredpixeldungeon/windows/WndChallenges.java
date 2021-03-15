@@ -24,76 +24,121 @@ package com.shatteredpixel.shatteredpixeldungeon.windows;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
-import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.ui.CheckBox;
 import com.shatteredpixel.shatteredpixeldungeon.ui.IconButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
+import com.shatteredpixel.shatteredpixeldungeon.ui.ScrollPane;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
+import com.watabou.noosa.ui.Component;
 
 import java.util.ArrayList;
 
 public class WndChallenges extends Window {
 
 	private static final int WIDTH		= 120;
+	private static final int HEIGHT		= 170;
 	private static final int TTL_HEIGHT = 16;
 	private static final int BTN_HEIGHT = 16;
 	private static final int GAP        = 1;
 
 	private boolean editable;
-	private ArrayList<CheckBox> boxes;
+	private ArrayList<CanScrollCheckBox> boxes;
 
 	public WndChallenges( int checked, boolean editable ) {
 
 		super();
 
+		resize(WIDTH, HEIGHT);
+
 		this.editable = editable;
 
-		RenderedTextBlock title = PixelScene.renderTextBlock( Messages.get(this, "title"), 12 );
-		title.hardlight( TITLE_COLOR );
-		title.setPos(
-				(WIDTH - title.width()) / 2,
-				(TTL_HEIGHT - title.height()) / 2
-		);
-		PixelScene.align(title);
-		add( title );
+		ScrollPane pane = new ScrollPane(new Component()) {
+			@Override
+			public void onClick(float x, float y) {
+				int max_size = boxes.size();
+				for (int i = 0; i < max_size; ++i) {
+					if (boxes.get(i).onClick(x, y))
+						break;
+				}
+			}
+		};
+		add(pane);
+		pane.setRect(0, GAP, WIDTH, HEIGHT - 2 * GAP);
+		Component content = pane.content();
 
 		boxes = new ArrayList<>();
 
-		float pos = TTL_HEIGHT;
-		for (int i=0; i < Challenges.NAME_IDS.length; i++) {
+		float pos = 0;
+
+		final int traditional_challenges = 0;
+		final int special_mode = 8;
+		final int additional_challenge = 9;
+		final int expansion = 20;
+
+		for (int i = 0; i < Challenges.NAME_IDS.length; i++) {
 
 			final String challenge = Challenges.NAME_IDS[i];
-			
-			CheckBox cb = new CheckBox( Messages.titleCase(Messages.get(Challenges.class, challenge)) );
-			cb.checked( (checked & Challenges.MASKS[i]) != 0 );
+
+			if(i==traditional_challenges || i==special_mode || i==additional_challenge || i==expansion){
+				RenderedTextBlock block = PixelScene.renderTextBlock(10);
+				switch (i){
+					case traditional_challenges:
+						block.text(M.L(Challenges.class, "traditional"));
+						block.hardlight(TITLE_COLOR);
+						break;
+					case special_mode:
+						block.text(M.L(Challenges.class, "test"));
+						block.hardlight(0xFF00FF);
+						break;
+					case additional_challenge:
+						block.text(M.L(Challenges.class, "add"));
+						block.hardlight(0xFF4444);
+						break;
+					case expansion: default:
+						block.text(M.L(Challenges.class, "expansion"));
+						block.hardlight(0x55AAFF);
+						break;
+				}
+				block.setPos((WIDTH - block.width()) / 2,
+						pos + GAP *4);
+				PixelScene.align(block);
+				content.add(block);
+				pos += block.height() + 8*GAP;
+			}
+
+			CanScrollCheckBox cb = new CanScrollCheckBox(M.TL(Challenges.class, challenge));
+			cb.checked((checked & Challenges.MASKS[i]) != 0);
 			cb.active = editable;
 
 			if (i > 0) {
 				pos += GAP;
 			}
-			cb.setRect( 0, pos, WIDTH-16, BTN_HEIGHT );
+			cb.setRect(0, pos, WIDTH - 16, BTN_HEIGHT);
 
-			add( cb );
-			boxes.add( cb );
-			
-			IconButton info = new IconButton(Icons.get(Icons.INFO)){
+			content.add(cb);
+			boxes.add(cb);
+
+			IconButton info = new IconButton(Icons.get(Icons.INFO)) {
 				@Override
 				protected void onClick() {
 					super.onClick();
 					ShatteredPixelDungeon.scene().add(
-							new WndMessage(Messages.get(Challenges.class, challenge+"_desc"))
+							new WndMessage(M.L(Challenges.class, challenge + "_desc"))
 					);
 				}
 			};
 			info.setRect(cb.right(), pos, 16, BTN_HEIGHT);
-			add(info);
-			
+			content.add(info);
+
 			pos = cb.bottom();
 		}
+		content.setSize(WIDTH, (int) pos);
+		pane.scrollTo(0, 0);
 
-		resize( WIDTH, (int)pos );
+
 	}
 
 	@Override
@@ -110,5 +155,29 @@ public class WndChallenges extends Window {
 		}
 
 		super.onBackPressed();
+	}
+
+	public static class CanScrollCheckBox extends CheckBox{
+
+		public CanScrollCheckBox(String label) {
+			super(label);
+		}
+
+		protected boolean onClick(float x, float y){
+			if(!inside(x,y)) return false;
+			onClick();
+
+			return true;
+		}
+		@Override
+		protected void onClick(){
+			super.onClick();
+		}
+
+		@Override
+		protected void layout(){
+			super.layout();
+			hotArea.width = hotArea.height = 0;
+		}
 	}
 }

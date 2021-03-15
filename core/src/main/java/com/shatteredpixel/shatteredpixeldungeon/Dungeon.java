@@ -262,7 +262,7 @@ public class Dungeon {
 				level = new PrisonLevel();
 				break;
 			case 10:
-				if(Dungeon.isChallenged(Challenges.ELITE_BOSSES)) level = new HardTenguLevel();
+				if(Dungeon.isChallenged(Challenges.ELITE_BOSSES_2)) level = new HardTenguLevel();
 				else level = new NewPrisonBossLevel();
 				break;
 			case 11:
@@ -272,7 +272,7 @@ public class Dungeon {
 				level = new CavesLevel();
 				break;
 			case 15:
-				if(Dungeon.isChallenged(Challenges.ELITE_BOSSES)) level = new HardDM300Level();
+				if(Dungeon.isChallenged(Challenges.ELITE_BOSSES_3)) level = new HardDM300Level();
 				else level = new NewCavesBossLevel();
 				break;
 			case 16:
@@ -282,7 +282,7 @@ public class Dungeon {
 				level = new CityLevel();
 				break;
 			case 20:
-				if(Dungeon.isChallenged(Challenges.ELITE_BOSSES)) level = new HardDKLevel();
+				if(Dungeon.isChallenged(Challenges.ELITE_BOSSES_4)) level = new HardDKLevel();
 				else level = new NewCityBossLevel();
 				break;
 			case 21:

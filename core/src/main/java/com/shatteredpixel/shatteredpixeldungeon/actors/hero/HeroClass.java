@@ -318,6 +318,7 @@ public enum HeroClass {
 			//word.curCharges = 99999;
 			//word.identify().collect();
 
+
 			CustomWeapon customWeapon = new CustomWeapon();
 			customWeapon.adjustStatus();
 			customWeapon.identify().collect();

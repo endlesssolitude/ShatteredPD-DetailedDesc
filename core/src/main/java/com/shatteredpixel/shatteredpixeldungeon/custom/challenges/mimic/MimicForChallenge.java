@@ -762,7 +762,7 @@ public class MimicForChallenge extends Mimic {
             case 0: default: return 1f;
             case 1: return 1.25f;
             case 2: return 1.55f;
-            case 3: return 1.9f;
+            case 3: return 1.95f;
         }
     }
 
@@ -937,7 +937,7 @@ public class MimicForChallenge extends Mimic {
             if(Random.Int(4)==0) {reward = new StoneOfEnchantment();reward.quantity(1);items.add(reward);}
             if(Random.Int(4)==0) {reward = new ScrollOfTransmutation();reward.quantity(1);items.add(reward);}
             if(Random.Int(4)==0) {reward = new PotionOfExperience();reward.quantity(1);items.add(reward);}
-            if(Random.Int(6)==0){
+            if(Random.Int(5)==0){
                 do{
                     switch(Random.Int(3)){
                         case 0:
@@ -952,7 +952,7 @@ public class MimicForChallenge extends Mimic {
                 }while (reward == null || Challenges.isItemBlocked(reward));
                 if(reward.isUpgradable()) {
                     reward.cursed = false;
-                    if (power > 12.8f) {
+                    if (power > 12.3f) {
                         reward.level(Random.Int(4, 7));
                     } else if (power > 9.9f) {
                         reward.level(Random.Int(3, 6));

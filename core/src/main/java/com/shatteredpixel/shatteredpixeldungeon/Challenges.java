@@ -35,13 +35,25 @@ public class Challenges {
 	public static final int DARKNESS			= 32;
 	public static final int NO_SCROLLS		    = 64;
 	public static final int CHAMPION_ENEMIES	= 128;
-	//Dungeon.newLevel, Char.attack (for min damage), Hero.speed(for speed limit), Goo and Yog spawning
-	public static final int ELITE_BOSSES		= 256;
-	public static final int TEST_MODE			= 512;
-	//hero.live for buff, mimic spawning
-	public static final int MIMIC_DUNGEON 		= 1024;
 
-	public static final int MAX_VALUE           = 2047;
+	public static final int TEST_MODE			= 1<<8;
+	//hero.live for buff, mimic spawning
+	public static final int MIMIC_DUNGEON 		= 1<<9;
+	//Dungeon.newLevel, Hero.speed(for speed limit), Goo and Yog spawning
+	public static final int ELITE_BOSSES_1		= 1<<10;
+	public static final int ELITE_BOSSES_2 		= 1<<11;
+	public static final int ELITE_BOSSES_3 		= 1<<12;
+	public static final int ELITE_BOSSES_4 		= 1<<13;
+	public static final int ELITE_BOSSES_5 		= 1<<14;
+	public static final int ELITE_ENEMIES_1		= 1<<15;
+	public static final int ELITE_ENEMIES_2		= 1<<16;
+	public static final int ELITE_ENEMIES_3		= 1<<17;
+	public static final int ELITE_ENEMIES_4		= 1<<18;
+	public static final int ELITE_ENEMIES_5		= 1<<19;
+
+	public static final int EXPANSION_MISC		= 1<<20;
+
+	public static final int MAX_VALUE           = (1<<21)-1;
 
 	public static final String[] NAME_IDS = {
 			"champion_enemies",
@@ -52,13 +64,33 @@ public class Challenges {
 			"swarm_intelligence",
 			"darkness",
 			"no_scrolls",
-			"elite_bosses",
+
+			"test_mode",
+
 			"mimic_dungeon",
-			"test_mode"
+			"elite_bosses_1",
+			"elite_bosses_2",
+			"elite_bosses_3",
+			"elite_bosses_4",
+			"elite_bosses_5",
+			"elite_enemies_1",
+			"elite_enemies_2",
+			"elite_enemies_3",
+			"elite_enemies_4",
+			"elite_enemies_5",
+
+			"expansion_misc"
+
 	};
 
 	public static final int[] MASKS = {
-			CHAMPION_ENEMIES, NO_FOOD, NO_ARMOR, NO_HEALING, NO_HERBALISM, SWARM_INTELLIGENCE, DARKNESS, NO_SCROLLS, ELITE_BOSSES, MIMIC_DUNGEON, TEST_MODE
+			CHAMPION_ENEMIES, NO_FOOD, NO_ARMOR, NO_HEALING, NO_HERBALISM, SWARM_INTELLIGENCE, DARKNESS, NO_SCROLLS,
+			TEST_MODE,
+			MIMIC_DUNGEON,
+			ELITE_BOSSES_1, ELITE_BOSSES_2, ELITE_BOSSES_3, ELITE_BOSSES_4, ELITE_BOSSES_5,
+			ELITE_ENEMIES_1, ELITE_ENEMIES_2, ELITE_ENEMIES_3, ELITE_ENEMIES_4, ELITE_ENEMIES_5,
+
+			EXPANSION_MISC
 	};
 
 	public static int activeChallenges(){

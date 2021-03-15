@@ -64,6 +64,7 @@ public enum Rankings {
 			return;
 		}
 
+
 		load();
 		
 		Record rec = new Record();

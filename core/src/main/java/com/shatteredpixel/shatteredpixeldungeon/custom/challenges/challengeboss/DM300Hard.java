@@ -153,7 +153,7 @@ public class DM300Hard extends Boss{
             }//else, just act
         }
         if(summonCD<0f){
-            summonCD = Math.max(52f - phase * 2f, 25f);
+            summonCD += Math.max(47f - phase * 3f, 23f);
             summonCaster(Random.Int(4), findRandomPlaceForCaster(), phase>5);
         }
         summonCD -= 1/speed();
@@ -177,10 +177,10 @@ public class DM300Hard extends Boss{
                 sprite.emitter().start(SparkParticle.STATIC, 0.05f, 20);
             }
 
-            Buff.affect(this, Barrier.class).setShield( 30 + (HT - HP)/10);
+            Buff.affect(this, Barrier.class).setShield( 30 );
 
             //summonCaster(Random.Int(4));
-            summonCD -= 25f;
+            summonCD -= 32f;
 
         }
     }
@@ -206,7 +206,7 @@ public class DM300Hard extends Boss{
             yell(Messages.get(this, "notice"));
         }
         if(buff(RageAndFire.class)!=null) damage = Math.round(damage*0.1f);
-        damage = Math.round(damage*Math.max(1f-0.1f*aliveCasters()[1], 0.5f));
+        damage = Math.round(damage*Math.max(1f-0.08f*aliveCasters()[1], 0.5f));
 
         int preHP = HP;
         super.damage(damage, src);
@@ -312,7 +312,7 @@ public class DM300Hard extends Boss{
                     caster = new SpellCaster.BounceCaster();
             }
             caster.pos = pos;
-            GameScene.add(caster, Random.Float(2f));
+            GameScene.add(caster, Random.Float(4f));
             Dungeon.level.mobs.add(caster);
             fallingRockVisual(pos);
             if(activate) caster.activate();
@@ -379,7 +379,7 @@ public class DM300Hard extends Boss{
                     Char ch = findChar(i);
                     if(ch!=null){
                         if(ch.alignment != Alignment.ENEMY){
-                            SpellCaster.zapDamage(ch, 22, 35, 0.75f, m);
+                            SpellCaster.zapDamage(ch, 18, 28, 0.75f, m);
                         }
                     }
                 }
