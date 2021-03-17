@@ -21,17 +21,30 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.custom.challenges.mobhard.spawner.MobList;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Bestiary {
+
+	private static boolean hasChallenge(int depth){
+		return Dungeon.isChallenged(Challenges.ELITE_ENEMIES_1 << ((depth-1)/5));
+	}
 	
 	public static ArrayList<Class<? extends Mob>> getMobRotation( int depth ){
-		ArrayList<Class<? extends Mob>> mobs = standardMobRotation( depth );
-		addRareMobs(depth, mobs);
-		swapMobAlts(mobs);
+		ArrayList<Class<? extends Mob>> mobs;
+		if(!hasChallenge(depth)){
+			mobs = standardMobRotation(depth);
+			addRareMobs(depth, mobs);
+			swapMobAlts(mobs);
+		}else{
+			mobs = MobList.HardMobList(depth);
+			MobList.swapMobAlts(mobs);
+		}
 		Random.shuffle(mobs);
 		return mobs;
 	}

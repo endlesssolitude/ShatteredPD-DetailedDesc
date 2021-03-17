@@ -525,7 +525,7 @@ public class Hero extends Char {
 			((HeroSprite)sprite).sprint( 1f );
 		}
 
-		if(Dungeon.isChallenged(Challenges.ELITE_BOSSES_1 | Challenges.ELITE_BOSSES_2 | Challenges.ELITE_BOSSES_3 | Challenges.ELITE_BOSSES_4 | Challenges.ELITE_BOSSES_5)){
+		if(Dungeon.isChallenged(Challenges.ELITE_BOSSES)){
 			if(Dungeon.bossLevel(Dungeon.depth)) {
 				if (buff(LockedFloor.class) != null) {
 					// 1/3 effect for extra speed

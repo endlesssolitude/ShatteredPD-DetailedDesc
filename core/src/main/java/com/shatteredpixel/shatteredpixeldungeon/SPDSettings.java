@@ -178,12 +178,12 @@ public class SPDSettings extends GameSettings {
 		return getInt( KEY_LAST_CLASS, 0, 0, 3 );
 	}
 	
-	public static void challenges( int value ) {
+	public static void challenges( long value ) {
 		put( KEY_CHALLENGES, value );
 	}
 	
-	public static int challenges() {
-		return getInt( KEY_CHALLENGES, 0, 0, Challenges.MAX_VALUE );
+	public static long challenges() {
+		return getLong( KEY_CHALLENGES, 0, 0, Challenges.MAX_VALUE );
 	}
 
 	public static void supportNagged( boolean value ) {

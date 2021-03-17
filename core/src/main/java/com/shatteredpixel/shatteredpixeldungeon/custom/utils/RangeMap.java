@@ -89,4 +89,38 @@ public class RangeMap {
         }
         return build(center, MapXY.buildXYMap(xyMap));
     }
+
+    public static int[] manhattanCircle(int center, int dist){
+        if(dist<0 && dist>300) return null;
+        if(dist==0){
+            return new int[]{center};
+        }
+        int[] xyMap = new int[2*4*dist];
+        //-0 = +0, so list by hand
+        int index = 0;
+        final int[] zeroTile = new int[]{dist, 0, -dist, 0, 0, dist, 0, -dist};
+        for(int i: zeroTile){
+            xyMap[index]=i;
+            ++index;
+        }
+
+        final int[] signX = new int[]{-1, -1, 1, 1};
+        final int[] signY = new int[]{-1, 1, -1, 1};
+        for(int x = dist - 1; x > 0; --x){
+            for(int i=0; i<4;++i){
+                xyMap[index]=x*signX[i];
+                xyMap[index+1]=(dist-x)*signY[i];
+                index += 2;
+            }
+        }
+
+        return build(center, MapXY.buildXYMap(xyMap));
+    }
+
+    public static int[] manhattanRange(int center, int range){
+        if(range>=0){
+            return arrayCopy(manhattanCircle(center, range), manhattanRange(center, range-1));
+        }
+        return new int[]{};
+    }
 }

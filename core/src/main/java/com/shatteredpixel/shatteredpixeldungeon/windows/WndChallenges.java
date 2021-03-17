@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ScrollPane;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
+import com.watabou.noosa.Image;
 import com.watabou.noosa.ui.Component;
 
 import java.util.ArrayList;
@@ -46,8 +47,9 @@ public class WndChallenges extends Window {
 
 	private boolean editable;
 	private ArrayList<CanScrollCheckBox> boxes;
+	private ArrayList<CanScrollInfo> infos;
 
-	public WndChallenges( int checked, boolean editable ) {
+	public WndChallenges( long checked, boolean editable ) {
 
 		super();
 
@@ -63,6 +65,12 @@ public class WndChallenges extends Window {
 					if (boxes.get(i).onClick(x, y))
 						break;
 				}
+				max_size = infos.size();
+				for(int i = 0; i<max_size;++i){
+					if(infos.get(i).onClick(x,y)){
+						break;
+					}
+				}
 			}
 		};
 		add(pane);
@@ -70,6 +78,7 @@ public class WndChallenges extends Window {
 		Component content = pane.content();
 
 		boxes = new ArrayList<>();
+		infos = new ArrayList<>();
 
 		float pos = 0;
 
@@ -121,7 +130,7 @@ public class WndChallenges extends Window {
 			content.add(cb);
 			boxes.add(cb);
 
-			IconButton info = new IconButton(Icons.get(Icons.INFO)) {
+			CanScrollInfo info = new CanScrollInfo(Icons.get(Icons.INFO)) {
 				@Override
 				protected void onClick() {
 					super.onClick();
@@ -131,6 +140,7 @@ public class WndChallenges extends Window {
 				}
 			};
 			info.setRect(cb.right(), pos, 16, BTN_HEIGHT);
+			infos.add(info);
 			content.add(info);
 
 			pos = cb.bottom();
@@ -145,7 +155,7 @@ public class WndChallenges extends Window {
 	public void onBackPressed() {
 
 		if (editable) {
-			int value = 0;
+			long value = 0;
 			for (int i=0; i < boxes.size(); i++) {
 				if (boxes.get( i ).checked()) {
 					value |= Challenges.MASKS[i];
@@ -169,9 +179,21 @@ public class WndChallenges extends Window {
 
 			return true;
 		}
+
 		@Override
-		protected void onClick(){
-			super.onClick();
+		protected void layout(){
+			super.layout();
+			hotArea.width = hotArea.height = 0;
+		}
+	}
+
+	public static class CanScrollInfo extends IconButton{
+		public CanScrollInfo(Image Icon){super(Icon);}
+
+		protected boolean onClick(float x, float y){
+			if(!inside(x,y)) return false;
+			onClick();
+			return true;
 		}
 
 		@Override

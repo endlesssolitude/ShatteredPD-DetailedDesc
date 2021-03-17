@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
 import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.DeviceCompat;
 import com.watabou.utils.FileUtils;
 
 import java.io.IOException;
@@ -60,8 +61,10 @@ public enum Rankings {
 
 	public void submit( boolean win, Class cause ) {
 
-		if(Dungeon.isChallenged(Challenges.TEST_MODE)){
-			return;
+		if(!DeviceCompat.isDebug()) {
+			if (Dungeon.isChallenged(Challenges.TEST_MODE)) {
+				return;
+			}
 		}
 
 
@@ -193,7 +196,7 @@ public enum Rankings {
 
 		Statistics.restoreFromBundle(data.getBundle(STATS));
 		
-		Dungeon.challenges = data.getInt(CHALLENGES);
+		Dungeon.challenges = data.getLong(CHALLENGES);
 
 	}
 	

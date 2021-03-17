@@ -23,37 +23,42 @@ package com.shatteredpixel.shatteredpixeldungeon;
 
 import com.shatteredpixel.shatteredpixeldungeon.items.Dewdrop;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCorruption;
 
 public class Challenges {
 
 	//Some of these internal IDs are outdated and don't represent what these challenges do
-	public static final int NO_FOOD				= 1;
-	public static final int NO_ARMOR			= 2;
-	public static final int NO_HEALING			= 4;
-	public static final int NO_HERBALISM		= 8;
-	public static final int SWARM_INTELLIGENCE	= 16;
-	public static final int DARKNESS			= 32;
-	public static final int NO_SCROLLS		    = 64;
-	public static final int CHAMPION_ENEMIES	= 128;
+	public static final long NO_FOOD				= 1;
+	public static final long NO_ARMOR			= 2;
+	public static final long NO_HEALING			= 4;
+	public static final long NO_HERBALISM		= 8;
+	public static final long SWARM_INTELLIGENCE	= 16;
+	public static final long DARKNESS			= 32;
+	public static final long NO_SCROLLS		    = 64;
+	public static final long CHAMPION_ENEMIES	= 128;
 
-	public static final int TEST_MODE			= 1<<8;
+	public static final long TEST_MODE			= 1<<8;
 	//hero.live for buff, mimic spawning
-	public static final int MIMIC_DUNGEON 		= 1<<9;
+	public static final long MIMIC_DUNGEON 		= 1<<9;
 	//Dungeon.newLevel, Hero.speed(for speed limit), Goo and Yog spawning
-	public static final int ELITE_BOSSES_1		= 1<<10;
-	public static final int ELITE_BOSSES_2 		= 1<<11;
-	public static final int ELITE_BOSSES_3 		= 1<<12;
-	public static final int ELITE_BOSSES_4 		= 1<<13;
-	public static final int ELITE_BOSSES_5 		= 1<<14;
-	public static final int ELITE_ENEMIES_1		= 1<<15;
-	public static final int ELITE_ENEMIES_2		= 1<<16;
-	public static final int ELITE_ENEMIES_3		= 1<<17;
-	public static final int ELITE_ENEMIES_4		= 1<<18;
-	public static final int ELITE_ENEMIES_5		= 1<<19;
+	public static final long ELITE_BOSSES_1		= 1<<10;
+	public static final long ELITE_BOSSES_2 		= 1<<11;
+	public static final long ELITE_BOSSES_3 		= 1<<12;
+	public static final long ELITE_BOSSES_4 		= 1<<13;
+	public static final long ELITE_BOSSES_5 		= 1<<14;
+	public static final long ELITE_ENEMIES_1		= 1<<15;
+	public static final long ELITE_ENEMIES_2		= 1<<16;
+	public static final long ELITE_ENEMIES_3		= 1<<17;
+	public static final long ELITE_ENEMIES_4		= 1<<18;
+	public static final long ELITE_ENEMIES_5		= 1<<19;
+	public static final long ELITE_BOSSES 			=
+			ELITE_BOSSES_1 | ELITE_BOSSES_2 | ELITE_BOSSES_3 | ELITE_BOSSES_4 | ELITE_BOSSES_5;
+	public static final long ELITE_ENEMIES			=
+			ELITE_ENEMIES_1 | ELITE_ENEMIES_2 | ELITE_ENEMIES_3 | ELITE_ENEMIES_4 | ELITE_ENEMIES_5;
 
-	public static final int EXPANSION_MISC		= 1<<20;
+	public static final long EXPANSION_MISC		= 1<<20;
 
-	public static final int MAX_VALUE           = (1<<21)-1;
+	public static final long MAX_VALUE           = (1<<21)-1;
 
 	public static final String[] NAME_IDS = {
 			"champion_enemies",
@@ -83,7 +88,7 @@ public class Challenges {
 
 	};
 
-	public static final int[] MASKS = {
+	public static final long[] MASKS = {
 			CHAMPION_ENEMIES, NO_FOOD, NO_ARMOR, NO_HEALING, NO_HERBALISM, SWARM_INTELLIGENCE, DARKNESS, NO_SCROLLS,
 			TEST_MODE,
 			MIMIC_DUNGEON,
@@ -95,7 +100,7 @@ public class Challenges {
 
 	public static int activeChallenges(){
 		int chCount = 0;
-		for (int ch : Challenges.MASKS){
+		for (long ch : Challenges.MASKS){
 			if ((Dungeon.challenges & ch) != 0) chCount++;
 		}
 		return chCount;
@@ -105,6 +110,10 @@ public class Challenges {
 
 		if (Dungeon.isChallenged(NO_HERBALISM) && item instanceof Dewdrop){
 			return true;
+		}
+
+		if(Dungeon.isChallenged(ELITE_ENEMIES)){
+			return item instanceof WandOfCorruption;
 		}
 
 		return false;

@@ -9,10 +9,7 @@ import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.watabou.utils.Callback;
 
-public class RatHard extends Rat {
-    {
-        EXP=2;
-    }
+public class RatH extends Rat {
 
     @Override
     public void die(Object cause){
@@ -22,13 +19,13 @@ public class RatHard extends Rat {
         white.beckon(pos);
 
         MagicMissile.boltFromChar(sprite.parent,
-                MagicMissile.EARTH,
+                MagicMissile.MAGIC_MISSILE,
                 sprite,
                 new Ballistica(pos, white.pos, Ballistica.STOP_TARGET).collisionPos,
                 new Callback() {
                     @Override
                     public void call() {
-                        new Flare(7, 25).color(0xFF4488, true).show(white.sprite, 2f);
+                        new Flare(5, 25).color(0xFF4488, true).show(white.sprite, 2f);
                     }
                 });
 

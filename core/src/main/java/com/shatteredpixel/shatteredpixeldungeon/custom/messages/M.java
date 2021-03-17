@@ -5,7 +5,7 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 public class M {
     public static String L(Class<?> c, String k, Object...args){
         String s = Messages.get(c, k, args);
-        if(s.equals("!!!NO TEXT FOUND!!!")){
+        if(s.contains("!!!NO TEXT FOUND!!!")){
             String key;
             if (c != null){
                 key = c.getName();

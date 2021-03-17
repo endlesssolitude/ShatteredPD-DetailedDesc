@@ -56,10 +56,8 @@ public class MapXY {
         int l = coordinates.length;
         if(l%2!=0) l--;
         int[][] mapXY = new int[2][l/2];
-        int count = 0;
-        for(int i:coordinates){
-            mapXY[count%2][count] = i;
-            ++count;
+        for(int i=0; i<coordinates.length; ++i){
+            mapXY[i%2][i/2] = coordinates[i];
         }
         return mapXY;
     }
