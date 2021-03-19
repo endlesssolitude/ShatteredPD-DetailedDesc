@@ -23,7 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.custom.challenges.mobhard.spawner.MobList;
+import com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.spawner.MobList;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;

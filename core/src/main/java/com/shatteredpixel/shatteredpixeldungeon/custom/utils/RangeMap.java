@@ -85,6 +85,7 @@ public class RangeMap {
             for(int j=-h;j<=h;++j){
                 xyMap[2*count]=i;
                 xyMap[2*count+1]=j;
+                count ++;
             }
         }
         return build(center, MapXY.buildXYMap(xyMap));

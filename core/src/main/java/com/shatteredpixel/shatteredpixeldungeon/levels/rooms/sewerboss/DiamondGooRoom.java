@@ -24,7 +24,7 @@ package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.sewerboss;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Goo;
-import com.shatteredpixel.shatteredpixeldungeon.custom.challenges.challengeboss.GooHard;
+import com.shatteredpixel.shatteredpixeldungeon.custom.ch.boss.GooHard;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
