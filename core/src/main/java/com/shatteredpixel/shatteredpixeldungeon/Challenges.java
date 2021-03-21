@@ -23,6 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon;
 
 import com.shatteredpixel.shatteredpixeldungeon.items.Dewdrop;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCorruption;
 
 public class Challenges {
@@ -113,7 +114,9 @@ public class Challenges {
 		}
 
 		if(Dungeon.isChallenged(ELITE_ENEMIES)){
-			return item instanceof WandOfCorruption;
+			if(item instanceof WandOfBlastWave || item instanceof WandOfCorruption){
+				return true;
+			}
 		}
 
 		return false;

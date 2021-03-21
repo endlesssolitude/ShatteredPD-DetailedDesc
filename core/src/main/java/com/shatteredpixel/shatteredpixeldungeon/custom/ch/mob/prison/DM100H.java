@@ -125,7 +125,7 @@ public class DM100H extends DM100 {
                 public boolean act(){
                     final Actor toRemove = this;
 
-                    DelayerEffect.delayTime(0.4f,
+                    DelayerEffect.delayTime(0.5f,
                             new Callback() {
                         @Override
                         public void call() {
@@ -134,10 +134,10 @@ public class DM100H extends DM100 {
                             aim.sprite.parent.add(new Lightning(aim.sprite.center(), new PointF( x, y-300f),null));
                             aim.sprite.parent.add(new Lightning(new PointF(x-5f, y), new PointF( x-5f, y-300f),null));
                             aim.sprite.parent.add(new Lightning(new PointF(x+5f, y), new PointF( x+5f, y-300f),null));
-                            Sample.INSTANCE.play( Assets.Sounds.LIGHTNING );
+                            Sample.INSTANCE.play( Assets.Sounds.LIGHTNING, 1.5f);
                             boolean alive = aim.isAlive();
 
-                            aim.damage(Random.Int(28, 42), new SkyLightning());
+                            aim.damage(Random.Int(28, 38), new SkyLightning());
                             aim.sprite.centerEmitter().burst( SparkParticle.FACTORY, 32 );
                             aim.sprite.flash();
                             Camera.main.shake(5f, 0.8f);

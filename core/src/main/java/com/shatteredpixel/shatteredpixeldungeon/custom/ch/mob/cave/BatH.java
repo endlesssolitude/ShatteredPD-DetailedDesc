@@ -231,4 +231,5 @@ public class BatH extends Bat {
             return super.act(enemyInFOV, justAlerted);
         }
     }
+
 }

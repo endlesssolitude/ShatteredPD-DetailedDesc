@@ -52,7 +52,7 @@ public class GnollH extends Gnoll {
                                     toRemove.next();
                                 }
                             },
-                            0.05f,
+                            1.25f,
                             0f
                     );
                     return false;
@@ -69,7 +69,7 @@ public class GnollH extends Gnoll {
     public void damage(int damage, Object src){
         if(enemySeen && enemy!=null) {
             for (Mob m: Dungeon.level.mobs.toArray(new Mob[0])){
-                if(m instanceof GnollH){
+                if(m instanceof GnollH && Dungeon.level.distance(pos, m.pos)<9){
                     m.beckon(enemy.pos);
                 }
             }

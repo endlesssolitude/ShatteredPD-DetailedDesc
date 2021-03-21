@@ -1,12 +1,12 @@
 package com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.spawner;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
-import com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.cave.BatH;
+import com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.cave.ShamanH;
+import com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.prison.DM100H;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.sewer.CrabH;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.sewer.GnollH;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.sewer.RatH;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.sewer.SlimeH;
-import com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.sewer.SnakeH;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.sewer.SwarmH;
 
 import java.util.ArrayList;
@@ -19,12 +19,10 @@ public class MobList {
             case 1: default:
                 //3x rat, 1x snake
                 return new ArrayList<>(Arrays.asList(
-                        BatH.class));
+                        ShamanH.random()));
             case 2:
                 //2x rat, 1x snake, 2x gnoll
-                return new ArrayList<>(Arrays.asList(RatH.class, RatH.class,
-                        SnakeH.class,
-                        GnollH.class, GnollH.class));
+                return new ArrayList<>(Arrays.asList(DM100H.class));
             case 3:
                 //1x rat, 3x gnoll, 1x swarm, 1x crab
                 return new ArrayList<>(Arrays.asList(RatH.class,

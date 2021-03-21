@@ -7,6 +7,25 @@ import com.watabou.noosa.Group;
 import com.watabou.noosa.Image;
 import com.watabou.utils.Callback;
 
+//used to lock thread temporarily, to keep current status instantly
+//so that we can stay at instant/fast visuals, or to custom freezing time.
+
+/*****format:
+Actor.addDelayed(new Actor{
+    final Actor toRemove = this;
+
+    //act
+    DelayerEffect.delayTime( timeToDelay, new Callback(){
+
+        //call
+        what to do when end
+
+        Actor.remove(toRemove);
+        toRemove.next();
+    }
+
+    }, -1);
+ */
 public class DelayerEffect extends Image {
 
     private float lasting = 0.5f;
