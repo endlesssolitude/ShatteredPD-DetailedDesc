@@ -285,7 +285,9 @@ public abstract class ShamanH extends Mob {
                 onZapComplete();
             }
         }));
-        Camera.main.shake(2, 0.3f);
+        if(findChar(target) == Dungeon.hero) {
+            Camera.main.shake(2, 0.3f);
+        }
         Sample.INSTANCE.play(Assets.Sounds.LIGHTNING);
     }
 
@@ -380,6 +382,7 @@ public abstract class ShamanH extends Mob {
             int zap =  Random.chances(new float[]{1.3f*lightning +1f, 0.9f*ice+1f}) + 2;
             if(zap==2) ++ice;
             if(zap==3) ++lightning;
+            if(ice*lightning > 24){ice = 0; lightning = 0;}
             return zap;
         }
     }
@@ -394,6 +397,7 @@ public abstract class ShamanH extends Mob {
         protected int decideWhichToZap() {
             int zap = Random.chances(new float[]{5f, 10f*(Math.max(poisonZap-2, 0))}) + 4;
             ++poisonZap;
+            if(zap==5) poisonZap=0;
             return zap;
         }
     }

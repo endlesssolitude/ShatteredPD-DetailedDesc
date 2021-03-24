@@ -92,7 +92,7 @@ public class RangeMap {
     }
 
     public static int[] manhattanCircle(int center, int dist){
-        if(dist<0 && dist>300) return null;
+        if(dist<0 || dist>300) return null;
         if(dist==0){
             return new int[]{center};
         }
@@ -118,9 +118,10 @@ public class RangeMap {
         return build(center, MapXY.buildXYMap(xyMap));
     }
 
-    public static int[] manhattanRange(int center, int range){
-        if(range>=0){
-            return arrayCopy(manhattanCircle(center, range), manhattanRange(center, range-1));
+    public static int[] manhattanRing(int center, int minRange, int maxRange){
+        minRange = Math.max(minRange, 0);
+        if(maxRange >= minRange){
+            return arrayCopy(manhattanCircle(center, maxRange), manhattanRing(center, minRange, maxRange-1));
         }
         return new int[]{};
     }

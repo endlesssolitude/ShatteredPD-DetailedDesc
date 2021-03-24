@@ -7,13 +7,13 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 
 public class SpinnerH extends Spinner {
     {
-        baseSpeed  = 1.25f;
+        baseSpeed  = 1.35f;
         EXP = 11;
     }
 
     @Override
     public void move(int step){
-        GameScene.add(Blob.seed(step, 5, Web.class));
+        GameScene.add(Blob.seed(step, 8, Web.class));
         super.move(step);
     }
 

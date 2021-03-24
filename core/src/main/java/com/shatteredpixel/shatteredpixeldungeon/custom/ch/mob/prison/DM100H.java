@@ -140,9 +140,9 @@ public class DM100H extends DM100 {
                             aim.damage(Random.Int(28, 38), new SkyLightning());
                             aim.sprite.centerEmitter().burst( SparkParticle.FACTORY, 32 );
                             aim.sprite.flash();
-                            Camera.main.shake(5f, 0.8f);
 
                             if(aim == Dungeon.hero){
+                                Camera.main.shake(5f, 0.8f);
                                 if(alive && !aim.isAlive()){
                                     Dungeon.fail(SkyLightning.class);
                                     GLog.n(M.L(SkyLightning.class, "ondeath"));
