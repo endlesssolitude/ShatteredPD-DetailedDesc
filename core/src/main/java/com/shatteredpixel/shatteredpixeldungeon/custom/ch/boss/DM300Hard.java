@@ -61,7 +61,7 @@ public class DM300Hard extends Boss{
         spriteClass = DM300Sprite.class;
 
         initProperty();
-        initBaseStatus(16, 22, 28, 16, 400, 6, 10);
+        initBaseStatus(16, 22, 28, 16, 400, 4, 8);
         initStatus(76);
 
         viewDistance = 18;
@@ -83,7 +83,7 @@ public class DM300Hard extends Boss{
     }
 
     //0~7 phases. if health < threshold[phase], then go on.
-    private static final int[] healthThreshold = new int[]{399, 350, 300, 250, 200, 150, 100, 50, -1000000};
+    private static final int[] healthThreshold = new int[]{399, 330, 270, 210, 160, 120, 80, 40, -1000000};
 
     private int phase = 0;
 
@@ -372,9 +372,7 @@ public class DM300Hard extends Boss{
                 m.sprite.parent.add(new BeamCustom(
                         DungeonTilemap.raisedTileCenterToWorld(m.pos),
                         DungeonTilemap.tileCenterToWorld(beam.collisionPos),
-                        Effects.Type.DEATH_RAY,
-                        0.75f,
-                        0x00FFFFFF));
+                        Effects.Type.DEATH_RAY).setLifespan(0.9f));
                 for(int i: beam.path){
                     Char ch = findChar(i);
                     if(ch!=null){
@@ -425,7 +423,8 @@ public class DM300Hard extends Boss{
     protected void fireProc(int targetCell){
         Ballistica ballistica = new Ballistica(pos, targetCell, Ballistica.PROJECTILE);
         ((MissileSpriteCustom)sprite.parent.recycle(MissileSpriteCustom.class)).reset(
-                sprite, ballistica.collisionPos, new Bomb(), new Callback() {
+                sprite, ballistica.collisionPos, new Bomb(), 10f, 2.0f,
+                new Callback() {
                     @Override
                     public void call() {
                         int[] cells = GME.NEIGHBOURS5();
@@ -446,9 +445,7 @@ public class DM300Hard extends Boss{
                         }
 
                     }
-                },
-                10f,
-                2.0f
+                }
         );
         lastTargeting = -1;
     }

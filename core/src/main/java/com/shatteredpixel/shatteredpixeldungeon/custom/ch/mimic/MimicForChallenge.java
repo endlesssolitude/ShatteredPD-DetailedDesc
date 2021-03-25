@@ -22,7 +22,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Weakness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
-import com.shatteredpixel.shatteredpixeldungeon.custom.utils.CustomUtils;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
@@ -36,6 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutat
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfPsionicBlast;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfEnchantment;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Grim;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
@@ -452,7 +452,7 @@ public class MimicForChallenge extends Mimic {
         int modlevel = (defendMod>>DEF_PUSH_BACK)&0x3;
         if(modlevel>0){
             if(Random.Int(2)==0) {
-                CustomUtils.throwChar(enemy, new Ballistica(enemy.pos, 2*enemy.pos - this.pos, Ballistica.MAGIC_BOLT), 1 + modlevel );
+                WandOfBlastWave.throwChar(enemy, new Ballistica(enemy.pos, 2*enemy.pos - this.pos, Ballistica.MAGIC_BOLT), 1 + modlevel );
                 damage = damage/5;
             }
         }
@@ -591,7 +591,7 @@ public class MimicForChallenge extends Mimic {
                 Ballistica trajectory = new Ballistica(this.pos, enemy.pos, Ballistica.STOP_TARGET);
                 //trim it to just be the part that goes past them
                 trajectory = new Ballistica(trajectory.collisionPos, trajectory.path.get(trajectory.path.size() - 1), Ballistica.PROJECTILE);
-                CustomUtils.throwChar(enemy, trajectory, 2 * modlevel);
+                WandOfBlastWave.throwChar(enemy, trajectory, 2 * modlevel);
             }
         }
     }

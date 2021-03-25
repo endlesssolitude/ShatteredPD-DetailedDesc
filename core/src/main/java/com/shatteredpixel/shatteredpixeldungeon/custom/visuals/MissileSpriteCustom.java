@@ -16,29 +16,29 @@ public class MissileSpriteCustom extends ItemSprite implements Tweener.Listener 
 
     private Callback callback;
 
-    public void reset( int from, int to, Item item, Callback listener, float speedMod, float aSpeedMod ) {
+    public void reset( int from, int to, Item item, float speedMod, float aSpeedMod, Callback listener) {
         reset(Dungeon.level.solid[from] ? DungeonTilemap.raisedTileCenterToWorld(from) : DungeonTilemap.raisedTileCenterToWorld(from),
                 Dungeon.level.solid[to] ? DungeonTilemap.raisedTileCenterToWorld(to) : DungeonTilemap.raisedTileCenterToWorld(to),
-                item, listener, speedMod, aSpeedMod);
+                item, speedMod, aSpeedMod, listener);
     }
 
-    public void reset( Visual from, int to, Item item, Callback listener, float speedMod, float aSpeedMod ) {
+    public void reset( Visual from, int to, Item item, float speedMod, float aSpeedMod, Callback listener ) {
         reset(from.center(),
                 Dungeon.level.solid[to] ? DungeonTilemap.raisedTileCenterToWorld(to) : DungeonTilemap.raisedTileCenterToWorld(to),
-                item, listener, speedMod, aSpeedMod);
+                item, speedMod, aSpeedMod, listener);
     }
 
-    public void reset( int from, Visual to, Item item, Callback listener, float speedMod, float aSpeedMod ) {
+    public void reset( int from, Visual to, Item item, float speedMod, float aSpeedMod, Callback listener ) {
         reset(Dungeon.level.solid[from] ? DungeonTilemap.raisedTileCenterToWorld(from) : DungeonTilemap.raisedTileCenterToWorld(from),
                 to.center(),
-                item, listener, speedMod, aSpeedMod);
+                item, speedMod, aSpeedMod, listener);
     }
 
-    public void reset( Visual from, Visual to, Item item, Callback listener, float speedMod, float aSpeedMod ) {
-        reset(from.center(), to.center(), item, listener, speedMod, aSpeedMod);
+    public void reset( Visual from, Visual to, Item item, float speedMod, float aSpeedMod, Callback listener ) {
+        reset(from.center(), to.center(), item, speedMod, aSpeedMod, listener);
     }
 
-    public void reset( PointF from, PointF to, Item item, Callback listener, float speedMod, float aSpeedMod) {
+    public void reset( PointF from, PointF to, Item item, float speedMod, float aSpeedMod, Callback listener) {
         revive();
 
         if (item == null)   view(0, null);
@@ -47,15 +47,15 @@ public class MissileSpriteCustom extends ItemSprite implements Tweener.Listener 
         setup( from,
                 to,
                 item,
-                listener,
                 speedMod,
-                aSpeedMod);
+                aSpeedMod,
+                listener);
     }
 
     private static final int DEFAULT_ANGULAR_SPEED = 720;
 
     //TODO it might be nice to have a source and destination angle, to improve thrown weapon visuals
-    private void setup( PointF from, PointF to, Item item, Callback listener, float speedMod, float aSpeedMod ){
+    private void setup( PointF from, PointF to, Item item, float speedMod, float aSpeedMod, Callback listener){
 
         originToCenter();
 

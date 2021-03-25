@@ -13,7 +13,7 @@ public class BeamCustom extends Image {
 
     private float timeLeft;
 
-    public BeamCustom(PointF s, PointF e, Effects.Type asset, float duration, int color) {
+    public BeamCustom(PointF s, PointF e, Effects.Type asset) {
         super( Effects.get( asset ) );
 
         origin.set( 0, height / 2 );
@@ -28,10 +28,23 @@ public class BeamCustom extends Image {
 
         //Sample.INSTANCE.play( Assets.Sounds.RAY );
 
-        timeLeft = this.duration = duration;
+        timeLeft = this.duration = 0.5f;
 
+    }
+
+    public BeamCustom setDiameter(float diameterModifier){
+        scale.y *= diameterModifier;
+        return this;
+    }
+
+    public BeamCustom setColor(int color){
         hardlight(color);
+        return this;
+    }
 
+    public BeamCustom setLifespan(float life){
+        timeLeft = this.duration = life;
+        return this;
     }
 /*
     public static class DeathRay extends Beam{

@@ -234,9 +234,7 @@ public abstract class SpellCaster extends Mob {
             sprite.parent.add(new BeamCustom(
                     sprite.center(),
                     DungeonTilemap.tileCenterToWorld(ba.collisionPos),
-                    Effects.Type.DEATH_RAY,
-                    0.3f,
-                    0x6060FF));
+                    Effects.Type.DEATH_RAY).setLifespan(0.45f).setColor(0x6060FF));
 
             hitProc(ba);
 
@@ -333,9 +331,7 @@ public abstract class SpellCaster extends Mob {
             sprite.parent.add(new BeamCustom(
                     sprite.center(),
                     DungeonTilemap.tileCenterToWorld(ba.collisionPos),
-                    Effects.Type.DEATH_RAY,
-                    0.3f,
-                    0xFF4040));
+                    Effects.Type.DEATH_RAY).setLifespan(0.45f).setColor(0xFF4040));
 
             hitProc(ba);
 
@@ -354,16 +350,12 @@ public abstract class SpellCaster extends Mob {
             sprite.parent.add(new BeamCustom(
                     DungeonTilemap.tileCenterToWorld(ba.collisionPos-1),
                     DungeonTilemap.tileCenterToWorld(ba.collisionPos+1),
-                    Effects.Type.DEATH_RAY,
-                    0.25f,
-                    0x00FFFFFF));
+                    Effects.Type.DEATH_RAY).setLifespan(0.4f).setColor(0x00FFFFFF));
 
             sprite.parent.add(new BeamCustom(
                     DungeonTilemap.tileCenterToWorld(ba.collisionPos-Dungeon.level.width()),
                     DungeonTilemap.tileCenterToWorld(ba.collisionPos+Dungeon.level.width()),
-                    Effects.Type.DEATH_RAY,
-                    0.25f,
-                    0x00FFFFFF));
+                    Effects.Type.DEATH_RAY).setLifespan(0.4f).setColor(0x00FFFFFF));
 
             boolean terrainAffected = false;
             int[] cells = GME.NEIGHBOURS5();
@@ -447,7 +439,7 @@ public abstract class SpellCaster extends Mob {
                         hitProc(ballistica);
                         target.sprite.parent.add(new BeamCustom(DungeonTilemap.tileCenterToWorld(source),
                                 DungeonTilemap.tileCenterToWorld(ballistica.collisionPos),
-                                Effects.Type.DEATH_RAY, 0.3f, 0x00FFFFFF));
+                                Effects.Type.DEATH_RAY).setLifespan(0.45f).setColor(0x00FFFFFF));
                     }
                 }
                 detach();
@@ -477,9 +469,7 @@ public abstract class SpellCaster extends Mob {
             sprite.parent.add(new BeamCustom(
                     sprite.center(),
                     DungeonTilemap.tileCenterToWorld(ba.collisionPos),
-                    Effects.Type.LIGHT_RAY,
-                    0.45f,
-                    0x00FFFFFF));
+                    Effects.Type.LIGHT_RAY).setLifespan(0.7f).setColor(0x00FFFFFF));
 
             hitProc(ba);
 
@@ -546,7 +536,7 @@ public abstract class SpellCaster extends Mob {
                         hitProc(ballistica);
                         target.sprite.parent.add(new BeamCustom(DungeonTilemap.tileCenterToWorld(target.pos),
                                 DungeonTilemap.tileCenterToWorld(ballistica.collisionPos),
-                                Effects.Type.LIGHT_RAY, 0.25f, 0x00FFFFFF));
+                                Effects.Type.LIGHT_RAY).setLifespan(0.6f).setColor(0x00FFFFFF));
                     }
                 }
                 detach();
@@ -576,9 +566,7 @@ public abstract class SpellCaster extends Mob {
             sprite.parent.add(new BeamCustom(
                     sprite.center(),
                     DungeonTilemap.tileCenterToWorld(ba.collisionPos),
-                    Effects.Type.DEATH_RAY,
-                    0.45f,
-                    0x30FF30));
+                    Effects.Type.DEATH_RAY).setLifespan(0.65f).setColor(0x30FF30));
 
             if(ba.collisionPos != lastTargeting) {
                 findTarget();
@@ -641,7 +629,7 @@ public abstract class SpellCaster extends Mob {
                         hitProc(ballistica);
                         target.sprite.parent.add(new BeamCustom(DungeonTilemap.tileCenterToWorld(source),
                                 DungeonTilemap.tileCenterToWorld(ballistica.collisionPos),
-                                Effects.Type.DEATH_RAY, 0.35f, 0x30FF30));
+                                Effects.Type.DEATH_RAY).setLifespan(0.55f).setColor(0x30FF30));
                 }
                 detach();
                 return true;

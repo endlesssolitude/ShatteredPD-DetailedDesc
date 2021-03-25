@@ -261,7 +261,7 @@ public abstract class ElementalH extends Mob {
         {
             spriteClass = ElementalHSprite.Fire.class;
 
-           loot = new PotionOfLiquidFlame();
+            loot = new PotionOfLiquidFlame();
             lootChance = 1/5f;
 
             properties.add( Property.FIERY );
@@ -322,6 +322,8 @@ public abstract class ElementalH extends Mob {
             for(int i:burn){
                 GameScene.add(Blob.seed(i, 12, Fire.class));
             }
+
+            super.die(cause);
         }
 
         @Override

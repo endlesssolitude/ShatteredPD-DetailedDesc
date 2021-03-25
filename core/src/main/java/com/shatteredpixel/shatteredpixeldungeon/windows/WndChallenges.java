@@ -175,7 +175,7 @@ public class WndChallenges extends Window {
 
 		protected boolean onClick(float x, float y){
 			if(!inside(x,y)) return false;
-			onClick();
+			if(active) onClick();
 
 			return true;
 		}
@@ -192,7 +192,7 @@ public class WndChallenges extends Window {
 
 		protected boolean onClick(float x, float y){
 			if(!inside(x,y)) return false;
-			onClick();
+			if(active) onClick();
 			return true;
 		}
 

@@ -164,16 +164,15 @@ public class BruteH extends Mob {
                                  public boolean act(){
                                      final Actor toRemove = this;
                                      ((MissileSpriteCustom)sprite.parent.recycle(MissileSpriteCustom.class)).reset(
-                                             pos, enemy.pos, thrownLeft>=1?new Bolas():new Tomahawk(), new Callback() {
+                                             pos, enemy.pos, thrownLeft>=1?new Bolas():new Tomahawk(), 1.25f, 0.8f,
+                                             new Callback() {
                                                  @Override
                                                  public void call() {
                                                      onAttackComplete();
                                                      Actor.remove(toRemove);
                                                      toRemove.next();
                                                  }
-                                             },
-                                             1.25f,
-                                             0.8f
+                                             }
                                      );
                                      return false;
                                  }

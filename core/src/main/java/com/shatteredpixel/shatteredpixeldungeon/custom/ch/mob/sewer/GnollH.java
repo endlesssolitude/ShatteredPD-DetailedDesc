@@ -44,16 +44,15 @@ public class GnollH extends Gnoll {
                 public boolean act(){
                     final Actor toRemove = this;
                     ((MissileSpriteCustom)sprite.parent.recycle(MissileSpriteCustom.class)).reset(
-                            pos, enemy.pos, new DartShot(), new Callback() {
+                            pos, enemy.pos, new DartShot(), 1.25f, 0f,
+                            new Callback() {
                                 @Override
                                 public void call() {
                                     onAttackComplete();
                                     Actor.remove(toRemove);
                                     toRemove.next();
                                 }
-                            },
-                            1.25f,
-                            0f
+                            }
                     );
                     return false;
                 }

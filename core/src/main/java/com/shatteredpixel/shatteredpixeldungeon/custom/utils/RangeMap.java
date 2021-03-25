@@ -125,4 +125,9 @@ public class RangeMap {
         }
         return new int[]{};
     }
+
+    public static int manhattanDist(int a, int b){
+        int w = Dungeon.level.width();
+        return Math.abs(a/w-b/w)+Math.abs(a%w-b%w);
+    }
 }

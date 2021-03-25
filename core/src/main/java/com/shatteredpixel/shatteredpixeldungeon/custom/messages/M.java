@@ -15,7 +15,7 @@ public class M {
             } else
                 key = k;
 
-            return "missed: " + key;
+            return "m:" + key;
         }
         return s;
     }

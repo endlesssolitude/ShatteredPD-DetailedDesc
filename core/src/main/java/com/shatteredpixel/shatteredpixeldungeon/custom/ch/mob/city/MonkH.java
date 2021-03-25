@@ -51,14 +51,13 @@ public class MonkH extends Monk {
                     ((MissileSpriteCustom) hero.sprite.parent.recycle(MissileSpriteCustom.class)).
                             reset(hero.sprite,
                                     ba.collisionPosI,
-                                    weapon, new Callback() {
+                                    weapon, 0.6f, 1.25f,
+                                    new Callback() {
                                         @Override
                                         public void call() {
                                             Dungeon.level.drop(weapon, ba.collisionPosI).sprite.drop();
                                         }
-                                    },
-                                    0.6f,
-                                    1.25f);
+                                    });
                 }
             }
         }
