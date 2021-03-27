@@ -1,19 +1,24 @@
 package com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.cave;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Amok;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Bat;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.RangeMap;
+import com.shatteredpixel.shatteredpixeldungeon.custom.visuals.DelayerEffect;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.Callback;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
+
+import java.util.ArrayList;
 
 public class BatH extends Bat {
     {
@@ -71,15 +76,32 @@ public class BatH extends Bat {
     }
 
     protected boolean avoidDamage(int threshold){
-        int availableCells = 0;
+        ArrayList<Integer> toEvade = new ArrayList<>();
         for(int i: PathFinder.NEIGHBOURS8){
             if(canPass(i+pos) && findChar(i+pos)==null){
-                ++availableCells;
+                toEvade.add(i+pos);
             }
         }
         //the more empty cells around, the more evasive.
-        if(Random.Int(threshold)<=Random.Int(availableCells)){
+        if(Random.Int(threshold)<Random.Int(toEvade.size())){
+            int p = toEvade.get(Random.Int(toEvade.size()));
+            sprite.move(pos, p);
             sprite.showStatus(CharSprite.POSITIVE, defenseVerb());
+            Actor.addDelayed(new Actor() {
+                final Actor toRemove = this;
+                @Override
+                protected boolean act() {
+                    DelayerEffect.delayTime(0.12f, new Callback() {
+                        @Override
+                        public void call() {
+                            sprite.move(p, pos);
+                            Actor.remove(toRemove);
+                            toRemove.next();
+                        }
+                    });
+                    return false;
+                }
+            }, -1);
             return true;
         }
         return false;
@@ -110,10 +132,14 @@ public class BatH extends Bat {
                 }
                 //melees are the least accurate
                 else if((((Hero) src).belongings.weapon) instanceof MeleeWeapon){
-                    if (avoidDamage(1)) {
+                    if (avoidDamage(2)) {
                         damage = -100;
                     }
                 }
+            }
+
+            if(damage == -100){
+                return;
             }
         }
         super.damage(damage, src);
@@ -134,7 +160,7 @@ public class BatH extends Bat {
         @Override
         public boolean act( boolean enemyInFOV, boolean justAlerted ) {
             //if can see enemy, keep 2 distance if healthy. if in danger, just fight
-            if(enemy!=null && HP*2>=HT && buff(Amok.class)!=null){
+            if(enemy!=null && HP*2>=HT && buff(Amok.class)==null){
                 //near, not attacked
                 if(canAttack(enemy)){
                     target = enemy.pos;
@@ -172,7 +198,7 @@ public class BatH extends Bat {
                             //these cells are not available, -10000 to mark
                             aroundScoreMap[j] -= 100;
                         }
-                        //then consider the next move: how much empty cells around there, and if those cells could avoid attacks.
+                        //then consider the next move: how much empty cells around there.
                         for(int i=0;i<allScoreMap.length;++i){
                             if(near(allMap[i], aroundMap[j])){
                                 aroundScoreMap[j] += allScoreMap[i];

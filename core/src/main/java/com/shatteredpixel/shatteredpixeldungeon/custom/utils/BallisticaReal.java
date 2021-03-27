@@ -88,7 +88,7 @@ public class BallisticaReal {
         float dy;
         float movX = Math.abs(vector.x);
         float movY = Math.abs(vector.y);
-
+        //to short move ,return
         if(movX < 0.001f && movY < 0.001f){
             int end = pointToCell(pointFloatToInt(from, false));
             pathI.add(end);
@@ -97,7 +97,7 @@ public class BallisticaReal {
             cldF(from);
             return;
         }
-
+        //actually it is abandoned
         if(movX>movY){
             dx = (vector.x>0?1f:-1f);
             dy = movY/movX*(vector.y>0?1f:-1f);
@@ -105,14 +105,15 @@ public class BallisticaReal {
             dy = (vector.y>0?1f:-1f);
             dx = movX/movY*(vector.x>0?1f:-1f);
         }
+        //which direction?
         boolean up = dy>0;
         boolean right = dx>0;
         boolean vertical = Math.abs(dx)<0.001f;
         boolean horizontal = Math.abs(dy)<0.001f;
-
+        //record current point
         PointF curPosF = new PointF(from.x, from.y);
         Point curPos = cellToPoint(sourceI);//pointFloatToInt(from, false);
-
+        //we shot into one tile, and meet one border. passable caches whether beam can pass this border.
         boolean[] canPass = new boolean[4];
         final int[] neigh = new int[]{-1, 1, Dungeon.level.width(), -Dungeon.level.width()};
 
@@ -141,6 +142,7 @@ public class BallisticaReal {
         while(isInsideMap(curPosF)){
             int cell= pointToCell(curPos);
             boolean passable;
+            //build passable
             for(int i=0;i<4;++i){
                 int target = cell + neigh[i];
                 passable = true;
@@ -158,12 +160,12 @@ public class BallisticaReal {
 
                 canPass[i]=passable;
             }
-
+            //will meet which border
             boolean xOnLine = curPosF.x-(int)curPosF.x==0;
             boolean yOnLine = curPosF.y-(int)curPosF.y==0;
             float tx = (float) (xOnLine?(Math.floor(curPosF.x) + (right?1f:-1f)):(Math.floor(curPosF.x) + (right?1f:0f)));
             float ty = (float) (yOnLine?(Math.floor(curPosF.y) + (up?1f:-1f)):(Math.floor(curPosF.y) + (up?1f:0f)));
-
+            //meet x border, y border, or both? And where?
             PointF nx, ny;
             if(vertical){
                 ny = new PointF(curPosF.x, ty);
@@ -185,6 +187,20 @@ public class BallisticaReal {
                 }
             }
 
+            //out of range, stop
+            if(stopTarget){
+                if((nx != null && Math.abs(nx.x  - from.x)>=movX) ||
+                        (ny != null && Math.abs(ny.y  - from.y)>=movY))
+                {
+                    cldF(to);
+                    cld(pointToCell(pointFloatToInt(to, false)));
+                    pathI.add(collisionI);
+                    pathF.add(collisionF);
+                    return;
+                }
+            }
+
+            //next cell, next pointF. Handle xy logic first.
             int nextCell=cell;
             if(ny==null){
                 nextCell += dx>0? 1:-1;
@@ -213,6 +229,7 @@ public class BallisticaReal {
                 //if x and y let it pass, the go on
             }
 
+            //judge whether can pass, and collide. For x or y logic
             pathI.add(nextCell);
             pathF.add(ny==null?nx.clone():ny.clone());
             //has judged xy cross
@@ -226,9 +243,10 @@ public class BallisticaReal {
                     }
                 }
             }
-
+            //go on one point, and continue
             curPosF=(ny==null?nx.clone():ny.clone());
             curPos=cellToPoint(nextCell);
+
         }
 
     }
