@@ -119,7 +119,7 @@ public class WandOfReflectDisintegration extends WandOfDisintegration {
         //addBeam(new Ballistica(beam.sourcePos, beam.collisionPos, Ballistica.STOP_SOLID | Ballistica.IGNORE_SOFT_SOLID));
         float angle = PointF.angle(new PointF(pointToF(Dungeon.level.cellToPoint(beam.sourcePos))),
                 new PointF(pointToF(Dungeon.level.cellToPoint(beam.collisionPos))));
-        angle /= -PointF.G2R;
+        angle /= PointF.G2R;
         if(angle<0f) angle += 360f;
         //GLog.i("%f,", angle);
         int scatter = offset_1.size();

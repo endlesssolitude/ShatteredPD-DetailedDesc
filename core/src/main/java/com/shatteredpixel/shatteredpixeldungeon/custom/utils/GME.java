@@ -38,7 +38,17 @@ public class GME {
     public static float angle(int from, int to){
         float angle = PointF.angle(new PointF(pointToF(Dungeon.level.cellToPoint(from))),
                 new PointF(pointToF(Dungeon.level.cellToPoint(to))));
-        angle /= -PointF.G2R;
+        angle /= PointF.G2R;
+        return angle;
+    }
+    public static float angle(float x, float y){
+        float angle = PointF.angle(new PointF(x, y),
+                new PointF(1f, 0));
+        angle /= PointF.G2R;
+        return angle;
+    }
+    public static float nAngle(float angle){
+        if(angle<0f) angle += 360f;
         return angle;
     }
     protected static PointF pointToF(Point p){

@@ -67,4 +67,5 @@ public class GLog {
 	public static void h( String text, Object... args ) {
 		i( HIGHLIGHT + text, args );
 	}
+
 }

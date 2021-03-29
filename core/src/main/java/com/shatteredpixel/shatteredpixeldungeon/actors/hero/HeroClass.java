@@ -35,6 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.TestBag;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.TimeReverser;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.TrapPlacer;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.WandOfReflectDisintegration;
+import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.WandOfScanningBeam;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.generator.LazyTest;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.generator.TestArmor;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.generator.TestArtifact;
@@ -313,6 +314,7 @@ public enum HeroClass {
 
 	private static void doChallengeSpawn(){
 		if(Dungeon.isChallenged(Challenges.TEST_MODE)){
+			new WandOfScanningBeam().identify().collect();
 			//new PVCTester().collect();
 			//WandOfReflectDisintegration word = new WandOfReflectDisintegration();
 			//word.curCharges = 99999;

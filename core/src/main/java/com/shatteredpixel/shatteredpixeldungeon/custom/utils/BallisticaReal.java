@@ -88,7 +88,7 @@ public class BallisticaReal {
         float dy;
         float movX = Math.abs(vector.x);
         float movY = Math.abs(vector.y);
-        //to short move ,return
+        //too short move ,return
         if(movX < 0.001f && movY < 0.001f){
             int end = pointToCell(pointFloatToInt(from, false));
             pathI.add(end);
@@ -287,7 +287,7 @@ public class BallisticaReal {
 
     //We assume up is positive y but in game it is opposite.
     private static PointF poleToPointF(float angle, float range){
-        return new PointF((float)(range*Math.cos(angle*A2P)), (float)(-range*Math.sin(angle*A2P)));
+        return new PointF((float)(range*Math.cos(angle*A2P)), (float)(range*Math.sin(angle*A2P)));
     }
 
     private static boolean isInsideMap(PointF posF){
