@@ -1,17 +1,12 @@
 package com.shatteredpixel.shatteredpixeldungeon.custom.testmode;
 
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.BallisticaFloat;
-import com.shatteredpixel.shatteredpixeldungeon.custom.utils.BallisticaReal;
 import com.shatteredpixel.shatteredpixeldungeon.custom.visuals.DelayerEffect;
-import com.shatteredpixel.shatteredpixeldungeon.custom.visuals.effects.RotateBeam;
-import com.shatteredpixel.shatteredpixeldungeon.effects.Effects;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.utils.Callback;
-import com.watabou.utils.PointF;
 
 import java.util.ArrayList;
 
@@ -51,9 +46,11 @@ public class PVCTester extends TestItem {
                              }, -1
 
             );
-
+/*
             hero.sprite.parent.add(new RotateBeam(Effects.Type.DEATH_RAY, new PointF(hero.pos% Dungeon.level.width(), hero.pos/Dungeon.level.width()).offset(0.5f, 0.1f),
                     45f, 360f, 40f, 200f, 1f, 1f).setProperty(BallisticaReal.STOP_SOLID));
+
+ */
         }
     }
 

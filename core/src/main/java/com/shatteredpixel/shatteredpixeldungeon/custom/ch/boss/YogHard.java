@@ -127,7 +127,6 @@ public class YogHard extends Boss{
 
         if (phase == 4 && findFist() == null){
             yell(Messages.get(this, "hope"));
-            summonCooldown = -20; //summon a burst of minions!
             phase = 5;
             setBackBeam(5, 5, 3, 2);
         }

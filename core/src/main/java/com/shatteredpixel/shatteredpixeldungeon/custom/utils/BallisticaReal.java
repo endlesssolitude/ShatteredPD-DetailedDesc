@@ -20,7 +20,11 @@ import java.util.List;
 //Yeah it would be quite odd when this happens, but it works for now.
 //Integer pos is considered at the center of tile.
 public class BallisticaReal {
-
+    //Why here we do NOT record FULL path?
+    //first, introduction of range makes real collision quite messy if we add end point to path.
+    //second, real beam collides with boundary, which means it has already considered the next cell.
+    //if we want to control the full path, just build a never-stop one and go by tiles.
+    //third, it would cost much more if go through full path. There are cases when it updates each flash.
     public ArrayList<Integer> pathI = new ArrayList<>();
     public Integer sourceI = null;
     public Integer collisionI = null;

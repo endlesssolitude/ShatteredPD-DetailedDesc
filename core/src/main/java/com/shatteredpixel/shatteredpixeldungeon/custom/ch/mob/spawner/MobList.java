@@ -1,7 +1,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.spawner;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
-import com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.hall.RipperH;
+import com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.cave.BatH;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.hall.ScorpioH;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.sewer.CrabH;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.sewer.GnollH;
@@ -19,7 +19,7 @@ public class MobList {
             case 1: default:
                 //3x rat, 1x snake
                 return new ArrayList<>(Arrays.asList(
-                        RipperH.class));
+                        BatH.class));
             case 2:
                 //2x rat, 1x snake, 2x gnoll
                 return new ArrayList<>(Arrays.asList(ScorpioH.class));

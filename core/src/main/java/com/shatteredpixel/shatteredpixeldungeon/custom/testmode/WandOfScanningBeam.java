@@ -6,7 +6,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.BallisticaReal;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.GME;
 import com.shatteredpixel.shatteredpixeldungeon.custom.visuals.DelayerEffect;
-import com.shatteredpixel.shatteredpixeldungeon.custom.visuals.effects.RotateBeam;
+import com.shatteredpixel.shatteredpixeldungeon.custom.visuals.effects.ScanningBeam;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Effects;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.PurpleParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfDisintegration;
@@ -14,15 +14,23 @@ import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.watabou.utils.Callback;
+import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
 
-public class WandOfScanningBeam extends WandOfDisintegration implements RotateBeam.OnCollide {
+public class WandOfScanningBeam extends WandOfDisintegration implements ScanningBeam.OnCollide {
     @Override
     protected void onZap(Ballistica attack) {
-        RotateBeam.setCollide(this);
+        ScanningBeam.setCollide(this);
         float angle = GME.angle(curUser.pos, attack.collisionPos);
-        curUser.sprite.parent.add(new RotateBeam(Effects.Type.DEATH_RAY, curUser.sprite.center().invScale(DungeonTilemap.SIZE),
-                angle, 120f, 80f, 8f, 0.4f, 0.4f).setProperty(BallisticaReal.STOP_SOLID));
+        PointF center = curUser.sprite.center().invScale(DungeonTilemap.SIZE);
+        curUser.sprite.parent.add(new ScanningBeam
+                (Effects.Type.DEATH_RAY, BallisticaReal.STOP_SOLID,
+                    new ScanningBeam.BeamData()
+                        .setPosition(center.x, center.y, angle, 8)
+                        .setSpeed(0f, 0f, 90f)
+                        .setTime(0.4f, 1.5f, 0.4f)
+                ).setDiameter(1.6f)
+        );
 
         Actor.addDelayed(new Actor() {
                              @Override

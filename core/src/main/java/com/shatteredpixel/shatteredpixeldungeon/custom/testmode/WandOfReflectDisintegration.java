@@ -255,7 +255,7 @@ public class WandOfReflectDisintegration extends WandOfDisintegration {
 
     protected float reflectAngle(PointF s, PointF e){
         //PointF realPoint = nextPF(s,e);
-        float angle = -PointF.angle(s,e)/PointF.G2R;
+        float angle = PointF.angle(s,e)/PointF.G2R;
         if(angle<0f) angle+= 360f;
         float dx = e.x - s.x;
         float dy = e.y - s.y;

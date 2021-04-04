@@ -101,7 +101,7 @@ public class BatH extends Bat {
                     });
                     return false;
                 }
-            }, -1);
+            }, -10);
             return true;
         }
         return false;

@@ -38,6 +38,7 @@ public class SwarmH extends Mob {
         loot = new PotionOfHealing();
         lootChance = 0.1667f; //by default, see rollToDropLoot()
     }
+
     @Override
     public void die(Object cause){
         for(int i=1;i<4;++i) {
@@ -46,7 +47,7 @@ public class SwarmH extends Mob {
                 Char ch = findChar(j);
                 if(ch!=null){
                     if(ch.alignment == Alignment.ENEMY){
-                        Buff.affect(ch, Healing.class).setHeal(8-2*i, 0, 4-i);
+                        Buff.affect(ch, Healing.class).setHeal(12-3*i, 0, 4-i);
                     }
                 }
             }
@@ -80,7 +81,6 @@ public class SwarmH extends Mob {
 
     @Override
     public int defenseProc( Char enemy, int damage ) {
-
 
             if (HP >= damage + 2) {
                 ArrayList<Integer> candidates = new ArrayList<>();

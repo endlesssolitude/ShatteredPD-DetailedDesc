@@ -23,13 +23,11 @@ package com.shatteredpixel.shatteredpixeldungeon.levels;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Bones;
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.YogDzewa;
-import com.shatteredpixel.shatteredpixeldungeon.custom.ch.boss.YogHard;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FlameParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
@@ -203,15 +201,10 @@ public class NewHallsBossLevel extends Level {
 
 		Dungeon.observe();
 
-		if(Dungeon.isChallenged(Challenges.ELITE_BOSSES_5)){
-			YogHard boss = new YogHard();
-			boss.pos = exit + width*3;
-			GameScene.add( boss );
-		}else {
 			YogDzewa boss = new YogDzewa();
 			boss.pos = exit + width * 3;
 			GameScene.add(boss);
-		}
+
 	}
 
 	@Override

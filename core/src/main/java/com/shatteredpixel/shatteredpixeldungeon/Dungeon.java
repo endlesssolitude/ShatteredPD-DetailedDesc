@@ -38,6 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Wandmaker;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.boss.HardDKLevel;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.boss.HardDM300Level;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.boss.HardTenguLevel;
+import com.shatteredpixel.shatteredpixeldungeon.custom.ch.boss.YogRealLevel;
 import com.shatteredpixel.shatteredpixeldungeon.items.Ankh;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
@@ -306,7 +307,8 @@ public class Dungeon {
 				level = new HallsLevel();
 				break;
 			case 25:
-				level = new NewHallsBossLevel();
+				if(Dungeon.isChallenged(Challenges.ELITE_BOSSES_5)) level = new YogRealLevel();
+				else level = new NewHallsBossLevel();
 				break;
 			case 26:
 				level = new LastLevel();

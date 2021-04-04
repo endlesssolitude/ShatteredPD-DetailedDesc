@@ -34,7 +34,7 @@ public class SkeletonH extends Skeleton {
                     new Callback() {
                         @Override
                         public void call() {
-                            CellEmitter.get(p).burst(Speck.factory(Speck.RATTLE), 13 - 3*revived);
+                            CellEmitter.get(p).burst(Speck.factory(Speck.RATTLE), 16 - 4*revived);
                         }
                     });
             RevivedSkeleton rs = new RevivedSkeleton();
