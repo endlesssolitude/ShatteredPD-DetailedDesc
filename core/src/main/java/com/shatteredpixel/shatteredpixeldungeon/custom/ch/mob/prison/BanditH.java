@@ -3,15 +3,23 @@ package com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.prison;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
+import com.shatteredpixel.shatteredpixeldungeon.plants.Blindweed;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.BanditSprite;
+import com.watabou.utils.Random;
 
 public class BanditH extends ThiefH{
     {
         spriteClass = BanditSprite.class;
         EXP = 7;
         lootChance = 1f;
+    }
+
+    {
+        immunities.add(Corruption.class);
     }
 
     @Override
@@ -31,6 +39,20 @@ public class BanditH extends ThiefH{
         } else {
             return false;
         }
+    }
+
+    @Override
+    public void rollToDropLoot(){
+        if (Dungeon.hero.lvl <= maxLvl + 2){
+            float chance = 0.5f;
+            chance *= RingOfWealth.dropChanceMultiplier( Dungeon.hero );
+            if(Random.Float()<chance){
+                Dungeon.level.drop(new Blindweed.Seed(), pos).sprite.drop();
+            }
+        }
+
+        super.rollToDropLoot();
+
     }
 
 }

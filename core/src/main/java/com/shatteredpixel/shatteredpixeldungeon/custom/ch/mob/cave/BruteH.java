@@ -7,17 +7,19 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ShieldBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Brute;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
-import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.HitBack;
 import com.shatteredpixel.shatteredpixeldungeon.custom.visuals.MissileSpriteCustom;
 import com.shatteredpixel.shatteredpixeldungeon.custom.visuals.effects.SpreadWave;
+import com.shatteredpixel.shatteredpixeldungeon.items.Ankh;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Bolas;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Tomahawk;
@@ -46,6 +48,9 @@ public class BruteH extends Mob {
 
         loot = Gold.class;
         lootChance = 0.5f;
+    }
+    {
+        immunities.add(Corruption.class);
     }
 
     protected int revived = 0;
@@ -78,6 +83,7 @@ public class BruteH extends Mob {
         Buff.affect(this, BruteRevive.class, 3f);
         Buff.affect(this, Barrier.class).setShield(65535);
         sprite.showStatus(CharSprite.NEGATIVE, "!!!");
+        raging = false;
     }
 
     protected void enrage(){
@@ -102,12 +108,6 @@ public class BruteH extends Mob {
     }
 
     @Override
-    public String name(){return M.L(Brute.class, "name");}
-
-    @Override
-    public String description(){return M.L(Brute.class, "desc");}
-
-    @Override
     public void storeInBundle(Bundle b){
         super.storeInBundle(b);
         b.put("revived", revived);
@@ -125,10 +125,10 @@ public class BruteH extends Mob {
 
     @Override
     public int damageRoll() {
-        int dmg =  (buff(Brute.BruteRage.class) != null ?
+        int dmg =  (buff(BruteH.BruteRage.class) != null ?
                 Random.NormalIntRange( 15, 40 ) :
                 Random.NormalIntRange( 5, 25 ));
-        return Math.round(dmg*(rangedAttack?0.7f:1f));
+        return Math.round(dmg*(rangedAttack?0.75f:1f)*(revived>0?1.2f:1f));
     }
 
     @Override
@@ -191,10 +191,27 @@ public class BruteH extends Mob {
             if(thrownLeft >=1){
                 Buff.affect(enemy, Cripple.class, Cripple.DURATION);
             }else if(thrownLeft == 0){
-                Buff.affect(enemy, Bleeding.class).set(damage*0.6f);
+                Buff.affect(enemy, Bleeding.class).set(damage*0.8f);
             }
         }
         return super.attackProc(enemy, damage);
+    }
+
+    @Override
+    public void rollToDropLoot(){
+        if (Dungeon.hero.lvl <= maxLvl + 2){
+            float chance = 0.02f;
+            chance *= RingOfWealth.dropChanceMultiplier( Dungeon.hero );
+            chance = Math.min(0.04f, chance);
+            if(Random.Float()<chance){
+                Ankh a = new Ankh();
+                if(Random.Int(3)==0) a.bless();
+                Dungeon.level.drop(a, pos).sprite.drop();
+            }
+        }
+
+        super.rollToDropLoot();
+
     }
 
 

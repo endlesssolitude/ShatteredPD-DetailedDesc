@@ -1,6 +1,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.sewer;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Albino;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Rat;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
@@ -11,6 +12,9 @@ import com.watabou.utils.Callback;
 import com.watabou.utils.Random;
 
 public class RatH extends Rat {
+    {
+        immunities.add(Corruption.class);
+    }
 
     @Override
     public void die(Object cause) {
@@ -20,7 +24,7 @@ public class RatH extends Rat {
         while (toSummon-- > 0) {
             Albino white = new Albino();
             white.pos = Dungeon.level.randomRespawnCell(white);
-            GameScene.add(white);
+            GameScene.add(white, 1f);
             white.beckon(pos);
 
             MagicMissile.boltFromChar(sprite.parent,

@@ -5,9 +5,11 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Snake;
 
 public class SnakeH extends Snake {
     {
+        immunities.add(Corruption.class);
+    }
+    {
         HT = HP = 6;
         EXP = 1;
-        immunities.add(Corruption.class);
 
         defenseSkill = 1000;
     }

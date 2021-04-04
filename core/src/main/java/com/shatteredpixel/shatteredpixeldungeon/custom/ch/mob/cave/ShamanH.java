@@ -6,6 +6,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chill;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hex;
@@ -13,7 +14,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Poison;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vulnerable;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Weakness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Shaman;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Lightning;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.PoisonParticle;
@@ -21,7 +21,11 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SparkParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCorrosion;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfFrost;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfPrismaticLight;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
@@ -47,7 +51,10 @@ public abstract class ShamanH extends Mob {
         maxLvl = 16;
 
         loot = Generator.Category.WAND;
-        lootChance = 0.09f; //initially, see rollToDropLoot
+        lootChance = 0.00001f; //initially, see rollToDropLoot
+    }
+    {
+        immunities.add(Corruption.class);
     }
     //avoid interfering with existing zaps.
     protected int zapCate = 0;
@@ -59,7 +66,7 @@ public abstract class ShamanH extends Mob {
 
     @Override
     public int attackSkill( Char target ) {
-        return 18;
+        return Dungeon.level.adjacent(pos, target.pos)?18:1000;
     }
 
     @Override
@@ -106,13 +113,15 @@ public abstract class ShamanH extends Mob {
         }
     }
 
+    public static class ShamanMagic{}
+
     protected void zap() {
         spend(1f);
 
         if (hit(this, enemy, true)) {
 
             int dmg = executeProc();
-            enemy.damage(dmg, new Shaman.EarthenBolt());
+            enemy.damage(dmg, new ShamanMagic());
 
             if (!enemy.isAlive() && enemy == Dungeon.hero) {
                 Dungeon.fail(getClass());
@@ -241,7 +250,7 @@ public abstract class ShamanH extends Mob {
             }
         }
 
-        return Math.round(Random.NormalIntRange(6, 12)*(1f+detached*0.43f));
+        return Math.round(Random.NormalIntRange(6, 12)*(1f+detached*0.47f));
     }
 
     public void iceZapFx(Char from, int target){
@@ -365,7 +374,24 @@ public abstract class ShamanH extends Mob {
                     }
                 }
             }
-            return Random.chances(new float[]{9f, has*5f});
+            return Random.chances(new float[]{9f, has*4f});
+        }
+
+        @Override
+        public void rollToDropLoot(){
+            if (Dungeon.hero.lvl <= maxLvl + 2){
+                float chance = 0.02f;
+                chance *= RingOfWealth.dropChanceMultiplier( Dungeon.hero );
+                chance = Math.min(0.05f, chance);
+                if(Random.Float()<chance){
+                    WandOfPrismaticLight w = new WandOfPrismaticLight();
+                    w.level(Random.chances(new float[]{0.55f - 2f*chance, 0.3f + chance, 0.15f+chance}));
+                    Dungeon.level.drop(w, pos).sprite.drop();
+                }
+            }
+
+            super.rollToDropLoot();
+
         }
     }
 
@@ -385,6 +411,23 @@ public abstract class ShamanH extends Mob {
             if(ice*lightning > 24){ice = 0; lightning = 0;}
             return zap;
         }
+
+        @Override
+        public void rollToDropLoot(){
+            if (Dungeon.hero.lvl <= maxLvl + 2){
+                float chance = 0.02f;
+                chance *= RingOfWealth.dropChanceMultiplier( Dungeon.hero );
+                chance = Math.min(0.05f, chance);
+                if(Random.Float()<chance){
+                    WandOfFrost w = new WandOfFrost();
+                    w.level(Random.chances(new float[]{0.55f - 2f*chance, 0.3f + chance, 0.15f+chance}));
+                    Dungeon.level.drop(w, pos).sprite.drop();
+                }
+            }
+
+            super.rollToDropLoot();
+
+        }
     }
 
     public static class TrickShaman extends ShamanH{
@@ -399,6 +442,21 @@ public abstract class ShamanH extends Mob {
             ++poisonZap;
             if(zap==5) poisonZap=0;
             return zap;
+        }
+
+        @Override
+        public void rollToDropLoot(){
+            if (Dungeon.hero.lvl <= maxLvl + 2){
+                float chance = 0.02f;
+                chance *= RingOfWealth.dropChanceMultiplier( Dungeon.hero );
+                chance = Math.min(0.05f, chance);
+                if(Random.Float()<chance){
+                    WandOfCorrosion w = new WandOfCorrosion();
+                    w.level(Random.chances(new float[]{0.55f - 2f*chance, 0.3f + chance, 0.15f+chance}));
+                    Dungeon.level.drop(w, pos).sprite.drop();
+                }
+            }
+            super.rollToDropLoot();
         }
     }
 

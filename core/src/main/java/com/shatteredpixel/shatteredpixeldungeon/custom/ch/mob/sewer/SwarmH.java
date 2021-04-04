@@ -10,13 +10,12 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Healing;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Poison;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Swarm;
-import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.RangeMap;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.SwarmSprite;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
@@ -39,6 +38,10 @@ public class SwarmH extends Mob {
         lootChance = 0.1667f; //by default, see rollToDropLoot()
     }
 
+    {
+        immunities.add(Corruption.class);
+    }
+
     @Override
     public void die(Object cause){
         for(int i=1;i<4;++i) {
@@ -47,7 +50,8 @@ public class SwarmH extends Mob {
                 Char ch = findChar(j);
                 if(ch!=null){
                     if(ch.alignment == Alignment.ENEMY){
-                        Buff.affect(ch, Healing.class).setHeal(12-3*i, 0, 4-i);
+                        Buff.affect(ch, Healing.class).setHeal(13-3*i, 1, 0);
+                        ch.sprite.showStatus(CharSprite.POSITIVE, "%d",13-3*i);
                     }
                 }
             }
@@ -149,16 +153,6 @@ public class SwarmH extends Mob {
     protected Item createLoot(){
         Dungeon.LimitedDrops.SWARM_HP.count++;
         return super.createLoot();
-    }
-
-    @Override
-    public String name(){
-        return M.L(Swarm.class,"name");
-    }
-
-    @Override
-    public String description(){
-        return M.L(Swarm.class, "desc");
     }
 
 }

@@ -11,6 +11,10 @@ public class EyeImage extends EyeH{
         spriteClass = EyeImageSprite.class;
     }
 
+    {
+        immunities.add(Corruption.class);
+    }
+
     @Override
     protected void createImage(){
 

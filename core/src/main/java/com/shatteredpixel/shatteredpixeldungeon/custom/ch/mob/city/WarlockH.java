@@ -4,10 +4,13 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Degrade;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Warlock;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
@@ -19,6 +22,9 @@ import com.watabou.utils.Random;
 import static com.shatteredpixel.shatteredpixeldungeon.items.Item.updateQuickslot;
 
 public class WarlockH extends Warlock {
+    {
+        immunities.add(Corruption.class);
+    }
     private static final float TIME_TO_ZAP = 1f;
 
     @Override
@@ -117,5 +123,20 @@ public class WarlockH extends Warlock {
     public void restoreFromBundle(Bundle b){
         super.restoreFromBundle(b);
         hitsToDegrade = b.getInt("hitsToDegrade");
+    }
+
+    @Override
+    public void rollToDropLoot(){
+        if (Dungeon.hero.lvl <= maxLvl + 2){
+            float chance = 0.2f;
+            chance *= RingOfWealth.dropChanceMultiplier( Dungeon.hero );
+            chance = Math.min(0.4f, chance);
+            if(Random.Float()<chance){
+                Dungeon.level.drop(new ScrollOfRecharging(), pos).sprite.drop();
+            }
+        }
+
+        super.rollToDropLoot();
+
     }
 }

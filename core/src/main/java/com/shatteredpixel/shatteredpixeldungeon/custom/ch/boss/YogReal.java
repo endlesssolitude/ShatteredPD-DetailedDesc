@@ -297,7 +297,7 @@ public class YogReal extends Boss{
             }
             GLog.w(M.L(this, "destroy_tile"));
             Camera.main.shake(2f, 1f);
-            ++destroyed;
+            destroyed = Math.min(3, ++destroyed);
         }
     }
 
@@ -369,6 +369,10 @@ public class YogReal extends Boss{
 
         if (dmgTaken > 0) {
             summonCD -= dmgTaken / 8f + 1f;
+        }
+
+        if(HP<=600){
+            BossHealthBar.bleed(true);
         }
 
         LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
@@ -474,6 +478,7 @@ public class YogReal extends Boss{
         Collections.addAll(regularSummons, b.getClassArray("REGULAR_SUMMONS"));
         if (!BossHealthBar.isAssigned()) {
             BossHealthBar.assignBoss(this);
+            if (HP < 600) BossHealthBar.bleed(true);
         }
     }
 
@@ -665,7 +670,7 @@ public class YogReal extends Boss{
             if(ch == Dungeon.hero){
                 if(!ch.isAlive()) Dungeon.fail(getClass());
             }
-            return 0;
+            return 1;
         }
 
         @Override
@@ -753,15 +758,15 @@ public class YogReal extends Boss{
 
         @Override
         public int onHitProc(Char ch) {
-            if(ch.alignment == Alignment.ENEMY) return 0;
-            ch.damage( Random.Int(40, 70), YogReal.class );
-            ch.sprite.centerEmitter().burst(  RainbowParticle.BURST, Random.Int(20, 35) );
+            if (ch.alignment == Alignment.ENEMY) return 0;
+            ch.damage(Random.Int(40, 70), YogReal.class);
+            ch.sprite.centerEmitter().burst(RainbowParticle.BURST, Random.Int(20, 35));
             ch.sprite.flash();
             Buff.affect(ch, Blindness.class, 50f);
-            if(ch == Dungeon.hero){
-                if(!ch.isAlive()) Dungeon.fail(getClass());
+            if (ch == Dungeon.hero) {
+                if (!ch.isAlive()) Dungeon.fail(getClass());
             }
-            return 0;
+            return 1;
         }
 
         @Override

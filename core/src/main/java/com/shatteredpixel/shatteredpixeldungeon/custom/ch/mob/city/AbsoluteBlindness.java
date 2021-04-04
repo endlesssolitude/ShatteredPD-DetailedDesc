@@ -2,6 +2,7 @@ package com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.city;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.watabou.noosa.Image;
 import com.watabou.utils.Bundle;
@@ -11,6 +12,7 @@ public class AbsoluteBlindness extends Buff {
         actPriority = VFX_PRIO;
         announced = true;
     }
+
     protected float left=0f;
     private int storedViewDistance;
     @Override
@@ -62,5 +64,20 @@ public class AbsoluteBlindness extends Buff {
     @Override
     public void tintIcon(Image icon){
         icon.hardlight(0x3366D4);
+    }
+
+    @Override
+    public String toString() {
+        return M.L(this, "name");
+    }
+
+    @Override
+    public String heroMessage() {
+        return M.L(this, "heromsg");
+    }
+
+    @Override
+    public String desc() {
+        return M.L(this, "desc");
     }
 }

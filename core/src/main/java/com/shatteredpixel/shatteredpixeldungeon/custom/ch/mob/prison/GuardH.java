@@ -4,15 +4,16 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Guard;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
-import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Chains;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.EtherealChains;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -27,6 +28,10 @@ public class GuardH extends Mob {
     //they can only use their chains INFINITELY
     private boolean chainsUsed = false;
     private static float cd = 8f;
+
+    {
+        immunities.add(Corruption.class);
+    }
 
     {
         spriteClass = GuardSprite.class;
@@ -133,6 +138,26 @@ public class GuardH extends Mob {
 
     @Override
     public void rollToDropLoot() {
+        if (Dungeon.hero.lvl <= maxLvl + 2){
+            float chance = 0.01f;
+            chance *= RingOfWealth.dropChanceMultiplier( Dungeon.hero );
+            chance = Math.min(0.04f, chance);
+
+            if(Random.Float()<chance) {
+                int index = 0;
+                for (int i = Generator.Category.ARTIFACT.classes.length - 1; i >= 0; --i) {
+                    if (Generator.Category.ARTIFACT.classes[i] == EtherealChains.class) {
+                        index = i;
+                        break;
+                    }
+                }
+                if (Generator.Category.ARTIFACT.probs[index] > 0.01f) {
+                    Dungeon.level.drop(new EtherealChains(), pos).sprite.drop();
+                    Generator.removeArtifact(EtherealChains.class);
+                }
+            }
+        }
+
         //each drop makes future drops 1/2 as likely
         // so loot chance looks like: 1/5, 1/10, 1/20, 1/40, etc.
         lootChance *= Math.pow(1/2f, Dungeon.LimitedDrops.GUARD_ARM.count);
@@ -180,15 +205,5 @@ public class GuardH extends Mob {
             }
 
         }
-    }
-
-    @Override
-    public String name(){
-        return M.L(Guard.class,"name");
-    }
-
-    @Override
-    public String description(){
-        return M.L(Guard.class, "desc");
     }
 }

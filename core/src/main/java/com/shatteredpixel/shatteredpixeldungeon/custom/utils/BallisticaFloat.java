@@ -262,9 +262,8 @@ public class BallisticaFloat{
     //library methods, static
     private static final float A2P = 0.0174533f;
 
-    //We assume up is positive y but in game it is opposite.
     private static PointF poleToPointF(float angle, float range){
-        return new PointF((float)(range*Math.cos(angle*A2P)), (float)(-range*Math.sin(angle*A2P)));
+        return new PointF((float)(range*Math.cos(angle*A2P)), (float)(range*Math.sin(angle*A2P)));
     }
 
     private static boolean isInsideMap(PointF posF){

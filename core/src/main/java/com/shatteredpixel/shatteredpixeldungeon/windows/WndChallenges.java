@@ -145,7 +145,7 @@ public class WndChallenges extends Window {
 
 			pos = cb.bottom();
 		}
-		content.setSize(WIDTH, (int) pos);
+		content.setSize(WIDTH, (int) pos + GAP*2);
 		pane.scrollTo(0, 0);
 
 

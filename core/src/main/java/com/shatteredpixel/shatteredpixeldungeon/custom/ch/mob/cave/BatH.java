@@ -4,11 +4,17 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Amok;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Bat;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.RangeMap;
 import com.shatteredpixel.shatteredpixeldungeon.custom.visuals.DelayerEffect;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEvasion;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfHaste;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
@@ -26,6 +32,9 @@ public class BatH extends Bat {
         defenseSkill = 16;
         HT=HP=32;
         HUNTING = new Hunting();
+    }
+    {
+        immunities.add(Corruption.class);
     }
 
     @Override
@@ -73,6 +82,19 @@ public class BatH extends Bat {
             }
         }
         return Math.round(super.defenseSkill(enemy) * availableCells / 3f);
+    }
+
+    @Override
+    public int attackProc(Char enemy, int damage){
+        //compensate
+        int reg = Math.min( 4, HT - HP );
+
+        if (reg > 0) {
+            HP += reg;
+            sprite.emitter().burst( Speck.factory( Speck.HEALING ), 1 );
+        }
+
+        return super.attackProc( enemy, damage );
     }
 
     protected boolean avoidDamage(int threshold){
@@ -155,6 +177,24 @@ public class BatH extends Bat {
         Dungeon.level.updateFieldOfView(this, fieldOfView);
     }
 
+
+    @Override
+    public void rollToDropLoot(){
+        if (Dungeon.hero.lvl <= maxLvl + 2){
+            float chance = 0.02f;
+            chance *= RingOfWealth.dropChanceMultiplier( Dungeon.hero );
+            chance = Math.min(0.06f, chance);
+            if(Random.Float()<chance){
+                Ring r;
+                r = Random.Int(2)==0? new RingOfHaste() : new RingOfEvasion();
+                r.level(Random.chances(new float[]{0.6f - 2f*chance, 0.25f + chance, 0.15f+chance}));
+                Dungeon.level.drop(r, pos).sprite.drop();
+            }
+        }
+
+        super.rollToDropLoot();
+
+    }
 
     private class Hunting extends Mob.Hunting{
         @Override

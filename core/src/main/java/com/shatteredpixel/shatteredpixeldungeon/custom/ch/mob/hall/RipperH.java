@@ -3,6 +3,7 @@ package com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.hall;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Light;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.RipperDemon;
 import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
@@ -19,16 +20,20 @@ import com.watabou.utils.Random;
 
 public class RipperH extends RipperDemon {
     {
-        spriteClass = RipperSprite.class;
+        spriteClass = RipperHSprite.class;
 
         HP = HT = 84;
         defenseSkill = 22;
         viewDistance = Light.DISTANCE;
 
-        EXP = 5;
+        EXP = 6;
         maxLvl = 27;
 
         baseSpeed = 2f;
+    }
+
+    {
+        immunities.add(Corruption.class);
     }
 
     @Override
@@ -51,7 +56,7 @@ public class RipperH extends RipperDemon {
             int dist = RangeMap.manhattanDist(pos, enemy.pos);
             ConsistBleeding bleeding = Buff.affect(enemy, ConsistBleeding.class);
             if(bleeding != null) {
-                boolean notFull = bleeding.newLayer(Random.Float(2f, 3.5f) * (dist <= 1 ? 1.5f : 1f), Random.Float(1.2f, 1.75f) * (dist <= 1 ? 1.5f : 1f));
+                boolean notFull = bleeding.newLayer(Random.Float(2.3f, 3.3f) * (dist <= 1 ? 1.5f : 1f), Random.Float(1.2f, 1.5f) * (dist <= 1 ? 1.5f : 1f));
                 if (!notFull) {
                     bleeding.burst();
                     bleeding.detach();
@@ -87,16 +92,18 @@ public class RipperH extends RipperDemon {
                 damage += Math.max(0, dmg[i])*lasting[i];
             }
             target.sprite.showStatus(CharSprite.NEGATIVE, "!!!");
+            GLog.n(M.L(this, "burst"));
             if (target.sprite.visible) {
                 Splash.at( target.sprite.center(), -PointF.PI / 2, PointF.PI / 6,
-                        target.sprite.blood(), Math.min( 30 * (int)damage / target.HT, 30 ) );
+                        target.sprite.blood(), 30 );
             }
             Wound.hit(target);
 
+            damage *= 1.6f;
             target.damage((int)damage, this);
             if(target == Dungeon.hero && !target.isAlive()){
                 Dungeon.fail(getClass());
-                GLog.n(M.L(this, "burst"));
+                GLog.n(M.L(this, "burst_die"));
             }
             detach();
         }
@@ -142,7 +149,7 @@ public class RipperH extends RipperDemon {
             }
             if(target == Dungeon.hero && !target.isAlive()){
                 Dungeon.fail(getClass());
-                GLog.n(M.L(this, "bleed"));
+                GLog.n(M.L(this, "bleed_die"));
             }
 
             percentDamage -= (int)percentDamage;
@@ -180,5 +187,33 @@ public class RipperH extends RipperDemon {
             return M.L(this, "desc", getLayer(), oneDamage());
         }
 
+        @Override
+        public String toString() {
+            return M.L(this, "name");
+        }
+
+        @Override
+        public String heroMessage() {
+            return M.L(this, "heromsg");
+        }
+
+        @Override
+        public float iconFadePercent() {
+            return Math.max(0, (5 - getLayer()) / 5f);
+        }
+
+    }
+
+    public static class RipperHSprite extends RipperSprite{
+        public RipperHSprite(){
+            super();
+            brightness(0.75f);
+        }
+
+        @Override
+        public void resetColor(){
+            super.resetColor();
+            brightness(0.75f);
+        }
     }
 }

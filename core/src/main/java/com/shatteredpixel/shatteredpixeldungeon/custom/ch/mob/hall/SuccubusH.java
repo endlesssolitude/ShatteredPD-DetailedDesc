@@ -5,6 +5,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Charm;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Healing;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Succubus;
@@ -15,6 +16,9 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 
 public class SuccubusH extends Succubus {
+    {
+        immunities.add(Corruption.class);
+    }
     @Override
     public int attackProc(Char enemy, int damage){
         Charm charm = enemy.buff(Charm.class);
@@ -22,14 +26,14 @@ public class SuccubusH extends Succubus {
         int dmg = super.attackProc(enemy, damage);
         if(armorBreak){
             //avoid extreme cases
-            dmg += Math.min(enemy.drRoll(), enemy.drRoll())*3/5;
+            dmg += (enemy.drRoll()+enemy.drRoll())/3;
         }
         for(Char ch: Actor.chars()){
             if(ch.alignment == Alignment.ENEMY){
                 if(ch!=this){
-                    int dist = RangeMap.manhattanDist(this.pos, enemy.pos);
-                    if(dist < 5){
-                        int heal = 40/(2+dist);
+                    int dist = RangeMap.manhattanDist(this.pos, ch.pos);
+                    if(dist < 9){
+                        int heal = 30/(1+dist/2);
                         Buff.affect(ch, Healing.class).setHeal(heal, 1, 0);
                         ch.sprite.showStatus(CharSprite.POSITIVE, "+%d", heal);
                         sprite.parent.add(new BeamCustom(sprite.center(), ch.sprite.center(), Effects.Type.HEALTH_RAY).setDiameter(0.5f).setLifespan(0.25f));
@@ -52,6 +56,8 @@ public class SuccubusH extends Succubus {
         rh.pos = Dungeon.level.randomRespawnCell(rh);
         GameScene.add(rh);
     }
+
+
 
 
 }

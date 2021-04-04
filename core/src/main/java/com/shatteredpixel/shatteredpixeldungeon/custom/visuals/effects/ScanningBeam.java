@@ -94,8 +94,9 @@ public class ScanningBeam extends Image {
             Char ch = Actor.findChar(i);
             if(ch != null){
                 if(!hasCollided.containsKey(ch.id())){
-                    collide.onHitProc(ch);
-                    hasCollided.put(ch.id(), angle);
+                    if(collide.onHitProc(ch) > 0) {
+                        hasCollided.put(ch.id(), angle);
+                    }
                 }
             }
         }

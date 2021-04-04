@@ -64,7 +64,7 @@ public class WandOfScanningBeam extends WandOfDisintegration implements Scanning
         ch.damage( damageRoll(buffedLvl()), this );
         ch.sprite.centerEmitter().burst( PurpleParticle.BURST, Random.IntRange( 1, 2 ) );
         ch.sprite.flash();
-        return 0;
+        return 1;
     }
 
     @Override

@@ -526,10 +526,15 @@ public class Hero extends Char {
 		}
 
 		if(Dungeon.isChallenged(Challenges.ELITE_BOSSES)){
-			if(Dungeon.bossLevel(Dungeon.depth)) {
+			//judge if boss is reinforced
+			long id = Dungeon.challenges / Challenges.ELITE_ENEMIES_1;
+			boolean slow = (id & (1<<(Dungeon.depth/5-1)))>0;
+			if(Dungeon.bossLevel(Dungeon.depth) && slow) {
 				if (buff(LockedFloor.class) != null) {
-					// 1/3 effect for extra speed
-					speed = 1f + (speed - 1f) * 0.33f;
+					// 1/4 effect for extra speed,  capped at 1.5
+					if(speed>1f) {
+						speed = Math.min(1f + (speed - 1f) * 0.25f, 1.5f);
+					}
 				}
 			}
 		}

@@ -2,8 +2,10 @@ package com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.city;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Monk;
+import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.BallisticaFloat;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.GME;
 import com.shatteredpixel.shatteredpixeldungeon.custom.visuals.MissileSpriteCustom;
@@ -12,7 +14,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Gauntlet;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Gloves;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
-import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
@@ -22,7 +23,9 @@ public class MonkH extends Monk {
     {
         EXP=13;
     }
-
+    {
+        immunities.add(Corruption.class);
+    }
     @Override
     public float attackDelay(){ return 0.9f*super.attackDelay();}
 
@@ -45,7 +48,7 @@ public class MonkH extends Monk {
                     hero.belongings.weapon = null;
                     Dungeon.quickslot.convertToPlaceholder(weapon);
                     Item.updateQuickslot();
-                    GLog.w(Messages.get(this, "disarm", weapon.name()));
+                    GLog.n(M.L(this, "disarm", weapon.name()));
 
                     BallisticaFloat ba = new BallisticaFloat(hero.pos, GME.angle(pos, hero.pos) + Random.Float(-22.5f, 22.5f), 6, Ballistica.PROJECTILE);
                     ((MissileSpriteCustom) hero.sprite.parent.recycle(MissileSpriteCustom.class)).

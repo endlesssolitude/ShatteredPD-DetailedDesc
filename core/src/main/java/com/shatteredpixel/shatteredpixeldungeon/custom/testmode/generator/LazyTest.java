@@ -22,8 +22,11 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfParalyticG
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfPurity;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfToxicGas;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfCleansing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfMagicalSight;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfAccuracy;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfElements;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfLullaby;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
@@ -36,6 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportat
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTerror;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfPsionicBlast;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.ArcaneCatalyst;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfBlast;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfBlink;
@@ -100,7 +104,7 @@ public class LazyTest extends TestGenerator {
             greatsword.level(15);
             greatsword.identify().collect();
 
-            new Gold().quantity(36888).doPickUp(hero);
+            new Gold().quantity(16777216).doPickUp(hero);
 
             new Pasty().quantity(100).collect();
 
@@ -114,7 +118,7 @@ public class LazyTest extends TestGenerator {
 
             new Honeypot().quantity(777).collect();
 
-            new StoneOfFlock().quantity(4444).collect();
+            new StoneOfFlock().quantity(777).collect();
 
             new Torch().quantity(777).identify().collect();
 
@@ -122,9 +126,9 @@ public class LazyTest extends TestGenerator {
 
             new ArcaneCatalyst().quantity(100).collect();
 
-            new StoneOfBlast().quantity(4444).collect();
+            new StoneOfBlast().quantity(777).collect();
 
-            new StoneOfBlink().quantity(4444).collect();
+            new StoneOfBlink().quantity(777).collect();
 
             new Blindweed.Seed().quantity(100).identify().collect();
             new Dreamfoil.Seed().quantity(100).identify().collect();
@@ -147,6 +151,16 @@ public class LazyTest extends TestGenerator {
             roe.level(22);
             roe.identify().collect();
 
+            RingOfAccuracy roa = new RingOfAccuracy();
+            roa.level(22);
+            roa.identify().collect();
+
+            RingOfWealth row = new RingOfWealth();
+            row.level(22);
+            row.identify().collect();
+
+            new ScrollOfPsionicBlast().quantity(666).identify().collect();
+            new PotionOfCleansing().quantity(777).identify().collect();
 
             detach(hero.belongings.backpack);
         }

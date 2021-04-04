@@ -1,6 +1,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.prison;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Skeleton;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
@@ -13,6 +14,10 @@ import com.watabou.utils.Callback;
 public class SkeletonH extends Skeleton {
     {
         EXP = 7;
+    }
+
+    {
+        immunities.add(Corruption.class);
     }
 
     protected int revived = 0;

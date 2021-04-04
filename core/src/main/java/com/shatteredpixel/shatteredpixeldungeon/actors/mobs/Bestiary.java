@@ -43,7 +43,6 @@ public class Bestiary {
 			swapMobAlts(mobs);
 		}else{
 			mobs = MobList.HardMobList(depth);
-			MobList.swapMobAlts(mobs);
 		}
 		Random.shuffle(mobs);
 		return mobs;

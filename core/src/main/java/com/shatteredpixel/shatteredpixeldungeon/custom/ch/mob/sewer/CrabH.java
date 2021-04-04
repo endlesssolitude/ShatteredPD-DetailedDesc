@@ -2,6 +2,7 @@ package com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.sewer;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Weakness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Crab;
@@ -9,6 +10,9 @@ import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
 public class CrabH extends Crab {
+    {
+        immunities.add(Corruption.class);
+    }
 
     private float deduced = 0;
     @Override

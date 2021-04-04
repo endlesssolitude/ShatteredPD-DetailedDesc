@@ -1,11 +1,15 @@
 package com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.sewer;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Slime;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 
 public class SlimeH extends Slime {
+    {
+        immunities.add(Corruption.class);
+    }
     @Override
     public int attackProc(Char enemy, int damage){
         Ballistica trajectory = new Ballistica(pos, enemy.pos, Ballistica.STOP_TARGET);

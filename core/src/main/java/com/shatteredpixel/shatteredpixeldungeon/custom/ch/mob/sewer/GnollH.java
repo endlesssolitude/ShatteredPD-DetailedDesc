@@ -3,6 +3,7 @@ package com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.sewer;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Gnoll;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.custom.visuals.MissileSpriteCustom;
@@ -15,6 +16,14 @@ import com.watabou.utils.Callback;
 public class GnollH extends Gnoll {
     {
         EXP = 3;
+
+        lootChance = 1f;
+
+
+    }
+
+    {
+        immunities.add(Corruption.class);
     }
 
     private int dartLeft = 2;

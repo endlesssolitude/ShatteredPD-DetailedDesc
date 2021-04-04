@@ -12,9 +12,12 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chill;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Frost;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.RangeMap;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
@@ -38,6 +41,7 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.MobSprite;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.MovieClip;
 import com.watabou.noosa.TextureFilm;
 import com.watabou.noosa.audio.Sample;
@@ -59,6 +63,9 @@ public abstract class ElementalH extends Mob {
         maxLvl = 20;
 
         flying = true;
+    }
+    {
+        immunities.add(Corruption.class);
     }
 
     @Override
@@ -188,7 +195,7 @@ public abstract class ElementalH extends Mob {
             spriteClass = ElementalHSprite.Frost.class;
 
             loot = new PotionOfFrost();
-            lootChance = 1/5f;
+            lootChance = 1/4f;
 
             properties.add( Property.ICY );
 
@@ -201,7 +208,13 @@ public abstract class ElementalH extends Mob {
                 iceBreak(enemy);
             }
             else if (Random.Int( 3 ) == 0 || Dungeon.level.water[enemy.pos]) {
-                Freezing.freeze(enemy.pos);
+                new FlavourBuff(){
+                    {actPriority = VFX_PRIO;}
+                    public boolean act() {
+                        Freezing.freeze(enemy.pos);
+                        return super.act();
+                    }
+                }.attachTo(enemy);
                 Splash.at( enemy.sprite.center(), sprite.blood(), 5);
             }
             Dungeon.level.setCellToWater(false, enemy.pos);
@@ -221,6 +234,7 @@ public abstract class ElementalH extends Mob {
             Buff.detach(enemy, Frost.class);
             enemy.damage(Math.max(enemy.HP/7, enemy.HT/10), this);
             enemy.sprite.burst(0x3325D4, 18);
+            enemy.sprite.showStatus(0x2299FF, "!!!");
             int[] iceArea = RangeMap.C1(enemy.pos);
             for(int i: iceArea){
                 GameScene.add(Blob.seed(i, 3, Freezing.class));
@@ -228,6 +242,7 @@ public abstract class ElementalH extends Mob {
             }
             if(enemy instanceof Hero && !enemy.isAlive()){
                 Dungeon.fail(getClass());
+                GLog.n(M.L(this, "ice_break_die"));
             }
         }
 
@@ -262,7 +277,7 @@ public abstract class ElementalH extends Mob {
             spriteClass = ElementalHSprite.Fire.class;
 
             loot = new PotionOfLiquidFlame();
-            lootChance = 1/5f;
+            lootChance = 1/4f;
 
             properties.add( Property.FIERY );
 
@@ -338,7 +353,7 @@ public abstract class ElementalH extends Mob {
             spriteClass = ElementalHSprite.Shock.class;
 
             loot = new ScrollOfRecharging();
-            lootChance = 1/3f;
+            lootChance = 1/7f;
 
             properties.add( Property.ELECTRIC );
 
@@ -372,7 +387,7 @@ public abstract class ElementalH extends Mob {
             boolean blind = enemy.buff(Blindness.class) != null;
             boolean seeNothing = enemy.buff(AbsoluteBlindness.class) != null;
             if(blind || seeNothing){
-                Buff.affect(enemy, AbsoluteBlindness.class).addLeft(10f).storeVD(enemy.viewDistance);
+                Buff.affect(enemy, AbsoluteBlindness.class).addLeft(9f).storeVD(enemy.viewDistance);
                 Buff.detach(enemy, Blindness.class);
             }else {
                 Buff.affect(enemy, Blindness.class, Blindness.DURATION);
@@ -412,7 +427,7 @@ public abstract class ElementalH extends Mob {
 
         @Override
         protected int setCD() {
-            return 2;
+            return Random.IntRange(2,3);
         }
 
     }

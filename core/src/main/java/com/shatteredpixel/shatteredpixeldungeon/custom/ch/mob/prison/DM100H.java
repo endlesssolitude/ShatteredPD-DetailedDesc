@@ -5,6 +5,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.CounterBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DM100;
 import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
@@ -12,6 +13,8 @@ import com.shatteredpixel.shatteredpixeldungeon.custom.visuals.DelayerEffect;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Effects;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Lightning;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SparkParticle;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLightning;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
@@ -30,6 +33,10 @@ public class DM100H extends DM100 {
     {
         EXP = 7;
         HT = HP = 23;
+    }
+
+    {
+        immunities.add(Corruption.class);
     }
 
     private float cd = 4f;
@@ -92,6 +99,23 @@ public class DM100H extends DM100 {
     public void restoreFromBundle(Bundle b){
         super.restoreFromBundle(b);
         cd = b.getFloat("skillCD");
+    }
+
+    @Override
+    public void rollToDropLoot(){
+        if (Dungeon.hero.lvl <= maxLvl + 2){
+            float chance = 0.02f;
+            chance *= RingOfWealth.dropChanceMultiplier( Dungeon.hero );
+            chance = Math.max(chance, 0.1f);
+            if(Random.Float()<chance){
+                WandOfLightning wandOfLightning = new WandOfLightning();
+                wandOfLightning.level(Random.chances(new float[]{0.6f-chance*2, 0.3f + chance, 0.1f+chance}));
+                Dungeon.level.drop(wandOfLightning, pos).sprite.drop();
+            }
+        }
+
+        super.rollToDropLoot();
+
     }
 
     public static class SkyLightning{}

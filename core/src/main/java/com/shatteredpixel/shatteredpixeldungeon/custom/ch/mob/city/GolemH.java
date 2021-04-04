@@ -2,6 +2,7 @@ package com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.city;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Golem;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.RangeMap;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ElmoParticle;
@@ -14,6 +15,9 @@ public class GolemH extends Golem {
 
     {
         EXP = 15;
+    }
+    {
+        immunities.add(Corruption.class);
     }
 
     private int damageToElemental = 3;
@@ -53,9 +57,9 @@ public class GolemH extends Golem {
         ele.pos = summonPos;
         ele.HP = ele.HT / 2;
         ele.maxLvl = -100;
-        ele.state = HUNTING;
+        ele.state = ele.HUNTING;
         GameScene.add(ele);
-        sprite.emitter().start(ElmoParticle.FACTORY, 0.004f, 18);
+        sprite.emitter().start(ElmoParticle.FACTORY, 0.01f, 18);
     }
 
     @Override
@@ -68,6 +72,12 @@ public class GolemH extends Golem {
     public void restoreFromBundle(Bundle b){
         super.restoreFromBundle(b);
         damageToElemental = b.getInt("element");
+    }
+
+    @Override
+    public int distance(Char enemy){
+        int dist = super.distance(enemy);
+        return  Math.max(dist, 1);
     }
 
 }

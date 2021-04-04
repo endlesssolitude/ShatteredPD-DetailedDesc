@@ -4,6 +4,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Light;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
@@ -17,6 +18,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Dewdrop;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfDisintegration;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
@@ -56,6 +58,10 @@ public class EyeH extends Mob {
         lootChance = 1f;
 
         properties.add(Property.DEMONIC);
+    }
+
+    {
+        immunities.add(Corruption.class);
     }
 
     @Override
@@ -268,6 +274,23 @@ public class EyeH extends Mob {
                 break;
         }
         return loot;
+    }
+
+    @Override
+    public void rollToDropLoot(){
+        if (Dungeon.hero.lvl <= maxLvl + 2){
+            float chance = 0.04f;
+            chance *= RingOfWealth.dropChanceMultiplier( Dungeon.hero );
+            chance = Math.min(0.1f, chance);
+            if(Random.Float()<chance){
+                WandOfDisintegration w=new WandOfDisintegration();
+                w.level(Random.chances(new float[]{0.3f - 2f*chance, 0.4f + chance, 0.2f+chance/2f, 0.1f + chance/2f}));
+                Dungeon.level.drop(w, pos).sprite.drop();
+            }
+        }
+
+        super.rollToDropLoot();
+
     }
 
     private static final String BEAM_TARGET     = "beamTarget";
