@@ -87,8 +87,8 @@ public class ScanningBeam extends Image {
             updateScale();
         }
     }
-
-    private void judgeHit(BallisticaReal ba){
+    //what will happen when both beams hit one character?
+    private synchronized void judgeHit(BallisticaReal ba){
         for(int i: ba.subPath(1, ba.dist)){
             collide.cellProc(i);
             Char ch = Actor.findChar(i);
@@ -129,7 +129,7 @@ public class ScanningBeam extends Image {
     private static OnCollide collide;
 
     public interface OnCollide {
-        //when hit char
+        //when hit char. return >0 means hit, <=0 otherwise.
         int onHitProc(Char ch);
         //when hit cell
         int cellProc(int i);

@@ -70,7 +70,7 @@ public abstract class YogRealFist extends Mob {
     protected boolean canRangedInMelee = true;
 
     protected void incrementRangedCooldown(){
-        rangedCooldown += Random.NormalFloat(7, 11);
+        rangedCooldown += Random.NormalFloat(6, 10);
     }
 
     @Override
@@ -138,7 +138,7 @@ public abstract class YogRealFist extends Mob {
 
     @Override
     public int damageRoll() {
-        return Random.NormalIntRange( 18, 36 );
+        return (Random.NormalIntRange( 20, 39 ) +  (isNearYog()?12:0)) ;
     }
 
     @Override
@@ -321,7 +321,7 @@ public abstract class YogRealFist extends Mob {
 
             if (Dungeon.level.water[pos] && HP < HT) {
                 sprite.emitter().burst( Speck.factory(Speck.HEALING), 3 );
-                HP += HT/50;
+                HP += HT/25;
             }
 
             return super.act();
@@ -381,7 +381,7 @@ public abstract class YogRealFist extends Mob {
 
         @Override
         public int damageRoll() {
-            return Random.NormalIntRange( 22, 44 );
+            return super.damageRoll()+Random.NormalIntRange(5, 10);
         }
 
         @Override

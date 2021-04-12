@@ -66,7 +66,8 @@ public class Messages {
 			Assets.Messages.UI,
 			Assets.Messages.WINDOWS,
 
-			Assets.Messages.CUSTOM
+			Assets.Messages.CUSTOM,
+			Assets.Messages.EXPANSION
 	};
 
 	static{

@@ -99,5 +99,4 @@ public class ScorpioH extends Scorpio {
         super.rollToDropLoot();
 
     }
-
 }

@@ -110,6 +110,7 @@ public class Assets {
 		public static final String WINDOWS  = "messages/windows/windows";
 
 		public static final String CUSTOM  = "messages/custom/custom";
+		public static final String EXPANSION="messages/expansion/expansion";
 	}
 
 	public static class Music {

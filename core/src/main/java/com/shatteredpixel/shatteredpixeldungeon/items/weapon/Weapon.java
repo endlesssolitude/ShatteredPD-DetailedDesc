@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Berserk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.virtual.VirtualEnchantment;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfFuror;
@@ -117,6 +118,8 @@ abstract public class Weapon extends KindOfWeapon {
 				Badges.validateItemLevelAquired( this );
 			}
 		}
+
+		damage = VirtualEnchantment.INSTANCE.attackProc(this, attacker, defender, damage);
 
 		return damage;
 	}

@@ -43,6 +43,8 @@ import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.generator.TestMe
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.generator.TestMissile;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.generator.TestPotion;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.generator.TestRing;
+import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.alchemy.AlchemyEX;
+import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.container.PotionBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
 import com.shatteredpixel.shatteredpixeldungeon.items.DewVial;
 import com.shatteredpixel.shatteredpixeldungeon.items.Dewdrop;
@@ -315,6 +317,10 @@ public enum HeroClass {
 	private static void doChallengeSpawn(){
 		if(Dungeon.isChallenged(Challenges.TEST_MODE)){
 			new WandOfScanningBeam().identify().collect();
+
+			if(Dungeon.isChallenged(Challenges.EXPANSION_MISC)) {
+				new AlchemyEX().collect();
+			}
 			//new PVCTester().collect();
 			//WandOfReflectDisintegration word = new WandOfReflectDisintegration();
 			//word.curCharges = 99999;
@@ -347,6 +353,7 @@ public enum HeroClass {
 			new TestPotion().collect();
 
 			new TestBag().collect();
+			new PotionBag().collect();
 
 			new ScrollHolder().collect();
 			Dungeon.LimitedDrops.SCROLL_HOLDER.drop();

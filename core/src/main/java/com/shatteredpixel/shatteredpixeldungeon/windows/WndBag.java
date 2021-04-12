@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Shopkeeper;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.TestBag;
+import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.container.PotionBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -41,6 +42,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.bags.ScrollHolder;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.VelvetPouch;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfIcyTouch;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurse;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation;
@@ -177,7 +179,8 @@ public class WndBag extends WndTabbed {
 			stuff.getItem( ScrollHolder.class ),
 			stuff.getItem( PotionBandolier.class ),
 			stuff.getItem( MagicalHolster.class ),
-				stuff.getItem(TestBag.class)
+				stuff.getItem(TestBag.class),
+				stuff.getItem(PotionBag.class)
 		};
 
 		for (Bag b : bags) {
@@ -335,7 +338,9 @@ public class WndBag extends WndTabbed {
 			return Icons.get( Icons.POTION_BANDOLIER );
 		} else if (bag instanceof TestBag) {
 			return Icons.get( Icons.GOLD );
-		} else {
+		} else if (bag instanceof PotionBag) {
+			return new ItemSprite(new ElixirOfIcyTouch());
+		}else{
 			return Icons.get( Icons.BACKPACK );
 		}
 	}

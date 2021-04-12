@@ -74,7 +74,7 @@ dependencies {
     natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86"
     natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86_64"
 
-    implementation 'cat.ereza:customactivityoncrash:2.3.0'
+    //implementation 'cat.ereza:customactivityoncrash:2.3.0'
 }
 
 // called every time gradle gets executed, takes the native dependencies of

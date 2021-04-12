@@ -34,7 +34,6 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ElmoParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.PurpleParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.RainbowParticle;
-import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.GoldenKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
@@ -289,10 +288,11 @@ public class YogReal extends Boss{
                     yr.pos = i;
                     yr.state = yr.HUNTING;
                     GameScene.add(yr, 2f);
-                    CellEmitter.get(i).burst(ShadowParticle.UP, 25);
+                    CellEmitter.get(i).start(ElmoParticle.FACTORY, 0.08f, 30);
                     --targetSummon;
                 }
-                CellEmitter.get(i).start(ElmoParticle.FACTORY, 0.07f, 20);
+                CellEmitter.get(i).burst(ElmoParticle.FACTORY, 18);
+
                 --total;
             }
             GLog.w(M.L(this, "destroy_tile"));

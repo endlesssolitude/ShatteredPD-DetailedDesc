@@ -123,7 +123,7 @@ public class RangeMap {
         if(maxRange >= minRange){
             return arrayCopy(manhattanCircle(center, maxRange), manhattanRing(center, minRange, maxRange-1));
         }
-        return new int[]{};
+        return new int[0];
     }
 
     public static int manhattanDist(int a, int b){
