@@ -53,7 +53,13 @@ public class BallisticaReal {
         //if we do not offset, the source will be 30, 20, and when it collides with y=20,
         //the wall judgement is centered at (30, 20), not (29, 20). First judgement will look at (30, 19) instead of (29,19)
         //When it collides, it regards the upper ceil, wall, not empty. And the ballistica will end here.
-        sourceI = pointToCell(pointFloatToInt(from.clone().offset(to.x-from.x>0?0.001f:-0.001f, to.y-from.y>0?0.001f:-0.001f), false));
+
+        //if the point is on the edge of cell, give it a tiny offset.
+        if(from.x-(int)from.x==0f || from.y-(int)from.y==0f) {
+            sourceI = pointToCell(pointFloatToInt(from.clone().offset(to.x - from.x > 0 ? 0.001f : -0.001f, to.y - from.y > 0 ? 0.001f : -0.001f), false));
+        }else{
+            sourceI = pointToCell(pointFloatToInt(from.clone(), false));
+        }
         sourceF = from;
         buildTrace(sourceF, to,
                 (params & STOP_TARGET) > 0,

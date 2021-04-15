@@ -647,7 +647,7 @@ public class YogReal extends Boss{
                                              toRemove.next();
                                              detach();
                                              //cancel shaking
-                                             Camera.main.shake(3f, 0.3f);
+                                             Camera.main.shake(2f, 0.3f);
                                          }
                                      });
                                      return false;
@@ -656,7 +656,7 @@ public class YogReal extends Boss{
 
             );
 
-            Camera.main.shake(3f, 100f);
+            Camera.main.shake(2f, 100f);
 
         }
 
@@ -744,7 +744,7 @@ public class YogReal extends Boss{
                                              toRemove.next();
                                              detach();
                                              //cancel shaking
-                                             Camera.main.shake(3f, 0.3f);
+                                             Camera.main.shake(2f, 0.3f);
                                          }
                                      });
                                      return false;
@@ -753,7 +753,7 @@ public class YogReal extends Boss{
 
             );
 
-            Camera.main.shake(3f, 100f);
+            Camera.main.shake(2f, 100f);
         }
 
         @Override

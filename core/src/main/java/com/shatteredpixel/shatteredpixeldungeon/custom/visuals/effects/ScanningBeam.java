@@ -57,7 +57,7 @@ public class ScanningBeam extends Image {
         this.baseDiameter = scale;
         return this;
     }
-
+    //build beam each flash
     @Override
     public void update(){
         super.update();
@@ -87,8 +87,8 @@ public class ScanningBeam extends Image {
             updateScale();
         }
     }
-    //what will happen when both beams hit one character?
-    private synchronized void judgeHit(BallisticaReal ba){
+    //May not safe if one cell/char is hit by multiple beams in one flash. Should avoid crossing.
+    private /*synchronized*/ void judgeHit(BallisticaReal ba){
         for(int i: ba.subPath(1, ba.dist)){
             collide.cellProc(i);
             Char ch = Actor.findChar(i);

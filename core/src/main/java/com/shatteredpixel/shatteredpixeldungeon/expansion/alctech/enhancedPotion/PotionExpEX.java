@@ -12,9 +12,9 @@ import com.shatteredpixel.shatteredpixeldungeon.plants.Starflower;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
-public class ExpPotionEX extends EnhancedPotion{
+public class PotionExpEX extends EnhancedPotion{
     {
-        image = ItemSpriteSheet.POTION_AZURE;
+        image = ItemSpriteSheet.POTION_GOLDEN;
     }
 
     @Override
@@ -79,7 +79,7 @@ public class ExpPotionEX extends EnhancedPotion{
         {
             inputs = new Class[]{PotionOfExperience.class, Starflower.Seed.class};
             inQuantity = new int[]{2,1};
-            output = ExpPotionEX.class;
+            output = PotionExpEX.class;
             outQuantity = 1;
             lvl = 3;
             cost = 1;
@@ -90,7 +90,7 @@ public class ExpPotionEX extends EnhancedPotion{
         {
             inputs = new Class[]{PotionOfExperience.class, Starflower.Seed.class, PotionOfToxicGas.class};
             inQuantity = new int[]{1,1,1};
-            output = ExpPotionEX.class;
+            output = PotionExpEX.class;
             outQuantity = 1;
             lvl = -3;
             cost = 1;

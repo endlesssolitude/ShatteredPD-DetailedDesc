@@ -2,6 +2,7 @@ package com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.enhancedPotio
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Fire;
@@ -11,20 +12,28 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Ooze;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
+import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.alchemy.CustomRecipe;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndUseItem;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.Random;
+import com.watabou.utils.Reflection;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 //what to override:
 //setCategory(decides if potion should drink/throw depending on the level)
@@ -120,16 +129,13 @@ public class EnhancedPotion extends Item {
 
     @Override
     public String status(){
-        StringBuilder sb = new StringBuilder(enhanceIdentifier());
-        sb.append(" ");
-        sb.append(quantity > 1? String.valueOf(quantity):"");
-        return sb.toString();
+        return enhanceIdentifier() + (quantity > 1 ? ":"+quantity : "");
     }
 
     @Override
     public boolean isSimilar(Item item){
-        if(item instanceof EnhancedPotion){
-            return enhanceLevel == ((EnhancedPotion)item).enhanceLevel;
+        if(this.getClass() == item.getClass()) {
+            return enhanceLevel == ((EnhancedPotion) item).enhanceLevel;
         }
         return false;
     }
@@ -306,5 +312,142 @@ public class EnhancedPotion extends Item {
     }
 
 
+
+
+
+
+
+
+    public static class EnhancedPotionRecipe extends CustomRecipe{
+
+        @Override
+        public boolean testIngredients(ArrayList<Item> ingredients) {
+            if(ingredients.size()!=3) return false;
+            int count=0;
+            boolean contain;
+            for(Item it: ingredients){
+                Class<? extends Item> itemClass = it.getClass();
+                contain = false;
+                for(Map.Entry<Class<? extends Potion>, Integer> entry : PBL.potionIdMap().entrySet()){
+                    if(itemClass == entry.getKey()){
+                        ++count;
+                        contain = true;
+                        break;
+                    }
+                }
+                if(contain) {
+                    continue;
+                }
+                for(Map.Entry<Class<? extends Plant.Seed>, Integer> entry : PBL.seedIdMap().entrySet()){
+                    if(itemClass == entry.getKey()){
+                        ++count;
+                        contain = true;
+                        break;
+                    }
+                }
+            }
+
+            return count==3;
+
+
+        }
+
+        @Override
+        public int cost(ArrayList<Item> ingredients) {
+            return 5;
+        }
+
+        @Override
+        public Item brew(ArrayList<Item> ingredients) {
+            if (!testIngredients(ingredients)) return null;
+
+            for (Item ingredient : ingredients){
+                ingredient.quantity(ingredient.quantity() - 1);
+            }
+
+            HashMap<Integer, Float> ingredientMap = new HashMap<>();
+
+            for(Item it: ingredients){
+                Class<? extends Item> itemClass = it.getClass();
+                for(Map.Entry<Class<? extends Potion>, Integer> entry : PBL.potionIdMap().entrySet()){
+                    if(itemClass == entry.getKey()){
+                        if(!ingredientMap.containsKey(entry.getValue())){
+                            ingredientMap.put(entry.getValue(), 1f);
+                        }else{
+                            float power = ingredientMap.get(entry.getValue());
+                            ingredientMap.put(entry.getValue(), power+1f);
+                        }
+                        break;
+                    }
+                }
+                for(Map.Entry<Class<? extends Plant.Seed>, Integer> entry : PBL.seedIdMap().entrySet()){
+                    if(itemClass == entry.getKey()){
+                        if(!ingredientMap.containsKey(entry.getValue())){
+                            ingredientMap.put(entry.getValue(), 1/3f);
+                        }else{
+                            float power = ingredientMap.get(entry.getValue());
+                            ingredientMap.put(entry.getValue(), 1/3f+power);
+                        }
+                        break;
+                    }
+                }
+            }
+
+            float total = 0;
+            float abs = 0;
+            for(Map.Entry<Integer, Float> entry: ingredientMap.entrySet()){
+                total += entry.getValue()*entry.getValue();
+                abs += Math.abs(entry.getValue());
+            }
+            total = (float) Math.sqrt(total);
+            float chanceForRandom = 1.366f * (abs/total -1f);
+            float maxPower = Float.MIN_VALUE;
+            for(Map.Entry<Integer, Float> entry: ingredientMap.entrySet()){
+                if(maxPower<entry.getValue()){
+                    maxPower = entry.getValue();
+                }
+            }
+
+            try{
+                EnhancedPotion enhancedPotion;
+                if(Random.Float()<chanceForRandom){
+                    enhancedPotion = Reflection.newInstance(
+                            PBL.enhancedLibMap().get(Random.chances(PBL.chanceMap())));
+                }else {
+                    enhancedPotion = Reflection.newInstance(
+                            PBL.enhancedLibMap().get(Random.chances(ingredientMap)));
+                }
+                enhancedPotion.setLevel(brewLevel(Math.max(maxPower, 0)));
+                return enhancedPotion;
+            }catch (Exception e) {
+                ShatteredPixelDungeon.reportException( e );
+                return null;
+            }
+        }
+
+        @Override
+        public Item sampleOutput(ArrayList<Item> ingredients) {
+            return new WndBag.Placeholder(ItemSpriteSheet.POTION_HOLDER){
+
+                @Override
+                public String name() {
+                    return M.L(EnhancedPotion.class, "name");
+                }
+
+                @Override
+                public String info() {
+                    return "";
+                }
+            };
+        }
+
+
+        private int brewLevel(float power){
+            if(power<0.75f) return 1;
+            if(power<2f) return Random.chances(new float[]{2f-power, power-0.75f})+1;
+            if(power<3f) return Random.chances(new float[]{3f-power, power-2f})+2;
+            return 3;
+        }
+    }
 
 }
