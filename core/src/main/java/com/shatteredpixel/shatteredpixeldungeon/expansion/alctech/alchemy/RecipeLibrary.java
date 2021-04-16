@@ -11,7 +11,7 @@ public class RecipeLibrary {
     };
 
     private static CustomRecipe[] twoIngredientRecipes = new CustomRecipe[]{
-
+        new EnhancedPotion.EnhancedPotionAlter()
     };
 
     private static CustomRecipe[] threeIngredientRecipes = new CustomRecipe[]{

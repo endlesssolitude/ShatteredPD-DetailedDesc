@@ -16,6 +16,7 @@ import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.alchemy.Custom
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.Runestone;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
@@ -314,10 +315,6 @@ public class EnhancedPotion extends Item {
 
 
 
-
-
-
-
     public static class EnhancedPotionRecipe extends CustomRecipe{
 
         @Override
@@ -431,7 +428,7 @@ public class EnhancedPotion extends Item {
 
                 @Override
                 public String name() {
-                    return M.L(EnhancedPotion.class, "name");
+                    return M.L(EnhancedPotion.class, "positive");
                 }
 
                 @Override
@@ -447,6 +444,62 @@ public class EnhancedPotion extends Item {
             if(power<2f) return Random.chances(new float[]{2f-power, power-0.75f})+1;
             if(power<3f) return Random.chances(new float[]{3f-power, power-2f})+2;
             return 3;
+        }
+    }
+
+    public static class EnhancedPotionAlter extends CustomRecipe{
+
+        @Override
+        public boolean testIngredients(ArrayList<Item> ingredients) {
+            if(ingredients.size() != 2) return false;
+            boolean potion = false;
+            boolean secondary = false;
+
+            for (Item i : ingredients){
+                if (i instanceof Plant.Seed || i instanceof Runestone){
+                    secondary = true;
+                } else if (PBL.enhancedLibMap().containsValue(i.getClass())) {
+                    potion = true;
+                }
+            }
+
+            return potion && secondary;
+        }
+
+        @Override
+        public int cost(ArrayList<Item> ingredients) {
+            return 1;
+        }
+
+        @Override
+        public Item brew(ArrayList<Item> ingredients) {
+            if(!testIngredients(ingredients)) return null;
+            EnhancedPotion p = null;
+            for(Item i: ingredients){
+                if(i instanceof EnhancedPotion){
+                    ((EnhancedPotion) i).enhanceLevel *= -1;
+                    p = (EnhancedPotion) i;
+                }else{
+                    i.quantity(i.quantity()-1);
+                }
+            }
+            return p;
+        }
+
+        @Override
+        public Item sampleOutput(ArrayList<Item> ingredients) {
+            return new WndBag.Placeholder(ItemSpriteSheet.POTION_HOLDER){
+
+                @Override
+                public String name() {
+                    return M.L(EnhancedPotion.class, "corrupted");
+                }
+
+                @Override
+                public String info() {
+                    return "";
+                }
+            };
         }
     }
 

@@ -11,7 +11,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Charm;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Degrade;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Frost;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Light;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
@@ -93,8 +93,8 @@ public class YogReal extends Boss{
     private int destroyed = 0;
 
     private float summonCD = 15f;
-    private int halfScanCD = 23;
-    private float[] scanBalancer = new float[]{100f, 100f};
+    private int beamCD = 23;
+    private float[] skillBalance = new float[]{100f, 100f, 100f};
 
     private static final int SUMMON_DECK_SIZE = 4;
     private ArrayList<Class> regularSummons = new ArrayList<>();
@@ -199,26 +199,34 @@ public class YogReal extends Boss{
 
     private void actScanning(){
         if(phase>0) {
-            --halfScanCD;
-            if (halfScanCD <= 0) {
-                if (Random.chances(scanBalancer) == 0) {
+            --beamCD;
+            if (beamCD <= 0) {
+                int skill  = Random.chances(skillBalance);
+                if (skill == 0) {
+                    Char enemy = (this.enemy == null ? this.enemy : Dungeon.hero);
                     int w = Dungeon.level.width();
                     int dx = enemy.pos % w - pos % w;
                     int dy = enemy.pos / w - pos / w;
                     int direction = 2 * (Math.abs(dx) > Math.abs(dy) ? 0 : 1);
                     direction += (direction > 0 ? (dy > 0 ? 1 : 0) : (dx > 0 ? 1 : 0));
                     Buff.affect(this, YogScanHalf.class).setPos(pos, direction);
-                    Dungeon.hero.interrupt();
-                    scanBalancer[0] /= 1.5f;
-                    halfScanCD = 20 + 8 - (phase == 5?19:0);
-                }else{
+                    skillBalance[skill] /= 1.5f;
+                    beamCD = 20 + 8 - (phase == 5?19:0);
+                }else if(skill == 1){
                     Buff.affect(this, YogScanRound.class).setPos(pos);
-                    Dungeon.hero.interrupt();
-                    scanBalancer[1] /= 2f;
-                    halfScanCD = 20 + 10 - (phase == 5?19:0);
+                    skillBalance[skill] /= 2f;
+                    beamCD = 20 + 10 - (phase == 5?19:0);
+                }else if(skill == 2){
+                    int count = 5 + phase + (phase == 5 ? 3 : 0);
+                    YogContinuousBeam b = Buff.affect(this, YogContinuousBeam.class);
+                    b.setLeft(count);
+                    b.setRage(phase == 5);
+                    beamCD = 20 + count - (phase == 5?19:0);
+                    skillBalance[skill] /= 1.75f;
                 }
-                if(scanBalancer[0] < 0.1f){
-                    scanBalancer[0] = scanBalancer[1] = 100f;
+                Dungeon.hero.interrupt();
+                if(skillBalance[0] < 0.1f){
+                    skillBalance[0] = skillBalance[1] = skillBalance[2] = 100f;
                 }
             }
         }
@@ -347,6 +355,7 @@ public class YogReal extends Boss{
 
         if(phase == 4 && findFist() == null){
             yell(Messages.get(this, "hope"));
+            summonCD = -20;
             phase = 5;
         }
 
@@ -356,6 +365,12 @@ public class YogReal extends Boss{
 
     @Override
     public void damage(int damage, Object src){
+        if(phase >= 5){
+            if(damage > 25) {
+                damage = 25;
+            }
+        }
+
         int preHP = HP;
         super.damage(damage, src);
         int postHP = HP;
@@ -410,6 +425,7 @@ public class YogReal extends Boss{
     @SuppressWarnings("unchecked")
     @Override
     public void die( Object cause ) {
+        GameScene.flash(0x80FFFFFF);
 
         for (Mob mob : (Iterable<Mob>)Dungeon.level.mobs.clone()) {
             if (mob instanceof Larva || mob instanceof RipperDemon) {
@@ -461,7 +477,7 @@ public class YogReal extends Boss{
         super.storeInBundle(b);
         b.put("phase", phase);
         b.put("count", destroyed);
-        b.put("halfScanningCD", halfScanCD);
+        b.put("halfScanningCD", beamCD);
         b.put("FIST_SUMMONS", fistSummons.toArray(new Class[0]));
         b.put("REGULAR_SUMMONS", regularSummons.toArray(new Class[0]));
     }
@@ -471,7 +487,7 @@ public class YogReal extends Boss{
         super.restoreFromBundle(b);
         phase = b.getInt("phase");
         destroyed = b.getInt("count");
-        halfScanCD = b.getInt("halfScanningCD");
+        beamCD = b.getInt("halfScanningCD");
         fistSummons.clear();
         Collections.addAll(fistSummons, b.getClassArray("FIST_SUMMONS"));
         regularSummons.clear();
@@ -570,17 +586,17 @@ public class YogReal extends Boss{
         public boolean act(){
             spend(TICK);
             if(left > 0){
-                renderBeam((direction & 2) == 0, (direction & 1) != 0);
+                renderWarning((direction & 2) == 0, (direction & 1) != 0);
                 --left;
             }else {
-                renderScan((direction & 2) == 0, (direction & 1) != 0);
+                renderSkill((direction & 2) == 0, (direction & 1) != 0);
                 diactivate();
             }
 
             return true;
         }
         //warning
-        protected void renderBeam(boolean isx, boolean positive){
+        protected void renderWarning(boolean isx, boolean positive){
             int w = Dungeon.level.width();
             int h = Dungeon.level.height();
             int xOfs = center % w;
@@ -606,7 +622,7 @@ public class YogReal extends Boss{
             );
         }
         //damage
-        protected void renderScan(boolean isx, boolean positive){
+        protected void renderSkill(boolean isx, boolean positive){
             int w = Dungeon.level.width();
             int xOfs = center % w;
             int yOfs = center / w;
@@ -617,13 +633,13 @@ public class YogReal extends Boss{
             if(isx){
                 startX = xOfs;
                 startY = 3;
-                xsp = 12f * (positive ? 1f : -1f);
+                xsp = 10f * (positive ? 1f : -1f);
                 ang = 90f;
                 r = w - 6;
             }else{
                 startY = yOfs;
                 startX = 3;
-                ysp = 12f * (positive ? 1f : -1f);
+                ysp = 10f * (positive ? 1f : -1f);
                 ang = 0f;
                 r = Dungeon.level.height() - 6;
             }
@@ -632,7 +648,7 @@ public class YogReal extends Boss{
             target.sprite.parent.add(new ScanningBeam(Effects.Type.DEATH_RAY, BallisticaReal.STOP_TARGET, new ScanningBeam.BeamData()
                     .setPosition(startX+0.5f, startY + 0.5f, ang, r)
                     .setSpeed(xsp, ysp, 0f)
-                    .setTime(0.3f, 1.25f, 0.5f)
+                    .setTime(0.3f, 1.5f, 0.5f)
                 ).setDiameter(3f)
             );
 
@@ -640,7 +656,7 @@ public class YogReal extends Boss{
                                  @Override
                                  protected boolean act() {
                                      final Actor toRemove = this;
-                                     DelayerEffect.delayTime(1.65f, new Callback() {
+                                     DelayerEffect.delayTime(1.8f, new Callback() {
                                          @Override
                                          public void call() {
                                              Actor.remove(toRemove);
@@ -666,8 +682,9 @@ public class YogReal extends Boss{
             ch.damage( Random.Int(50, 80), YogReal.class );
             ch.sprite.centerEmitter().burst( PurpleParticle.BURST, Random.IntRange( 5, 10 ) );
             ch.sprite.flash();
-            Buff.affect(ch, Cripple.class, 50f);
             if(ch == Dungeon.hero){
+                Sample.INSTANCE.play(Assets.Sounds.BLAST, Random.Float(1.1f, 1.5f));
+                Buff.affect(ch, Degrade.class, 50f);
                 if(!ch.isAlive()) Dungeon.fail(getClass());
             }
             return 1;
@@ -713,7 +730,7 @@ public class YogReal extends Boss{
                 if(left % 3 == 1) renderWarn();
                 --left;
             }else{
-                renderScan();
+                renderSkill();
                 diactivate();
             }
             return true;
@@ -724,12 +741,12 @@ public class YogReal extends Boss{
                         ).set(36, 1f, 0xCCCCCC, null));
         }
 
-        public void renderScan(){
+        public void renderSkill(){
             ScanningBeam.setCollide(this);
             target.sprite.parent.add(new ScanningBeam(Effects.Type.LIGHT_RAY, BallisticaReal.STOP_TARGET|BallisticaReal.STOP_SOLID, new ScanningBeam.BeamData()
                     .setPosition((center%Dungeon.level.width())+0.5f, (center/Dungeon.level.width())+0.5f, Random.Float(360f), 18)
-                    .setSpeed(0, 0, 150f)
-                    .setTime(0.3f, 2.4f, 0.5f))
+                    .setSpeed(0, 0, 180f)
+                    .setTime(0.3f, 2.0f, 0.5f))
                     .setDiameter(2.0f)
             );
 
@@ -737,7 +754,7 @@ public class YogReal extends Boss{
                                  @Override
                                  protected boolean act() {
                                      final Actor toRemove = this;
-                                     DelayerEffect.delayTime(2.8f, new Callback() {
+                                     DelayerEffect.delayTime(2.3f, new Callback() {
                                          @Override
                                          public void call() {
                                              Actor.remove(toRemove);
@@ -764,6 +781,7 @@ public class YogReal extends Boss{
             ch.sprite.flash();
             Buff.affect(ch, Blindness.class, 50f);
             if (ch == Dungeon.hero) {
+                Sample.INSTANCE.play(Assets.Sounds.BLAST, Random.Float(1.1f, 1.5f));
                 if (!ch.isAlive()) Dungeon.fail(getClass());
             }
             return 1;
@@ -772,6 +790,128 @@ public class YogReal extends Boss{
         @Override
         public int cellProc(int i) {
             return 0;
+        }
+    }
+
+    public static class YogContinuousBeam extends Buff{
+        private int left = 10;
+        private int aim = -1;
+        private int lastAim = -1;
+        private boolean raged = false;
+        boolean started = false;
+
+        public YogContinuousBeam setLeft(int left){
+            this.left = left;
+            return this;
+        }
+        public YogContinuousBeam setRage(boolean rage){
+            this.raged = rage;
+            return this;
+        }
+
+        @Override
+        public boolean act(){
+            spend(TICK);
+            findTarget();
+            if(left>1 && !started){
+                renderWarn();
+                started = true;
+            }else{
+                renderSkill();
+                if(left <= 0) detach();
+            }
+            --left;
+            return true;
+        }
+
+        private void renderWarn(){
+            Ballistica ba = new Ballistica(target.pos, aim, Ballistica.WONT_STOP);
+            target.sprite.parent.add(new BeamCustom(
+                    target.sprite.center(), DungeonTilemap.tileCenterToWorld(ba.collisionPos), Effects.Type.LIGHT_RAY,null)
+                    .setLifespan(0.5f).setDiameter(0.3f).setColor(0xFFE9B0));
+        }
+
+        private void renderSkill(){
+            if(lastAim == -1) return;
+            Ballistica ba = new Ballistica(target.pos, lastAim, Ballistica.WONT_STOP);
+            target.sprite.parent.add(new BeamCustom(
+                    target.sprite.center(), DungeonTilemap.tileCenterToWorld(ba.collisionPos), Effects.Type.LIGHT_RAY, null)
+                    .setTime(0.4f, 0.6f, 0.3f).setDiameter(1.8f).setColor(0xFFE9B0));
+            Actor.addDelayed(
+                    new Actor() {
+                        final Actor toRemove = this;
+                        @Override
+                        protected boolean act() {
+                            DelayerEffect.delayTime(0.4f, new Callback() {
+                                @Override
+                                public void call() {
+                                    Actor.remove(toRemove);
+                                    toRemove.next();
+
+                                    Sample.INSTANCE.play(Assets.Sounds.RAY, Random.Float(0.8f, 1.25f));
+                                    Camera.main.shake(3f, 0.5f);
+                                    onHitProc(ba);
+                                }
+                            });
+                            return false;
+                        }
+                    },
+                    -1
+            );
+        }
+
+        private void onHitProc(Ballistica ba){
+            for(Integer cell: ba.subPath(1, ba.dist)) {
+                Char ch = findChar(cell);
+                if (ch != null) {
+                    if (ch.alignment == Alignment.ENEMY) continue;
+                    ch.damage(Random.Int(30, 50), YogReal.class);
+                    Buff.affect(ch, Blindness.class, 5f);
+                    ch.sprite.flash();
+                    if (ch == Dungeon.hero) {
+                        Sample.INSTANCE.play(Assets.Sounds.BLAST, Random.Float(0.9f, 1.1f));
+                        if (!ch.isAlive()) Dungeon.fail(getClass());
+                    }
+                }
+                if (raged) {
+                    int position;
+                    for (int p : PathFinder.NEIGHBOURS4) {
+                        position = cell + p;
+                        if (Dungeon.level.map[position] == Terrain.STATUE) {
+                            Level.set(position, Terrain.EMBERS);
+                            GameScene.updateMap(position);
+                        }
+                        if (Dungeon.level.map[position] == Terrain.STATUE_SP) {
+                            Level.set(position, Terrain.EMPTY_SP);
+                            GameScene.updateMap(position);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void findTarget(){
+            lastAim = aim;
+            //I can't get enemy for target!
+            aim = Dungeon.hero.pos;
+        }
+
+        @Override
+        public void storeInBundle(Bundle b) {
+            super.storeInBundle(b);
+            b.put("thisAim", aim);
+            b.put("lastAim", lastAim);
+            b.put("leftTime", left);
+            b.put("isRage", raged);
+        }
+
+        @Override
+        public void restoreFromBundle(Bundle b) {
+            super.restoreFromBundle(b);
+            left = b.getInt("leftTime");
+            aim = b.getInt("thisAim");
+            lastAim = b.getInt("lastAim");
+            raged = b.getBoolean("isRage");
         }
     }
 

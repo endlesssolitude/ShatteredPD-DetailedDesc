@@ -4,6 +4,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Effects;
 import com.watabou.glwrap.Blending;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Image;
+import com.watabou.utils.Callback;
 import com.watabou.utils.PointF;
 
 public class BeamCustom extends Image {
@@ -13,7 +14,13 @@ public class BeamCustom extends Image {
 
     private float timeLeft;
 
-    public BeamCustom(PointF s, PointF e, Effects.Type asset) {
+    private Callback callback;
+
+    private float chargeTime = 0f;
+    private float keepTime = 0f;
+    private float fadeTime = 0.5f;
+
+    public BeamCustom(PointF s, PointF e, Effects.Type asset, Callback callback){
         super( Effects.get( asset ) );
 
         origin.set( 0, height / 2 );
@@ -30,6 +37,11 @@ public class BeamCustom extends Image {
 
         timeLeft = this.duration = 0.5f;
 
+        this.callback = callback;
+    }
+
+    public BeamCustom(PointF s, PointF e, Effects.Type asset) {
+        this(s, e, asset, null);
     }
 
     public BeamCustom setDiameter(float diameterModifier){
@@ -42,8 +54,20 @@ public class BeamCustom extends Image {
         return this;
     }
 
+    public BeamCustom setTime(float rise, float flat, float down){
+        chargeTime = rise;
+        keepTime = flat;
+        fadeTime = down;
+        timeLeft = rise + flat + down;
+        updateImage();
+        return this;
+    }
+    //avoid using both setLifespan and setTime.
+    //Old interface, should abandon
     public BeamCustom setLifespan(float life){
         timeLeft = this.duration = life;
+        fadeTime = life;
+        chargeTime = keepTime = 0f;
         return this;
     }
 /*
@@ -71,12 +95,28 @@ public class BeamCustom extends Image {
     public void update() {
         super.update();
 
-        float p = timeLeft / duration;
-        alpha( p );
-        scale.set( scale.x, p );
+        updateImage();
 
         if ((timeLeft -= Game.elapsed) <= 0) {
+            if(callback != null){
+                callback.call();
+            }
             killAndErase();
+        }
+    }
+
+    protected void updateImage(){
+        if(timeLeft > keepTime + fadeTime){
+            float p = ( keepTime + fadeTime + chargeTime - timeLeft) / Math.max(chargeTime, Game.elapsed);
+            alpha( p );
+            scale.set( scale.x, p );
+        }else if(timeLeft > fadeTime){
+            alpha(1f);
+            scale.set( scale.x, 1f );
+        }else{
+            float p = ( fadeTime - timeLeft) / Math.max(fadeTime, Game.elapsed);
+            alpha( 1f-p );
+            scale.set( scale.x, 1f-p );
         }
     }
 

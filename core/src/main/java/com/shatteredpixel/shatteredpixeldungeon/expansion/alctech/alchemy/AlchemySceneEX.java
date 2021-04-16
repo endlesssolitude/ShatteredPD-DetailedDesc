@@ -359,11 +359,13 @@ public class AlchemySceneEX extends PixelScene {
             Sample.INSTANCE.play( Assets.Sounds.PUFF );
 
             output.item(result);
-            if (!(result instanceof AlchemistsToolkit)) {
-                if (!result.collect()){
-                    Dungeon.level.drop(result, Dungeon.hero.pos);
-                }
+            for(ItemButton bt:inputs){
+                bt.item(null);
             }
+
+            //No one would brew potion on traps or chasm right?
+            Dungeon.level.drop(result, Dungeon.hero.pos);
+            result.collect();
 
             try {
                 Dungeon.saveAll();

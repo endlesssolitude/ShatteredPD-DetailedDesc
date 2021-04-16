@@ -4,11 +4,10 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bless;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ElmoParticle;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.buffs.PlainVampire;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfToxicGas;
-import com.shatteredpixel.shatteredpixeldungeon.plants.Starflower;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
@@ -37,7 +36,6 @@ public class PotionExpEX extends EnhancedPotion{
         if(enhanceLevel <= -3){
             n3(hero);
         }
-
     }
 
     protected void p1(Hero h){
@@ -51,51 +49,32 @@ public class PotionExpEX extends EnhancedPotion{
         Buff.affect(h, Bless.class, 128f);
     }
     protected void n1(Hero h){
-        heroDegrade(h, (int) (h.maxExp()*(1.7f)));
+        heroDegrade(h, (int) (h.maxExp()*(1.5f)));
     }
     protected void n2(Hero h){
-        heroDegrade(h, (int) (h.maxExp()*(3.5f)));
+        heroDegrade(h, (int) (h.maxExp()*(3.1f)));
     }
     protected void n3(Hero h){
         heroDegrade(h, (int) (h.maxExp()*(4.7f)));
         Buff.affect(h, PlainVampire.class).setHits(20).setRate(0.225f);
+        h.sprite.showStatus(CharSprite.NEGATIVE, M.L(this, "vampire"));
     }
 
     protected void heroDegrade(Hero h, int exp){
         h.exp -= exp;
         int lvl = h.lvl;
+        int dLevel = 0;
         while(h.lvl > 1 && h.exp < 0 ){
             h.lvl --;
             h.exp += h.maxExp();
             h.updateHT(true);
+            ++dLevel;
         }
         if(h.sprite!= null && lvl-h.lvl>0){
             h.sprite.showStatus(CharSprite.NEGATIVE, M.L(this, "degrade", lvl-h.lvl));
+            h.sprite.emitter().start(ElmoParticle.FACTORY, 0.05f, 20 + dLevel*15);
         }
         Item.updateQuickslot();
     }
-
-    public static class ExpP3Recipe extends SimplePotionRecipe{
-        {
-            inputs = new Class[]{PotionOfExperience.class, Starflower.Seed.class};
-            inQuantity = new int[]{2,1};
-            output = PotionExpEX.class;
-            outQuantity = 1;
-            lvl = 3;
-            cost = 1;
-        }
-    }
-
-    public static class ExpN3Recipe extends SimplePotionRecipe{
-        {
-            inputs = new Class[]{PotionOfExperience.class, Starflower.Seed.class, PotionOfToxicGas.class};
-            inQuantity = new int[]{1,1,1};
-            output = PotionExpEX.class;
-            outQuantity = 1;
-            lvl = -3;
-            cost = 1;
-        }
-    }
-
 
 }
