@@ -6,4 +6,8 @@ public class PotionFlyEX extends EnhancedPotion{
     {
         image = ItemSpriteSheet.POTION_IVORY;
     }
+
+
+
+
 }

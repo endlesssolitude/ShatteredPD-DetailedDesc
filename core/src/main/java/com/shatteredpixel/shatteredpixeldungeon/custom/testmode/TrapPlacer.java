@@ -1,7 +1,9 @@
 package com.shatteredpixel.shatteredpixeldungeon.custom.testmode;
 
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.AlarmTrap;
@@ -40,10 +42,11 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.CheckBox;
-import com.shatteredpixel.shatteredpixeldungeon.ui.OptionSlider;
+import com.shatteredpixel.shatteredpixeldungeon.ui.IconButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.watabou.noosa.Image;
 import com.watabou.utils.Bundle;
 
 import java.util.ArrayList;
@@ -237,7 +240,7 @@ public class TrapPlacer extends TestItem {
         super.execute(hero, action);
         if (action.equals(AC_PLACE)) {
             if (trap == null) {
-                GLog.w(Messages.get(this, "null_trap"));
+                GLog.w(M.L(this, "null_trap"));
                 return;
             }
             GameScene.selectCell(new CellSelector.Listener() {
@@ -250,24 +253,24 @@ public class TrapPlacer extends TestItem {
                 }
                 @Override
                 public String prompt() {
-                    return Messages.get(TrapPlacer.class, "prompt");
+                    return M.L(TrapPlacer.class, "prompt");
                 }
             });
 
         } else if (action.equals(AC_SET)) {
-            GameScene.show(new DoubleAxisSelector());
+            GameScene.show(new SettingsWindow());
         }
     }
 
     public void setTrap(Integer cell) {
         if (trap == null) {
-            GLog.w(Messages.get(this, "null_trap"));
+            GLog.w(M.L(this, "null_trap"));
             return;
         }
 
         if (!canPlaceTrap(cell)) {
             {
-                GLog.w(Messages.get(this, "invalid_tile"));
+                GLog.w(M.L(this, "invalid_tile"));
                 return;
             }
         }
@@ -321,74 +324,82 @@ public class TrapPlacer extends TestItem {
         return Messages.get(this, "desc", (trap == null ? Messages.get(TrapPlacer.class, "no_trap_selected") : Messages.get(trap.getClass(), "name")));
     }
 
-    protected class DoubleAxisSelector extends Window {
-        RenderedTextBlock indexToTrap;
-        OptionSlider opRow;
-        OptionSlider opColumn;
-        CheckBox cb;
+    private class SettingsWindow extends Window{
+        private static final int WIDTH = 120;
+        private static final int HEIGHT = 144;
 
-        public DoubleAxisSelector() {
+        private static final int BTN_SIZE = 14;
+
+        private static final int ROWS = 7;
+        private static final int COLS = 8;
+
+        private ArrayList<IconButton> trapButtons = new ArrayList<>();
+        private RenderedTextBlock selected;
+
+        public SettingsWindow(){
             super();
-            width = 120;
 
-            cb = new CheckBox(Messages.get(this, "trigger_when_put")){
+            resize(WIDTH, HEIGHT);
+
+            RenderedTextBlock ttl = PixelScene.renderTextBlock(M.L(SettingsWindow.class, "title"), 9);
+            PixelScene.align(ttl);
+            add(ttl);
+            ttl.setPos(1, 1);
+            ttl.hardlight(0x44A8E4);
+
+            float left = (WIDTH - BTN_SIZE*COLS)/2f;
+            float top = ttl.bottom() + 4f;
+            for(int i=0; i<ROWS; ++i){
+                for(int j=0;j<COLS;++j){
+                    final int index = i*COLS + j;
+                    IconButton btn = new IconButton(){
+                        @Override
+                        public void onClick(){
+                            trapButtons.get(row*COLS+column).icon().resetColor();
+                            row = index / COLS;
+                            column = index % COLS;
+                            trapButtons.get(index).icon().color(0xFFFF44);
+                            updateText();
+                        }
+                    };
+                    btn.icon(new Image(Assets.Environment.TERRAIN_FEATURES, 16*j, 16*i, 16, 16));
+                    btn.setRect(left + BTN_SIZE * j, top + BTN_SIZE * i, BTN_SIZE, BTN_SIZE);
+                    add(btn);
+                    trapButtons.add(btn);
+                }
+            }
+            trapButtons.get(row * COLS + column).icon().color(0xFFFF44);
+
+            selected = PixelScene.renderTextBlock("", 6);
+            PixelScene.align(selected);
+            add(selected);
+
+            CheckBox cb = new CheckBox(M.L(TrapPlacer.class, "trigger")){
                 @Override
-                protected void onClick() {
+                protected void onClick(){
                     super.onClick();
                     triggerWhenPut = checked();
                 }
             };
             cb.checked(triggerWhenPut);
-            cb.setRect(0, 2, 120, 18);
+            cb.setRect(1, top + 7 * BTN_SIZE + 4, WIDTH/2f, 16);
             add(cb);
 
-            //indexToTrap = new StyledButton(Chrome.Type.SCROLL, "");
-            indexToTrap = PixelScene.renderTextBlock("", 6);
-            indexToTrap.text(statDesc(row, column));
-            indexToTrap.visible = true;
-            indexToTrap.setPos(0, cb.bottom() + 2);
-            add(indexToTrap);
+            selected.setPos(WIDTH/2f + 6, top + 7 * BTN_SIZE + 4 + (cb.height()-7f)/2f);
 
-            opColumn = new OptionSlider(Messages.get(this, "column_slider"), "0", "7", 0, 7) {
-                @Override
-                protected void onChange() {
-                    column = getSelectedValue();
-                    DoubleAxisSelector.this.updateText();
-                }
-            };
-            opColumn.setRect(0, indexToTrap.top() + indexToTrap.height() + 2, 120, 26);
-            opColumn.setSelectedValue(column);
-            add(opColumn);
+            updateText();
 
-            opRow = new OptionSlider(Messages.get(this, "row_slider"), "0", "6", 0, 6) {
-                @Override
-                protected void onChange() {
-                    row = getSelectedValue();
-                    DoubleAxisSelector.this.updateText();
-                }
-            };
-            opRow.setRect(0, opColumn.bottom() + 2, 120, 26);
-            opRow.setSelectedValue(row);
-            add(opRow);
-
-            resize(120, (int) (opRow.bottom() + 2));
+            resize(WIDTH, (int) (cb.bottom() + 2));
         }
 
-        public void updateText() {
+        private void updateText(){
             indexToTrap(row, column);
-
-            indexToTrap.text(statDesc(row, column));
-
-            opColumn.setPos(0, indexToTrap.top() + indexToTrap.height() + 2);
-            opRow.setPos(0, opColumn.bottom() + 2);
-            resize(120, (int) (opRow.bottom() + 2));
+            selected.text(statDesc());
         }
 
-        private String statDesc(int row, int column) {
-            String statDesc = Messages.get(this, "trap_index_pre", column, row, (trap == null ? Messages.get(TrapPlacer.class, "no_trap_selected") : Messages.get(trap.getClass(), "name")));
-            String key = "trap_index_c" + String.valueOf(column);
-            statDesc += Messages.get(this, key);
-            return statDesc;
+        private String statDesc() {
+            if(trap == null) return M.L(this, "null_trap");
+            return M.L(trap.getClass(), "name");
         }
     }
 }

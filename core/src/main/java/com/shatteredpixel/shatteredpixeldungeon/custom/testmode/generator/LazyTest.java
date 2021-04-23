@@ -110,25 +110,25 @@ public class LazyTest extends TestGenerator {
 
             new Food().quantity(100).collect();
 
-            new Dart().quantity(777).collect();
+            new Dart().quantity(100).collect();
 
-            new Bomb().quantity(777).collect();
+            new Bomb().quantity(100).collect();
 
             new TomeOfMastery().collect();
 
-            new Honeypot().quantity(777).collect();
+            new Honeypot().quantity(100).collect();
 
-            new StoneOfFlock().quantity(777).collect();
+            new StoneOfFlock().quantity(100).collect();
 
-            new Torch().quantity(777).identify().collect();
+            new Torch().quantity(100).identify().collect();
 
             new AlchemicalCatalyst().quantity(100).collect();
 
             new ArcaneCatalyst().quantity(100).collect();
 
-            new StoneOfBlast().quantity(777).collect();
+            new StoneOfBlast().quantity(100).collect();
 
-            new StoneOfBlink().quantity(777).collect();
+            new StoneOfBlink().quantity(100).collect();
 
             new Blindweed.Seed().quantity(100).identify().collect();
             new Dreamfoil.Seed().quantity(100).identify().collect();
@@ -159,8 +159,8 @@ public class LazyTest extends TestGenerator {
             row.level(22);
             row.identify().collect();
 
-            new ScrollOfPsionicBlast().quantity(666).identify().collect();
-            new PotionOfCleansing().quantity(777).identify().collect();
+            new ScrollOfPsionicBlast().quantity(100).identify().collect();
+            new PotionOfCleansing().quantity(100).identify().collect();
 
             detach(hero.belongings.backpack);
         }

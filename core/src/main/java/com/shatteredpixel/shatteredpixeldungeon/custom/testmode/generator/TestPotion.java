@@ -149,8 +149,6 @@ public class TestPotion extends TestGenerator {
     }
 
     private int cateSelected = 0;
-
-
     private int item_quantity = 1;
     private int selected = 0;
     private int upgrade_left = 20;
@@ -473,6 +471,10 @@ public class TestPotion extends TestGenerator {
         return 11;
     }
 
+    private int maxCategory(){
+        return 11;
+    }
+
     private static ArrayList<Class<? extends Potion>> potionList = new ArrayList<>();
     private static ArrayList<Class<? extends ExoticPotion>> exoticPotionList = new ArrayList<>();
     private static ArrayList<Class<? extends Plant.Seed>> seedList = new ArrayList<>();
@@ -565,6 +567,7 @@ public class TestPotion extends TestGenerator {
         private CheckBox c_multiply;
         private RedButton b_create;
         private ArrayList<IconButton> buttonList = new ArrayList<>();
+        private ArrayList<IconButton> cateButtonList = new ArrayList<>();
         private static final int WIDTH = 120;
         private static final int BTN_SIZE = 16;
         private static final int GAP = 2;
@@ -633,10 +636,13 @@ public class TestPotion extends TestGenerator {
                 IconButton btn = new IconButton() {
                     @Override
                     protected void onClick() {
-                        cateSelected = Math.min(j, 12 - 1);
+                        cateButtonList.get(cateSelected).icon().resetColor();
+                        cateSelected = Math.min(j, maxCategory());
                         if(selected > maxIndex(cateSelected)) selected = maxIndex(cateSelected);
+                        cateButtonList.get(cateSelected).icon().color(0xFFFF44);
                         updateImage();
                         updateText();
+
                         super.onClick();
                     }
                 };
@@ -653,6 +659,7 @@ public class TestPotion extends TestGenerator {
                     btn.setRect(left + (placed - firstRow) * BTN_SIZE, top + GAP + BTN_SIZE, BTN_SIZE, BTN_SIZE);
                 }
                 add(btn);
+                cateButtonList.add(btn);
                 placed++;
             }
         }
@@ -668,7 +675,7 @@ public class TestPotion extends TestGenerator {
                 IconButton btn = new IconButton() {
                     @Override
                     protected void onClick() {
-                        selected = Math.min(j, 12 - 1);
+                        selected = Math.min(j, maxIndex(cateSelected));
                         updateText();
                         super.onClick();
                     }

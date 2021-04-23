@@ -302,17 +302,17 @@ public class EnhancedPotion extends Item {
         setAction();
     }
 
+
+    //+1, +2, +3: _1 2 3 -1 -2 -3: _11 12 13
     @Override
     public String name(){
-        return M.L(this, "name");
+        return M.L(this,  "name_" + (enhanceLevel > 0 ? enhanceLevel : (-enhanceLevel + 10)));
     }
 
     @Override
     public String desc(){
-        return M.L(this, "desc");
+        return M.L(this, "desc_" + (enhanceLevel > 0 ? enhanceLevel : (-enhanceLevel + 10)));
     }
-
-
 
 
     public static class EnhancedPotionRecipe extends CustomRecipe{

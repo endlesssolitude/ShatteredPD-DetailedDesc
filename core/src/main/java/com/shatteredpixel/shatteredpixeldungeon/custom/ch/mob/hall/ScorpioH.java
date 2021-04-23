@@ -37,14 +37,14 @@ public class ScorpioH extends Scorpio {
     @Override
     public int attackProc(Char enemy, int damage) {
         int d = super.attackProc(enemy, damage);
-        ++hasAttacked;
+        hasAttacked = Math.min(8, ++hasAttacked);
         if(canHeadShot(enemy)) {
             d = Math.max(Math.max(enemy.HP - 1, enemy.HT * 2 / 3), d);
             Wound.hit(enemy);
             enemy.sprite.showStatus(CharSprite.NEGATIVE, M.L(this, "head_shot"));
             enemy.sprite.bloodBurstA(sprite.center(), enemy.HT);
             if(enemy instanceof Hero){
-                Camera.main.shake(7f, 0.4f);
+                Camera.main.shake(4f, 0.4f);
             }
         }else {
             d += (enemy.drRoll() + enemy.drRoll()) * hasAttacked / 24;

@@ -49,15 +49,15 @@ public class PotionExpEX extends EnhancedPotion{
         Buff.affect(h, Bless.class, 128f);
     }
     protected void n1(Hero h){
-        heroDegrade(h, (int) (h.maxExp()*(1.5f)));
+        heroDegrade(h, (int) (h.maxExp()*(1.3f)));
     }
     protected void n2(Hero h){
-        heroDegrade(h, (int) (h.maxExp()*(3.1f)));
+        heroDegrade(h, (int) (h.maxExp()*(2.7f)));
     }
     protected void n3(Hero h){
-        heroDegrade(h, (int) (h.maxExp()*(4.7f)));
+        heroDegrade(h, (int) (h.maxExp()*(4.1f)));
         Buff.affect(h, PlainVampire.class).setHits(20).setRate(0.225f);
-        h.sprite.showStatus(CharSprite.NEGATIVE, M.L(this, "vampire"));
+        h.sprite.showStatus(0xD030D0, M.L(this, "vampire"));
     }
 
     protected void heroDegrade(Hero h, int exp){

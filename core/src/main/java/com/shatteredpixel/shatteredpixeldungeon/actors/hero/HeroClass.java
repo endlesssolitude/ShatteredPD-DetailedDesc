@@ -31,6 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.BackpackCleaner;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.CustomWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.ImmortalShieldAffecter;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.LevelTeleporter;
+import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.MobPlacer;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.TestBag;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.TimeReverser;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.TrapPlacer;
@@ -315,12 +316,13 @@ public enum HeroClass {
 	}
 
 	private static void doChallengeSpawn(){
+		if(Dungeon.isChallenged(Challenges.EXPANSION_MISC)) {
+			new AlchemyEX().collect();
+		}
 		if(Dungeon.isChallenged(Challenges.TEST_MODE)){
 			new WandOfScanningBeam().identify().collect();
 
-			if(Dungeon.isChallenged(Challenges.EXPANSION_MISC)) {
-				new AlchemyEX().collect();
-			}
+			new MobPlacer().collect();
 			//new PVCTester().collect();
 			//WandOfReflectDisintegration word = new WandOfReflectDisintegration();
 			//word.curCharges = 99999;
