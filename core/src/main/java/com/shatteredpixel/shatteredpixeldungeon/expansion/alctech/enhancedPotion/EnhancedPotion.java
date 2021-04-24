@@ -18,7 +18,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.Runestone;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
-import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
@@ -54,7 +53,7 @@ public class EnhancedPotion extends Item {
     protected static final int DRINK_PREFER = 16;
 
     protected static final int THROW = THROW_ONLY | THROW_PREFER;
-    protected static final int DRINK = DRINK_ONLY | THROW_PREFER;
+    protected static final int DRINK = DRINK_ONLY | DRINK_PREFER;
 
     protected static final String AC_DRINK = "drink";
     protected static final String AC_CHOOSE = "choose";
@@ -119,13 +118,15 @@ public class EnhancedPotion extends Item {
 
     public void setLevel(int level){
         this.enhanceLevel = level;
-        setCategory(level);
+        setCategory();
         setAction();
     }
 
-    protected void setCategory(int level){
+    protected void setCategory(){
         //do nothing byDefault
         //drinkOrThrow = something
+        //be sure to contain all cases
+        drinkOrThrow = NEUTRAL;
     }
 
     @Override
@@ -151,6 +152,7 @@ public class EnhancedPotion extends Item {
         if((drinkOrThrow & THROW)>0){
             defaultAction = AC_THROW;
         }
+
     }
 
     @Override
@@ -205,9 +207,9 @@ public class EnhancedPotion extends Item {
         if (drinkOrThrow == THROW_PREFER) {
 
             GameScene.show(
-                    new WndOptions( Messages.get(Potion.class, "beneficial"),
-                            Messages.get(Potion.class, "sure_throw"),
-                            Messages.get(Potion.class, "yes"), Messages.get(Potion.class, "no") ) {
+                    new WndOptions( M.L(Potion.class, "beneficial"),
+                            M.L(Potion.class, "sure_throw"),
+                            M.L(Potion.class, "yes"), M.L(Potion.class, "no") ) {
                         @Override
                         protected void onSelect(int index) {
                             if (index == 0) {
@@ -285,7 +287,7 @@ public class EnhancedPotion extends Item {
 
     @Override
     public int value() {
-        return 75 * quantity;
+        return 30 * quantity * Math.abs(enhanceLevel);
     }
 
     @Override
@@ -298,7 +300,7 @@ public class EnhancedPotion extends Item {
     public void restoreFromBundle(Bundle b){
         super.restoreFromBundle(b);
         enhanceLevel = b.getInt("enhcancelevel");
-        setCategory(enhanceLevel);
+        setCategory();
         setAction();
     }
 
@@ -477,7 +479,8 @@ public class EnhancedPotion extends Item {
             EnhancedPotion p = null;
             for(Item i: ingredients){
                 if(i instanceof EnhancedPotion){
-                    ((EnhancedPotion) i).enhanceLevel *= -1;
+                    int enl = ((EnhancedPotion) i).enhanceLevel;
+                    ((EnhancedPotion) i).setLevel(enl *-1);
                     p = (EnhancedPotion) i;
                 }else{
                     i.quantity(i.quantity()-1);

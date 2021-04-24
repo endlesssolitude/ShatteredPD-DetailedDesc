@@ -359,13 +359,6 @@ public class AlchemySceneEX extends PixelScene {
             Sample.INSTANCE.play( Assets.Sounds.PUFF );
 
             output.item(result);
-            for(ItemButton bt:inputs){
-                bt.item(null);
-            }
-
-            //No one would brew potion on traps or chasm right?
-            Dungeon.level.drop(result, Dungeon.hero.pos);
-            result.collect();
 
             try {
                 Dungeon.saveAll();
@@ -380,10 +373,15 @@ public class AlchemySceneEX extends PixelScene {
                             input.slot.item(new WndBag.Placeholder(ItemSpriteSheet.SOMETHING));
                             input.item = null;
                         } else {
-                            input.slot.item(input.item);
+                            input.slot.item(new WndBag.Placeholder(ItemSpriteSheet.SOMETHING));
+
                         }
                     }
                 }
+            }
+
+            if(!result.collect()){
+                Dungeon.level.drop(result, Dungeon.hero.pos);
             }
 
             btnCombine.enable(false);

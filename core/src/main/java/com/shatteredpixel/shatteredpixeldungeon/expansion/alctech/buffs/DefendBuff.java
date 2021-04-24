@@ -3,26 +3,24 @@ package com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.buffs;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.watabou.utils.Bundle;
 
-//for effects that trigger on attack. Link buff and proc.
-public abstract class AttackBuff extends Buff {
-
+public abstract class DefendBuff extends Buff {
     protected int hits;
     protected float rate;
 
-    public AttackBuff setHits(int hits){
+    public DefendBuff setHits(int hits){
         this.hits = hits;
         return this;
     }
 
-    public AttackBuff addHits(int hits){
+    public DefendBuff addHits(int hits){
         this.hits += hits;
         return this;
     }
 
-    public AttackBuff setRate(float rate){
+    public DefendBuff setRate(float rate){
         this.rate = rate;
         return this;
     }
@@ -51,10 +49,10 @@ public abstract class AttackBuff extends Buff {
     @Override
     public String desc(){return M.L(this, "desc", hits);}
 
-    public int trigger(Weapon w, Char attacker, Char defender, int damage) {
+    public int trigger(Armor a, Char attacker, Char defender, int damage) {
         consume();
-        return proc(w, attacker, defender, damage);
+        return proc(a, attacker, defender, damage);
     }
 
-    protected abstract int proc(Weapon w, Char attacker, Char defender, int damage);
+    protected abstract int proc(Armor a, Char attacker, Char defender, int damage);
 }

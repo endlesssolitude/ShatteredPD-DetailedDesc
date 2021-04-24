@@ -46,6 +46,8 @@ import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.generator.TestPo
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.generator.TestRing;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.alchemy.AlchemyEX;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.container.PotionBag;
+import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.enchs.ScrollOfTestInch;
+import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.enhancedPotion.PotionFrostEX;
 import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
 import com.shatteredpixel.shatteredpixeldungeon.items.DewVial;
 import com.shatteredpixel.shatteredpixeldungeon.items.Dewdrop;
@@ -378,7 +380,12 @@ public enum HeroClass {
 
 			new WandOfReflectDisintegration().identify().collect();
 
+			PotionFrostEX pfe = new PotionFrostEX();
+			pfe.quantity(100);
+			pfe.setLevel(3);
+			pfe.collect();
 
+			new ScrollOfTestInch().quantity(100).identify().collect();
 		}
 
 		if(Dungeon.isChallenged(Challenges.MIMIC_DUNGEON)){

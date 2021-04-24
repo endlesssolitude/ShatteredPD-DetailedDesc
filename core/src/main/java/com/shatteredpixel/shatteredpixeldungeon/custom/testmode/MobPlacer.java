@@ -3,6 +3,8 @@ package com.shatteredpixel.shatteredpixeldungeon.custom.testmode;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ChampionEnemy;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Acidic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Albino;
@@ -55,6 +57,7 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.IconButton;
+import com.shatteredpixel.shatteredpixeldungeon.ui.OptionSlider;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RedButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
@@ -64,6 +67,7 @@ import com.watabou.utils.PointF;
 import com.watabou.utils.Reflection;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 
 public class MobPlacer extends TestItem{
@@ -75,10 +79,20 @@ public class MobPlacer extends TestItem{
     private static final String AC_PLACE = "place";
     private static final String AC_SET = "set";
 
-
     private int mobTier = 1;
     private int mobIndex = 0;
+    private int elite = 0;
+    private static final int MAX_ELITE = 6;
 
+    private final ArrayList<Class<? extends ChampionEnemy>> eliteBuffs = new ArrayList<>();
+    {
+        eliteBuffs.add(ChampionEnemy.Blazing.class);
+        eliteBuffs.add(ChampionEnemy.AntiMagic.class);
+        eliteBuffs.add(ChampionEnemy.Blessed.class);
+        eliteBuffs.add(ChampionEnemy.Giant.class);
+        eliteBuffs.add(ChampionEnemy.Growing.class);
+        eliteBuffs.add(ChampionEnemy.Projecting.class);
+    };
 
     @Override
     public ArrayList<String> actions(Hero hero) {
@@ -101,6 +115,12 @@ public class MobPlacer extends TestItem{
                                 Mob m = Reflection.newInstance(allData.get(dataThreshold(mobTier) + mobIndex).mobClass);
                                 m.pos = cell;
                                 GameScene.add(m);
+                                if(elite>0){
+                                    Collections.shuffle(eliteBuffs);
+                                    for(int i=0;i<elite;++i){
+                                        Buff.affect(m, eliteBuffs.get(i));
+                                    }
+                                }
                                 ScrollOfTeleportation.appear(m, cell);
                                 Dungeon.level.occupyCell(m);
                             } catch (Exception e) {
@@ -130,7 +150,7 @@ public class MobPlacer extends TestItem{
 
     protected int maxMobIndex(int tier){
         switch (tier){
-            case 1: return DataPack.GREAT_CRAB.ordinal() - 1;
+            case 1: return DataPack.GREAT_CRAB.ordinal();
             case 2: return DataPack.NEW_FIRE_ELE.ordinal() - DataPack.GREAT_CRAB.ordinal() - 1;
             case 3: return DataPack.DM201.ordinal() - DataPack.NEW_FIRE_ELE.ordinal() - 1;
             case 4: return DataPack.ELE_CHAOS.ordinal() - DataPack.DM201.ordinal() - 1;
@@ -160,6 +180,7 @@ public class MobPlacer extends TestItem{
         super.storeInBundle(b);
         b.put("mobTier", mobTier);
         b.put("mobIndex", mobIndex);
+        b.put("eliteTags", elite);
     }
 
     @Override
@@ -167,13 +188,14 @@ public class MobPlacer extends TestItem{
         super.restoreFromBundle(b);
         mobTier = b.getInt("mobTier");
         mobIndex = b.getInt("mobIndex");
+        elite = b.getInt("eliteTags");
     }
 
 
     private class WndSetMob extends Window{
 
         private static final int WIDTH = 120;
-        private static final int HEIGHT = 95;
+        private static final int HEIGHT = 118;
         private static final int BTN_SIZE = 18;
         private static final int GAP = 2;
 
@@ -198,7 +220,7 @@ public class MobPlacer extends TestItem{
                     updateSelectedMob();
                 }
             };
-            lhs.setRect(GAP, GAP, 20, 18);
+            lhs.setRect(GAP, GAP, 24, 18);
             add(lhs);
 
             RedButton rhs = new RedButton(">>>", 8){
@@ -213,7 +235,7 @@ public class MobPlacer extends TestItem{
                     updateSelectedMob();
                 }
             };
-            rhs.setRect(WIDTH - 20 - GAP,  GAP, 20, 18);
+            rhs.setRect(WIDTH - 24 - GAP,  GAP, 24, 18);
             add(rhs);
 
             selectedPage = PixelScene.renderTextBlock("", 9);
@@ -224,6 +246,17 @@ public class MobPlacer extends TestItem{
             selectedMob.hardlight(0xFFFF44);
             PixelScene.align(selectedMob);
             add(selectedMob);
+
+            OptionSlider op = new OptionSlider
+                    (M.L(MobPlacer.class, "elite"), "0", String.valueOf(MAX_ELITE), 0, MAX_ELITE) {
+                @Override
+                protected void onChange() {
+                    elite = getSelectedValue();
+                }
+            };
+            op.setRect(GAP, 92, WIDTH - 2*GAP, 24);
+            op.setSelectedValue(elite);
+            add(op);
 
             createMobImage();
 

@@ -836,7 +836,7 @@ public class YogReal extends Boss{
             Ballistica ba = new Ballistica(target.pos, lastAim, Ballistica.WONT_STOP);
             target.sprite.parent.add(new BeamCustom(
                     target.sprite.center(), DungeonTilemap.tileCenterToWorld(ba.collisionPos), Effects.Type.LIGHT_RAY, null)
-                    .setTime(0.4f, 0.6f, 0.3f).setDiameter(1.8f).setColor(0xFFE9B0));
+                    .setTime(0.4f, 0.6f, 0.3f).setDiameter(2.2f).setColor(left > 2 ? 0xFFE9B0 : 0xA9C7FF));
             Actor.addDelayed(
                     new Actor() {
                         final Actor toRemove = this;

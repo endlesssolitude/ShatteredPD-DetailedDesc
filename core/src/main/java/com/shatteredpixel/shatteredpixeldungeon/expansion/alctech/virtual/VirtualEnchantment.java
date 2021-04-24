@@ -1,7 +1,8 @@
 package com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.virtual;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.buffs.PlainVampire;
+import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.enhancedPotion.PotionExpEX;
+import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.enhancedPotion.PotionFrostEX;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 
@@ -19,7 +20,7 @@ public enum VirtualEnchantment{
     INSTANCE;
 
     public int attackProc(Weapon weapon, Char attacker, Char defender, int damage) {
-        PlainVampire pv = attacker.buff(PlainVampire.class);
+        PotionExpEX.PlainVampire pv = attacker.buff(PotionExpEX.PlainVampire.class);
         if(pv != null){
             damage = pv.trigger(weapon, attacker, defender, damage);
         }
@@ -27,6 +28,10 @@ public enum VirtualEnchantment{
     }
 
     public int defenseProc(Armor armor, Char attacker, Char defender, int damage){
+        PotionFrostEX.IceArmor ia = defender.buff(PotionFrostEX.IceArmor.class);
+        if(ia != null){
+            damage = ia.trigger(armor, attacker, defender, damage);
+        }
         return damage;
     }
 

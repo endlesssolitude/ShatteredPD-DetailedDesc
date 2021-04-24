@@ -1,19 +1,29 @@
 package com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.enhancedPotion;
 
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bless;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ElmoParticle;
-import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.buffs.PlainVampire;
+import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.buffs.AttackBuff;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.watabou.noosa.audio.Sample;
 
 public class PotionExpEX extends EnhancedPotion{
     {
         image = ItemSpriteSheet.POTION_GOLDEN;
+    }
+
+    @Override
+    protected void setCategory() {
+        drinkOrThrow = DRINK_PREFER;
     }
 
     @Override
@@ -55,7 +65,7 @@ public class PotionExpEX extends EnhancedPotion{
         heroDegrade(h, (int) (h.maxExp()*(2.7f)));
     }
     protected void n3(Hero h){
-        heroDegrade(h, (int) (h.maxExp()*(4.1f)));
+        heroDegrade(h, (int) (h.maxExp()*(3.2f)));
         Buff.affect(h, PlainVampire.class).setHits(20).setRate(0.225f);
         h.sprite.showStatus(0xD030D0, M.L(this, "vampire"));
     }
@@ -74,7 +84,21 @@ public class PotionExpEX extends EnhancedPotion{
             h.sprite.showStatus(CharSprite.NEGATIVE, M.L(this, "degrade", lvl-h.lvl));
             h.sprite.emitter().start(ElmoParticle.FACTORY, 0.05f, 20 + dLevel*15);
         }
+        Sample.INSTANCE.play(Assets.Sounds.DEGRADE);
         Item.updateQuickslot();
     }
 
+    public static class PlainVampire extends AttackBuff {
+        @Override
+        protected int proc(Weapon w, Char attacker, Char defender, int damage) {
+            int heal = Math.round(damage*rate);
+            heal = Math.min(attacker.HT - attacker.HP, heal);
+            if (heal > 0 && attacker.isAlive()) {
+                attacker.HP += heal;
+                attacker.sprite.emitter().start( Speck.factory( Speck.HEALING ), 0.4f, 1 );
+                attacker.sprite.showStatus( CharSprite.POSITIVE, Integer.toString( heal ) );
+            }
+            return damage;
+        }
+    }
 }
