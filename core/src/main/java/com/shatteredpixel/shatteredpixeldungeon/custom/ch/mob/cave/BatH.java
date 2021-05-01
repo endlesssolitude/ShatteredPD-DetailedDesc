@@ -1,7 +1,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.cave;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Amok;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
@@ -20,7 +19,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.watabou.utils.Bundle;
-import com.watabou.utils.Callback;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
@@ -109,21 +107,9 @@ public class BatH extends Bat {
             int p = toEvade.get(Random.Int(toEvade.size()));
             sprite.move(pos, p);
             sprite.showStatus(CharSprite.POSITIVE, defenseVerb());
-            Actor.addDelayed(new Actor() {
-                final Actor toRemove = this;
-                @Override
-                protected boolean act() {
-                    DelayerEffect.delayTime(0.12f, new Callback() {
-                        @Override
-                        public void call() {
-                            sprite.move(p, pos);
-                            Actor.remove(toRemove);
-                            toRemove.next();
-                        }
-                    });
-                    return false;
-                }
-            }, -10);
+            DelayerEffect.delay(0.12f, true, this, ()->{
+                sprite.move(p, pos);
+            });
             return true;
         }
         return false;

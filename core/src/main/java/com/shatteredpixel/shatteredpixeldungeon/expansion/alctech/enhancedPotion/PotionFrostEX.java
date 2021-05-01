@@ -40,7 +40,7 @@ public class PotionFrostEX extends EnhancedPotion{
         }else if(enhanceLevel == -3){
             n3(hero);
         }else {
-            super.apply(hero);
+            new PotionOfFrost().apply(hero);
         }
     }
 

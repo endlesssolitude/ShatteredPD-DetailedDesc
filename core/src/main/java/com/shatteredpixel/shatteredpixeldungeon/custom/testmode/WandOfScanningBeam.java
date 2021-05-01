@@ -1,7 +1,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.custom.testmode;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.BallisticaReal;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.GME;
@@ -31,23 +30,7 @@ public class WandOfScanningBeam extends WandOfDisintegration implements Scanning
                         .setTime(0.4f, 1.5f, 0.4f)
                 ).setDiameter(1.6f)
         );
-
-        Actor.addDelayed(new Actor() {
-                             @Override
-                             protected boolean act() {
-                                 final Actor toRemove = this;
-                                 DelayerEffect.delayTime(2.3f, new Callback() {
-                                     @Override
-                                     public void call() {
-                                         Actor.remove(toRemove);
-                                         toRemove.next();
-                                     }
-                                 });
-                                 return false;
-                             }
-                         }, -1
-
-        );
+        DelayerEffect.delay(2.3f, null);
     }
 
     @Override

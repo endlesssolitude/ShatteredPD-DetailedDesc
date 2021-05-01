@@ -51,7 +51,6 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
-import com.watabou.utils.Callback;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
@@ -210,19 +209,19 @@ public class YogReal extends Boss{
                     int direction = 2 * (Math.abs(dx) > Math.abs(dy) ? 0 : 1);
                     direction += (direction > 0 ? (dy > 0 ? 1 : 0) : (dx > 0 ? 1 : 0));
                     Buff.affect(this, YogScanHalf.class).setPos(pos, direction);
-                    skillBalance[skill] /= 1.5f;
+                    skillBalance[skill] /= 1.75f;
                     beamCD = 20 + 8 - (phase == 5?19:0);
                 }else if(skill == 1){
                     Buff.affect(this, YogScanRound.class).setPos(pos);
                     skillBalance[skill] /= 2f;
                     beamCD = 20 + 10 - (phase == 5?19:0);
                 }else if(skill == 2){
-                    int count = 5 + phase + (phase == 5 ? 3 : 0);
+                    int count = 4 + (phase == 5 ? 3 : 0);
                     YogContinuousBeam b = Buff.affect(this, YogContinuousBeam.class);
                     b.setLeft(count);
                     b.setRage(phase == 5);
                     beamCD = 20 + count - (phase == 5?19:0);
-                    skillBalance[skill] /= 1.75f;
+                    skillBalance[skill] /= 2.25f;
                 }
                 Dungeon.hero.interrupt();
                 if(skillBalance[0] < 0.1f){
@@ -492,10 +491,9 @@ public class YogReal extends Boss{
         Collections.addAll(fistSummons, b.getClassArray("FIST_SUMMONS"));
         regularSummons.clear();
         Collections.addAll(regularSummons, b.getClassArray("REGULAR_SUMMONS"));
-        if (!BossHealthBar.isAssigned()) {
-            BossHealthBar.assignBoss(this);
-            if (HP < 600) BossHealthBar.bleed(true);
-        }
+        if(phase>0) BossHealthBar.assignBoss(this);
+        if (HP < 600) BossHealthBar.bleed(true);
+
     }
 
 
@@ -651,26 +649,10 @@ public class YogReal extends Boss{
                     .setTime(0.3f, 1.5f, 0.5f)
                 ).setDiameter(3f)
             );
-
-            Actor.addDelayed(new Actor() {
-                                 @Override
-                                 protected boolean act() {
-                                     final Actor toRemove = this;
-                                     DelayerEffect.delayTime(1.8f, new Callback() {
-                                         @Override
-                                         public void call() {
-                                             Actor.remove(toRemove);
-                                             toRemove.next();
-                                             detach();
-                                             //cancel shaking
-                                             Camera.main.shake(2f, 0.3f);
-                                         }
-                                     });
-                                     return false;
-                                 }
-                             }, -1
-
-            );
+            DelayerEffect.delay(1.8f, ()->{
+                detach();
+                Camera.main.shake(2f, 0.3f);
+            });
 
             Camera.main.shake(2f, 100f);
 
@@ -750,25 +732,10 @@ public class YogReal extends Boss{
                     .setDiameter(2.0f)
             );
 
-            Actor.addDelayed(new Actor() {
-                                 @Override
-                                 protected boolean act() {
-                                     final Actor toRemove = this;
-                                     DelayerEffect.delayTime(2.3f, new Callback() {
-                                         @Override
-                                         public void call() {
-                                             Actor.remove(toRemove);
-                                             toRemove.next();
-                                             detach();
-                                             //cancel shaking
-                                             Camera.main.shake(2f, 0.3f);
-                                         }
-                                     });
-                                     return false;
-                                 }
-                             }, -1
-
-            );
+            DelayerEffect.delay(2.3f, () -> {
+                detach();
+                Camera.main.shake(2f, 0.3f);
+            });
 
             Camera.main.shake(2f, 100f);
         }
@@ -836,28 +803,12 @@ public class YogReal extends Boss{
             Ballistica ba = new Ballistica(target.pos, lastAim, Ballistica.WONT_STOP);
             target.sprite.parent.add(new BeamCustom(
                     target.sprite.center(), DungeonTilemap.tileCenterToWorld(ba.collisionPos), Effects.Type.LIGHT_RAY, null)
-                    .setTime(0.4f, 0.6f, 0.3f).setDiameter(2.2f).setColor(left > 2 ? 0xFFE9B0 : 0xA9C7FF));
-            Actor.addDelayed(
-                    new Actor() {
-                        final Actor toRemove = this;
-                        @Override
-                        protected boolean act() {
-                            DelayerEffect.delayTime(0.4f, new Callback() {
-                                @Override
-                                public void call() {
-                                    Actor.remove(toRemove);
-                                    toRemove.next();
-
-                                    Sample.INSTANCE.play(Assets.Sounds.RAY, Random.Float(0.8f, 1.25f));
-                                    Camera.main.shake(3f, 0.5f);
-                                    onHitProc(ba);
-                                }
-                            });
-                            return false;
-                        }
-                    },
-                    -1
-            );
+                    .setTime(0.4f, 0.6f, 0.3f).setDiameter(2.2f).setColor(left >= 2 ? 0xFFE9B0 : 0xA9C7FF));
+            DelayerEffect.delay(0.4f, ()->{
+                Sample.INSTANCE.play(Assets.Sounds.RAY, Random.Float(0.8f, 1.25f));
+                Camera.main.shake(3f, 0.5f);
+                onHitProc(ba);
+            });
         }
 
         private void onHitProc(Ballistica ba){

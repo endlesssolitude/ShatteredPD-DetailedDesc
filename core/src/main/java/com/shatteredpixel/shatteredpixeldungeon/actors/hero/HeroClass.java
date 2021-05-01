@@ -47,7 +47,7 @@ import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.generator.TestRi
 import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.alchemy.AlchemyEX;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.container.PotionBag;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.enchs.ScrollOfTestInch;
-import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.enhancedPotion.PotionFrostEX;
+import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.enhancedPotion.PotionFireEX;
 import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
 import com.shatteredpixel.shatteredpixeldungeon.items.DewVial;
 import com.shatteredpixel.shatteredpixeldungeon.items.Dewdrop;
@@ -380,11 +380,20 @@ public enum HeroClass {
 
 			new WandOfReflectDisintegration().identify().collect();
 
-			PotionFrostEX pfe = new PotionFrostEX();
-			pfe.quantity(100);
-			pfe.setLevel(3);
-			pfe.collect();
+			PotionFireEX pfe1 = new PotionFireEX();
+			pfe1.quantity(100);
+			pfe1.setLevel(-1);
+			pfe1.collect();
 
+			PotionFireEX pfe2 = new PotionFireEX();
+			pfe2.quantity(100);
+			pfe2.setLevel(-2);
+			pfe2.collect();
+
+			PotionFireEX pfe3 = new PotionFireEX();
+			pfe3.quantity(100);
+			pfe3.setLevel(-3);
+			pfe3.collect();
 			new ScrollOfTestInch().quantity(100).identify().collect();
 		}
 

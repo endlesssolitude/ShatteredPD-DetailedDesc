@@ -51,6 +51,16 @@ public abstract class AttackBuff extends Buff {
     @Override
     public String desc(){return M.L(this, "desc", hits);}
 
+    @Override
+    public String heroMessage() {
+        return "";
+    }
+
+    @Override
+    public String toString() {
+        return M.L(this, "name");
+    }
+
     public int trigger(Weapon w, Char attacker, Char defender, int damage) {
         consume();
         return proc(w, attacker, defender, damage);

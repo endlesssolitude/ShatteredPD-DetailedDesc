@@ -48,8 +48,10 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Image;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.Reflection;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class TrapPlacer extends TestItem {
     {
@@ -67,6 +69,7 @@ public class TrapPlacer extends TestItem {
     private int column = 0;
     protected Trap trap = null;
     private boolean triggerWhenPut = false;
+    private boolean enableInvalidImage = false;
     //encoding for traps, column = color, row = shape;
     /*
     //trap colors
@@ -90,141 +93,38 @@ public class TrapPlacer extends TestItem {
     public static final int LARGE_DOT   = 6;
      */
 
-    //encoding of all traps(tengu trap not included)
-    protected void indexToTrap(int row, int column) {
-        if (column == 0) switch (row) {
-            case 0:
-                nt(new AlarmTrap());
-                break;
-            case 6:
-                nt(new DisarmingTrap());
-                break;
-            case 3:
-                nt(new GuardianTrap());
-                break;
-            case 4:
-                nt(new PitfallTrap());
-                break;
-            default:
-                nt(null);
-                break;
-        }
-        else if (column == 1) switch (row) {
-            case 3:
-                nt(new BlazingTrap());
-                break;
-            case 0:
-                nt(new BurningTrap());
-                break;
-            case 4:
-                nt(new ExplosiveTrap());
-                break;
-            default:
-                nt(null);
-                break;
-        }
-        else if (column == 2) switch (row) {
-            case 0:
-                nt(new ShockingTrap());
-                break;
-            case 3:
-                nt(new StormTrap());
-                break;
-            default:
-                nt(null);
-                break;
-        }
-        else if (column == 3) switch (row) {
-            case 0:
-                nt(new OozeTrap());
-                break;
-            case 5:
-                nt(new PoisonDartTrap());
-                break;
-            case 2:
-                nt(new ToxicTrap());
-                break;
-            case 1:
-                nt(new WeakeningTrap());
-                break;
-            default:
-                nt(null);
-                break;
-        }
-        else if (column == 4) switch (row) {
-            case 2:
-                nt(new ConfusionTrap());
-                break;
-            case 6:
-                nt(new DistortionTrap());
-                break;
-            case 1:
-                nt(new SummoningTrap());
-                break;
-            case 0:
-                nt(new TeleportationTrap());
-                break;
-            case 3:
-                nt(new WarpingTrap());
-                break;
-            default:
-                nt(null);
-                break;
-        }
-        else if (column == 5) switch (row) {
-            case 1:
-                nt(new CursingTrap());
-                break;
-            case 5:
-                nt(new DisintegrationTrap());
-                break;
-            default:
-                nt(null);
-                break;
-        }
-        else if (column == 6) switch (row) {
-            case 0:
-                nt(new ChillingTrap());
-                break;
-            case 1:
-                nt(new FlockTrap());
-                break;
-            case 3:
-                nt(new FrostTrap());
-                break;
-            default:
-                nt(null);
-                break;
-        }
-        else if (column == 7) switch (row) {
-            case 2:
-                nt(new CorrosionTrap());
-                break;
-            case 3:
-                nt(new FlashingTrap());
-                break;
-            case 6:
-                nt(new GrimTrap());
-                break;
-            case 0:
-                nt(new GrippingTrap());
-                break;
-            case 4:
-                nt(new RockfallTrap());
-                break;
-            case 5:
-                nt(new WornDartTrap());
-                break;
-            default:
-                nt(null);
-                break;
-        }
-        else nt(null);
-    }
-
-    //abbr for newTrap()
-    protected void nt(Trap t) {
-        trap = t;
+    //index = row * COLS + column
+    private static HashMap<Integer, Class<? extends Trap>> trapLib = new HashMap<>(30);
+    static {
+        trapLib.put(0, AlarmTrap.class);
+        trapLib.put(48, DisarmingTrap.class);
+        trapLib.put(24, GuardianTrap.class);
+        trapLib.put(32, PitfallTrap.class);
+        trapLib.put(25, BlazingTrap.class);
+        trapLib.put(1, BurningTrap.class);
+        trapLib.put(33, ExplosiveTrap.class);
+        trapLib.put(2, ShockingTrap.class);
+        trapLib.put(26, StormTrap.class);
+        trapLib.put(3, OozeTrap.class);
+        trapLib.put(43, PoisonDartTrap.class);
+        trapLib.put(19, ToxicTrap.class);
+        trapLib.put(11, WeakeningTrap.class);
+        trapLib.put(20, ConfusionTrap.class);
+        trapLib.put(52, DistortionTrap.class);
+        trapLib.put(12, SummoningTrap.class);
+        trapLib.put(4, TeleportationTrap.class);
+        trapLib.put(28, WarpingTrap.class);
+        trapLib.put(13, CursingTrap.class);
+        trapLib.put(45, DisintegrationTrap.class);
+        trapLib.put(6, ChillingTrap.class);
+        trapLib.put(14, FlockTrap.class);
+        trapLib.put(30, FrostTrap.class);
+        trapLib.put(23, CorrosionTrap.class);
+        trapLib.put(31, FlashingTrap.class);
+        trapLib.put(55, GrimTrap.class);
+        trapLib.put(7, GrippingTrap.class);
+        trapLib.put(39, RockfallTrap.class);
+        trapLib.put(47, WornDartTrap.class);
     }
 
     @Override
@@ -277,7 +177,14 @@ public class TrapPlacer extends TestItem {
 
         Trap trapToCreate = trap;
         //create a new instance for trap
-        indexToTrap(row, column);
+        Class<? extends Trap> tc = trapLib.get(index());
+        if(tc == null){
+            trap = null;
+            GLog.n(M.L(this, "error", index()));
+            return;
+        }else{
+            trap = Reflection.newInstance(tc);
+        }
         Dungeon.level.setTrap(trapToCreate.reveal(), cell);
         //logic for deciding if triggering trap
         //Dungeon.level.map[cell] = Terrain.TRAP;
@@ -308,6 +215,7 @@ public class TrapPlacer extends TestItem {
         bundle.put("row", row);
         bundle.put("column", column);
         bundle.put("trigger", triggerWhenPut);
+        bundle.put("enableInvalid", enableInvalidImage);
     }
 
     @Override
@@ -316,12 +224,17 @@ public class TrapPlacer extends TestItem {
         row = bundle.getInt("row");
         column = bundle.getInt("column");
         triggerWhenPut = bundle.getBoolean("trigger");
-        indexToTrap(row, column);
+        enableInvalidImage = bundle.getBoolean("enableInvalid");
+        trap = Reflection.newInstance(trapLib.get(index()));
     }
 
     @Override
     public String desc() {
         return Messages.get(this, "desc", (trap == null ? Messages.get(TrapPlacer.class, "no_trap_selected") : Messages.get(trap.getClass(), "name")));
+    }
+
+    private int index(){
+        return row * 8 + column;
     }
 
     private class SettingsWindow extends Window{
@@ -336,6 +249,8 @@ public class TrapPlacer extends TestItem {
         private ArrayList<IconButton> trapButtons = new ArrayList<>();
         private RenderedTextBlock selected;
 
+
+
         public SettingsWindow(){
             super();
 
@@ -347,27 +262,39 @@ public class TrapPlacer extends TestItem {
             ttl.setPos(1, 1);
             ttl.hardlight(0x44A8E4);
 
+            CheckBox enableInvalid = new CheckBox(M.L(TrapPlacer.class, "invalid_trap_display")){
+                @Override
+                protected void onClick() {
+                    super.onClick();
+                    enableInvalidImage = checked();
+                    refreshImage();
+                }
+            };
+            enableInvalid.checked(enableInvalidImage);
+            add(enableInvalid);
+            enableInvalid.setRect(2, ttl.bottom() + 2, WIDTH - 4, 16);
+
             float left = (WIDTH - BTN_SIZE*COLS)/2f;
-            float top = ttl.bottom() + 4f;
+            float top = enableInvalid.bottom() + 4f;
             for(int i=0; i<ROWS; ++i){
                 for(int j=0;j<COLS;++j){
                     final int index = i*COLS + j;
                     IconButton btn = new IconButton(){
                         @Override
                         public void onClick(){
-                            trapButtons.get(row*COLS+column).icon().resetColor();
+                            trapButtons.get(index()).icon().resetColor();
                             row = index / COLS;
                             column = index % COLS;
                             trapButtons.get(index).icon().color(0xFFFF44);
                             updateText();
                         }
                     };
-                    btn.icon(new Image(Assets.Environment.TERRAIN_FEATURES, 16*j, 16*i, 16, 16));
                     btn.setRect(left + BTN_SIZE * j, top + BTN_SIZE * i, BTN_SIZE, BTN_SIZE);
                     add(btn);
                     trapButtons.add(btn);
                 }
             }
+            refreshImage();
             trapButtons.get(row * COLS + column).icon().color(0xFFFF44);
 
             selected = PixelScene.renderTextBlock("", 6);
@@ -393,13 +320,29 @@ public class TrapPlacer extends TestItem {
         }
 
         private void updateText(){
-            indexToTrap(row, column);
+            Class<? extends Trap> cls = trapLib.get(index());
+            if(cls == null){
+                trap = null;
+            }else {
+                trap = Reflection.newInstance(cls);
+            }
             selected.text(statDesc());
         }
 
         private String statDesc() {
             if(trap == null) return M.L(this, "null_trap");
             return M.L(trap.getClass(), "name");
+        }
+
+        private void refreshImage(){
+
+            for(int i = 0, size = trapButtons.size(); i < size; ++i){
+                if(trapLib.get(i)==null && !enableInvalidImage){
+                    trapButtons.get(i).icon(new Image(Assets.Environment.TERRAIN_FEATURES, 128, 16*(i/COLS), 16, 16));
+                }else{
+                    trapButtons.get(i).icon(new Image(Assets.Environment.TERRAIN_FEATURES, 16*(i%COLS), 16*(i/COLS), 16, 16));;
+                }
+            }
         }
     }
 }

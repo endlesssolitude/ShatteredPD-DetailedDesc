@@ -2,7 +2,6 @@ package com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.prison;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
@@ -24,7 +23,6 @@ import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
 import com.watabou.utils.Bundle;
-import com.watabou.utils.Callback;
 import com.watabou.utils.GameMath;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
@@ -143,46 +141,27 @@ public class DM100H extends DM100 {
         }
 
         protected void lightningStrike(){
+            DelayerEffect.delay(0.5f, ()->{
+                float x = aim.sprite.center().x;
+                float y = aim.sprite.center().y;
+                aim.sprite.parent.add(new Lightning(aim.sprite.center(), new PointF( x, y-300f),null));
+                aim.sprite.parent.add(new Lightning(new PointF(x-5f, y), new PointF( x-5f, y-300f),null));
+                aim.sprite.parent.add(new Lightning(new PointF(x+5f, y), new PointF( x+5f, y-300f),null));
+                Sample.INSTANCE.play( Assets.Sounds.LIGHTNING, 1.5f);
+                boolean alive = aim.isAlive();
 
-            Actor.addDelayed(new Actor() {
-                @Override
-                public boolean act(){
-                    final Actor toRemove = this;
+                aim.damage(Random.Int(28, 38), new SkyLightning());
+                aim.sprite.centerEmitter().burst( SparkParticle.FACTORY, 32 );
+                aim.sprite.flash();
 
-                    DelayerEffect.delayTime(0.5f,
-                            new Callback() {
-                        @Override
-                        public void call() {
-                            float x = aim.sprite.center().x;
-                            float y = aim.sprite.center().y;
-                            aim.sprite.parent.add(new Lightning(aim.sprite.center(), new PointF( x, y-300f),null));
-                            aim.sprite.parent.add(new Lightning(new PointF(x-5f, y), new PointF( x-5f, y-300f),null));
-                            aim.sprite.parent.add(new Lightning(new PointF(x+5f, y), new PointF( x+5f, y-300f),null));
-                            Sample.INSTANCE.play( Assets.Sounds.LIGHTNING, 1.5f);
-                            boolean alive = aim.isAlive();
-
-                            aim.damage(Random.Int(28, 38), new SkyLightning());
-                            aim.sprite.centerEmitter().burst( SparkParticle.FACTORY, 32 );
-                            aim.sprite.flash();
-
-                            if(aim == Dungeon.hero){
-                                Camera.main.shake(5f, 0.8f);
-                                if(alive && !aim.isAlive()){
-                                    Dungeon.fail(SkyLightning.class);
-                                    GLog.n(M.L(SkyLightning.class, "ondeath"));
-                                }
-                            }
-                            Actor.remove(toRemove);
-                            toRemove.next();
-                        }
+                if(aim == Dungeon.hero){
+                    Camera.main.shake(5f, 0.8f);
+                    if(alive && !aim.isAlive()){
+                        Dungeon.fail(SkyLightning.class);
+                        GLog.n(M.L(SkyLightning.class, "ondeath"));
                     }
-                    );
-                    return false;
                 }
-                },
-                    -1);
-
-
+            });
         }
 
         public LightningPrediction set(Char ch){
