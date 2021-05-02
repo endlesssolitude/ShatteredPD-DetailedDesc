@@ -11,8 +11,12 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
+import com.shatteredpixel.shatteredpixeldungeon.custom.utils.timing.VirtualActor;
+import com.shatteredpixel.shatteredpixeldungeon.custom.utils.FilterUtil;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.RangeMap;
-import com.shatteredpixel.shatteredpixeldungeon.custom.visuals.DelayerEffect;
+import com.shatteredpixel.shatteredpixeldungeon.custom.utils.timing.RepeatedCallback;
+import com.shatteredpixel.shatteredpixeldungeon.custom.utils.timing.VirtualTimer;
+import com.shatteredpixel.shatteredpixeldungeon.custom.visuals.CellColorBlock;
 import com.shatteredpixel.shatteredpixeldungeon.custom.visuals.effects.BeamCustom;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Effects;
@@ -20,13 +24,11 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.BlastParticle;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.buffs.AttackBuff;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.buffs.DefendBuff;
-import com.shatteredpixel.shatteredpixeldungeon.expansion.utils.FilterUtil;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlame;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
@@ -51,12 +53,13 @@ public class PotionFireEX extends EnhancedPotion{
 
     @Override
     public void shatter(int cell) {
-        super.shatter(cell);
         if(enhanceLevel == 1){
             p1(cell);
         } else if(enhanceLevel == 2){
             p2(cell);
-        } else{
+        } else if(enhanceLevel == 3){
+            p3t(cell);
+        }else{
             new PotionOfLiquidFlame().shatter(cell);
         }
     }
@@ -64,7 +67,7 @@ public class PotionFireEX extends EnhancedPotion{
     @Override
     public void apply(Hero hero) {
         if(enhanceLevel == 3){
-            p3(hero);
+            p3d(hero);
         }else if(enhanceLevel == -1){
             n1(hero);
         }else if(enhanceLevel == -2){
@@ -79,7 +82,9 @@ public class PotionFireEX extends EnhancedPotion{
     @Override
     protected void setCategory() {
         if(enhanceLevel == 1 || enhanceLevel == 2) drinkOrThrow = THROW_ONLY;
-        else{
+        else if(enhanceLevel == 3){
+            drinkOrThrow = NEUTRAL;
+        }else{
             drinkOrThrow = DRINK_PREFER;
         }
     }
@@ -90,7 +95,9 @@ public class PotionFireEX extends EnhancedPotion{
             CellEmitter.center(cell).burst(BlastParticle.FACTORY, 25);
         }
         int[] N2 = RangeMap.manhattanRing(cell, 0, 2);
+
         for(int i: N2){
+            Dungeon.hero.sprite.parent.add(new CellColorBlock(i, 0.6f, 0.1f, 0.2f, 0x80FFD467));
             Char c = Actor.findChar(i);
             if(c!=null){
                 int damage = Random.NormalIntRange(7 + Dungeon.depth, 12 + Dungeon.depth*5/2);
@@ -117,6 +124,7 @@ public class PotionFireEX extends EnhancedPotion{
         int[] N2 = RangeMap.manhattanRing(cell, 0, 2);
         ArrayList<Integer> toExplode = new ArrayList<>();
         for(int i: N2){
+            Dungeon.hero.sprite.parent.add(new CellColorBlock(i, 0.6f, 0.15f, 0.2f, 0x80FF9762));
             Char c = Actor.findChar(i);
             if(c!=null){
                 int damage = Random.NormalIntRange(10 + Dungeon.depth * 3 / 2, 15 + Dungeon.depth * 3);
@@ -142,8 +150,8 @@ public class PotionFireEX extends EnhancedPotion{
             p1(i);
         }
     }
-    protected void p3(Hero h){
-        Buff.affect(h, FireRain.class).addLife(7);
+    protected void p3d(Hero h){
+        Buff.affect(h, FireRain.class).addLife(8);
     }
     protected void n1(Hero h){
         Buff.affect(h, FireAura.class).set(FireAura.DURATION);
@@ -152,19 +160,38 @@ public class PotionFireEX extends EnhancedPotion{
         Buff.affect(h, FireBeam.class).addHits(14);
     }
     protected void n3(Hero h){
-        Buff.affect(h, FireArmor.class).addHits(6);
+        Buff.affect(h, FireArmor.class).addHits(7);
     }
 
-    public static void skyFire(int pos, float rad, CharSprite sp, Callback callback){
+    protected void p3t(int cell) {
+        int[] map = RangeMap.centeredRect(cell, 4, 4);
+        RepeatedCallback.executeChain(0.25f, 16, () -> {
+            final int targetCell = map[Random.Int(map.length)];
+            final float radius = 3.2f;
+            skyFire(targetCell, radius, () -> {
+                for (Char ch : Actor.chars()) {
+                    if (ch.alignment != Char.Alignment.ALLY) {
+                        if (Dungeon.level.trueDistance(ch.pos, targetCell) <= radius) {
+                            ch.damage(Random.IntRange(4+Dungeon.depth/2, 8+Dungeon.depth), this);
+                        }
+                    }
+                }
+            });
+        });
+    }
+
+    public static void skyFire(int pos, float rad, Callback callback){
         float radius = Math.min(rad, 3);
         PointF center = new PointF(DungeonTilemap.tileCenterToWorld(pos));
-        sp.parent.add(new Halo(radius * DungeonTilemap.SIZE, 0xFF4427, 1f){
+
+        Dungeon.hero.sprite.parent.add(new Halo(radius * DungeonTilemap.SIZE, 0xFF4427, 1f){
             private final float time = 0.5f;
             private float life = time;
             @Override
             public void update(){
                 if((life -= Game.elapsed) < -time){
                     killAndErase();
+                    remove();
                 }else if(life>0){
                     am = (life-time)/time;
                     aa = (time-life)/time;
@@ -182,7 +209,7 @@ public class PotionFireEX extends EnhancedPotion{
             }
         }.point(center.x, center.y));
 
-        MagicMissile mm = MagicMissile.boltFromChar(sp.parent, 0, sp, pos, null);
+        final MagicMissile mm = ((MagicMissile)Dungeon.hero.sprite.parent.recycle( MagicMissile.class ));
         final float ang = Random.Float(60f, 120f)*3.1416f/180f;
         mm.reset(MagicMissile.FIRE, center.clone().offset((float) (200f * Math.cos(ang)), (float) (200f * Math.sin(-ang))), center, ()->{
                     CellEmitter.center(pos).burst(BlastParticle.FACTORY, 50);
@@ -191,7 +218,8 @@ public class PotionFireEX extends EnhancedPotion{
                 });
         mm.setSpeed(400f);
 
-        DelayerEffect.delay(0.55f, true, PotionFireEX.class, null);
+        VirtualActor.delay(0.55f, true, PotionFireEX.class, null);
+        VirtualTimer.countTime(1f, mm::destroy);
         //DelayerEffect.delay(0.5f, null);
 
         Camera.main.shake(3f, 0.5f);
@@ -226,10 +254,10 @@ public class PotionFireEX extends EnhancedPotion{
                     ch.alignment == Char.Alignment.ENEMY && Dungeon.hero.fieldOfView[ch.pos]).toArray(new Char[0]);
             if(suitable.length == 0) return false;
             Char aimedChar = Random.oneOf(suitable);
-            skyFire(aimedChar.pos, 2.5f, aimedChar.sprite != null ? aimedChar.sprite : Dungeon.hero.sprite, ()-> {
+            skyFire(aimedChar.pos, 3f, ()-> {
                 for(Char ch: Actor.chars()){
                     if(ch.alignment != Char.Alignment.ALLY) {
-                        if (Dungeon.level.trueDistance(ch.pos, aimedChar.pos) <= 2.5f) {
+                        if (Dungeon.level.trueDistance(ch.pos, aimedChar.pos) <= 3f) {
                             Buff.affect(ch, Burning.class).reignite(ch);
                             ch.damage(Random.IntRange(7 + Dungeon.depth, 12 + Dungeon.depth * 5 / 2), this);
                         }
@@ -356,10 +384,10 @@ public class PotionFireEX extends EnhancedPotion{
 
         @Override
         protected int proc(Armor a, Char attacker, Char defender, int damage) {
-            skyFire(attacker.pos, 3f, defender.sprite, ()->{
+            skyFire(attacker.pos, 3.5f, ()->{
                 for(Char ch: Actor.chars()){
                     if(ch.alignment != Char.Alignment.ALLY) {
-                        if (Dungeon.level.trueDistance(ch.pos, attacker.pos) <= 3f) {
+                        if (Dungeon.level.trueDistance(ch.pos, attacker.pos) <= 3.5f) {
                             Buff.affect(ch, Burning.class).reignite(ch);
                             ch.damage(Random.IntRange(9 + Dungeon.depth * 3 / 2, 14 + Dungeon.depth * 2), this);
                         }

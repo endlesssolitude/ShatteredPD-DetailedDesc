@@ -24,7 +24,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.RipperDemon;
 import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.BallisticaReal;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.HitBack;
-import com.shatteredpixel.shatteredpixeldungeon.custom.visuals.DelayerEffect;
+import com.shatteredpixel.shatteredpixeldungeon.custom.utils.timing.VirtualActor;
 import com.shatteredpixel.shatteredpixeldungeon.custom.visuals.effects.BeamCustom;
 import com.shatteredpixel.shatteredpixeldungeon.custom.visuals.effects.ScanningBeam;
 import com.shatteredpixel.shatteredpixeldungeon.custom.visuals.effects.SpreadWave;
@@ -649,7 +649,7 @@ public class YogReal extends Boss{
                     .setTime(0.3f, 1.5f, 0.5f)
                 ).setDiameter(3f)
             );
-            DelayerEffect.delay(1.8f, ()->{
+            VirtualActor.delay(1.8f, ()->{
                 detach();
                 Camera.main.shake(2f, 0.3f);
             });
@@ -732,7 +732,7 @@ public class YogReal extends Boss{
                     .setDiameter(2.0f)
             );
 
-            DelayerEffect.delay(2.3f, () -> {
+            VirtualActor.delay(2.3f, () -> {
                 detach();
                 Camera.main.shake(2f, 0.3f);
             });
@@ -804,7 +804,7 @@ public class YogReal extends Boss{
             target.sprite.parent.add(new BeamCustom(
                     target.sprite.center(), DungeonTilemap.tileCenterToWorld(ba.collisionPos), Effects.Type.LIGHT_RAY, null)
                     .setTime(0.4f, 0.6f, 0.3f).setDiameter(2.2f).setColor(left >= 2 ? 0xFFE9B0 : 0xA9C7FF));
-            DelayerEffect.delay(0.4f, ()->{
+            VirtualActor.delay(0.4f, ()->{
                 Sample.INSTANCE.play(Assets.Sounds.RAY, Random.Float(0.8f, 1.25f));
                 Camera.main.shake(3f, 0.5f);
                 onHitProc(ba);

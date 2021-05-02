@@ -8,7 +8,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.CounterBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DM100;
 import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
-import com.shatteredpixel.shatteredpixeldungeon.custom.visuals.DelayerEffect;
+import com.shatteredpixel.shatteredpixeldungeon.custom.utils.timing.VirtualActor;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Effects;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Lightning;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SparkParticle;
@@ -141,7 +141,7 @@ public class DM100H extends DM100 {
         }
 
         protected void lightningStrike(){
-            DelayerEffect.delay(0.5f, ()->{
+            VirtualActor.delay(0.5f, ()->{
                 float x = aim.sprite.center().x;
                 float y = aim.sprite.center().y;
                 aim.sprite.parent.add(new Lightning(aim.sprite.center(), new PointF( x, y-300f),null));

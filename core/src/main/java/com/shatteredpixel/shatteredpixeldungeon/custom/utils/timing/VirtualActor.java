@@ -1,4 +1,4 @@
-package com.shatteredpixel.shatteredpixeldungeon.custom.visuals;
+package com.shatteredpixel.shatteredpixeldungeon.custom.utils.timing;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
@@ -8,17 +8,17 @@ import com.watabou.utils.Callback;
 
 //used to lock thread temporarily, to keep current status instantly
 //so that we can stay at instant/fast visuals, or to custom freezing time.
-public class DelayerEffect extends Visual {
+public class VirtualActor extends Visual {
 
     private float lasting = 0.5f;
     private Callback callback;
 
-    public DelayerEffect() {
+    public VirtualActor() {
         super(0,0,0,0);
     }
 
     private static void addDelayerVisual(float delay, Callback callback){
-        DelayerEffect d = new DelayerEffect();
+        VirtualActor d = new VirtualActor();
         d.reset(delay, callback);
         Dungeon.hero.sprite.parent.add(d);
     }
@@ -38,19 +38,17 @@ public class DelayerEffect extends Visual {
             killAndErase();
         }
     }
-
+    //simply delay time, can't interrupt
     public static void delay(float time){
         delay(time, false, null, null);
     }
-
-    public static void delay(float time, final boolean parallel, Object obj){
-        delay(time, parallel, obj, null);
-    }
-
+    //delay time and decide if delayer from the same class can parallel
+    public static void delay(float time, final boolean parallel, Object obj){ delay(time, parallel, obj, null); }
+    //simple delay with callback
     public static void delay(float time, Callback callback){
         delay(time, false, null, callback);
     }
-
+    //delay time and decide if delayer from the same class can parallel with callback
     public static void delay(float time, final boolean parallel, Object obj, Callback callback){
         if(!parallel) {
             Actor.addDelayed(new Actor() {
@@ -58,7 +56,7 @@ public class DelayerEffect extends Visual {
                 @Override
                 protected boolean act() {
                     Actor.remove(toRemove);
-                    DelayerEffect.addDelayerVisual(time, () -> {
+                    VirtualActor.addDelayerVisual(time, () -> {
                         if (callback != null) callback.call();
                         toRemove.next();
                     });
@@ -69,19 +67,19 @@ public class DelayerEffect extends Visual {
             //We need to distinguish different parallel effects, and hashcode for classname is a good idea.
             //Since we only have 100- effects to hash, the chance of conflict is small enough.
             final int hash = obj == null? 0:obj.getClass().getName().hashCode();
-            Actor.addDelayed(new SynchronizedDelayer() {
+            Actor.addDelayed(new ClassSpecifiedDelayer() {
                 final Actor toRemove = this;
                 @Override
                 protected boolean act() {
                     //remove this first to avoid deadlock when multiple events ends simultaneously.
                     Actor.remove(toRemove);
-                    DelayerEffect.addDelayerVisual(time, () -> {
+                    VirtualActor.addDelayerVisual(time, () -> {
                         if (callback != null) callback.call();
                         toRemove.next();
                     });
                     for (Actor a : Actor.all()) {
-                        if (a instanceof SynchronizedDelayer && a.cooldown() == 0) {
-                            if(((SynchronizedDelayer) a).targetHash == this.targetHash) {
+                        if (a instanceof ClassSpecifiedDelayer && a.cooldown() == 0) {
+                            if(((ClassSpecifiedDelayer) a).targetHash == this.targetHash) {
                                 return true;
                             }
                         }
@@ -91,6 +89,26 @@ public class DelayerEffect extends Visual {
             }.setHash(hash), -1);
         }
     }
+    //simple delay that ANY DelayerEffect can interrupt
+    public static void delaySoft(float time, Callback callback){
+        Actor.addDelayed(new Delayer() {
+            final Actor toRemove = this;
+            @Override
+            protected boolean act() {
+                Actor.remove(toRemove);
+                VirtualActor.addDelayerVisual(time, () -> {
+                    if (callback != null) callback.call();
+                    toRemove.next();
+                });
+                for(Actor a: Actor.all()){
+                    if(a instanceof Delayer && a.cooldown() == 0){
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }, -1);
+    }
 
     public static abstract class Delayer extends Actor{
         {
@@ -98,11 +116,11 @@ public class DelayerEffect extends Visual {
         }
     }
 
-    public static abstract class SynchronizedDelayer extends Actor{
+    public static abstract class ClassSpecifiedDelayer extends Delayer{
         {
             actPriority = VFX_PRIO;
         }
         public int targetHash;
-        public SynchronizedDelayer setHash(int hash){this.targetHash = hash; return this;}
+        public ClassSpecifiedDelayer setHash(int hash){this.targetHash = hash; return this;}
     }
 }

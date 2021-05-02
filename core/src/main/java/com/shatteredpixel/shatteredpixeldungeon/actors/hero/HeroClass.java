@@ -382,17 +382,17 @@ public enum HeroClass {
 
 			PotionFireEX pfe1 = new PotionFireEX();
 			pfe1.quantity(100);
-			pfe1.setLevel(-1);
+			pfe1.setLevel(1);
 			pfe1.collect();
 
 			PotionFireEX pfe2 = new PotionFireEX();
 			pfe2.quantity(100);
-			pfe2.setLevel(-2);
+			pfe2.setLevel(2);
 			pfe2.collect();
 
 			PotionFireEX pfe3 = new PotionFireEX();
 			pfe3.quantity(100);
-			pfe3.setLevel(-3);
+			pfe3.setLevel(3);
 			pfe3.collect();
 			new ScrollOfTestInch().quantity(100).identify().collect();
 		}

@@ -4,7 +4,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.BallisticaReal;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.GME;
-import com.shatteredpixel.shatteredpixeldungeon.custom.visuals.DelayerEffect;
+import com.shatteredpixel.shatteredpixeldungeon.custom.utils.timing.VirtualActor;
 import com.shatteredpixel.shatteredpixeldungeon.custom.visuals.effects.ScanningBeam;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Effects;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.PurpleParticle;
@@ -30,7 +30,7 @@ public class WandOfScanningBeam extends WandOfDisintegration implements Scanning
                         .setTime(0.4f, 1.5f, 0.4f)
                 ).setDiameter(1.6f)
         );
-        DelayerEffect.delay(2.3f, null);
+        VirtualActor.delay(2.3f, null);
     }
 
     @Override

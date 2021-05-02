@@ -1,4 +1,4 @@
-package com.shatteredpixel.shatteredpixeldungeon.expansion.utils;
+package com.shatteredpixel.shatteredpixeldungeon.custom.utils;
 
 import java.util.ArrayList;
 import java.util.Collection;

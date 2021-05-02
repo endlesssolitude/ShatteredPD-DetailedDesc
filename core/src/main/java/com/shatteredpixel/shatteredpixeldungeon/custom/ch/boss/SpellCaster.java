@@ -16,6 +16,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.BallisticaFloat;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.GME;
+import com.shatteredpixel.shatteredpixeldungeon.custom.utils.timing.VirtualTimer;
 import com.shatteredpixel.shatteredpixeldungeon.custom.visuals.effects.BeamCustom;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Effects;
@@ -304,6 +305,7 @@ public abstract class SpellCaster extends Mob {
                             }
                         } );
                         m.setSpeed(400f);
+                        VirtualTimer.countTime(10f, m::destroy);
                     }
                 }
                 detach();
@@ -446,7 +448,7 @@ public abstract class SpellCaster extends Mob {
                 return true;
             }
             protected void hitProc(Ballistica ballistica){
-                for(int i: ballistica.path) {
+                for(int i: ballistica.subPath(1, ballistica.dist)) {
                     Char ch = findChar(i);
                     if (ch != null) {
                         ch.sprite.centerEmitter().burst( PurpleParticle.BURST, 1 );
@@ -493,7 +495,7 @@ public abstract class SpellCaster extends Mob {
         }
 
         protected void hitProc(Ballistica ba){
-            for(int i: ba.path) {
+            for(int i: ba.subPath(1, ba.dist)) {
                 Char ch = findChar(i);
                 if (ch != null) {
                     ch.sprite.emitter().burst(Speck.factory(Speck.LIGHT), 6 );
@@ -543,7 +545,7 @@ public abstract class SpellCaster extends Mob {
                 return true;
             }
             protected void hitProc(Ballistica ballistica){
-                for(int i: ballistica.path) {
+                for(int i: ballistica.subPath(1, ballistica.dist)) {
                     Char ch = findChar(i);
                     if (ch != null) {
                         ch.sprite.emitter().burst(Speck.factory(Speck.LIGHT), 4 );
@@ -635,7 +637,7 @@ public abstract class SpellCaster extends Mob {
                 return true;
             }
             protected void hitProc(Ballistica ballistica){
-                for(int i: ballistica.path) {
+                for(int i: ballistica.subPath(1, ballistica.dist)) {
                     Char ch = findChar(i);
                     if (ch != null) {
                         CellEmitter.center(ch.pos).burst( BloodParticle.BURST, 1 );

@@ -8,7 +8,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Bat;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.RangeMap;
-import com.shatteredpixel.shatteredpixeldungeon.custom.visuals.DelayerEffect;
+import com.shatteredpixel.shatteredpixeldungeon.custom.utils.timing.VirtualActor;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEvasion;
@@ -107,7 +107,7 @@ public class BatH extends Bat {
             int p = toEvade.get(Random.Int(toEvade.size()));
             sprite.move(pos, p);
             sprite.showStatus(CharSprite.POSITIVE, defenseVerb());
-            DelayerEffect.delay(0.12f, true, this, ()->{
+            VirtualActor.delay(0.12f, true, this, ()->{
                 sprite.move(p, pos);
             });
             return true;

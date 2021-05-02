@@ -442,9 +442,9 @@ public class EnhancedPotion extends Item {
 
 
         private int brewLevel(float power){
-            if(power<0.75f) return 1;
-            if(power<2f) return Random.chances(new float[]{2f-power, power-0.75f})+1;
-            if(power<3f) return Random.chances(new float[]{3f-power, power-2f})+2;
+            if(power<1f) return 1;
+            if(power<2.33f) return Random.chances(new float[]{2.33f-power, power-1f})+1;
+            if(power<3f) return Random.chances(new float[]{3f-power, power-2.33f})+2;
             return 3;
         }
     }

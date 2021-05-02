@@ -29,11 +29,12 @@ public class MeteorFalling extends Weapon.Enchantment{
     @Override
     public int proc(Weapon weapon, Char attacker, Char defender, int damage) {
         if(--count<=0){
-            PotionFireEX.skyFire(defender.pos, Math.min(2f + 0.12f* weapon.buffedLvl(), 3.5f), attacker.sprite, ()->{
+            float radius =  Math.min(2f + 0.12f* weapon.buffedLvl(), 3.5f);
+            PotionFireEX.skyFire(defender.pos, radius, ()->{
                 for(Char ch: Actor.chars()){
                     if(ch.alignment != Char.Alignment.ALLY) {
-                        if (Dungeon.level.trueDistance(ch.pos, attacker.pos) <= 3f) {
-                            Buff.affect(ch, Burning.class).reignite(ch);
+                        if (Dungeon.level.trueDistance(ch.pos, attacker.pos) <= radius) {
+                            Buff.affect(ch, Burning.class);
                             ch.damage(Random.IntRange(8 + Dungeon.depth, 12 + Dungeon.depth * 2), this);
                         }
                     }
