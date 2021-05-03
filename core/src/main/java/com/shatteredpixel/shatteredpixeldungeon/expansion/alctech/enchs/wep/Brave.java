@@ -7,8 +7,8 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 public class Brave extends Weapon.Enchantment {
     @Override
     public int proc(Weapon weapon, Char attacker, Char defender, int damage) {
-        float missing = 1f - (float)attacker.HP / attacker.HT;
-        damage *= (1f + missing * missing * Math.min(0.5f + weapon.buffedLvl()*0.04f, 0.9f));
+        float missing = 1.15f - (float)attacker.HP / attacker.HT;
+        damage *= (1f + missing * missing * Math.min(0.4f + weapon.buffedLvl()*0.06f, 1f));
         return damage;
     }
 

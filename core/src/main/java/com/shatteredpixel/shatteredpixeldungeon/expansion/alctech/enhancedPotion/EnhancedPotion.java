@@ -204,7 +204,7 @@ public class EnhancedPotion extends Item {
     @Override
     public void doThrow( final Hero hero ) {
 
-        if (drinkOrThrow == THROW_PREFER) {
+        if (drinkOrThrow == DRINK_PREFER) {
 
             GameScene.show(
                     new WndOptions( M.L(Potion.class, "beneficial"),

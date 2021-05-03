@@ -12,7 +12,7 @@ import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
 public class MeteorFalling extends Weapon.Enchantment{
-    private int count = 6;
+    private int count = 4;
 
     @Override
     public void storeInBundle(Bundle bundle) {
@@ -29,18 +29,18 @@ public class MeteorFalling extends Weapon.Enchantment{
     @Override
     public int proc(Weapon weapon, Char attacker, Char defender, int damage) {
         if(--count<=0){
-            float radius =  Math.min(2f + 0.12f* weapon.buffedLvl(), 3.5f);
+            float radius =  Math.min(2f + 0.2f* weapon.buffedLvl(), 3.6f);
             PotionFireEX.skyFire(defender.pos, radius, ()->{
                 for(Char ch: Actor.chars()){
                     if(ch.alignment != Char.Alignment.ALLY) {
-                        if (Dungeon.level.trueDistance(ch.pos, attacker.pos) <= radius) {
-                            Buff.affect(ch, Burning.class);
-                            ch.damage(Random.IntRange(8 + Dungeon.depth, 12 + Dungeon.depth * 2), this);
+                        if (Dungeon.level.trueDistance(ch.pos, defender.pos) <= radius) {
+                            Buff.affect(ch, Burning.class).reignite(ch);
+                            ch.damage(Random.IntRange(10 + Dungeon.depth, 20 + Dungeon.depth * 7 / 3), this);
                         }
                     }
                 }
             });
-            count = 6;
+            count = 4;
         }
 
         return damage;

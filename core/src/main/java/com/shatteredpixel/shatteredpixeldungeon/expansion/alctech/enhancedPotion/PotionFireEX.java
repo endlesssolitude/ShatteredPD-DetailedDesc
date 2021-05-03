@@ -11,10 +11,10 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
-import com.shatteredpixel.shatteredpixeldungeon.custom.utils.timing.VirtualActor;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.FilterUtil;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.RangeMap;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.timing.RepeatedCallback;
+import com.shatteredpixel.shatteredpixeldungeon.custom.utils.timing.VirtualActor;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.timing.VirtualTimer;
 import com.shatteredpixel.shatteredpixeldungeon.custom.visuals.CellColorBlock;
 import com.shatteredpixel.shatteredpixeldungeon.custom.visuals.effects.BeamCustom;
@@ -97,7 +97,7 @@ public class PotionFireEX extends EnhancedPotion{
         int[] N2 = RangeMap.manhattanRing(cell, 0, 2);
 
         for(int i: N2){
-            Dungeon.hero.sprite.parent.add(new CellColorBlock(i, 0.6f, 0.1f, 0.2f, 0x80FFD467));
+            Dungeon.hero.sprite.parent.add(new CellColorBlock(i, 0.6f, 0.1f, 0.2f, 0x80FFD467, true));
             Char c = Actor.findChar(i);
             if(c!=null){
                 int damage = Random.NormalIntRange(7 + Dungeon.depth, 12 + Dungeon.depth*5/2);
@@ -124,7 +124,7 @@ public class PotionFireEX extends EnhancedPotion{
         int[] N2 = RangeMap.manhattanRing(cell, 0, 2);
         ArrayList<Integer> toExplode = new ArrayList<>();
         for(int i: N2){
-            Dungeon.hero.sprite.parent.add(new CellColorBlock(i, 0.6f, 0.15f, 0.2f, 0x80FF9762));
+            Dungeon.hero.sprite.parent.add(new CellColorBlock(i, 0.6f, 0.15f, 0.2f, 0x80FF9762, true));
             Char c = Actor.findChar(i);
             if(c!=null){
                 int damage = Random.NormalIntRange(10 + Dungeon.depth * 3 / 2, 15 + Dungeon.depth * 3);
@@ -151,7 +151,7 @@ public class PotionFireEX extends EnhancedPotion{
         }
     }
     protected void p3d(Hero h){
-        Buff.affect(h, FireRain.class).addLife(8);
+        Buff.affect(h, FireRain.class).addLife(7);
     }
     protected void n1(Hero h){
         Buff.affect(h, FireAura.class).set(FireAura.DURATION);
@@ -254,12 +254,12 @@ public class PotionFireEX extends EnhancedPotion{
                     ch.alignment == Char.Alignment.ENEMY && Dungeon.hero.fieldOfView[ch.pos]).toArray(new Char[0]);
             if(suitable.length == 0) return false;
             Char aimedChar = Random.oneOf(suitable);
-            skyFire(aimedChar.pos, 3f, ()-> {
+            skyFire(aimedChar.pos, 4.05f, ()-> {
                 for(Char ch: Actor.chars()){
                     if(ch.alignment != Char.Alignment.ALLY) {
-                        if (Dungeon.level.trueDistance(ch.pos, aimedChar.pos) <= 3f) {
+                        if (Dungeon.level.trueDistance(ch.pos, aimedChar.pos) <= 4.05f) {
                             Buff.affect(ch, Burning.class).reignite(ch);
-                            ch.damage(Random.IntRange(7 + Dungeon.depth, 12 + Dungeon.depth * 5 / 2), this);
+                            ch.damage(Random.IntRange(5 + Dungeon.depth * 3 / 2, 8 + Dungeon.depth * 5 / 2), this);
                         }
                     }
                 }
@@ -384,12 +384,12 @@ public class PotionFireEX extends EnhancedPotion{
 
         @Override
         protected int proc(Armor a, Char attacker, Char defender, int damage) {
-            skyFire(attacker.pos, 3.5f, ()->{
+            skyFire(attacker.pos, 4.05f, ()->{
                 for(Char ch: Actor.chars()){
                     if(ch.alignment != Char.Alignment.ALLY) {
-                        if (Dungeon.level.trueDistance(ch.pos, attacker.pos) <= 3.5f) {
+                        if (Dungeon.level.trueDistance(ch.pos, attacker.pos) <= 4.05f) {
                             Buff.affect(ch, Burning.class).reignite(ch);
-                            ch.damage(Random.IntRange(9 + Dungeon.depth * 3 / 2, 14 + Dungeon.depth * 2), this);
+                            ch.damage(Random.IntRange(7 + Dungeon.depth * 3 / 2, 11 + Dungeon.depth * 5 / 2), this);
                         }
                     }
                 }

@@ -1,7 +1,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.enchs;
 
-import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.enchs.armor.LastStanding;
-import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.enchs.wep.Brave;
+import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.enchs.armor.Igniting;
+import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.enchs.wep.MeteorFalling;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.InventoryScroll;
@@ -16,10 +16,10 @@ public class ScrollOfTestInch extends InventoryScroll {
     @Override
     protected void onItemSelected(Item item) {
         if(item instanceof Weapon){
-            ((Weapon) item).enchant(new Brave());
+            ((Weapon) item).enchant(new MeteorFalling());
         }
         if(item instanceof Armor){
-            ((Armor) item).inscribe(new LastStanding());
+            ((Armor) item).inscribe(new Igniting());
         }
     }
 }

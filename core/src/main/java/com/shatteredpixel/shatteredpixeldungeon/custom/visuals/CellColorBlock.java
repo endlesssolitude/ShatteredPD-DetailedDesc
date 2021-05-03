@@ -11,8 +11,9 @@ public class CellColorBlock extends Image {
     private float delay;
     private float fade;
     private float defAlpha;
+    private boolean lightmode;
 
-    public CellColorBlock( int pos, float maxAlpha, float staticTime, float fadeTime, int ARGB8888) {
+    public CellColorBlock( int pos, float maxAlpha, float staticTime, float fadeTime, int ARGB8888, boolean light) {
         super( TextureCache.createSolid( ARGB8888 ) );
 
         origin.set( 0.5f );
@@ -27,6 +28,7 @@ public class CellColorBlock extends Image {
         delay = staticTime + fadeTime;
         fade = fadeTime;
         defAlpha = maxAlpha;
+        lightmode = light;
     }
 
     @Override
@@ -44,7 +46,7 @@ public class CellColorBlock extends Image {
 
     @Override
     public void draw() {
-        Blending.setLightMode();
+        if(lightmode) Blending.setLightMode();
         super.draw();
         Blending.setNormalMode();
     }
