@@ -12,7 +12,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vulnerable;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
-import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.LloydsBeacon;
+import com.shatteredpixel.shatteredpixeldungeon.items.keys.GoldenKey;
+import com.shatteredpixel.shatteredpixeldungeon.items.keys.IronKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.SkeletonKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.GooBlob;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
@@ -33,7 +34,7 @@ import java.util.ArrayList;
 public class GooHard extends Boss{
     {
         initProperty();
-        initBaseStatus(3, 8, 14, 10, 120, 0, 2);
+        initBaseStatus(3, 8, 14, 10, 128, 0, 2);
         initStatus(20);
 
         properties.add(Property.DEMONIC);
@@ -254,7 +255,9 @@ public class GooHard extends Boss{
         Dungeon.level.unseal();
 
         GameScene.bossSlain();
+        Dungeon.level.drop( new IronKey( Dungeon.depth ), pos ).sprite.drop();
         Dungeon.level.drop( new SkeletonKey( Dungeon.depth ), pos ).sprite.drop();
+        Dungeon.level.drop( new GoldenKey( Dungeon.depth ), pos ).sprite.drop();
 
         //60% chance of 2 blobs, 30% chance of 3, 10% chance for 4. Average of 2.5
         int blobs = Random.chances(new float[]{5, 4, 3, 2, 1}) + 3;
@@ -265,8 +268,6 @@ public class GooHard extends Boss{
             } while (!Dungeon.level.passable[pos + ofs]);
             Dungeon.level.drop( new GooBlob(), pos + ofs ).sprite.drop();
         }
-
-        Dungeon.level.drop(new LloydsBeacon(), pos).sprite.drop();
 
         Badges.validateBossSlain();
 

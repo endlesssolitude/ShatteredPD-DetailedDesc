@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Imp;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Wandmaker;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.boss.HardDKLevel;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.boss.HardDM300Level;
+import com.shatteredpixel.shatteredpixeldungeon.custom.ch.boss.HardGooLevel;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.boss.HardTenguLevel;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.boss.YogRealLevel;
 import com.shatteredpixel.shatteredpixeldungeon.items.Ankh;
@@ -153,7 +154,7 @@ public class Dungeon {
 
 	}
 
-	public static long challenges;
+	public static int challenges;
 	public static int mobsToChampion;
 
 	public static Hero hero;
@@ -254,7 +255,8 @@ public class Dungeon {
 				level = new SewerLevel();
 				break;
 			case 5:
-				level = new SewerBossLevel();
+				if((Statistics.boss_enhance & 0x1) != 0) level = new HardGooLevel();
+				else level = new SewerBossLevel();
 				break;
 			case 6:
 			case 7:
@@ -263,7 +265,7 @@ public class Dungeon {
 				level = new PrisonLevel();
 				break;
 			case 10:
-				if(Dungeon.isChallenged(Challenges.ELITE_BOSSES_2)) level = new HardTenguLevel();
+				if((Statistics.boss_enhance & 0x2) != 0) level = new HardTenguLevel();
 				else level = new NewPrisonBossLevel();
 				break;
 			case 11:
@@ -273,7 +275,7 @@ public class Dungeon {
 				level = new CavesLevel();
 				break;
 			case 15:
-				if(Dungeon.isChallenged(Challenges.ELITE_BOSSES_3)) level = new HardDM300Level();
+				if((Statistics.boss_enhance & 0x4) != 0) level =  new HardDM300Level();
 				else level = new NewCavesBossLevel();
 				break;
 			case 16:
@@ -283,7 +285,7 @@ public class Dungeon {
 				level = new CityLevel();
 				break;
 			case 20:
-				if(Dungeon.isChallenged(Challenges.ELITE_BOSSES_4)) level = new HardDKLevel();
+				if((Statistics.boss_enhance & 0x8) != 0) level = new HardDKLevel();
 				else level = new NewCityBossLevel();
 				break;
 			case 21:
@@ -307,7 +309,7 @@ public class Dungeon {
 				level = new HallsLevel();
 				break;
 			case 25:
-				if(Dungeon.isChallenged(Challenges.ELITE_BOSSES_5)) level = new YogRealLevel();
+				if((Statistics.boss_enhance & 0x10) != 0) level = new YogRealLevel();
 				else level = new NewHallsBossLevel();
 				break;
 			case 26:
@@ -573,7 +575,7 @@ public class Dungeon {
 		quickslot.reset();
 		QuickSlotButton.reset();
 
-		Dungeon.challenges = bundle.getLong( CHALLENGES );
+		Dungeon.challenges = bundle.getInt( CHALLENGES );
 		Dungeon.mobsToChampion = bundle.getInt( MOBS_TO_CHAMPION );
 		
 		Dungeon.level = null;

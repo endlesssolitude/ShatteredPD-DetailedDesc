@@ -120,7 +120,7 @@ public class GamesInProgress {
 		}
 	}
 
-	public static void set(int slot, int depth, long challenges,
+	public static void set(int slot, int depth, int challenges,
 	                       Hero hero) {
 		Info info = new Info();
 		info.slot = slot;
@@ -157,7 +157,7 @@ public class GamesInProgress {
 		
 		public int depth;
 		public int version;
-		public long challenges;
+		public int challenges;
 		
 		public int level;
 		public int str;

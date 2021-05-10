@@ -25,7 +25,10 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.Statistics;
+import com.shatteredpixel.shatteredpixeldungeon.custom.ch.boss.BossTome;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.mimic.MimicScroll;
+import com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.EnemyTome;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.AlchemizeSimulator;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.BackpackCleaner;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.CustomWeapon;
@@ -318,6 +321,14 @@ public enum HeroClass {
 	}
 
 	private static void doChallengeSpawn(){
+		if(Dungeon.isChallenged(Challenges.ELITE_ENEMIES)){
+			new EnemyTome().collect();
+			//enable the first region by default
+			Statistics.elite_enemies = 1;
+		}
+		if(Dungeon.isChallenged(Challenges.ELITE_BOSSES)){
+			new BossTome().collect();
+		}
 		if(Dungeon.isChallenged(Challenges.EXPANSION_MISC)) {
 			new AlchemyEX().collect();
 		}

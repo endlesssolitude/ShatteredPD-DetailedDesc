@@ -196,7 +196,7 @@ public enum Rankings {
 
 		Statistics.restoreFromBundle(data.getBundle(STATS));
 		
-		Dungeon.challenges = data.getLong(CHALLENGES);
+		Dungeon.challenges = data.getInt(CHALLENGES);
 
 	}
 	

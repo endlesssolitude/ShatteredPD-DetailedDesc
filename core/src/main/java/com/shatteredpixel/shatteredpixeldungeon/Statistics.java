@@ -68,6 +68,8 @@ public class Statistics {
 		qualifiedForNoKilling = false;
 		
 		amuletObtained = false;
+
+		resetCustom();
 		
 	}
 	
@@ -111,6 +113,8 @@ public class Statistics {
 		bundle.put(NO_KILLING_QUALIFIED, qualifiedForNoKilling);
 		
 		bundle.put( AMULET,		amuletObtained );
+
+		storeCustom(bundle);
 	}
 	
 	public static void restoreFromBundle( Bundle bundle ) {
@@ -133,11 +137,31 @@ public class Statistics {
 		qualifiedForNoKilling = bundle.getBoolean( NO_KILLING_QUALIFIED );
 		
 		amuletObtained	= bundle.getBoolean( AMULET );
+
+		restoreCustom(bundle);
 	}
 	
 	public static void preview( GamesInProgress.Info info, Bundle bundle ){
 		info.goldCollected  = bundle.getInt( GOLD );
 		info.maxDepth       = bundle.getInt( DEEPEST );
+	}
+
+	public static int boss_enhance = 0;
+	public static int elite_enemies = 0;
+
+	private static void resetCustom(){
+		boss_enhance = 0;
+		elite_enemies = 0;
+	}
+
+	private static void storeCustom(Bundle b){
+		b.put("boss_enhance", boss_enhance);
+		b.put("elite_enemies", elite_enemies);
+	}
+
+	private static void restoreCustom(Bundle b){
+		boss_enhance = b.getInt("boss_enhance");
+		elite_enemies = b.getInt("elite_enemies");
 	}
 
 }

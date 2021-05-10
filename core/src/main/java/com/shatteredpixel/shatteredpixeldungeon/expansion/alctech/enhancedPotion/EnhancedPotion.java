@@ -42,7 +42,6 @@ import java.util.Map;
 //Actually maintaining 6 levels of potion is problematic......
 public class EnhancedPotion extends Item {
     protected static final float TIME_TO_DRINK = 1f;
-
     // NO another action
     protected static final int THROW_ONLY = 1;
     protected static final int DRINK_ONLY = 2;
@@ -59,7 +58,6 @@ public class EnhancedPotion extends Item {
     protected static final String AC_CHOOSE = "choose";
 
     protected int drinkOrThrow;
-
     protected int enhanceLevel;
 
     {

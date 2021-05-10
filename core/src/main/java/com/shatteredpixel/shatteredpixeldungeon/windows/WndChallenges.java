@@ -82,35 +82,25 @@ public class WndChallenges extends Window {
 
 		float pos = 0;
 
-		final int traditional_challenges = 0;
-		final int special_mode = 8;
-		final int additional_challenge = 9;
-		final int expansion = 20;
-
 		for (int i = 0; i < Challenges.NAME_IDS.length; i++) {
 
 			final String challenge = Challenges.NAME_IDS[i];
 
-			if(i==traditional_challenges || i==special_mode || i==additional_challenge || i==expansion){
+			if(i==0){
 				RenderedTextBlock block = PixelScene.renderTextBlock(10);
-				switch (i){
-					case traditional_challenges:
-						block.text(M.L(Challenges.class, "traditional"));
-						block.hardlight(TITLE_COLOR);
-						break;
-					case special_mode:
-						block.text(M.L(Challenges.class, "test"));
-						block.hardlight(0xFF00FF);
-						break;
-					case additional_challenge:
-						block.text(M.L(Challenges.class, "add"));
-						block.hardlight(0xFF4444);
-						break;
-					case expansion: default:
-						block.text(M.L(Challenges.class, "expansion"));
-						block.hardlight(0x55AAFF);
-						break;
-				}
+				block.text(M.L(Challenges.class, "traditional"));
+				block.hardlight(TITLE_COLOR);
+				block.setPos((WIDTH - block.width()) / 2,
+						pos + GAP *4);
+				PixelScene.align(block);
+				content.add(block);
+				pos += block.height() + 8*GAP;
+			}
+
+			if(Challenges.NAME_IDS[i].equals("test_mode")){
+				RenderedTextBlock block = PixelScene.renderTextBlock(10);
+				block.text(M.L(Challenges.class, "expansion"));
+				block.hardlight(0xFF00FF);
 				block.setPos((WIDTH - block.width()) / 2,
 						pos + GAP *4);
 				PixelScene.align(block);
@@ -147,7 +137,6 @@ public class WndChallenges extends Window {
 		}
 		content.setSize(WIDTH, (int) pos + GAP*2);
 		pane.scrollTo(0, 0);
-
 
 	}
 

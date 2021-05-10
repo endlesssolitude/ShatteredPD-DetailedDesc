@@ -21,10 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.sewerboss;
 
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Goo;
-import com.shatteredpixel.shatteredpixeldungeon.custom.ch.boss.GooHard;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
@@ -62,15 +59,10 @@ public class WalledGooRoom extends GooBossRoom {
 		
 		setupGooNest(level);
 
-		if(Dungeon.isChallenged(Challenges.ELITE_BOSSES_1)){
-			GooHard boss = new GooHard();
-			boss.pos = level.pointToCell(center());
-			level.mobs.add( boss );
-		}else{
 			Goo boss = new Goo();
 			boss.pos = level.pointToCell(center());
 			level.mobs.add( boss );
-		}
+
 	}
 	
 	@Override
