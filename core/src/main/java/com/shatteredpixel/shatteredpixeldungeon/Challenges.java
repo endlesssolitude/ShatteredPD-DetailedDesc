@@ -41,11 +41,11 @@ public class Challenges {
 	public static final int TEST_MODE			= 1<<8;
 	//hero.live for buff, mimic spawning
 	public static final int MIMIC_DUNGEON 		= 1<<15;
-	//Dungeon.newLevel, Hero.speed(for speed limit), Goo and Yog spawning
+	//Dungeon.newLevel, Hero.speed(for speed limit)
 	public static final int ELITE_BOSSES		= 1<<16;
 	public static final int ELITE_ENEMIES		= 1<<17;
 
-	public static final int EXPANSION_MISC		= 1<<18;
+	public static final int EXPANSION_ENCH = 1<<18;
 
 	public static final int MAX_VALUE           = (1<<19)-1;
 
@@ -64,7 +64,7 @@ public class Challenges {
 			"elite_bosses",
 			"elite_enemies",
 
-			"expansion_misc"
+			"expansion_ench"
 
 	};
 
@@ -75,7 +75,7 @@ public class Challenges {
 			ELITE_BOSSES,
 			ELITE_ENEMIES,
 
-			EXPANSION_MISC
+			EXPANSION_ENCH
 	};
 
 	public static int activeChallenges(){

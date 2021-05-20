@@ -1,4 +1,4 @@
-package com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.alchemy;
+package com.shatteredpixel.shatteredpixeldungeon.expansion.alchemy;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;

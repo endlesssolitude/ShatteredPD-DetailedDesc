@@ -1,6 +1,5 @@
-package com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.alchemy;
+package com.shatteredpixel.shatteredpixeldungeon.expansion.alchemy;
 
-import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.enhancedPotion.EnhancedPotion;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 
 import java.util.ArrayList;
@@ -11,11 +10,11 @@ public class RecipeLibrary {
     };
 
     private static CustomRecipe[] twoIngredientRecipes = new CustomRecipe[]{
-        new EnhancedPotion.EnhancedPotionAlter()
+            //new EnhancedPotion.EnhancedPotionAlter()
     };
 
     private static CustomRecipe[] threeIngredientRecipes = new CustomRecipe[]{
-            new EnhancedPotion.EnhancedPotionRecipe()
+            //new EnhancedPotion.EnhancedPotionRecipe()
     };
 
     public static CustomRecipe findRecipe(ArrayList<Item> ingredients){

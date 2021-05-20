@@ -25,10 +25,10 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.boss.BossTome;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.mimic.MimicScroll;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.EnemyTome;
+import com.shatteredpixel.shatteredpixeldungeon.custom.dict.DictBook;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.AlchemizeSimulator;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.BackpackCleaner;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.CustomWeapon;
@@ -47,10 +47,8 @@ import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.generator.TestMe
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.generator.TestMissile;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.generator.TestPotion;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.generator.TestRing;
-import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.alchemy.AlchemyEX;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.container.PotionBag;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.enchs.ScrollOfTestInch;
-import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.enhancedPotion.PotionHealingEX;
 import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
 import com.shatteredpixel.shatteredpixeldungeon.items.DewVial;
 import com.shatteredpixel.shatteredpixeldungeon.items.Dewdrop;
@@ -321,16 +319,15 @@ public enum HeroClass {
 	}
 
 	private static void doChallengeSpawn(){
+		new DictBook().collect();
 		if(Dungeon.isChallenged(Challenges.ELITE_ENEMIES)){
 			new EnemyTome().collect();
-			//enable the first region by default
-			Statistics.elite_enemies = 1;
 		}
 		if(Dungeon.isChallenged(Challenges.ELITE_BOSSES)){
 			new BossTome().collect();
 		}
-		if(Dungeon.isChallenged(Challenges.EXPANSION_MISC)) {
-			new AlchemyEX().collect();
+		if(Dungeon.isChallenged(Challenges.EXPANSION_ENCH)) {
+			//new AlchemyEX().collect();
 		}
 		if(Dungeon.isChallenged(Challenges.TEST_MODE)){
 			new WandOfScanningBeam().identify().collect();
@@ -391,20 +388,6 @@ public enum HeroClass {
 
 			new WandOfReflectDisintegration().identify().collect();
 
-			PotionHealingEX pfe1 = new PotionHealingEX();
-			pfe1.quantity(100);
-			pfe1.setLevel(-1);
-			pfe1.collect();
-
-			PotionHealingEX pfe2 = new PotionHealingEX();
-			pfe2.quantity(100);
-			pfe2.setLevel(-2);
-			pfe2.collect();
-
-			PotionHealingEX pfe3 = new PotionHealingEX();
-			pfe3.quantity(100);
-			pfe3.setLevel(-3);
-			pfe3.collect();
 			new ScrollOfTestInch().quantity(100).identify().collect();
 		}
 

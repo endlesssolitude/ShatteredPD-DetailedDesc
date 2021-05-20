@@ -1,4 +1,4 @@
-package com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.alchemy;
+package com.shatteredpixel.shatteredpixeldungeon.expansion.alchemy;
 
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -104,13 +104,5 @@ public abstract class CustomRecipe {
         }
 
     }
-
-
-
-    //*******
-    // Static members
-    //*******
-
-
 
 }

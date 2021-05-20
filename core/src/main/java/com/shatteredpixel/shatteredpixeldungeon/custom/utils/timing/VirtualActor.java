@@ -6,6 +6,8 @@ import com.watabou.noosa.Game;
 import com.watabou.noosa.Visual;
 import com.watabou.utils.Callback;
 
+import java.util.ArrayList;
+
 //used to lock thread temporarily, to keep current status instantly
 //so that we can stay at instant/fast visuals, or to custom freezing time.
 public class VirtualActor extends Visual {
@@ -108,6 +110,19 @@ public class VirtualActor extends Visual {
                 return false;
             }
         }, -1);
+    }
+    //kill all the delayer
+    public static void killAll(){
+        ArrayList<Actor> toRemove = new ArrayList<>();
+        for(Actor a: Actor.all()){
+            if(a instanceof Delayer){
+                toRemove.add(a);
+            }
+        }
+        for(Actor a: toRemove){
+            Actor.remove(a);
+            a.next();
+        }
     }
 
     public static abstract class Delayer extends Actor{

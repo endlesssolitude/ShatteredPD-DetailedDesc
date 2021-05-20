@@ -1,6 +1,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.enhancedPotion;
 
-import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.alchemy.CustomRecipe;
+import com.shatteredpixel.shatteredpixeldungeon.expansion.alchemy.CustomRecipe;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 
 import java.util.ArrayList;

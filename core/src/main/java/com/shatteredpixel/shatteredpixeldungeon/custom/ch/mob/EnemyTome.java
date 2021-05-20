@@ -53,10 +53,10 @@ public class EnemyTome extends Item{
         StringBuilder sb = new StringBuilder(M.L(EnemyTome.class, "desc"));
         for(int i=0; i<32;++i){
             if((Statistics.elite_enemies & (1<<i)) > 0){
+                sb.append('\n');
                 sb.append(5*i+1);
                 sb.append('~');
                 sb.append(5*i+5);
-                sb.append('\n');
             }
         }
         return sb.toString();

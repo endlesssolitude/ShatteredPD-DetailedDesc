@@ -52,9 +52,9 @@ public class BossTome extends Item {
     public String desc() {
         StringBuilder sb = new StringBuilder(M.L(BossTome.class, "desc"));
         for(int i=0; i<32;++i){
-            if((Statistics.elite_enemies & (1<<i)) > 0){
-                sb.append(5*i+5);
+            if((Statistics.boss_enhance & (1<<i)) > 0){
                 sb.append('\n');
+                sb.append(5*i+5);
             }
         }
         return sb.toString();

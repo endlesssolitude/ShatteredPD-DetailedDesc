@@ -107,20 +107,20 @@ public class MimicForChallenge extends Mimic {
     }
 
     public int type = 0;
-    protected static final int T_CHAOS = 0;
-    protected static final int T_ATTACK = 1;
-    protected static final int T_DEFEND = 2;
-    protected static final int T_TRICK = 3;
+    private static final int T_CHAOS = 0;
+    private static final int T_ATTACK = 1;
+    private static final int T_DEFEND = 2;
+    private static final int T_TRICK = 3;
 
     //BASIC attribute modification for mimic. Spawn one, occasionally two.
     //Mod level is between 0 and 7.
-    protected int basicModFactor = 0;
-    protected static final int BASE_HEALTH_MOVE = 0;
-    protected static final int BASE_ATTACK_MOVE = 3;
-    protected static final int BASE_EVASION_MOVE = 6;
-    protected static final int BASE_ACCURACY_MOVE = 9;
-    protected static final int BASE_MOVE_SPEED_MOVE = 12;
-    protected static final int BASE_ATTACK_SPEED_MOVE = 15;
+    private int basicModFactor = 0;
+    private static final int BASE_HEALTH_MOVE = 0;
+    private static final int BASE_ATTACK_MOVE = 3;
+    private static final int BASE_EVASION_MOVE = 6;
+    private static final int BASE_ACCURACY_MOVE = 9;
+    private static final int BASE_MOVE_SPEED_MOVE = 12;
+    private static final int BASE_ATTACK_SPEED_MOVE = 15;
 
     protected void createType(){
         type = Random.chances(new float[]{40f, 20f, 10f, 20f});
@@ -134,11 +134,11 @@ public class MimicForChallenge extends Mimic {
         return Random.chances(new float[]{7,7,5,5})+Math.min(4, Math.round(level/6));
     }
 
-    protected int maxBasicTags(){
+    private int maxBasicTags(){
         return 1;
     }
 
-    protected void createBasicModFactor(){
+    private void createBasicModFactor(){
         int maxMods = 1;
 
         int typeAbilityLevel = basicPerkModLevel();
@@ -243,13 +243,13 @@ public class MimicForChallenge extends Mimic {
     private static final int TRK_CHARGE_EATER = 12;
     private static final int TRK_THROW = 14;
 
-    protected int maxSpecialTags(){
+    private int maxSpecialTags(){
         if(level<5) return 1;
         else if(level<10) return 2;
         else return 3;
     }
     //We are much more offensive on distributing high-level perks to improve interest and difficulty, and provide richer reward in early run.
-    protected void createSpecialModFactor(){
+    private void createSpecialModFactor(){
 
         int reslevel = Random.chances(new float[]{50f - level, 30f - level/2, 20f + level/2, 10f + level});
         switch(Random.Int(3)){
@@ -310,11 +310,11 @@ public class MimicForChallenge extends Mimic {
         }
     }
 
-    private int perkLevel(){
+    protected int perkLevel(){
         return Random.chances(new float[]{60f - level, 45f - level / 2, 30f + level / 2, 20f + level});
     }
 
-    private int uniquePerkLevel(){
+    protected int uniquePerkLevel(){
         return Random.chances(new float[]{40f - level, 40f - level / 2, 40f + level / 2, 40f + level});
     }
 
@@ -750,14 +750,14 @@ public class MimicForChallenge extends Mimic {
         super.add(buff);
     }
 
-    protected float basicModPower(int level){
+    private float basicModPower(int level){
         if(level>0 && level<8){
             return 1f + level/14f + level*level / 98f;
         }
         return 1f;
     }
 
-    protected float specialModPower(int level){
+    private float specialModPower(int level){
         switch (level){
             case 0: default: return 1f;
             case 1: return 1.25f;

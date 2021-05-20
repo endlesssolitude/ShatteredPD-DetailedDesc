@@ -22,10 +22,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.windows;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.custom.dict.DictionaryJournal;
-import com.shatteredpixel.shatteredpixeldungeon.custom.dict.Dict;
-import com.shatteredpixel.shatteredpixeldungeon.custom.dict.DictSpriteSheet;
-import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClassArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
@@ -69,7 +65,6 @@ public class WndJournal extends WndTabbed {
     private AlchemyTab alchemyTab;
     private NotesTab notesTab;
     private CatalogTab catalogTab;
-    private DictTab dictTab;
 
     public static int last_index = 0;
 
@@ -99,11 +94,6 @@ public class WndJournal extends WndTabbed {
         catalogTab.setRect(0, 0, width, height);
         catalogTab.updateList();
 
-        dictTab = new DictTab();
-        add(dictTab);
-        dictTab.setRect(0, 0, width, height);
-        dictTab.updateList();
-
         Tab[] tabs = {
                 new IconTab(new ItemSprite(ItemSpriteSheet.GUIDE_PAGE, null)) {
                     protected void select(boolean value) {
@@ -131,13 +121,6 @@ public class WndJournal extends WndTabbed {
                         super.select(value);
                         catalogTab.active = catalogTab.visible = value;
                         if (value) last_index = 3;
-                    }
-                },
-                new IconTab(new ItemSprite(ItemSpriteSheet.ARTIFACT_SPELLBOOK, null)) {
-                    protected void select(boolean value) {
-                        super.select(value);
-                        dictTab.active = dictTab.visible = value;
-                        if (value) last_index = 4;
                     }
                 }
         };
@@ -777,164 +760,6 @@ public class WndJournal extends WndTabbed {
                 } else {
                     return false;
                 }
-            }
-        }
-
-    }
-
-    private static class DictTab extends Component {
-        private RedButton[] itemButtons;
-        private static final int NUM_BUTTONS = 10;
-
-        private static int currentItemIdx = 0;
-
-        //sprite locations
-        private static final int ARMORS_IDX = 0;
-        private static final int WEAPONS_IDX = 1;
-        private static final int WANDS_IDX = 2;
-        private static final int RINGS_IDX = 3;
-        private static final int ARTIFACTS_IDX = 4;
-        private static final int ALCHEMY_IDX = 5;
-        private static final int MOB_IDX = 6;
-        private static final int PLANTS_IDX = 7;
-        private static final int UNCLASSIFIED_IDX = 8;
-        private static final int DOCUMENTS_IDX = 9;
-
-        private static final int spriteIndexes[] = {2, 1, 4, 5, 6, 13, 0, 10, 0, 0};
-
-        private ScrollPane list;
-
-        private ArrayList<DictButton> items = new ArrayList<>();
-
-        @Override
-        protected void createChildren() {
-            itemButtons = new RedButton[NUM_BUTTONS];
-            for (int i = 0; i < NUM_BUTTONS; i++) {
-                final int idx = i;
-                itemButtons[i] = new RedButton("") {
-                    @Override
-                    protected void onClick() {
-                        currentItemIdx = idx;
-                        updateList();
-                    }
-                };
-                itemButtons[i].icon(new ItemSprite(ItemSpriteSheet.SOMETHING + spriteIndexes[i], null));
-                add(itemButtons[i]);
-            }
-
-            list = new ScrollPane(new Component()) {
-                @Override
-                public void onClick(float x, float y) {
-                    int size = items.size();
-                    for (int i = 0; i < size; i++) {
-                        if (items.get(i).onClick(x, y)) {
-                            break;
-                        }
-                    }
-                }
-            };
-            add(list);
-        }
-
-        @Override
-        protected void layout() {
-            super.layout();
-
-            int perRow = NUM_BUTTONS;
-            float buttonWidth = width() / perRow;
-
-            for (int i = 0; i < NUM_BUTTONS; i++) {
-                itemButtons[i].setRect((i % perRow) * (buttonWidth), (i / perRow) * (ITEM_HEIGHT),
-                        buttonWidth, ITEM_HEIGHT);
-                PixelScene.align(itemButtons[i]);
-            }
-
-            list.setRect(0, itemButtons[NUM_BUTTONS - 1].bottom() + 1, width,
-                    height - itemButtons[NUM_BUTTONS - 1].bottom() - 1);
-        }
-
-        private void updateList() {
-
-            items.clear();
-
-            for (int i = 0; i < NUM_BUTTONS; i++) {
-                if (i == currentItemIdx) {
-                    itemButtons[i].icon().color(TITLE_COLOR);
-                } else {
-                    itemButtons[i].icon().resetColor();
-                }
-            }
-
-            Component content = list.content();
-            content.clear();
-            list.scrollTo(0, 0);
-
-            ArrayList<String> keys;
-            ArrayList<Integer> imageSheets;
-            if (currentItemIdx == ARMORS_IDX) {
-                keys = new ArrayList<>(DictionaryJournal.ARMORS.keyList());
-                imageSheets = new ArrayList<>(DictionaryJournal.ARMORS.imageList());
-            } else if (currentItemIdx == ARTIFACTS_IDX) {
-                keys = new ArrayList<>(DictionaryJournal.ARTIFACTS.keyList());
-                imageSheets = new ArrayList<>(DictionaryJournal.ARTIFACTS.imageList());
-            } else if (currentItemIdx == WEAPONS_IDX) {
-                keys = new ArrayList<>(DictionaryJournal.WEAPONS.keyList());
-                imageSheets = new ArrayList<>(DictionaryJournal.WEAPONS.imageList());
-            } else if (currentItemIdx == RINGS_IDX) {
-                keys = new ArrayList<>(DictionaryJournal.RINGS.keyList());
-                imageSheets = new ArrayList<>(DictionaryJournal.RINGS.imageList());
-            } else if (currentItemIdx == ALCHEMY_IDX) {
-                keys = new ArrayList<>(DictionaryJournal.ALCHEMY.keyList());
-                imageSheets = new ArrayList<>(DictionaryJournal.ALCHEMY.imageList());
-            } else if (currentItemIdx == MOB_IDX) {
-                keys = new ArrayList<>(DictionaryJournal.MOBS.keyList());
-                imageSheets = new ArrayList<>(DictionaryJournal.MOBS.imageList());
-            } else if (currentItemIdx == PLANTS_IDX) {
-                keys = new ArrayList<>(DictionaryJournal.PLANTS.keyList());
-                imageSheets = new ArrayList<>(DictionaryJournal.PLANTS.imageList());
-            } else if (currentItemIdx == UNCLASSIFIED_IDX) {
-                keys = new ArrayList<>(DictionaryJournal.UNCLASSIFIED.keyList());
-                imageSheets = new ArrayList<>(DictionaryJournal.UNCLASSIFIED.imageList());
-            } else if (currentItemIdx == WANDS_IDX) {
-                keys = new ArrayList<>(DictionaryJournal.WANDS.keyList());
-                imageSheets = new ArrayList<>(DictionaryJournal.WANDS.imageList());
-            } else if (currentItemIdx == DOCUMENTS_IDX) {
-                keys = new ArrayList<>(DictionaryJournal.DOCUMENTS.keyList());
-                imageSheets = new ArrayList<>(DictionaryJournal.DOCUMENTS.imageList());
-            } else {
-                keys = new ArrayList<>();
-                imageSheets = new ArrayList<>();
-            }
-
-            float pos = 0;
-            for (int i = 0; i < keys.size(); i++) {
-                DictButton item = new DictButton(keys.get(i), imageSheets.get(i));
-                item.setRect(0, pos, width, ITEM_HEIGHT);
-                content.add(item);
-                items.add(item);
-
-                pos += item.height();
-            }
-
-            content.setSize(width, pos);
-            list.setSize(list.width(), list.height());
-        }
-
-        private static class DictButton extends ListItem {
-
-            private String k;
-
-            public DictButton(String key, int imageSheet) {
-                super(DictSpriteSheet.createImage(imageSheet), M.TL(Dict.class, key ));
-                this.k = key;
-            }
-
-            public boolean onClick(float x, float y) {
-                if (inside(x, y)) {
-                    GameScene.show(new WndTitledMessage(new Image(icon), M.TL(Dict.class, k ), M.L(Dict.class, k + "_d")));
-                    return true;
-                }
-                return false;
             }
         }
 
