@@ -47,8 +47,7 @@ import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.generator.TestMe
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.generator.TestMissile;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.generator.TestPotion;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.generator.TestRing;
-import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.container.PotionBag;
-import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.enchs.ScrollOfTestInch;
+import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.baseclasses.Enchanter;
 import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
 import com.shatteredpixel.shatteredpixeldungeon.items.DewVial;
 import com.shatteredpixel.shatteredpixeldungeon.items.Dewdrop;
@@ -328,6 +327,7 @@ public enum HeroClass {
 		}
 		if(Dungeon.isChallenged(Challenges.EXPANSION_ENCH)) {
 			//new AlchemyEX().collect();
+			new Enchanter().collect();
 		}
 		if(Dungeon.isChallenged(Challenges.TEST_MODE)){
 			new WandOfScanningBeam().identify().collect();
@@ -342,6 +342,8 @@ public enum HeroClass {
 			CustomWeapon customWeapon = new CustomWeapon();
 			customWeapon.adjustStatus();
 			customWeapon.identify().collect();
+
+			new TestBag().collect();
 
 			new TrapPlacer().collect();
 
@@ -363,9 +365,7 @@ public enum HeroClass {
 			new TestMissile().collect();
 			new TestRing().collect();
 			new TestPotion().collect();
-
-			new TestBag().collect();
-			new PotionBag().collect();
+			//new PotionBag().collect();
 
 			new ScrollHolder().collect();
 			Dungeon.LimitedDrops.SCROLL_HOLDER.drop();
@@ -388,7 +388,7 @@ public enum HeroClass {
 
 			new WandOfReflectDisintegration().identify().collect();
 
-			new ScrollOfTestInch().quantity(100).identify().collect();
+			//new ScrollOfTestInch().quantity(100).identify().collect();
 		}
 
 		if(Dungeon.isChallenged(Challenges.MIMIC_DUNGEON)){

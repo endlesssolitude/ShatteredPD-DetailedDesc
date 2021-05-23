@@ -32,7 +32,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Momentum;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
-import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.mergeManagers.VirtualEnchantment;
 import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
 import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -424,7 +423,7 @@ public class Armor extends EquipableItem {
 			}
 		}
 
-		damage = VirtualEnchantment.INSTANCE.defenseProc(this, attacker, defender, damage);
+		//damage = VirtualEnchantment.INSTANCE.defenseProc(this, attacker, defender, damage);
 		
 		return damage;
 	}

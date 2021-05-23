@@ -101,8 +101,6 @@ public class DM300Hard extends Boss{
         return super.speed() * (0.6f + phase*0.05f);
     }
 
-
-
     protected void goOnPhase(){
         phase++;
         CellEmitter.center(pos).burst(BlastParticle.FACTORY, 30);
@@ -162,7 +160,6 @@ public class DM300Hard extends Boss{
 
     @Override
     public void move(int step) {
-        //if(buff(RageAndFire.class)!=null) return;
 
         super.move(step);
 
@@ -179,7 +176,6 @@ public class DM300Hard extends Boss{
 
             Buff.affect(this, Barrier.class).setShield( 30 );
 
-            //summonCaster(Random.Int(4));
             summonCD -= 32f;
 
         }
@@ -206,7 +202,6 @@ public class DM300Hard extends Boss{
             yell(Messages.get(this, "notice"));
         }
         if(buff(RageAndFire.class)!=null) damage = Math.round(damage*0.1f);
-        damage = Math.round(damage*Math.max(1f-0.08f*aliveCasters()[1], 0.5f));
 
         int preHP = HP;
         super.damage(damage, src);

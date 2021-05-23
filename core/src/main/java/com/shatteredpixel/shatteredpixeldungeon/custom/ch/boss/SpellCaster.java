@@ -214,11 +214,11 @@ public abstract class SpellCaster extends Mob {
         }
     }
  */
-    //modifier works 130% efficiently to adjust difficulty
+    //modifier works 115% efficiently to adjust difficulty
     public static void zapDamage(Char ch, int min, int max, float modifier, Object src){
         int damage = Random.IntRange(min, max);
         if(ch.buff(Marked.class)!=null){
-            damage = Math.round(damage*(1f+modifier*1.3f));
+            damage = Math.round(damage*(1f+modifier*1.15f));
         }
         ch.damage(damage, src);
         if(ch == Dungeon.hero && !ch.isAlive()){

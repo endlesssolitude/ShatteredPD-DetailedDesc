@@ -1,4 +1,4 @@
-package com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.mergeManagers;
+package com.shatteredpixel.shatteredpixeldungeon.expansion.mergeManagers;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;

@@ -11,6 +11,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Charm;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Degrade;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Frost;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Light;
@@ -21,6 +22,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.RipperDemon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Scorpio;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Succubus;
 import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.BallisticaReal;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.HitBack;
@@ -200,6 +203,8 @@ public class YogReal extends Boss{
         if(phase>0) {
             --beamCD;
             if (beamCD <= 0) {
+                Buff.detach(this, YogScanHalf.class);
+                Buff.detach(this, YogScanRound.class);
                 int skill  = Random.chances(skillBalance);
                 if (skill == 0) {
                     Char enemy = (this.enemy == null ? this.enemy : Dungeon.hero);
@@ -268,6 +273,10 @@ public class YogReal extends Boss{
         }
 
     }
+    // 6, 9, 12 enemies on destroy.
+    private static final int[] destroySummon_1 = {3, 2, 1};
+    private static final int[] destroySummon_2 = {3, 3, 3};
+    private static final int[] destroySummon_3 = {0, 6, 6};
 
     private void actDestroy(){
         if(findFist() == null && phase > destroyed + 1 && phase <= 4) {
@@ -286,20 +295,33 @@ public class YogReal extends Boss{
                 }
             }
             Random.shuffle(toDestroy);
-            //2, 5, 8!
-            int targetSummon = phase * 3 - 4;
+            int[] toSummon = phase <= 2? destroySummon_1 : (phase <=3 ? destroySummon_2 : destroySummon_3);
+            int willSummon = 0;
+            for(int i:toSummon){
+                willSummon += i;
+            }
             int total = toDestroy.size();
             for (int i : toDestroy) {
-                if (Random.Float()<(float)(targetSummon/total)) {
-                    YogRealRipper yr = new YogRealRipper();
-                    yr.pos = i;
-                    yr.state = yr.HUNTING;
-                    GameScene.add(yr, 2f);
-                    CellEmitter.get(i).start(ElmoParticle.FACTORY, 0.08f, 30);
-                    --targetSummon;
+                if (Random.Float()<(float)(willSummon/total)) {
+                    int roll = Random.Int(willSummon);
+                    int cat = 0;
+                    for(int j=0;j<toSummon.length;++j){
+                        if(roll>=toSummon[j]){
+                            roll -= toSummon[j];
+                            ++cat;
+                        }else{
+                            break;
+                        }
+                    }
+                    Mob summoning = cat == 0? new YogRealRipper(): (cat == 1? new YogRealSuccubus(): new YogRealScorpio());
+                    summoning.pos = i;
+                    summoning.state = summoning.HUNTING;
+                    GameScene.add(summoning, 2f);
+                    CellEmitter.get(i).start(ElmoParticle.FACTORY, 0.08f, 40);
+                    --willSummon;
+                    --toSummon[Math.min(cat, toSummon.length-1)];
                 }
-                CellEmitter.get(i).burst(ElmoParticle.FACTORY, 18);
-
+                CellEmitter.get(i).burst(ElmoParticle.FACTORY, 10);
                 --total;
             }
             GLog.w(M.L(this, "destroy_tile"));
@@ -324,9 +346,7 @@ public class YogReal extends Boss{
 
     @Override
     protected boolean act() {
-        actScanning();
-        actSummon();
-        actDestroy();
+
         //char logic
         if (fieldOfView == null || fieldOfView.length != Dungeon.level.length()){
             fieldOfView = new boolean[Dungeon.level.length()];
@@ -343,6 +363,10 @@ public class YogReal extends Boss{
         enemySeen = enemy != null && enemy.isAlive() && fieldOfView[enemy.pos] && enemy.invisible <= 0;
         //end of char/mob logic
 
+        actScanning();
+        actSummon();
+        actDestroy();
+
         if (phase == 0){
             if (Dungeon.hero.viewDistance >= Dungeon.level.distance(pos, Dungeon.hero.pos)) {
                 Dungeon.observe();
@@ -356,6 +380,9 @@ public class YogReal extends Boss{
             yell(Messages.get(this, "hope"));
             summonCD = -20;
             phase = 5;
+            regularSummons.add(YogRealRipper.class);
+            regularSummons.add(Larva.class);
+            regularSummons.add(YogRealRipper.class);
         }
 
         spend(TICK);
@@ -493,7 +520,6 @@ public class YogReal extends Boss{
         Collections.addAll(regularSummons, b.getClassArray("REGULAR_SUMMONS"));
         if(phase>0) BossHealthBar.assignBoss(this);
         if (HP < 600) BossHealthBar.bleed(true);
-
     }
 
 
@@ -503,7 +529,7 @@ public class YogReal extends Boss{
         {
             spriteClass = LarvaSprite.class;
 
-            HP = HT = 24;
+            HP = HT = 30;
             defenseSkill = 16;
             viewDistance = Light.DISTANCE;
 
@@ -512,21 +538,22 @@ public class YogReal extends Boss{
 
             properties.add(Property.DEMONIC);
 
+            immunities.add(Corruption.class);
         }
 
         @Override
         public int attackSkill( Char target ) {
-            return 30;
+            return 50;
         }
 
         @Override
         public int damageRoll(){
-            return Random.NormalIntRange(16, 26);
+            return Random.NormalIntRange(22, 34);
         }
 
         @Override
         public int drRoll() {
-            return Random.NormalIntRange(0, 4);
+            return Random.NormalIntRange(0, 6);
         }
 
         @Override
@@ -550,6 +577,33 @@ public class YogReal extends Boss{
         }
     }
 
+    public static class YogRealScorpio extends Scorpio {
+        {
+            maxLvl = -999;
+            viewDistance = 11;
+        }
+        @Override
+        public void damage(int dmg, Object src){
+            if(Dungeon.level.distance(pos, YogRealLevel.CENTER)<=4){
+                dmg = Math.max(dmg/6, 2);
+            }
+            super.damage(dmg, src);
+        }
+    }
+
+    public static class YogRealSuccubus extends Succubus {
+        {
+            maxLvl = -999;
+            viewDistance = 12;
+        }
+        @Override
+        public void damage(int dmg, Object src){
+            if(Dungeon.level.distance(pos, YogRealLevel.CENTER)<=4){
+                dmg = Math.max(dmg/6, 2);
+            }
+            super.damage(dmg, src);
+        }
+    }
 
 
     public static class YogScanHalf extends Buff implements ScanningBeam.OnCollide{
@@ -719,8 +773,10 @@ public class YogReal extends Boss{
         }
 
         public void renderWarn(){
-            target.sprite.parent.add(new SpreadWave().setPos(DungeonTilemap.tileCenterToWorld(center)
-                        ).set(36, 1f, 0xCCCCCC, null));
+            //SpreadRingImage.blast(10, 0.2f, 0.4f, 0xCCCCCC, 1f,
+             //       DungeonTilemap.tileCenterToWorld(center), null);
+            SpreadWave.blast(target.sprite.center(), 32, 1f, 0xCCCCCC, null);
+            //target.sprite.parent.add(new RingImage(5*DungeonTilemap.SIZE, 0.5f, 1f, 0xAAAAAA).setPoint(target.sprite.center()));
         }
 
         public void renderSkill(){
@@ -843,7 +899,7 @@ public class YogReal extends Boss{
 
         private void findTarget(){
             lastAim = aim;
-            //I can't get enemy for target!
+            //I can't get char.enemy from target, it's protected!
             aim = Dungeon.hero.pos;
         }
 

@@ -1,4 +1,4 @@
-package com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.attack;
+package com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
@@ -14,7 +14,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.BlastParticle;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.enhancedPotion.PotionFireEX;
-import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.baseclasses.CountEnchantment;
+import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.baseclasses.CountInscription;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.watabou.glwrap.Blending;
@@ -27,7 +27,7 @@ import com.watabou.utils.Callback;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
 
-public class Meteor extends CountEnchantment {
+public class Meteor extends CountInscription {
     {
         defaultTriggers = 50;
     }
@@ -35,7 +35,7 @@ public class Meteor extends CountEnchantment {
     private int count = 4;
 
     @Override
-    protected int myProc(Weapon w, Char attacker, Char defender, int damage) {
+    public int proc(Weapon w, Char attacker, Char defender, int damage) {
         if(--count<=0){
             float radius =  Math.min(2f + 0.2f* w.buffedLvl(), 3.6f);
             skyFire(defender.pos, radius, ()->{
@@ -43,19 +43,20 @@ public class Meteor extends CountEnchantment {
                     if(ch.alignment != Char.Alignment.ALLY) {
                         if (Dungeon.level.trueDistance(ch.pos, defender.pos) <= radius) {
                             Buff.affect(ch, Burning.class).reignite(ch);
-                            ch.damage(Random.IntRange(10 + Dungeon.depth, 20 + Dungeon.depth * 7 / 3), this);
+                            ch.damage(Random.IntRange(4 + Dungeon.depth, 8 + Dungeon.depth * 7 / 3), this);
                         }
                     }
                 }
             });
             count = 4;
         }
+        consume(weapon, attacker);
         return damage;
     }
 
     @Override
-    public void detach(Weapon w, Char attacker) {
-        super.detach(w, attacker);
+    public void useUp(Weapon w, Char attacker) {
+        super.useUp(w, attacker);
         int[] map = RangeMap.centeredRect(attacker.pos, 4, 4);
         RepeatedCallback.executeChain(0.2f, Math.min(10 + w.buffedLvl()/2, 20), () -> {
             final int targetCell = map[Random.Int(map.length)];
@@ -64,17 +65,12 @@ public class Meteor extends CountEnchantment {
                 for (Char ch : Actor.chars()) {
                     if (ch.alignment != Char.Alignment.ALLY) {
                         if (Dungeon.level.trueDistance(ch.pos, targetCell) <= radius) {
-                            ch.damage(Random.IntRange(4+Dungeon.depth/2, 8+Dungeon.depth), this);
+                            ch.damage(Random.IntRange(3+Dungeon.depth/2, 6+Dungeon.depth), this);
                         }
                     }
                 }
             });
         });
-    }
-
-    @Override
-    protected int Color() {
-        return 0xFF9812;
     }
 
     @Override

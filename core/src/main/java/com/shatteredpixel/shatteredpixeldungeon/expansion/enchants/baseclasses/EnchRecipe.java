@@ -1,46 +1,34 @@
 package com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.baseclasses;
 
-import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.attack.Meteor;
-import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
+import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.Meteor;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
-import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor.Glyph;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlame;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.InfernalBrew;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon.Enchantment;
 import com.watabou.utils.Reflection;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-//Enchantment and Glyph are actually the same thing but, they are designed differently. WTF.
 public enum EnchRecipe{
-    METEOR(true, Meteor.class, InfernalBrew.class, PotionOfLiquidFlame.class);
+    METEOR(Meteor.class, 80, InfernalBrew.class, PotionOfLiquidFlame.class);
 
     public ArrayList<Class<? extends Item>> input = new ArrayList<>();
-    public Class<? extends Enchantment> ench;
-    public Class<? extends Glyph> glyph;
-    public boolean isEnch = false;
+    public Class<? extends Inscription> inscription;
+    public int triggers=0;
 
     //the first boolean is never used, but it can distinguish the constructors because wild class is "the same".
-    EnchRecipe(boolean noUse, Class<? extends Enchantment> ench, Class<? extends Item>... in){
-        this.ench = ench;
+    EnchRecipe(Class<? extends Inscription> ench, int triggers, Class<? extends Item>... in){
+        this.inscription = ench;
         this.input.addAll(Arrays.asList(in));
-        isEnch = true;
-    }
-    EnchRecipe(Class<? extends Glyph> glyph, Class<? extends Item>... in){
-        this.glyph = glyph;
-        this.input.addAll(Arrays.asList(in));
-        isEnch = false;
+        this.triggers = triggers;
     }
 
     public static final int last_enchant_index = 1;
     //find a corresponding recipe and return it, or return null.
-    public static EnchRecipe searchForRecipe(boolean isEnchantment, Class<? extends Item>... in){
+    public static EnchRecipe searchForRecipe(ArrayList<Class<? extends Item>> in){
         for(EnchRecipe recipe: EnchRecipe.values()) {
-            if(isEnchantment != recipe.isEnch) continue;
-            if(in.length<recipe.input.size()) continue;
+            if(in.size()<recipe.input.size()) continue;
             boolean contain=true;
             for (Class<? extends Item> itemClass : in) {
                 if(!recipe.input.contains(itemClass)){
@@ -55,17 +43,19 @@ public enum EnchRecipe{
         return null;
     }
     //simply enchant
-    public static boolean enchant(EquipableItem toEnchant, EnchRecipe recipe){
-        boolean enchant = false;
-        if(toEnchant instanceof Weapon){
-            ((Weapon) toEnchant).enchant(Reflection.newInstance(recipe.ench));
-            enchant = true;
+    public static boolean enchant(Weapon toEnchant, EnchRecipe recipe){
+        Inscription inscription = Reflection.newInstance(recipe.inscription);
+        if(inscription == null){
+            return false;
         }
-        if(toEnchant instanceof Armor){
-            ((Armor) toEnchant).inscribe(Reflection.newInstance(recipe.glyph));
-            enchant = true;
+        if(inscription instanceof CountInscription){
+            ((CountInscription) inscription).setTriggers(recipe.triggers);
         }
-        return enchant;
+        if(toEnchant.inscription != null){
+            toEnchant.inscription.detachFromWeapon();
+        }
+        inscription.attachToWeapon(toEnchant);
+        return true;
     }
 
 }

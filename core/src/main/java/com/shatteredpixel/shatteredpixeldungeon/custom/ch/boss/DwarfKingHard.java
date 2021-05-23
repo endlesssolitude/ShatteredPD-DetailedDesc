@@ -27,17 +27,16 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ElmoParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SparkParticle;
+import com.shatteredpixel.shatteredpixeldungeon.items.Ankh;
 import com.shatteredpixel.shatteredpixeldungeon.items.ArmorKit;
-import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.LloydsBeacon;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHaste;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfToxicGas;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCorruption;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -472,6 +471,8 @@ public class DwarfKingHard extends Boss{
 
         super.die( cause );
 
+        int dropPos = this.pos;
+
         if (Dungeon.level.solid[pos]){
             Heap h = Dungeon.level.heaps.get(pos);
             if (h != null) {
@@ -480,18 +481,18 @@ public class DwarfKingHard extends Boss{
                 }
                 h.destroy();
             }
-            Dungeon.level.drop(new ArmorKit(), pos + Dungeon.level.width()).sprite.drop(pos);
-            Dungeon.level.drop(new Gold().quantity(Random.Int(2400, 3600)), pos + Dungeon.level.width()).sprite.drop(pos);
-            Dungeon.level.drop(new PotionOfHaste().quantity(3), pos + Dungeon.level.width()).sprite.drop(pos);
-            Dungeon.level.drop(new ScrollOfRecharging().quantity(3), pos + Dungeon.level.width()).sprite.drop(pos);
-            Dungeon.level.drop(new PotionOfToxicGas().quantity(3), pos + Dungeon.level.width()).sprite.drop(pos);
-        } else {
-            Dungeon.level.drop(new ArmorKit(), pos).sprite.drop();
-            Dungeon.level.drop(new Gold().quantity(Random.Int(2400, 3600)), pos).sprite.drop(pos);
-            Dungeon.level.drop(new PotionOfHaste().quantity(3), pos).sprite.drop(pos);
-            Dungeon.level.drop(new ScrollOfRecharging().quantity(3), pos).sprite.drop(pos);
-            Dungeon.level.drop(new PotionOfToxicGas().quantity(3), pos).sprite.drop(pos);
+            dropPos = pos + Dungeon.level.width();
         }
+
+        WandOfCorruption woc = new WandOfCorruption();
+        woc.level(3);
+        woc.identify();
+        Dungeon.level.drop(woc, dropPos).sprite.drop();
+        Dungeon.level.drop(new ArmorKit(), dropPos).sprite.drop();
+        Dungeon.level.drop(new ScrollOfRecharging().quantity(3),  dropPos).sprite.drop(pos);
+        Ankh ankh = new Ankh();
+        ankh.bless();
+        Dungeon.level.drop(ankh, dropPos).sprite.drop(pos);
 
         Badges.validateBossSlain();
 
@@ -838,19 +839,19 @@ public class DwarfKingHard extends Boss{
             summonSubject(2, DKGhoul.class);
             summonSubject(3, DKGhoul.class);
             ++wave;
-            spend(TICK*10);
+            spend(TICK*9);
         }else if(wave == 1){
             summonSubject(1, DKGhoul.class);
             summonSubject(5, DKMonk.class);
             ++wave;
-            spend(TICK*14);
+            spend(TICK*12);
         }else if(wave == 2){
             summonSubject(1, DKGhoul.class);
             summonSubject(2, DKWarlock.class);
             summonSubject(6, DKGhoul.class);
             summonSubject(6, DKGhoul.class);
             ++wave;
-            spend(TICK*17);
+            spend(TICK*15);
         }else if(wave == 3){
             yell(Messages.get(this, "wave_2"));
             summonSubject(1, DKGhoul.class);
@@ -858,14 +859,14 @@ public class DwarfKingHard extends Boss{
             summonSubject(2, DKGhoul.class);
             summonSubject(11, DKMonk.class);
             ++wave;
-            spend(TICK*16);
+            spend(TICK*15);
         }else if(wave == 4){
             summonSubject(2, DKGhoul.class);
             summonSubject(5, DKWarlock.class);
             summonSubject(5, DKMonk.class);
             summonSubject(2, DKGhoul.class);
             ++wave;
-            spend(TICK*15);
+            spend(TICK*14);
         }else if(wave == 5){
             yell(Messages.get(this,"wave_3"));
             summonSubject(2, DKGhoul.class);
@@ -873,18 +874,18 @@ public class DwarfKingHard extends Boss{
             summonSubject(4, DKMonk.class);
             summonSubject(8, DKMonk.class);
             ++wave;
-            spend(TICK*14);
+            spend(TICK*13);
         }else if(wave == 6){
             summonSubject(3, DKWarlock.class);
             summonSubject(3, DKMonk.class);
             summonSubject(3, DKMonk.class);
             summonSubject(3, DKWarlock.class);
             ++wave;
-            spend(TICK*13);
+            spend(TICK*12);
         }else{
             //only need to kill one.
             summonSubject(3, DKWarlock.class);
-            spend(TICK*3);
+            spend(TICK);
         }
     }
 

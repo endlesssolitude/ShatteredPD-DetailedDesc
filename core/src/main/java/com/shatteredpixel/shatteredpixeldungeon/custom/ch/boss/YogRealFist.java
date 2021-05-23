@@ -76,6 +76,10 @@ public abstract class YogRealFist extends Mob {
     @Override
     protected boolean act() {
         if (paralysed <= 0 && rangedCooldown > 0) rangedCooldown--;
+        boolean beckon = false;
+        if(enemy==null) beckon=true;
+        else if(fieldOfView[enemy.pos]) beckon=true;
+        if(beckon) beckon(Dungeon.hero.pos);
         return super.act();
     }
 

@@ -151,7 +151,6 @@ public class TestPotion extends TestGenerator {
     private int cateSelected = 0;
     private int item_quantity = 1;
     private int selected = 0;
-    private int upgrade_left = 20;
     private boolean multiply = false;
 
 
@@ -192,7 +191,6 @@ public class TestPotion extends TestGenerator {
         super.storeInBundle(bundle);
         bundle.put("item_quantity", item_quantity);
         bundle.put("selected", selected);
-        bundle.put("upgrade_left", upgrade_left);
         bundle.put("multiply", multiply);
         bundle.put("cate_selected", cateSelected);
     }
@@ -202,7 +200,6 @@ public class TestPotion extends TestGenerator {
         super.restoreFromBundle(bundle);
         item_quantity = bundle.getInt("item_quantity");
         selected = bundle.getInt("selected");
-        upgrade_left = bundle.getInt("upgrade_left");
         multiply = bundle.getBoolean("multiply");
         cateSelected = bundle.getInt("cate_selected");
     }

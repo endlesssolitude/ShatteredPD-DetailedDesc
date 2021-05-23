@@ -28,7 +28,6 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.BlastParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FlameParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SmokeParticle;
-import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.TomeOfMastery;
@@ -39,6 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfBlink;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Shuriken;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -204,8 +204,10 @@ public class TenguHard extends Boss{
             Dungeon.level.drop( new TomeOfMastery(), pos ).sprite.drop();
         }
 
-        Dungeon.level.drop(new Gold().quantity(Random.Int(1000,1400)), pos).sprite.drop();
-        Dungeon.level.drop(new Bomb().quantity(Random.Int(5, 9)), pos ).sprite.drop();
+        Shuriken sh = new Shuriken();
+        sh.level(3);
+        Dungeon.level.drop(sh.identify(), pos).sprite.drop();
+        Dungeon.level.drop(new Bomb().quantity(Random.Int(3, 6)), pos ).sprite.drop();
         Dungeon.level.drop(new StoneOfBlink().quantity(3), pos).sprite.drop();
 
         GameScene.bossSlain();

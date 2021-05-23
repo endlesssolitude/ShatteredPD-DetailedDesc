@@ -95,10 +95,10 @@ public class GooHard extends Boss{
             }
             HP++;
             if(surroundingWater() > 7){
-                HP += 2;
+                HP += 3;
             }
 
-            sprite.emitter().burst( Speck.factory( Speck.HEALING ), surroundingWater() > 7 ? 3:1 );
+            sprite.emitter().burst( Speck.factory( Speck.HEALING ), surroundingWater() > 7 ? 4:1 );
         }
 
         if (state != SLEEPING){

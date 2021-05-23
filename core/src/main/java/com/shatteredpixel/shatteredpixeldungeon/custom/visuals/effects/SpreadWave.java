@@ -29,6 +29,7 @@ public class SpreadWave extends Image {
         c = color;
         callback = cb;
         this.time = time;
+        scale.set(0);
         return this;
     }
 

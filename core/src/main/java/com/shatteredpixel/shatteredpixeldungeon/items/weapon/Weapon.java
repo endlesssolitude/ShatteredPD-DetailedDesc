@@ -28,7 +28,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Berserk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
-import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.mergeManagers.VirtualEnchantment;
+import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.baseclasses.Inscription;
+import com.shatteredpixel.shatteredpixeldungeon.expansion.mergeManagers.VirtualEnchantment;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfFuror;
@@ -100,6 +101,8 @@ abstract public class Weapon extends KindOfWeapon {
 	
 	public Enchantment enchantment;
 	public boolean curseInfusionBonus = false;
+
+	public Inscription inscription;
 	
 	@Override
 	public int proc( Char attacker, Char defender, int damage ) {
@@ -120,6 +123,7 @@ abstract public class Weapon extends KindOfWeapon {
 		}
 
 		damage = VirtualEnchantment.INSTANCE.attackProc(this, attacker, defender, damage);
+		if(inscription != null) damage = inscription.proc(this, attacker, defender, damage);
 
 		return damage;
 	}
@@ -146,6 +150,8 @@ abstract public class Weapon extends KindOfWeapon {
 		bundle.put( ENCHANTMENT, enchantment );
 		bundle.put( CURSE_INFUSION_BONUS, curseInfusionBonus );
 		bundle.put( AUGMENT, augment );
+
+		bundle.put("Inscription_for_weapon", inscription);
 	}
 	
 	@Override
@@ -157,6 +163,9 @@ abstract public class Weapon extends KindOfWeapon {
 		curseInfusionBonus = bundle.getBoolean( CURSE_INFUSION_BONUS );
 
 		augment = bundle.getEnum(AUGMENT, Augment.class);
+
+		inscription = (Inscription) bundle.get("Inscription_for_weapon");
+		if(inscription != null) inscription.attachToWeapon(this);
 	}
 	
 	@Override
