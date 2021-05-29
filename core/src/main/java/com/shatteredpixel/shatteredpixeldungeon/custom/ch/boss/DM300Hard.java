@@ -36,8 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.SkeletonKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.MetalShard;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -241,8 +240,7 @@ public class DM300Hard extends Boss{
         Dungeon.level.drop(new Gold().quantity(Random.Int(1800, 2400)), pos).sprite.drop();
         Dungeon.level.drop(new MetalShard().quantity(Random.Int(4, 7)), pos).sprite.drop();
         Dungeon.level.drop(new ScrollOfMagicMapping().quantity(2).identify(), pos).sprite.drop();
-        Dungeon.level.drop(new ScrollOfTransmutation().quantity(2).identify(), pos).sprite.drop();
-        Dungeon.level.drop(new ScrollOfTeleportation().quantity(2).identify(), pos).sprite.drop();
+        Dungeon.level.drop(new ScrollOfUpgrade().identify(), pos).sprite.drop();
     }
 
     @Override
@@ -307,7 +305,7 @@ public class DM300Hard extends Boss{
                     caster = new SpellCaster.BounceCaster();
             }
             caster.pos = pos;
-            GameScene.add(caster, Random.Float(4f));
+            GameScene.add(caster, Random.Float(2f, 8f));
             Dungeon.level.mobs.add(caster);
             fallingRockVisual(pos);
             if(activate) caster.activate();

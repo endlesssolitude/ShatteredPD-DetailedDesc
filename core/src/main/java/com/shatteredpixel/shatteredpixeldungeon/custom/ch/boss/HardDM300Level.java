@@ -8,8 +8,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.SkeletonKey;
-import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfBlink;
-import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfFlock;
 import com.shatteredpixel.shatteredpixeldungeon.levels.CavesLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.CityLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
@@ -170,9 +168,6 @@ public class HardDM300Level extends Level {
             ch.pos = n;
             ch.sprite.place(n);
         }
-
-        Dungeon.level.drop(new StoneOfFlock().quantity(6), entrance - width).sprite.drop();
-        Dungeon.level.drop(new StoneOfBlink().quantity(6), entrance - width).sprite.drop();
 
         GameScene.updateMap( entrance );
         Dungeon.observe();
