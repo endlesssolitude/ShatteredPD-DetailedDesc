@@ -123,7 +123,9 @@ abstract public class Weapon extends KindOfWeapon {
 		}
 
 		damage = VirtualEnchantment.INSTANCE.attackProc(this, attacker, defender, damage);
-		if(inscription != null) damage = inscription.proc(this, attacker, defender, damage);
+		if(inscription != null && attacker == Dungeon.hero){
+			damage = inscription.proc(this, attacker, defender, damage);
+		}
 
 		return damage;
 	}

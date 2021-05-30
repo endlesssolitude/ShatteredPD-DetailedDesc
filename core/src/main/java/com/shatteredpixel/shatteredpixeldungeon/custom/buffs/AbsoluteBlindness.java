@@ -1,4 +1,4 @@
-package com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.city;
+package com.shatteredpixel.shatteredpixeldungeon.custom.buffs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;

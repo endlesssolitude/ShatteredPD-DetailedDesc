@@ -26,6 +26,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bless;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hex;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.StrengthAndSacrifice;
@@ -162,7 +163,7 @@ public class WndHero extends WndTabbed {
 		//FIXME why so COMPLEX
 		private int attackskillcal(){
 			Hero hero = Dungeon.hero;
-			float atkskl= hero.lvl +9;
+			float atkskl = hero.lvl +9;
 
 			atkskl *= RingOfAccuracy.accuracyMultiplier( hero );
 			KindOfWeapon wep = hero.belongings.weapon;
@@ -172,6 +173,7 @@ public class WndHero extends WndTabbed {
 			if( hero.buff(Bless.class)!=null){
 				atkskl *= 1.25;
 			}
+			if (hero.buff(  Hex.class) != null) atkskl *= 0.8f;
 
 			StrengthAndSacrifice b = Dungeon.hero.buff(StrengthAndSacrifice.class);
 			if(b!=null){
@@ -192,6 +194,7 @@ public class WndHero extends WndTabbed {
 			if( hero.buff(Bless.class)!=null){
 				defskl *= 1.25;
 			}
+			if (hero.buff(  Hex.class) != null) defskl *= 0.8f;
 			StrengthAndSacrifice s = Dungeon.hero.buff(StrengthAndSacrifice.class);
 			if(s!=null){
 				defskl *= s.EvasionCorruptionFactor();

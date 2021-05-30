@@ -65,7 +65,7 @@ public class TierChange extends Inscription {
 
     public static class TierUpThree extends TierChange{
         {
-            tierChange = 4;
+            tierChange = 3;
         }
     }
 
@@ -83,7 +83,7 @@ public class TierChange extends Inscription {
 
     public static class TierDownThree extends TierChange{
         {
-            tierChange = -4;
+            tierChange = -3;
         }
     }
 }

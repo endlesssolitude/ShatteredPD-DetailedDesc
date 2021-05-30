@@ -3,6 +3,7 @@ package com.shatteredpixel.shatteredpixeldungeon.custom.utils;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.watabou.utils.Point;
 import com.watabou.utils.PointF;
+import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 //GAME MATH EXTENSION
@@ -80,4 +81,9 @@ public class GME {
 
         return result;
     }
+
+    public static int accurateRound(float toRound){
+        return Random.Float() < toRound - (int)toRound ? (int)(toRound + 1f) : (int)toRound;
+    }
+
 }

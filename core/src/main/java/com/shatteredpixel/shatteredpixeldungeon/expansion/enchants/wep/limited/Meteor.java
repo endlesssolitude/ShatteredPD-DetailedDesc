@@ -58,7 +58,7 @@ public class Meteor extends CountInscription {
     public void useUp(Weapon w, Char attacker) {
         super.useUp(w, attacker);
         int[] map = RangeMap.centeredRect(attacker.pos, 4, 4);
-        RepeatedCallback.executeChain(0.2f, Math.min(10 + w.buffedLvl()/2, 20), () -> {
+        RepeatedCallback.executeChain(0.2f, Math.min(14 + w.buffedLvl()/2, 22), () -> {
             final int targetCell = map[Random.Int(map.length)];
             final float radius = Math.min(3.2f + w.buffedLvl() * 0.04f, 3.6f);
             skyFire(targetCell, radius, () -> {

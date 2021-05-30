@@ -9,7 +9,7 @@ Aim to help dungeon players know the data and mechanics of game, and have a plat
 
 - All the description are ONLY available in CHINESE. 
 
-- Currently this version is ONLY distributed in Tencent PD groups in China.
+- Currently this version is ONLY distributed in Tencent PD groups in China and NO plan for a wider release at least now.
 
 *****************Main Features*****************
 
@@ -17,7 +17,7 @@ Aim to help dungeon players know the data and mechanics of game, and have a plat
 
 - TestMode that has convinet access to most items and can travel between floors.
 
-- A few interesting and hard challenges or expansions to distinguish with original Shattered and improve play experience. Content might be somewhat limited because I can't make too many changes to original ShPD code, or it would be a disaster when transfering between versions.
+- A few expansions for the original game. Expansions are quite limited because I can only add new contents via limited interfaces, or it would be a disaster when transferring between versions.
 
 - And other parts of the game is TOTALLY UNCHANGED to keep inline with the original ShatterdPD.
 
@@ -29,4 +29,4 @@ Aim to help dungeon players know the data and mechanics of game, and have a plat
 
 - Update (usually) each time when ShatteredPD releases a major version.
 
-- Since the gameplay is almost the same to original ShPD, you can just regard it as a dictionary.
+- You can just regard it as a dictionary.
