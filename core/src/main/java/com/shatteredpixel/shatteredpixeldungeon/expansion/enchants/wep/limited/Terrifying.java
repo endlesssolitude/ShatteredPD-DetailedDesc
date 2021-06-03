@@ -20,7 +20,7 @@ public class Terrifying extends CountInscription {
     public int proc(Weapon weapon, Char attacker, Char defender, int damage) {
         if(damage >= defender.HP){
             defender.sprite.centerEmitter().burst(ShadowParticle.UP, Random.IntRange(7, 15));
-            defender.damage(damage * 3 / 2, attacker);
+            defender.damage(damage * 11 / 10, attacker);
             //This means defender haven't die (usually), interrupt
             if(defender.isAlive()) {return 0;}
             consume(weapon, attacker);

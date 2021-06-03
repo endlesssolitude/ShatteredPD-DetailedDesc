@@ -19,7 +19,7 @@ public class RaiseDead extends CountInscription {
     public int proc(Weapon weapon, Char attacker, Char defender, int damage) {
         if(damage >= defender.HP){
             defender.sprite.centerEmitter().burst(ShadowParticle.UP, Random.IntRange(7, 15));
-            defender.damage(damage * 3 / 2, attacker);
+            defender.damage(damage * 11 / 10, attacker);
             if(defender.isAlive()) {return 0;}
             Wraith wraith = Wraith.spawnAt(defender.pos);
             Buff.affect(wraith, Corruption.class);

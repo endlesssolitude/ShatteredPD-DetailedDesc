@@ -50,7 +50,7 @@ public class VirtualActor extends Visual {
     public static void delay(float time, Callback callback){
         delay(time, false, null, callback);
     }
-    //delay time and decide if delayer from the same class can parallel with callback
+    //delay time and decide if delayer from the same class can parallel with callback enabled
     public static void delay(float time, final boolean parallel, Object obj, Callback callback){
         if(!parallel) {
             Actor.addDelayed(new Actor() {

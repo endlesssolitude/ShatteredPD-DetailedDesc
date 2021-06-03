@@ -2,6 +2,7 @@ package com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.baseclasses;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Bundle;
@@ -46,7 +47,8 @@ public abstract class CountInscription extends Inscription{
     public void useUp(Weapon w, Char attacker){
         onLose();
         detachFromWeapon();
-        GLog.w(M.L(CountInscription.class, "use_up"));
+        GLog.w(M.L(CountInscription.class, "use_up", w.name(), this.name()));
+        new Flare(5, 32).show(attacker.sprite, 2f).color(0xCCCCCC, true);
     }
 
     @Override
