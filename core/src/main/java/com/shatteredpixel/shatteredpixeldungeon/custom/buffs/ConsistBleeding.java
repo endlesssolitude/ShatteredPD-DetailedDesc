@@ -46,7 +46,7 @@ public class ConsistBleeding extends Buff{
         }
         Wound.hit(target);
 
-        damage *= Random.Float(1.6f, 2f);
+        damage *= Random.Float(1.7f, 2.1f);
         target.damage((int)damage, this);
         if(target == Dungeon.hero && !target.isAlive()){
             Dungeon.fail(getClass());

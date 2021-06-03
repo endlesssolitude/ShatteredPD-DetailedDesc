@@ -25,7 +25,7 @@ public abstract class Scattering extends CountInscription {
     protected int colorRGB888 = 0xFFFFFF;
     @Override
     public int proc(Weapon weapon, Char attacker, Char defender, int damage) {
-        float angle = 7.5f;
+        float angle = 10f;
         for(int i=-1; i<=1; ++i){
             BallisticaFloat baf = new BallisticaFloat(attacker.pos, GME.angle(attacker.pos, defender.pos) + angle* i, weapon.RCH * 2 + 4, Ballistica.STOP_TARGET | BallisticaFloat.STOP_SOLID);
             attacker.sprite.parent.add(new BeamCustom(attacker.sprite.center(), baf.collisionPosF.clone().scale(DungeonTilemap.SIZE), Effects.Type.LIGHT_RAY)

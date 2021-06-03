@@ -1,31 +1,41 @@
 package com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.baseclasses;
 
+import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.Armory;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.Cursed;
-import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.Duel;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.Erasing;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.Gravity;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.Sacrificing;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.Switching;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.TierChange;
+import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.Assassination;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.BleedingBlast;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.Curing;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.DarkFog;
+import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.DoubleAttack;
+import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.FarHitBack;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.GasVenting;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.IceBreaking;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.Imaging;
+import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.Impacting;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.KillingWeak;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.Meteor;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.Overload;
+import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.RangedSlash;
+import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.RaiseDead;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.Scattering;
+import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.Terrifying;
+import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.Tidal;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.Unholy;
 import com.shatteredpixel.shatteredpixeldungeon.items.Ankh;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.Stylus;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfFrost;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHaste;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfInvisibility;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLevitation;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlame;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfMindVision;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfParalyticGas;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfPurity;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
@@ -33,10 +43,11 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfToxicGas;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.BlizzardBrew;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.InfernalBrew;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfEarthenArmor;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfShielding;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfShroudingFog;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfStormClouds;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.GooBlob;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.MetalShard;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMirrorImage;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRage;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging;
@@ -45,7 +56,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportat
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTerror;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
-import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAggression;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfPrismaticImage;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAugmentation;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfBlast;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfBlink;
@@ -58,6 +69,7 @@ import com.shatteredpixel.shatteredpixeldungeon.plants.Icecap;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Sorrowmoss;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Stormvine;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Sungrass;
+import com.shatteredpixel.shatteredpixeldungeon.plants.Swiftthistle;
 import com.watabou.utils.Reflection;
 
 import java.util.ArrayList;
@@ -77,12 +89,20 @@ public enum EnchRecipe{
     BLEEDING_BLAST(BleedingBlast.class, 180, ScrollOfRage.class, ScrollOfRetribution.class, PotionOfHaste.class),
     GAS_VENTING(GasVenting.class, 70, PotionOfToxicGas.class, PotionOfToxicGas.class, PotionOfPurity.class),
     KILLING_WEAK(KillingWeak.class, 75, Sorrowmoss.Seed.class, ScrollOfTerror.class, PotionOfToxicGas.class),
+    DOUBLE_ATTACK(DoubleAttack.class, 110, PotionOfHaste.class, Swiftthistle.Seed.class, StoneOfAugmentation.class),
+    IMPACTING(Impacting.class, 65, PotionOfHaste.class, StoneOfAugmentation.class, StoneOfEnchantment.class),
+    RANGED_SLASH(RangedSlash.class, 40, ScrollOfRage.class, ScrollOfRetribution.class, StoneOfFlock.class),
+    RAISE_DEAD(RaiseDead.class, 15, ScrollOfTerror.class, GooBlob.class, ScrollOfPrismaticImage.class),
+    FAR_HIT_BACK(FarHitBack.class, 135, StoneOfBlast.class, ScrollOfRetribution.class, ScrollOfRage.class),
+    TERRIFYING(Terrifying.class, 16, ScrollOfTerror.class, PotionOfMindVision.class, PotionOfPurity.class),
+    ASSASSINATION(Assassination.class, 50, PotionOfInvisibility.class, ScrollOfIdentify.class, PotionOfPurity.class),
+    TIDAL(Tidal.class, 80, PotionOfStormClouds.class, StoneOfBlast.class, Stormvine.Seed.class),
 
     CURSED_ATTACK(Cursed.class, 1, MetalShard.class, GooBlob.class, Ankh.class),
     SWITCHING(Switching.class, 1, ScrollOfTeleportation.class, StoneOfBlink.class, PotionOfLevitation.class),
     SACRIFICING(Sacrificing.class, 1, MetalShard.class, PotionOfHealing.class, ScrollOfRetribution.class),
     GRAVITY(Gravity.class, 1, Earthroot.Seed.class, PotionOfParalyticGas.class, PotionOfEarthenArmor.class),
-    DUEL(Duel.class, 1, PotionOfShielding.class, ScrollOfRetribution.class, StoneOfAggression.class),
+    ARMORY(Armory.class, 1, ScrollOfTransmutation.class, Stylus.class),
 
     TIER_UP_ONE(TierChange.TierUpOne.class, 1, StoneOfAugmentation.class, PotionOfHealing.class),
     TIER_UP_TWO(TierChange.TierUpTwo.class, 1, ScrollOfTransmutation.class, StoneOfEnchantment.class),

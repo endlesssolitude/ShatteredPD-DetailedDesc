@@ -16,11 +16,11 @@ import com.watabou.utils.Random;
 import java.util.ArrayList;
 
 public class Imaging extends CountInscription {
-    private int hitsToImage = 5;
+    private int hitsToImage = 4;
     @Override
     public int proc(Weapon weapon, Char attacker, Char defender, int damage) {
         if(--hitsToImage<=0){
-            hitsToImage += 6;
+            hitsToImage += 4;
             if(attacker instanceof Hero){
                 spawnImages((Hero)attacker, 1);
             }

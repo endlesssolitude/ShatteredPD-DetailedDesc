@@ -106,6 +106,11 @@ abstract public class Weapon extends KindOfWeapon {
 	
 	@Override
 	public int proc( Char attacker, Char defender, int damage ) {
+
+		damage = VirtualEnchantment.INSTANCE.attackProc(this, attacker, defender, damage);
+		if(inscription != null && attacker == Dungeon.hero){
+			damage = inscription.proc(this, attacker, defender, damage);
+		}
 		
 		if (enchantment != null && attacker.buff(MagicImmune.class) == null) {
 			damage = enchantment.proc( this, attacker, defender, damage );
@@ -120,11 +125,6 @@ abstract public class Weapon extends KindOfWeapon {
 				GLog.p( Messages.get(Weapon.class, "identify") );
 				Badges.validateItemLevelAquired( this );
 			}
-		}
-
-		damage = VirtualEnchantment.INSTANCE.attackProc(this, attacker, defender, damage);
-		if(inscription != null && attacker == Dungeon.hero){
-			damage = inscription.proc(this, attacker, defender, damage);
 		}
 
 		return damage;
