@@ -32,7 +32,7 @@ public class MapXY {
                     continue;
                 }
             }
-            map[count] = mapXY[0][count] + mapXY[1][count] * w;
+            map[count] = mapXY[0][i] + mapXY[1][i] * w;
             ++count;
         }
         return map;

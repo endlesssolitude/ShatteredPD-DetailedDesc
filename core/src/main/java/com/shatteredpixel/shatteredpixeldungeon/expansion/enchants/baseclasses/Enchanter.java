@@ -308,27 +308,6 @@ public class Enchanter extends Item {
         };
     }
 
-    /*
-    public static class InscriptionInfo extends IconButton{
-        public InscriptionInfo(){
-            super();
-            icon(new ItemSprite(new Sword().enchant(new Lucky())));
-        }
-
-        @Override
-        protected void onClick() {
-            super.onClick();
-            GameScene.show();
-        }
-    }
-
-    public static class WndInscriptionRecipe extends Window{
-        public WndInscriptionRecipe(){
-
-        }
-    }
-     */
-
     public static class WndInfoInscription extends Window{
         private static final int WIDTH = 120;
         private static final int HEIGHT = 144;

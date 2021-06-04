@@ -18,10 +18,10 @@ public class RangedSlash extends CountInscription {
         for(int i: RangeMap.centeredRect(attacker.pos, dist, dist)){
             Char ch = Actor.findChar(i);
             if(ch != attacker && ch.alignment != Char.Alignment.ALLY){
-                ch.damage(GME.accurateRound(damage * .25f), attacker);
+                ch.damage(GME.accurateRound(damage * .35f), attacker);
             }
         }
-        SpreadWave.blast(attacker.sprite.center(), dist * .8f, .4f, 0xCCCCCC, null);
+        SpreadWave.blast(attacker.sprite.center(), dist * .8f, .25f, 0xCCCCCC, null);
         consume(weapon, attacker);
         return damage;
     }

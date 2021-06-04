@@ -32,7 +32,7 @@ public class Meteor extends CountInscription {
         defaultTriggers = 50;
     }
 
-    private int count = 4;
+    private int count = 3;
 
     @Override
     public int proc(Weapon w, Char attacker, Char defender, int damage) {
@@ -48,7 +48,7 @@ public class Meteor extends CountInscription {
                     }
                 }
             });
-            count = 4;
+            count = 3;
         }
         consume(weapon, attacker);
         return damage;

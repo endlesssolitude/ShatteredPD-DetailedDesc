@@ -12,14 +12,18 @@ import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.B
 import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.Curing;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.DarkFog;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.DoubleAttack;
+import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.ElectricityShock;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.FarHitBack;
+import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.FireBeam;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.GasVenting;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.Gravity;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.IceBreaking;
+import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.IceGuard;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.Imaging;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.Impacting;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.Invisible;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.KillingWeak;
+import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.LightningDamnation;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.Meteor;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.Overload;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited.PlantTriggering;
@@ -49,9 +53,12 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfToxicGas;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.BlizzardBrew;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.InfernalBrew;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.ShockingBrew;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfDragonsBreath;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfEarthenArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfShielding;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfShroudingFog;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfSnapFreeze;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfStormClouds;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.GooBlob;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.MetalShard;
@@ -64,6 +71,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportat
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTerror;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfMysticalEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfPrismaticImage;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAugmentation;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfBlast;
@@ -71,6 +79,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfBlink;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfDisarming;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfEnchantment;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfFlock;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfShock;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Earthroot;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Fadeleaf;
@@ -85,7 +94,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public enum EnchRecipe{
-    METEOR(Meteor.class, 88, InfernalBrew.class, PotionOfLiquidFlame.class, PotionOfLevitation.class),
+    METEOR(Meteor.class, 77, InfernalBrew.class, PotionOfLiquidFlame.class, PotionOfLevitation.class),
     ICE_BREAK(IceBreaking.class, 110, BlizzardBrew.class, PotionOfFrost.class, Icecap.Seed.class),
     UNHOLY(Unholy.class, 110, ScrollOfTerror.class, ScrollOfRage.class, ScrollOfRetribution.class),
     CURE(Curing.class, 150, PotionOfHealing.class, Sungrass.Seed.class, PotionOfHealing.class),
@@ -115,6 +124,10 @@ public enum EnchRecipe{
     POLLUTING(Polluting.class, 80, PotionOfParalyticGas.class, PotionOfToxicGas.class, ScrollOfTerror.class),
     VAPORIZING(Vaporizing.class, 60, PotionOfLiquidFlame.class, PotionOfLiquidFlame.class, PotionOfPurity.class),
     GRAVITY(Gravity.class, 30, Earthroot.Seed.class, PotionOfParalyticGas.class, PotionOfEarthenArmor.class),
+    FIRE_BEAM(FireBeam.class, 90, PotionOfDragonsBreath.class, PotionOfLiquidFlame.class, PotionOfPurity.class),
+    ICE_GUARD(IceGuard.class, 50, PotionOfSnapFreeze.class, PotionOfFrost.class, PotionOfPurity.class),
+    ELECTRICITY_SHOCK(ElectricityShock.class, 80, ShockingBrew.class, StoneOfShock.class, PotionOfPurity.class),
+    LIGHTNING_DAMNATION(LightningDamnation.class, 25, ShockingBrew.class, ScrollOfMysticalEnergy.class, PotionOfPurity.class),
 
     CURSED_ATTACK(Cursed.class, 1, MetalShard.class, GooBlob.class, Ankh.class),
     SWITCHING(Switching.class, 1, ScrollOfTeleportation.class, StoneOfBlink.class, PotionOfLevitation.class),
