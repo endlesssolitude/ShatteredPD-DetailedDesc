@@ -42,7 +42,9 @@ public class AbsoluteBlindness extends Buff {
     }
 
     public AbsoluteBlindness storeVD(int vd){
-        storedViewDistance = vd;
+        if(vd>0) {
+            storedViewDistance = vd;
+        }
         return this;
     }
 

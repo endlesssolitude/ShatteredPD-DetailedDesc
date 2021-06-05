@@ -387,7 +387,10 @@ public abstract class ElementalH extends Mob {
         protected void rangedProc( Char enemy ) {
             boolean blind = enemy.buff(Blindness.class) != null;
             boolean seeNothing = enemy.buff(AbsoluteBlindness.class) != null;
-            if(blind || seeNothing){
+            if(seeNothing){
+                Buff.affect(enemy, AbsoluteBlindness.class).addLeft(9f);
+                Buff.detach(enemy, Blindness.class);
+            } else if(blind){
                 Buff.affect(enemy, AbsoluteBlindness.class).addLeft(9f).storeVD(enemy.viewDistance);
                 Buff.detach(enemy, Blindness.class);
             }else {
@@ -411,19 +414,6 @@ public abstract class ElementalH extends Mob {
             }
 
             return super.defenseProc(enemy, damage);
-        }
-
-        @Override
-        public void die(Object src){
-            for(Char c: Actor.chars()){
-                float distance = Dungeon.level.trueDistance(pos, c.pos);
-                float turns = 10f - distance * 2f;
-                if(turns>2f) {
-                    Buff.affect(enemy, AbsoluteBlindness.class).addLeft(turns).storeVD(enemy.viewDistance);
-                }
-            }
-
-            super.die(src);
         }
 
         @Override

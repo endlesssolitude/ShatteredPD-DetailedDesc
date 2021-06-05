@@ -26,6 +26,8 @@
  import com.watabou.noosa.NinePatch;
  import com.watabou.noosa.audio.Sample;
  import com.watabou.noosa.ui.Component;
+ import com.watabou.utils.Bundlable;
+ import com.watabou.utils.Bundle;
  import com.watabou.utils.Reflection;
 
  import java.util.ArrayList;
@@ -77,7 +79,7 @@ public class Enchanter extends Item {
         private EnchRecipe currentAvailableRecipe;
 
         public WndEnchant(){
-            super();
+            super(0, 0, 0, Chrome.get(Chrome.Type.WINDOW_SILVER));
 
             resize(WIDTH, 100);
 
@@ -310,22 +312,27 @@ public class Enchanter extends Item {
 
     public static class WndInfoInscription extends Window{
         private static final int WIDTH = 120;
-        private static final int HEIGHT = 144;
+        private static final int HEIGHT = 160;
+        private static final int BTN_HEIGHT = 16;
         private static final int GAP = 4;
-        private static final int TEXT_SIZE = 8;
+        private static final int TEXT_SIZE = 6;
+
+        private static float currentScroll;
 
         private final ArrayList<Float> upperBoundary;
         private final ArrayList<Float> bottomBoundary;
         private final ArrayList<Class<? extends Inscription>> storedInscription;
         private final ArrayList<Integer> triggers;
+        private float scrollToWhere;
+        private ScrollPane sp;
         public WndInfoInscription(){
-            super();
+            super(0, 0,0, Chrome.get(Chrome.Type.WINDOW_SILVER));
             upperBoundary = new ArrayList<>(50);
             bottomBoundary = new ArrayList<>(50);
             storedInscription = new ArrayList<>(50);
             triggers = new ArrayList<>(50);
             resize(WIDTH, HEIGHT);
-            ScrollPane sp = new ScrollPane(new Component()){
+            sp = new ScrollPane(new Component()){
                 @Override
                 public void onClick(float x, float y) {
                     super.onClick(x, y);
@@ -336,7 +343,7 @@ public class Enchanter extends Item {
                                 ((CountInscription) inscription).setTriggers(triggers.get(i));
                             }
                             StringBuilder sb = new StringBuilder();
-                            sb.append('_').append(inscription.name()).append('_').append('\n');
+                            sb.append('_').append(inscription.name()).append("_\n\n");
                             sb.append(inscription.desc());
                             GameScene.show(new WndMessage( sb.toString()));
                         }
@@ -344,7 +351,6 @@ public class Enchanter extends Item {
                 }
             };
             add(sp);
-            sp.setRect(0, 0, WIDTH, HEIGHT - GAP);
             Component content = sp.content();
             float pos = GAP * 2;
             int i = 1;
@@ -358,7 +364,7 @@ public class Enchanter extends Item {
                         sb.append('+');
                     }
                 }
-                sb.append("=\n");
+                sb.append("\n");
                 Inscription insc = Reflection.newInstance(recipe.inscription);
                 sb.append('_').append(insc.name()).append('_');
                 if(insc instanceof CountInscription){
@@ -381,8 +387,36 @@ public class Enchanter extends Item {
             }
 
             content.setSize(WIDTH, pos + GAP);
+            sp.setRect(0, 0, WIDTH, HEIGHT - GAP - BTN_HEIGHT);
 
-            sp.scrollTo(0, 0);
+            sp.scrollTo(0, currentScroll);
+
+            RedButton pageUp = new RedButton(M.L(Enchanter.class, "page_up"), 9){
+                @Override
+                protected void onClick() {
+                    super.onClick();
+                    sp.scrollTo(0, Math.max(sp.content().camera().scroll.y - sp.height() + TEXT_SIZE, 0));
+                }
+            };
+            add(pageUp);
+            pageUp.setRect(0, HEIGHT - BTN_HEIGHT, WIDTH/2f - GAP / 2f, BTN_HEIGHT);
+
+            RedButton pageDown = new RedButton(M.L(Enchanter.class, "page_down"), 9){
+                @Override
+                protected void onClick() {
+                    super.onClick();
+                    sp.scrollTo(0, Math.min(sp.content().camera().scroll.y + sp.height() - TEXT_SIZE, sp.content().height() - sp.height()));
+                }
+            };
+            add(pageDown);
+            pageDown.setRect(GAP/ 2f + WIDTH / 2f, HEIGHT - BTN_HEIGHT, WIDTH/2f - GAP / 2f, BTN_HEIGHT);
+
+        }
+
+        @Override
+        public void onBackPressed() {
+            super.onBackPressed();
+            currentScroll = sp.content().camera().scroll.y;
         }
     }
 

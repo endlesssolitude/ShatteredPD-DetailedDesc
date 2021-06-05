@@ -26,9 +26,9 @@ import java.util.ArrayList;
 
 public class BatH extends Bat {
     {
-        EXP = 9;
-        defenseSkill = 16;
-        HT=HP=32;
+        EXP = 10;
+        defenseSkill = 20;
+        HT=HP=40;
         HUNTING = new Hunting();
     }
     {
@@ -95,64 +95,9 @@ public class BatH extends Bat {
         return super.attackProc( enemy, damage );
     }
 
-    protected boolean avoidDamage(int threshold){
-        ArrayList<Integer> toEvade = new ArrayList<>();
-        for(int i: PathFinder.NEIGHBOURS8){
-            if(canPass(i+pos) && findChar(i+pos)==null){
-                toEvade.add(i+pos);
-            }
-        }
-        //the more empty cells around, the more evasive.
-        if(Random.Int(threshold)<Random.Int(toEvade.size())){
-            int p = toEvade.get(Random.Int(toEvade.size()));
-            sprite.move(pos, p);
-            sprite.showStatus(CharSprite.POSITIVE, defenseVerb());
-            VirtualActor.delay(0.12f, true, this, ()->{
-                sprite.move(p, pos);
-            });
-            return true;
-        }
-        return false;
-    }
-
     protected boolean near(int pa, int pb){
         return Dungeon.level.adjacent(pa,pb);
     }
-
-    @Override
-    public void damage(int damage, Object src){
-        //gain extra evasion when: see enemy, and not near enemy
-        if(enemy != null && enemySeen && !near(enemy.pos, pos)) {
-            //magic attacks are the most accurate
-            //it can't stand for all magic attacks, but it works for now
-            if (src instanceof Wand) {
-                if (avoidDamage(6)) {
-                    damage = -100;
-                }
-            }
-
-            if(src instanceof Hero){
-                //thrown weapons are less accurate
-                if((((Hero) src).belongings.weapon) instanceof MissileWeapon){
-                    if (avoidDamage(4)) {
-                        damage = -100;
-                    }
-                }
-                //melees are the least accurate
-                else if((((Hero) src).belongings.weapon) instanceof MeleeWeapon){
-                    if (avoidDamage(2)) {
-                        damage = -100;
-                    }
-                }
-            }
-
-            if(damage == -100){
-                return;
-            }
-        }
-        super.damage(damage, src);
-    }
-
 
     protected boolean canPass(int cell){
         //doors are solid but passable!

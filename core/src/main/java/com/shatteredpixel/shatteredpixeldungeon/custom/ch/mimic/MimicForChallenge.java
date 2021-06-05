@@ -380,7 +380,7 @@ public class MimicForChallenge extends Mimic {
         int modlevel = (attackMod>>ATK_FIRE)&0x3;
         if(modlevel>0) {
             if(Random.Int(5-modlevel)==0) {
-                Buff.affect(enemy, Burning.class);
+                Buff.affect(enemy, Burning.class).reignite(enemy);
             }
         }
     }
@@ -563,7 +563,7 @@ public class MimicForChallenge extends Mimic {
         int modLevel = (trickMod>>TRK_SCAN)&0x3;
         if(modLevel>0){
             if(this.alignment == Alignment.ENEMY){
-                if(Dungeon.level.distance(this.pos, Dungeon.hero.pos)<=3*modLevel-1){
+                if(Dungeon.level.distance(this.pos, Dungeon.hero.pos)<=6*modLevel-5){
                     Buff.detach(Dungeon.hero, Invisibility.class);
                 }
             }

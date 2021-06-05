@@ -20,6 +20,7 @@ public class MimicScroll extends Item {
         bones = false;
         defaultAction = AC_READ;
         stackable = true;
+        unique = true;
     }
     private static final String AC_READ = "read";
 

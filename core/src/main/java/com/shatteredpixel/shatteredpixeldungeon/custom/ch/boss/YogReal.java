@@ -195,7 +195,7 @@ public class YogReal extends Boss{
     }
 
     private float standardSummonCD(){
-        if(phase >= 5) return 3.6f;
+        if(phase >= 5) return 5.25f;
         return Random.NormalFloat(22f, 30f) - phase*2;
     }
 
@@ -380,8 +380,6 @@ public class YogReal extends Boss{
             yell(Messages.get(this, "hope"));
             summonCD = -20;
             phase = 5;
-            regularSummons.add(YogRealRipper.class);
-            regularSummons.add(Larva.class);
             regularSummons.add(YogRealRipper.class);
         }
 
@@ -580,7 +578,7 @@ public class YogReal extends Boss{
     public static class YogRealScorpio extends Scorpio {
         {
             maxLvl = -999;
-            viewDistance = 11;
+            viewDistance = 8;
         }
         @Override
         public void damage(int dmg, Object src){
@@ -594,7 +592,7 @@ public class YogReal extends Boss{
     public static class YogRealSuccubus extends Succubus {
         {
             maxLvl = -999;
-            viewDistance = 12;
+            viewDistance = 10;
         }
         @Override
         public void damage(int dmg, Object src){
