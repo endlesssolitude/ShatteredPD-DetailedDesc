@@ -178,7 +178,7 @@ public class SPDSettings extends GameSettings {
 		return getInt( KEY_LAST_CLASS, 0, 0, 3 );
 	}
 	
-	public static void challenges( long value ) {
+	public static void challenges( int value ) {
 		put( KEY_CHALLENGES, value );
 	}
 	

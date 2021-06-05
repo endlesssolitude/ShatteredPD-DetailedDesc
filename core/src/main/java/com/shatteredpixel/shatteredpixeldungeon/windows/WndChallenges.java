@@ -144,7 +144,7 @@ public class WndChallenges extends Window {
 	public void onBackPressed() {
 
 		if (editable) {
-			long value = 0;
+			int value = 0;
 			for (int i=0; i < boxes.size(); i++) {
 				if (boxes.get( i ).checked()) {
 					value |= Challenges.MASKS[i];
