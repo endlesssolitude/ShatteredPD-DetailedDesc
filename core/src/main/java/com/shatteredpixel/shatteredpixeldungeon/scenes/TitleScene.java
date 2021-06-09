@@ -47,8 +47,6 @@ import com.watabou.noosa.audio.Music;
 import com.watabou.utils.ColorMath;
 import com.watabou.utils.DeviceCompat;
 
-import java.util.Date;
-
 public class TitleScene extends PixelScene {
 	
 	@Override
@@ -104,7 +102,6 @@ public class TitleScene extends PixelScene {
 		StyledButton btnPlay = new StyledButton(GREY_TR, Messages.get(this, "enter")){
 			@Override
 			protected void onClick() {
-
 				if (GamesInProgress.checkAll().size() == 0){
 					GamesInProgress.selectedClass = null;
 					GamesInProgress.curSlot = 1;
@@ -225,7 +222,7 @@ public class TitleScene extends PixelScene {
 		@Override
 		public void update() {
 			super.update();
-
+/*
 			if (unreadCount == -1 && News.articlesAvailable()){
 				long lastRead = SPDSettings.newsLastRead();
 				if (lastRead == 0){
@@ -244,12 +241,14 @@ public class TitleScene extends PixelScene {
 			if (unreadCount > 0){
 				textColor(ColorMath.interpolate( 0xFFFFFF, Window.SHPX_COLOR, 0.5f + (float)Math.sin(Game.timeTotal*5)/2f));
 			}
+
+ */
 		}
 
 		@Override
 		protected void onClick() {
 			super.onClick();
-			ShatteredPixelDungeon.switchNoFade( NewsScene.class );
+			//ShatteredPixelDungeon.switchNoFade( NewsScene.class );
 		}
 	}
 
@@ -279,8 +278,6 @@ public class TitleScene extends PixelScene {
  */
 		}
 
-
-
 		@Override
 		protected void onClick() {
 			/*
@@ -291,6 +288,7 @@ public class TitleScene extends PixelScene {
 				AvailableUpdateData update = Updates.updateData();
 
 				ShatteredPixelDungeon.scene().addToFront( new WndOptions(
+						Icons.get(Icons.CHANGES),
 						update.versionName == null ? Messages.get(this,"title") : Messages.get(this,"versioned_title", update.versionName),
 						update.desc == null ? Messages.get(this,"desc") : update.desc,
 						Messages.get(this,"update"),
@@ -307,10 +305,9 @@ public class TitleScene extends PixelScene {
 					}
 				});
 
-			} else
-				{
+			} else {
+			*/
 
-			 */
 				ChangesScene.changesSelected = 0;
 				ShatteredPixelDungeon.switchNoFade( ChangesScene.class );
 			//}
@@ -358,6 +355,7 @@ public class TitleScene extends PixelScene {
 
 		@Override
 		protected void onClick() {
+			super.onClick();
 			//ShatteredPixelDungeon.switchNoFade(SupporterScene.class);
 		}
 	}

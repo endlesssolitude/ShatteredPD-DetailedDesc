@@ -152,24 +152,26 @@ public class StatusPane extends Component {
 		add( pickedUp = new Toolbar.PickedUpItem());
 
 		if(!Dungeon.isChallenged(Challenges.TEST_MODE)){version = new BitmapText( "v" + Game.version , PixelScene.pixelFont);version.alpha( 0.5f );}
-		else{
-			version = new BitmapText("v" + Game.version + "-TEST", PixelScene.pixelFont){
+		else {
+			version = new BitmapText("v" + Game.version + "-TEST", PixelScene.pixelFont) {
 				private float time;
+
 				@Override
 				public void update() {
 					super.update();
 					//am = 1f + 0.01f*Math.max(0f, (float)Math.sin( time += Game.elapsed/5 ));
-					time += Game.elapsed/5f;
+					time += Game.elapsed / 5f;
 					//float r = 0.43f+0.57f*Math.max(0f, (float)Math.sin( time));
 					//float g = 0.43f+0.57f*Math.max(0f, (float)Math.sin( time + 2*Math.PI/3 ));
 					//float b = 0.43f+0.57f*Math.max(0f, (float)Math.sin( time + 4*Math.PI/3 ));
 					float base = 0.65f;
-					float r = base + (1f-base)*(float)Math.sin(time);
-					float g = base + (1f-base)*(float)Math.sin(time+ 2*Math.PI/3);
-					float b = base + (1f-base)*(float)Math.sin(time+ 4*Math.PI/3);
-					version.hardlight(r,g,b);
-					if (time >= 2f*Math.PI) time = 0;
+					float r = base + (1f - base) * (float) Math.sin(time);
+					float g = base + (1f - base) * (float) Math.sin(time + 2 * Math.PI / 3);
+					float b = base + (1f - base) * (float) Math.sin(time + 4 * Math.PI / 3);
+					version.hardlight(r, g, b);
+					if (time >= 2f * Math.PI) time = 0;
 				}
+
 				@Override
 				public void draw() {
 					Blending.setLightMode();
@@ -177,7 +179,6 @@ public class StatusPane extends Component {
 					Blending.setNormalMode();
 				}
 			};
-			version.hardlight(0xFFFF00);
 			version.alpha(1f);
 		}
 		add(version);
@@ -226,14 +227,13 @@ public class StatusPane extends Component {
 			version.measure();
 			version.x = width - version.width();
 			version.y = btnMenu.bottom() + (4 - version.baseLine());
-			PixelScene.align(version);
 		}else{
 			version.scale.set(PixelScene.align(0.75f));
 			version.measure();
 			version.x = width - version.width();
 			version.y = btnMenu.bottom() + (5 - version.baseLine());
-			PixelScene.align(version);
 		}
+		PixelScene.align(version);
 	}
 	
 	private static final int[] warningColors = new int[]{0x660000, 0xCC0000, 0x660000};

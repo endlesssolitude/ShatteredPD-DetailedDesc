@@ -35,6 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Recipe;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SandalsOfNature;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.UnstableSpellbook;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.PotionBandolier;
@@ -42,8 +43,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.bags.ScrollHolder;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.VelvetPouch;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfIcyTouch;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurse;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.Recycle;
@@ -174,11 +173,11 @@ public class WndBag extends WndTabbed {
 
 		Belongings stuff = Dungeon.hero.belongings;
 		Bag[] bags = {
-			stuff.backpack,
-			stuff.getItem( VelvetPouch.class ),
-			stuff.getItem( ScrollHolder.class ),
-			stuff.getItem( PotionBandolier.class ),
-			stuff.getItem( MagicalHolster.class ),
+				stuff.backpack,
+				stuff.getItem( VelvetPouch.class ),
+				stuff.getItem( ScrollHolder.class ),
+				stuff.getItem( PotionBandolier.class ),
+				stuff.getItem( MagicalHolster.class ),
 				stuff.getItem(TestBag.class),
 				stuff.getItem(PotionBag.class)
 		};
@@ -336,11 +335,7 @@ public class WndBag extends WndTabbed {
 			return Icons.get( Icons.WAND_HOLSTER );
 		} else if (bag instanceof PotionBandolier) {
 			return Icons.get( Icons.POTION_BANDOLIER );
-		} else if (bag instanceof TestBag) {
-			return Icons.get( Icons.GOLD );
-		} else if (bag instanceof PotionBag) {
-			return new ItemSprite(new ElixirOfIcyTouch());
-		}else{
+		} else {
 			return Icons.get( Icons.BACKPACK );
 		}
 	}
@@ -453,7 +448,7 @@ public class WndBag extends WndTabbed {
 						mode == Mode.SEED && SandalsOfNature.canUseSeed(item) ||
 						mode == Mode.FOOD && (item instanceof Food) ||
 						mode == Mode.POTION && (item instanceof Potion) ||
-						mode == Mode.SCROLL && (item instanceof Scroll) ||
+						mode == Mode.SCROLL && UnstableSpellbook.canUseScroll(item) ||
 						mode == Mode.INTUITIONABLE && StoneOfIntuition.isIntuitionable(item) ||
 						mode == Mode.EQUIPMENT && (item instanceof EquipableItem || item instanceof Wand) ||
 						mode == Mode.ALCHEMY && Recipe.usableInRecipe(item) ||

@@ -79,7 +79,7 @@ public class BruteH extends Mob {
 
     protected void revive(){
         ++revived;
-        HP = HT*2/3;
+        HP = HT/2;
         Buff.affect(this, BruteRevive.class, 3f);
         Buff.affect(this, Barrier.class).setShield(65535);
         sprite.showStatus(CharSprite.NEGATIVE, "!!!");
@@ -87,7 +87,7 @@ public class BruteH extends Mob {
     }
 
     protected void enrage(){
-        Buff.affect(this, BruteH.BruteRage.class).setShield(HT*(1+revived)/2 - 4);
+        Buff.affect(this, BruteH.BruteRage.class).setShield(revived>0 ? HT/2 : HT * 3 / 4);
         if (Dungeon.level.heroFOV[pos]) {
             sprite.showStatus( CharSprite.NEGATIVE, Messages.get(Brute.class, "enraged") );
         }
@@ -200,9 +200,9 @@ public class BruteH extends Mob {
     @Override
     public void rollToDropLoot(){
         if (Dungeon.hero.lvl <= maxLvl + 2){
-            float chance = 0.02f;
+            float chance = 0.03f;
             chance *= RingOfWealth.dropChanceMultiplier( Dungeon.hero );
-            chance = Math.min(0.04f, chance);
+            chance = Math.min(0.06f, chance);
             if(Random.Float()<chance){
                 Ankh a = new Ankh();
                 if(Random.Int(3)==0) a.bless();
@@ -229,7 +229,7 @@ public class BruteH extends Mob {
                 return true;
             }
 
-            absorbDamage( 1 );
+            absorbDamage( 2 );
 
             if (shielding() <= 0){
                 target.die(null);

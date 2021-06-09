@@ -18,7 +18,7 @@ import com.watabou.utils.Random;
 
 public class WandOfScanningBeam extends WandOfDisintegration implements ScanningBeam.OnCollide {
     @Override
-    protected void onZap(Ballistica attack) {
+    public void onZap(Ballistica attack) {
         ScanningBeam.setCollide(this);
         float angle = GME.angle(curUser.pos, attack.collisionPos);
         PointF center = curUser.sprite.center().invScale(DungeonTilemap.SIZE);
@@ -43,7 +43,7 @@ public class WandOfScanningBeam extends WandOfDisintegration implements Scanning
         if(ch.pos == curUser.pos){
             return 0;
         }
-        processSoulMark(ch, chargesPerCast());
+        wandProc(ch, chargesPerCast());
         ch.damage( damageRoll(buffedLvl()), this );
         ch.sprite.centerEmitter().burst( PurpleParticle.BURST, Random.IntRange( 1, 2 ) );
         ch.sprite.flash();

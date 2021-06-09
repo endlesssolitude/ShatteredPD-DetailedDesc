@@ -30,7 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FlameParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SmokeParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.TomeOfMastery;
+import com.shatteredpixel.shatteredpixeldungeon.items.TengusMask;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.LloydsBeacon;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
@@ -201,7 +201,7 @@ public class TenguHard extends Boss{
     public void die( Object cause ) {
 
         if (Dungeon.hero.subClass == HeroSubClass.NONE) {
-            Dungeon.level.drop( new TomeOfMastery(), pos ).sprite.drop();
+            Dungeon.level.drop( new TengusMask(), pos ).sprite.drop();
         }
 
         Shuriken sh = new Shuriken();

@@ -33,7 +33,7 @@ public class Bestiary {
 	private static boolean hasReinforce(int depth){
 		return (Statistics.elite_enemies & (1<<(depth-1)/5))>0;
 	}
-	
+
 	public static ArrayList<Class<? extends Mob>> getMobRotation( int depth ){
 		ArrayList<Class<? extends Mob>> mobs;
 		if(!hasReinforce(depth)){

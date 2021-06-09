@@ -29,7 +29,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.baseclasses.Inscription;
-import com.shatteredpixel.shatteredpixeldungeon.expansion.mergeManagers.VirtualEnchantment;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfFuror;
@@ -107,7 +106,6 @@ abstract public class Weapon extends KindOfWeapon {
 	@Override
 	public int proc( Char attacker, Char defender, int damage ) {
 
-		damage = VirtualEnchantment.INSTANCE.attackProc(this, attacker, defender, damage);
 		if(inscription != null && attacker == Dungeon.hero){
 			damage = inscription.proc(this, attacker, defender, damage);
 		}
@@ -195,18 +193,24 @@ abstract public class Weapon extends KindOfWeapon {
 	}
 	
 	@Override
-	public float speedFactor( Char owner ) {
+	public float delayFactor( Char owner ) {
+		return baseDelay(owner) * (1f/speedMultiplier(owner));
+	}
 
-		int encumbrance = 0;
+	protected float baseDelay( Char owner ){
+		float delay = augment.delayFactor(this.DLY);
 		if (owner instanceof Hero) {
-			encumbrance = STRReq() - ((Hero)owner).STR();
+			int encumbrance = STRReq() - ((Hero)owner).STR();
+			if (encumbrance > 0){
+				delay *= Math.pow( 1.2, encumbrance );
+			}
 		}
 
-		float DLY = augment.delayFactor(this.DLY);
+		return delay;
+	}
 
-		DLY *= RingOfFuror.attackDelayMultiplier(owner);
-
-		return (encumbrance > 0 ? (float)(DLY * Math.pow( 1.2, encumbrance )) : DLY);
+	protected float speedMultiplier(Char owner ){
+		return RingOfFuror.attackSpeedMultiplier(owner);
 	}
 
 	@Override
@@ -224,11 +228,7 @@ abstract public class Weapon extends KindOfWeapon {
 		lvl = Math.max(0, lvl);
 
 		//strength req decreases at +1,+3,+6,+10,etc.
-		int req = (8 + tier * 2) - (int)(Math.sqrt(8 * lvl + 1) - 1)/2;
-
-		if (Dungeon.hero.pointsInTalent(Talent.STRONGMAN) >= 2) req--;
-
-		return req;
+		return (8 + tier * 2) - (int)(Math.sqrt(8 * lvl + 1) - 1)/2;
 	}
 
 	@Override
@@ -366,7 +366,7 @@ abstract public class Weapon extends KindOfWeapon {
 			if (attacker instanceof Hero && ((Hero) attacker).hasTalent(Talent.ENRAGED_CATALYST)){
 				Berserk rage = attacker.buff(Berserk.class);
 				if (rage != null) {
-					multi += 0.2f * rage.rageAmount() * ((Hero) attacker).pointsInTalent(Talent.ENRAGED_CATALYST);
+					multi += (rage.rageAmount() / 6f) * ((Hero) attacker).pointsInTalent(Talent.ENRAGED_CATALYST);
 				}
 			}
 			return multi;

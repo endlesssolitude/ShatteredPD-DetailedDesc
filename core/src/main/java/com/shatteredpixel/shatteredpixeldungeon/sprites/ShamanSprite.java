@@ -118,6 +118,4 @@ public abstract class ShamanSprite extends MobSprite {
 			return 42;
 		}
 	}
-
-
 }

@@ -31,10 +31,10 @@ public enum DictionaryJournal {
         ARMORS.d.put("armor_mail",          ItemSpriteSheet.ARMOR_MAIL);
         ARMORS.d.put("armor_scale",         ItemSpriteSheet.ARMOR_SCALE);
         ARMORS.d.put("armor_plate",         ItemSpriteSheet.ARMOR_PLATE);
-        ARMORS.d.put("armor_warrior",       ItemSpriteSheet.ARMOR_WARRIOR);
-        ARMORS.d.put("armor_mage",          ItemSpriteSheet.ARMOR_MAGE);
-        ARMORS.d.put("armor_rogue",         ItemSpriteSheet.ARMOR_ROGUE);
-        ARMORS.d.put("armor_huntress",      ItemSpriteSheet.ARMOR_HUNTRESS);
+        ARMORS.d.put("armor_epic",          ItemSpriteSheet.ARMOR_WARRIOR);
+        //ARMORS.d.put("armor_mage",          ItemSpriteSheet.ARMOR_MAGE);
+        //ARMORS.d.put("armor_rogue",         ItemSpriteSheet.ARMOR_ROGUE);
+        //ARMORS.d.put("armor_huntress",      ItemSpriteSheet.ARMOR_HUNTRESS);
         ARMORS.d.put("armor_glyph_1",       ItemSpriteSheet.STYLUS);
         ARMORS.d.put("armor_glyph_2",       ItemSpriteSheet.STYLUS);
         ARMORS.d.put("armor_glyph_3",       ItemSpriteSheet.STYLUS);

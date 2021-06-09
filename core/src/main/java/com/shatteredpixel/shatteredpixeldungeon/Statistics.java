@@ -148,20 +148,24 @@ public class Statistics {
 
 	public static int boss_enhance = 0;
 	public static int elite_enemies = 0;
+	public static float real_time_passed = 0;
 
 	private static void resetCustom(){
 		boss_enhance = 0;
 		elite_enemies = 0;
+		real_time_passed = 0f;
 	}
 
 	private static void storeCustom(Bundle b){
 		b.put("boss_enhance", boss_enhance);
 		b.put("elite_enemies", elite_enemies);
+		b.put("real_time_passed", real_time_passed);
 	}
 
 	private static void restoreCustom(Bundle b){
 		boss_enhance = b.getInt("boss_enhance");
 		elite_enemies = b.getInt("elite_enemies");
+		real_time_passed = b.getFloat("real_time_passed");
 	}
 
 }

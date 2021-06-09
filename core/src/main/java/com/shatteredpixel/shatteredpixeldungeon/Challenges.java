@@ -37,20 +37,22 @@ public class Challenges {
 	public static final int DARKNESS			= 32;
 	public static final int NO_SCROLLS		    = 64;
 	public static final int CHAMPION_ENEMIES	= 128;
+	public static final int STRONGER_BOSSES 	= 256;
 
-	public static final int TEST_MODE			= 1<<8;
+	public static final int TEST_MODE			= 1<<9;
 	//hero.live for buff, mimic spawning
 	public static final int MIMIC_DUNGEON 		= 1<<15;
 	//Dungeon.newLevel, Hero.speed(for speed limit)
 	public static final int ELITE_BOSSES		= 1<<16;
 	public static final int ELITE_ENEMIES		= 1<<17;
 
-	public static final int EXPANSION_ENCH = 1<<18;
+	public static final int EXPANSION_ENCH 		= 1<<18;
 
 	public static final int MAX_VALUE           = (1<<19)-1;
 
 	public static final String[] NAME_IDS = {
 			"champion_enemies",
+			"stronger_bosses",
 			"no_food",
 			"no_armor",
 			"no_healing",
@@ -69,7 +71,7 @@ public class Challenges {
 	};
 
 	public static final long[] MASKS = {
-			CHAMPION_ENEMIES, NO_FOOD, NO_ARMOR, NO_HEALING, NO_HERBALISM, SWARM_INTELLIGENCE, DARKNESS, NO_SCROLLS,
+			CHAMPION_ENEMIES, STRONGER_BOSSES, NO_FOOD, NO_ARMOR, NO_HEALING, NO_HERBALISM, SWARM_INTELLIGENCE, DARKNESS, NO_SCROLLS,
 			TEST_MODE,
 			MIMIC_DUNGEON,
 			ELITE_BOSSES,

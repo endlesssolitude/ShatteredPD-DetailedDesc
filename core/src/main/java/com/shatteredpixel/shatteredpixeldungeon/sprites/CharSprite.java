@@ -56,6 +56,8 @@ import com.watabou.utils.Callback;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
 
+import java.nio.Buffer;
+
 public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip.Listener {
 	
 	// Color constants for floating text
@@ -276,7 +278,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	}
 
 	public void jump( int from, int to, Callback callback ) {
-		float distance = Dungeon.level.trueDistance( from, to );
+		float distance = Math.max( 1f, Dungeon.level.trueDistance( from, to ));
 		jump( from, to, callback, distance * 2, distance * 0.1f );
 	}
 
@@ -482,10 +484,9 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	
 	@Override
 	public void update() {
-		if (paused && !looping() && ch != null && curAnim != null){
-			Animation cur = curAnim;
-			curAnim = null;
-			listener.onComplete(cur);
+		if (paused && ch != null && curAnim != null && !curAnim.looped && !finished){
+			listener.onComplete(curAnim);
+			finished = true;
 		}
 		
 		super.update();
@@ -640,7 +641,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 
 		if (renderShadow) {
 			if (dirty) {
-				verticesBuffer.position(0);
+				((Buffer)verticesBuffer).position(0);
 				verticesBuffer.put(vertices);
 				if (buffer == null)
 					buffer = new Vertexbuffer(verticesBuffer);

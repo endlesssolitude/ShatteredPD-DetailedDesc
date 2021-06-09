@@ -3,7 +3,7 @@ package com.shatteredpixel.shatteredpixeldungeon.custom.testmode.generator;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Honeypot;
-import com.shatteredpixel.shatteredpixeldungeon.items.TomeOfMastery;
+import com.shatteredpixel.shatteredpixeldungeon.items.TengusMask;
 import com.shatteredpixel.shatteredpixeldungeon.items.Torch;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.PlateArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
@@ -28,8 +28,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfMag
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.GooBlob;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.MetalShard;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfAccuracy;
-import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfElements;
-import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfLullaby;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
@@ -44,6 +42,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutat
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfPsionicBlast;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.ArcaneCatalyst;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAugmentation;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfBlast;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfBlink;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfFlock;
@@ -117,7 +116,8 @@ public class LazyTest extends TestGenerator {
 
             new Bomb().quantity(100).collect();
 
-            new TomeOfMastery().collect();
+            //new TomeOfMastery().collect();
+            new TengusMask().collect();
 
             new Honeypot().quantity(100).collect();
 
@@ -132,6 +132,8 @@ public class LazyTest extends TestGenerator {
             new StoneOfBlast().quantity(100).collect();
 
             new StoneOfBlink().quantity(100).collect();
+
+            new StoneOfAugmentation().quantity(100).collect();
 
             new Blindweed.Seed().quantity(100).identify().collect();
             new Dreamfoil.Seed().quantity(100).identify().collect();
@@ -150,17 +152,9 @@ public class LazyTest extends TestGenerator {
                 new PotionOfStrength().apply(hero);
             }
 
-            RingOfElements roe = new RingOfElements();
-            roe.level(22);
-            roe.identify().collect();
-
             RingOfAccuracy roa = new RingOfAccuracy();
             roa.level(22);
             roa.identify().collect();
-
-            RingOfWealth row = new RingOfWealth();
-            row.level(22);
-            row.identify().collect();
 
             new ScrollOfPsionicBlast().quantity(100).identify().collect();
             new PotionOfCleansing().quantity(100).identify().collect();

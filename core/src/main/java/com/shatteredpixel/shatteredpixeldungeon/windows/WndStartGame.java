@@ -47,6 +47,7 @@ import com.watabou.noosa.Game;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.ui.Button;
 import com.watabou.noosa.ui.Component;
+import com.watabou.utils.DeviceCompat;
 
 public class WndStartGame extends Window {
 	
@@ -115,34 +116,40 @@ public class WndStartGame extends Window {
 		start.visible = false;
 		start.setRect(0, HEIGHT - 20, WIDTH, 20);
 		add(start);
-
-		IconButton challengeButton = new IconButton(
-				Icons.get( SPDSettings.challenges() > 0 ? Icons.CHALLENGE_ON :Icons.CHALLENGE_OFF)){
-			@Override
-			protected void onClick() {
-				ShatteredPixelDungeon.scene().addToFront(new WndChallenges(SPDSettings.challenges(), true) {
-					public void onBackPressed() {
-						super.onBackPressed();
-						if (parent != null) {
-							icon(Icons.get(SPDSettings.challenges() > 0 ?
-									Icons.CHALLENGE_ON : Icons.CHALLENGE_OFF));
+		
+		if (DeviceCompat.isDebug() || Badges.isUnlocked(Badges.Badge.VICTORY)){
+			IconButton challengeButton = new IconButton(
+					Icons.get( SPDSettings.challenges() > 0 ? Icons.CHALLENGE_ON :Icons.CHALLENGE_OFF)){
+				@Override
+				protected void onClick() {
+					ShatteredPixelDungeon.scene().addToFront(new WndChallenges(SPDSettings.challenges(), true) {
+						public void onBackPressed() {
+							super.onBackPressed();
+							if (parent != null) {
+								icon(Icons.get(SPDSettings.challenges() > 0 ?
+										Icons.CHALLENGE_ON : Icons.CHALLENGE_OFF));
+							}
 						}
-					}
-				} );
-			}
-
-			@Override
-			public void update() {
-				if( !visible && GamesInProgress.selectedClass != null){
-					visible = true;
+					} );
 				}
-				super.update();
-			}
-		};
-		challengeButton.setRect(WIDTH - 20, HEIGHT - 20, 20, 20);
-		challengeButton.visible = false;
-		add(challengeButton);
-
+				
+				@Override
+				public void update() {
+					if( !visible && GamesInProgress.selectedClass != null){
+						visible = true;
+					}
+					super.update();
+				}
+			};
+			challengeButton.setRect(WIDTH - 20, HEIGHT - 20, 20, 20);
+			challengeButton.visible = false;
+			add(challengeButton);
+			
+		} else {
+			Dungeon.challenges = 0;
+			SPDSettings.challenges(0);
+		}
+		
 		resize(WIDTH, HEIGHT);
 		
 	}
@@ -260,7 +267,7 @@ public class WndStartGame extends Window {
 					if (cl == null) return;
 					String msg = Messages.get(cl, cl.name() + "_desc_subclasses");
 					for (HeroSubClass sub : cl.subClasses()){
-						msg += "\n\n" + sub.desc();
+						msg += "\n\n" + sub.shortDesc();
 					}
 					ShatteredPixelDungeon.scene().addToFront(new WndMessage(msg));
 				}

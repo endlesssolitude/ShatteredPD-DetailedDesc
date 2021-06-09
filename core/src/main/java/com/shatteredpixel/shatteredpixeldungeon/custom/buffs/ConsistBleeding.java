@@ -39,7 +39,6 @@ public class ConsistBleeding extends Buff{
             damage += Math.max(0, dmg[i])*lasting[i];
         }
         target.sprite.showStatus(CharSprite.NEGATIVE, "!!!");
-        if(target == Dungeon.hero) {GLog.n(M.L(this, "burst"));}
         if (target.sprite.visible) {
             Splash.at( target.sprite.center(), -PointF.PI / 2, PointF.PI / 6,
                     target.sprite.blood(), 30 );

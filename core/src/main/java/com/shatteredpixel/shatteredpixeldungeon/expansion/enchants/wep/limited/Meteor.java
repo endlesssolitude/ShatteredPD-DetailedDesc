@@ -43,7 +43,7 @@ public class Meteor extends CountInscription {
                     if(ch.alignment != Char.Alignment.ALLY) {
                         if (Dungeon.level.trueDistance(ch.pos, defender.pos) <= radius) {
                             Buff.affect(ch, Burning.class).reignite(ch);
-                            ch.damage(Random.IntRange(4 + Dungeon.depth, 8 + Dungeon.depth * 7 / 3), this);
+                            ch.damage(Random.IntRange(2 + Dungeon.depth * 5 / 6, 5 + Dungeon.depth * 5 / 3), this);
                         }
                     }
                 }

@@ -5,11 +5,10 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ToxicGas;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Amok;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Charm;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Degrade;
@@ -86,9 +85,6 @@ public class YogReal extends Boss{
         immunities.add( Vertigo.class );
         immunities.add( Frost.class );
         immunities.add( Paralysis.class );
-
-        resistances.add(Burning.class);
-        resistances.add(ToxicGas.class);
     }
 
     private int phase = 0;
@@ -393,6 +389,10 @@ public class YogReal extends Boss{
             if(damage > 25) {
                 damage = 25;
             }
+        }
+
+        if(src instanceof Buff || src instanceof Blob){
+            damage = Math.max(0, damage-1);
         }
 
         int preHP = HP;

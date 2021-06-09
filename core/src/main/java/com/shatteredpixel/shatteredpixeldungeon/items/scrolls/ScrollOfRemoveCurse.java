@@ -100,14 +100,12 @@ public class ScrollOfRemoveCurse extends InventoryScroll {
 	public static boolean uncursable( Item item ){
 		if (item.isEquipped(Dungeon.hero) && Dungeon.hero.buff(Degrade.class) != null) {
 			return true;
-		} if ((item instanceof EquipableItem || item instanceof Wand) && (!item.isIdentified() || item.cursed)){
+		} if ((item instanceof EquipableItem || item instanceof Wand) && ((!item.isIdentified() && !item.cursedKnown) || item.cursed)){
 			return true;
 		} else if (item instanceof Weapon){
 			return ((Weapon)item).hasCurseEnchant();
 		} else if (item instanceof Armor){
 			return ((Armor)item).hasCurseGlyph();
-		} else if (item.level() != item.buffedLvl()) {
-			return true;
 		} else {
 			return false;
 		}

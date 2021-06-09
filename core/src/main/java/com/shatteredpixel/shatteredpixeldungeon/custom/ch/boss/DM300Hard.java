@@ -150,7 +150,7 @@ public class DM300Hard extends Boss{
             }//else, just act
         }
         if(summonCD<0f){
-            summonCD += Math.max(47f - phase * 3f, 23f);
+            summonCD += Math.max(60f - phase * 2f, 40f);
             summonCaster(Random.Int(4), findRandomPlaceForCaster(), phase>5);
         }
         summonCD -= 1/speed();
@@ -173,9 +173,9 @@ public class DM300Hard extends Boss{
                 sprite.emitter().start(SparkParticle.STATIC, 0.05f, 20);
             }
 
-            Buff.affect(this, Barrier.class).setShield( 30 );
+            Buff.affect(this, Barrier.class).setShield( 20 );
 
-            summonCD -= 32f;
+            summonCD -= 24f;
 
         }
     }

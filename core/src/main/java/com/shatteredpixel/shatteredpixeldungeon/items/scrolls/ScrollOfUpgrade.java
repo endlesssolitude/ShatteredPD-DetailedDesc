@@ -22,13 +22,11 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.scrolls;
 
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Degrade;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
-import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.generator.TestPotion;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -52,12 +50,6 @@ public class ScrollOfUpgrade extends InventoryScroll {
 	
 	@Override
 	protected void onItemSelected( Item item ) {
-
-		if(Dungeon.isChallenged(Challenges.TEST_MODE)){
-			if(Statistics.upgradesUsed > 99){
-				GLog.n(Messages.get(TestPotion.class, "upgrade_fail"));
-			}
-		}
 
 		upgrade( curUser );
 

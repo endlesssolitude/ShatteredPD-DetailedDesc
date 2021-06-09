@@ -41,7 +41,7 @@ import com.watabou.utils.FileUtils;
 
 public class WelcomeScene extends PixelScene {
 
-	private static final int LATEST_UPDATE = ShatteredPixelDungeon.v0_9_2;
+	private static final int LATEST_UPDATE = ShatteredPixelDungeon.v0_9_3;
 
 	@Override
 	public void create() {
@@ -190,18 +190,6 @@ public class WelcomeScene extends PixelScene {
 				Badges.saveGlobal();
 			}
 		}
-
-		//resetting language preference back to native for finnish speakers if they were on english
-		//This is because Finnish was unmaintained for quite a while
-		/*
-		if ( previousVersion <= 500
-				&& Languages.matchLocale(Locale.getDefault()) == Languages.FINNISH
-				&& Messages.lang() == Languages.ENGLISH) {
-			SPDSettings.language(Languages.FINNISH);
-			Messages.setup(Languages.FINNISH);
-		}
-
-		 */
 		
 		SPDSettings.version(ShatteredPixelDungeon.versionCode);
 	}

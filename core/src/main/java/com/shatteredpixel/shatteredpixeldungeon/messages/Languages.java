@@ -25,8 +25,7 @@ import java.util.Locale;
 
 public enum Languages {
 	ENGLISH("english",      "",   Status.REVIEWED,   null, null),
-	CHINESE("中文",         "zh", Status.UNREVIEWED,  new String[]{"Jinkeloid(zdx00793)", "endlesssolitude"}, new String[]{"931451545", "Fatir", "Fishbone", "HoofBumpBlurryface", "Lery", "Lyn_0401", "ShatteredFlameBlast", "SpaceAnchor", "hmdzl001", "leo", "tempest102"});
-
+	CHINESE("中文",         "zh", Status.UNREVIEWED,  new String[]{"Jinkeloid(zdx00793)", "endlesssolitude"}, new String[]{"931451545", "Chronie_Lynn_Iwa", "Fatir", "Fishbone", "HoofBumpBlurryface", "Lery", "Lyn_0401", "Ooooscar", "ShatteredFlameBlast", "SpaceAnchor", "hmdzl001", "leo", "tempest102"});
 
 	public enum Status{
 		//below 80% complete languages are not added.

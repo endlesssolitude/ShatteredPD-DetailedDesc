@@ -8,10 +8,10 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.SkeletonKey;
+import com.shatteredpixel.shatteredpixeldungeon.levels.CavesBossLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.CavesLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.CityLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
-import com.shatteredpixel.shatteredpixeldungeon.levels.NewCavesBossLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.ToxicTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
@@ -94,7 +94,7 @@ public class HardDM300Level extends Level {
     public String tileDesc( int tile ) {
         switch (tile) {
             case Terrain.WATER:
-                return super.tileDesc( tile ) + "\n\n" + Messages.get(NewCavesBossLevel.class, "water_desc");
+                return super.tileDesc( tile ) + "\n\n" + Messages.get(CavesBossLevel.class, "water_desc");
             case Terrain.ENTRANCE:
                 return Messages.get(CavesLevel.class, "entrance_desc");
             case Terrain.EXIT:
@@ -127,7 +127,7 @@ public class HardDM300Level extends Level {
 
         for(int i=4*WIDTH;i<length-4*WIDTH;++i){
             if(!solid[i]) {
-                if (Random.Int(100) < 20) {
+                if (Random.Int(100) < 18) {
                     map[i] = Terrain.INACTIVE_TRAP;
                     Trap t = new ToxicTrap().reveal();
                     t.active = false;
@@ -227,15 +227,15 @@ public class HardDM300Level extends Level {
             W, W, W, W, W, e, e, e, e, e, e, e, e, e, e, e, W, W, W, W, W,
             W, W, W, W, e, e, e, e, e, e, e, e, e, e, e, e, e, W, W, W, W,
             W, W, W, e, e, e, e, e, e, e, e, e, e, e, e, e, e, e, W, W, W,
-            W, W, W, e, e, e, e, e, e, e, e, e, e, e, e, e, e, e, W, W, W,
             W, W, W, e, e, e, e, e, e, e, W, e, e, e, e, e, e, e, W, W, W,
-            W, W, W, e, e, e, e, e, e, e, W, e, e, e, e, e, e, e, W, W, W,
-            W, W, W, e, e, e, e, e, e, e, e, e, e, e, e, e, e, e, W, W, W,
-            W, W, W, e, e, e, e, W, W, e, e, e, W, W, e, e, e, e, W, W, W,
-            W, W, W, e, e, e, e, e, e, e, e, e, e, e, e, e, e, e, W, W, W,
             W, W, W, e, e, e, e, e, e, e, W, e, e, e, e, e, e, e, W, W, W,
             W, W, W, e, e, e, e, e, e, e, W, e, e, e, e, e, e, e, W, W, W,
             W, W, W, e, e, e, e, e, e, e, e, e, e, e, e, e, e, e, W, W, W,
+            W, W, W, e, e, e, W, W, W, e, e, e, W, W, W, e, e, e, W, W, W,
+            W, W, W, e, e, e, e, e, e, e, e, e, e, e, e, e, e, e, W, W, W,
+            W, W, W, e, e, e, e, e, e, e, W, e, e, e, e, e, e, e, W, W, W,
+            W, W, W, e, e, e, e, e, e, e, W, e, e, e, e, e, e, e, W, W, W,
+            W, W, W, e, e, e, e, e, e, e, W, e, e, e, e, e, e, e, W, W, W,
             W, W, W, e, e, e, e, e, e, e, e, e, e, e, e, e, e, e, W, W, W,
             W, W, W, W, e, e, e, e, e, e, e, e, e, e, e, e, e, W, W, W, W,
             W, W, W, W, W, e, e, e, e, e, e, e, e, e, e, e, W, W, W, W, W,

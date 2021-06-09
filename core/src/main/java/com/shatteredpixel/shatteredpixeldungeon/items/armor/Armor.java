@@ -233,7 +233,9 @@ public class Armor extends EquipableItem {
 		this.seal = seal;
 		if (seal.level() > 0){
 			//doesn't trigger upgrading logic such as affecting curses/glyphs
-			level(level()+1);
+			int newLevel = level()+1;
+			if (curseInfusionBonus) newLevel--;
+			level(newLevel);
 			Badges.validateItemLevelAquired(this);
 		}
 		if (seal.getGlyph() != null){
@@ -422,8 +424,6 @@ public class Armor extends EquipableItem {
 				Badges.validateItemLevelAquired( this );
 			}
 		}
-
-		//damage = VirtualEnchantment.INSTANCE.defenseProc(this, attacker, defender, damage);
 		
 		return damage;
 	}
@@ -537,13 +537,7 @@ public class Armor extends EquipableItem {
 		lvl = Math.max(0, lvl);
 
 		//strength req decreases at +1,+3,+6,+10,etc.
-		int req = (8 + Math.round(tier * 2)) - (int)(Math.sqrt(8 * lvl + 1) - 1)/2;
-
-		if (Dungeon.hero.hasTalent(Talent.STRONGMAN)){
-			req -= (Dungeon.hero.pointsInTalent(Talent.STRONGMAN)+1)/2;
-		}
-
-		return req;
+		return (8 + Math.round(tier * 2)) - (int)(Math.sqrt(8 * lvl + 1) - 1)/2;
 	}
 	
 	@Override

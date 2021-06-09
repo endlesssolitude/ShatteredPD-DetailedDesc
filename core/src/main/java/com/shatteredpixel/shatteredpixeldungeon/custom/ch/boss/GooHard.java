@@ -34,7 +34,7 @@ import java.util.ArrayList;
 public class GooHard extends Boss{
     {
         initProperty();
-        initBaseStatus(3, 8, 14, 10, 128, 0, 2);
+        initBaseStatus(3, 8, 14, 10, 144, 0, 2);
         initStatus(20);
 
         properties.add(Property.DEMONIC);
@@ -99,10 +99,6 @@ public class GooHard extends Boss{
             }
 
             sprite.emitter().burst( Speck.factory( Speck.HEALING ), surroundingWater() > 7 ? 4:1 );
-        }
-
-        if (state != SLEEPING){
-            Dungeon.level.seal();
         }
 
         Dungeon.level.setCellToWater(true, pos);
@@ -214,8 +210,8 @@ public class GooHard extends Boss{
     }
 
     @Override
-    public boolean attack( Char enemy ) {
-        boolean result = super.attack( enemy );
+    public boolean attack( Char enemy, float dmgMulti, float dmgBonus, float accMulti ) {
+        boolean result = super.attack(  enemy, dmgMulti, dmgBonus, accMulti );
         pumpedUp = 0;
         return result;
     }
@@ -255,11 +251,10 @@ public class GooHard extends Boss{
         Dungeon.level.unseal();
 
         GameScene.bossSlain();
-        Dungeon.level.drop( new IronKey( Dungeon.depth ), pos ).sprite.drop();
+        Dungeon.level.drop( new IronKey( Dungeon.depth ).quantity(2), pos ).sprite.drop();
         Dungeon.level.drop( new SkeletonKey( Dungeon.depth ), pos ).sprite.drop();
         Dungeon.level.drop( new GoldenKey( Dungeon.depth ), pos ).sprite.drop();
 
-        //60% chance of 2 blobs, 30% chance of 3, 10% chance for 4. Average of 2.5
         int blobs = Random.chances(new float[]{5, 4, 3, 2, 1}) + 3;
         for (int i = 0; i < blobs; i++){
             int ofs;

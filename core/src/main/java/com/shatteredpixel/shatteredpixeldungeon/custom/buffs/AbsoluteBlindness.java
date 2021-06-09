@@ -40,7 +40,7 @@ public class AbsoluteBlindness extends Buff {
         storedViewDistance = b.getInt("stroedVD");
         left = b.getFloat("blindLeft") + 1f;
     }
-
+    //deprecate
     public AbsoluteBlindness storeVD(int vd){
         if(vd>0) {
             storedViewDistance = vd;
@@ -55,7 +55,8 @@ public class AbsoluteBlindness extends Buff {
 
     @Override
     public void detach(){
-        target.viewDistance = storedViewDistance;
+        //target.viewDistance = storedViewDistance;
+        target.viewDistance = Dungeon.level.viewDistance;
         Dungeon.observe();
         super.detach();
     }

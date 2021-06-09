@@ -4,13 +4,13 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.Ankh;
-import com.shatteredpixel.shatteredpixeldungeon.items.ArmorKit;
-import com.shatteredpixel.shatteredpixeldungeon.items.DewVial;
 import com.shatteredpixel.shatteredpixeldungeon.items.Dewdrop;
 import com.shatteredpixel.shatteredpixeldungeon.items.Honeypot;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.TomeOfMastery;
+import com.shatteredpixel.shatteredpixeldungeon.items.KingsCrown;
+import com.shatteredpixel.shatteredpixeldungeon.items.TengusMask;
 import com.shatteredpixel.shatteredpixeldungeon.items.Torch;
+import com.shatteredpixel.shatteredpixeldungeon.items.Waterskin;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.ArcaneBomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Firebomb;
@@ -171,7 +171,6 @@ public class TestPotion extends TestGenerator {
         Item item = Reflection.newInstance(idToItem(selected));
         if(Challenges.isItemBlocked(item)) return;
         if (item != null) {
-
             if(item.stackable){
                 int qu = item_quantity * (multiply?10:1);
                 collect = item.quantity(qu).collect();
@@ -454,10 +453,10 @@ public class TestPotion extends TestGenerator {
             case 2: return MetalShard.class;
             case 3: return Honeypot.class;
             case 4: return Ankh.class;
-            case 5: return DewVial.class;
+            case 5: return Waterskin.class;
             case 6: return Dewdrop.class;
-            case 7: default: return ArmorKit.class;
-            case 8: return TomeOfMastery.class;
+            case 7: default: return KingsCrown.class;
+            case 8: return TengusMask.class;
         }
     }
 

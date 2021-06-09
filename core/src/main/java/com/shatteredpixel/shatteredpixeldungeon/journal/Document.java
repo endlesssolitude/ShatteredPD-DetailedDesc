@@ -101,11 +101,11 @@ public enum Document {
 	public static final String GUIDE_SEARCH_PAGE = "Examining_and_Searching";
 	
 	static {
-		ADVENTURERS_GUIDE.pages.put(GUIDE_INTRO_PAGE, 		true);
+		ADVENTURERS_GUIDE.pages.put(GUIDE_INTRO_PAGE, 	true);
 		ADVENTURERS_GUIDE.pages.put("Identifying", 		true);
-		ADVENTURERS_GUIDE.pages.put(GUIDE_SEARCH_PAGE, 		true);
-		ADVENTURERS_GUIDE.pages.put("Strength", 			true);
-		ADVENTURERS_GUIDE.pages.put("Food", 				true);
+		ADVENTURERS_GUIDE.pages.put(GUIDE_SEARCH_PAGE, 	true);
+		ADVENTURERS_GUIDE.pages.put("Strength", 		true);
+		ADVENTURERS_GUIDE.pages.put("Food", 			true);
 		ADVENTURERS_GUIDE.pages.put("Levelling", 		true);
 		ADVENTURERS_GUIDE.pages.put("Surprise_Attacks", true);
 		ADVENTURERS_GUIDE.pages.put("Dieing", 			true);
@@ -117,7 +117,7 @@ public enum Document {
 		ALCHEMY_GUIDE.pages.put("Stones",               true);
 		ALCHEMY_GUIDE.pages.put("Energy_Food",          true);
 		ALCHEMY_GUIDE.pages.put("Bombs",                true);
-		//ALCHEMY_GUIDE.pages.put("Darts",              true);
+		//ALCHEMY_GUIDE.pages.put("Darts",              DeviceCompat.isDebug());
 		
 		//prison
 		ALCHEMY_GUIDE.pages.put("Exotic_Potions",       true);

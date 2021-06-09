@@ -226,8 +226,8 @@ public abstract class RegularLevel extends Level {
 				mobsToSpawn--;
 				mobs.add(mob);
 
-				//add a second mob to this room
-				if (mobsToSpawn > 0 && Random.Int(4) == 0){
+				//chance to add a second mob to this room, except on floor 1
+				if (Dungeon.depth > 1 && mobsToSpawn > 0 && Random.Int(4) == 0){
 					mob = createMob();
 
 					tries = 30;
@@ -320,7 +320,12 @@ public abstract class RegularLevel extends Level {
 			nItems += 2;
 		}
 
+		//More mimic,  More reward
 		int triesForMimic = 1000;
+		if(Dungeon.isChallenged(Challenges.MIMIC_DUNGEON)){
+			nItems += 2;
+		}
+
 		for (int i=0; i < nItems; i++) {
 
 			Item toDrop = Generator.random();
@@ -333,6 +338,7 @@ public abstract class RegularLevel extends Level {
 			}
 
 			Heap.Type type = null;
+
 			if(Dungeon.isChallenged(Challenges.MIMIC_DUNGEON)){
 				triesForMimic--;
 				if(triesForMimic<0) break;
@@ -341,10 +347,12 @@ public abstract class RegularLevel extends Level {
 							(toDrop.isUpgradable() && Random.Int(4 - toDrop.level()) == 0)){
 						mobs.add(MimicForChallenge.spawnAt(cell, toDrop, GoldenMimicForChallenge.class));
 					}else{mobs.add(MimicForChallenge.spawnAt(cell, toDrop));}
-				}else{i--;
+				}else{
+					//fail, reroll
+					i--;
 				}
 				continue;
-			} else {
+			}else {
 				switch (Random.Int(20)) {
 					case 0:
 						type = Heap.Type.SKELETON;

@@ -120,7 +120,9 @@ abstract public class MissileWeapon extends Weapon {
 				Item similar = Dungeon.hero.belongings.getSimilar(this);
 				if (similar != null){
 					detach(Dungeon.hero.belongings.backpack);
-					return similar.merge(this);
+					Item result = similar.merge(this);
+					updateQuickslot();
+					return result;
 				}
 				updateQuickslot();
 				return this;
@@ -233,7 +235,7 @@ abstract public class MissileWeapon extends Weapon {
 	
 	@Override
 	public float castDelay(Char user, int dst) {
-		return speedFactor( user );
+		return delayFactor( user );
 	}
 	
 	protected void rangedHit( Char enemy, int cell ){
@@ -312,7 +314,7 @@ abstract public class MissileWeapon extends Weapon {
 				damage += Random.IntRange( 0, exStr );
 			}
 			if (owner.buff(Momentum.class) != null && owner.buff(Momentum.class).freerunning()) {
-				damage = Math.round(damage * (1f + 0.1f * ((Hero) owner).pointsInTalent(Talent.PROJECTILE_MOMENTUM)));
+				damage = Math.round(damage * (1f + 0.15f * ((Hero) owner).pointsInTalent(Talent.PROJECTILE_MOMENTUM)));
 			}
 		}
 		

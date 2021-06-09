@@ -141,7 +141,7 @@ public enum EnchRecipe{
     TIER_DOWN_TWO(TierChange.TierDownTwo.class, 1,  GooBlob.class, StoneOfAugmentation.class, StoneOfEnchantment.class),
     TIER_DOWN_THREE(TierChange.TierDownThree.class, 1,  GooBlob.class, ScrollOfTransmutation.class, StoneOfAugmentation.class),
 
-    ERASE(Erasing.class, 1, Fadeleaf.Seed.class, Stormvine.Seed.class);
+    ERASE(Erasing.class, 1, Fadeleaf.Seed.class);
 
 
     public ArrayList<Class<? extends Item>> input = new ArrayList<>();

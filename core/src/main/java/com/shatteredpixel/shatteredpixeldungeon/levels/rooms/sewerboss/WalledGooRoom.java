@@ -58,11 +58,10 @@ public class WalledGooRoom extends GooBossRoom {
 		Painter.fill( level, left + width()/2 - 2, top + height()/2 - 1, 4 + width()%2, 2 + height()%2, Terrain.WATER);
 		
 		setupGooNest(level);
-
-			Goo boss = new Goo();
-			boss.pos = level.pointToCell(center());
-			level.mobs.add( boss );
-
+		
+		Goo boss = new Goo();
+		boss.pos = level.pointToCell(center());
+		level.mobs.add( boss );
 	}
 	
 	@Override

@@ -2,7 +2,6 @@ package com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.city;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Electricity;
@@ -388,10 +387,10 @@ public abstract class ElementalH extends Mob {
             boolean blind = enemy.buff(Blindness.class) != null;
             boolean seeNothing = enemy.buff(AbsoluteBlindness.class) != null;
             if(seeNothing){
-                Buff.affect(enemy, AbsoluteBlindness.class).addLeft(9f);
+                Buff.affect(enemy, AbsoluteBlindness.class).addLeft(7f);
                 Buff.detach(enemy, Blindness.class);
             } else if(blind){
-                Buff.affect(enemy, AbsoluteBlindness.class).addLeft(9f).storeVD(enemy.viewDistance);
+                Buff.affect(enemy, AbsoluteBlindness.class).addLeft(7f).storeVD(enemy.viewDistance);
                 Buff.detach(enemy, Blindness.class);
             }else {
                 Buff.affect(enemy, Blindness.class, Blindness.DURATION);
@@ -418,7 +417,7 @@ public abstract class ElementalH extends Mob {
 
         @Override
         protected int setCD() {
-            return Random.IntRange(2,3);
+            return Random.IntRange(3,4);
         }
 
     }

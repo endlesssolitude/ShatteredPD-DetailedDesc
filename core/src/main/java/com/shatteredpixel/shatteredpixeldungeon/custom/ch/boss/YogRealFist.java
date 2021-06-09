@@ -16,7 +16,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Light;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Ooze;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Roots;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Yog;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.YogFist;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
@@ -637,12 +636,7 @@ public abstract class YogRealFist extends Mob {
                     new Callback() {
                         @Override
                         public void call() {
-                            //pre-0.8.0 saves
-                            if (ch instanceof Yog.BurningFist){
-                                ((Yog.BurningFist)ch).onZapComplete();
-                            } else {
-                                ((YogRealFist)ch).onZapComplete();
-                            }
+                            ((YogRealFist)ch).onZapComplete();
                         }
                     } );
             Sample.INSTANCE.play( Assets.Sounds.ZAP );

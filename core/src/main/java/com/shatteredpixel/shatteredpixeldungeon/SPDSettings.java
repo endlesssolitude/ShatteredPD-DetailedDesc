@@ -161,7 +161,7 @@ public class SPDSettings extends GameSettings {
 	public static final String KEY_INTRO		= "intro";
 
 	public static final String KEY_SUPPORT_NAGGED= "support_nagged";
-
+	
 	public static void intro( boolean value ) {
 		put( KEY_INTRO, value );
 	}
@@ -193,7 +193,7 @@ public class SPDSettings extends GameSettings {
 	public static boolean supportNagged() {
 		return getBoolean(KEY_SUPPORT_NAGGED, false);
 	}
-
+	
 	//Audio
 	
 	public static final String KEY_MUSIC		= "music";
@@ -260,7 +260,8 @@ public class SPDSettings extends GameSettings {
 	}
 	
 	public static boolean systemFont(){
-		return getBoolean(KEY_SYSTEMFONT, language() == Languages.CHINESE);
+		return getBoolean(KEY_SYSTEMFONT,
+				( language() == Languages.CHINESE ));
 	}
 
 	//Connectivity

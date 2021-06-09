@@ -143,7 +143,7 @@ public class WandOfReflectDisintegration extends WandOfDisintegration {
     }
 
     @Override
-    protected void onZap( Ballistica beam ) {
+    public void onZap( Ballistica beam ) {
 
         if(isTest) {
             curUser.spend(-0.9f);
@@ -193,7 +193,7 @@ public class WandOfReflectDisintegration extends WandOfDisintegration {
 
         int lvl = level;
         for (Char ch : chars) {
-            processSoulMark(ch, chargesPerCast());
+            wandProc(ch, chargesPerCast());
             int damage = Math.round(damageRoll(lvl)*reflectionDamageFactor(reflection));
             if(!ch.equals(curUser)) {
                 ch.damage(damage, this);
@@ -220,7 +220,7 @@ public class WandOfReflectDisintegration extends WandOfDisintegration {
     }
 
     @Override
-    protected void fx( Ballistica beam, Callback callback ) {
+    public void fx( Ballistica beam, Callback callback ) {
         buildBeams(beam);
         int size = fxE.size();
         for(int i=0;i<size;++i){

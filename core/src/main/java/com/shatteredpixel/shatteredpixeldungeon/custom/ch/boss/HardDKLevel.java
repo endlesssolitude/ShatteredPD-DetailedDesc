@@ -9,10 +9,10 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Imp;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.levels.CityBossLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.CityLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.HallsLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
-import com.shatteredpixel.shatteredpixeldungeon.levels.NewCityBossLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.CityPainter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
@@ -493,9 +493,9 @@ public class HardDKLevel extends Level {
                 //DK arena tiles
             } else {
                 if (Dungeon.level.map[cell] == Terrain.SIGN){
-                    return Messages.get(NewCityBossLevel.class, "throne_name");
+                    return Messages.get(CityBossLevel.class, "throne_name");
                 } else if (Dungeon.level.map[cell] == Terrain.PEDESTAL){
-                    return Messages.get(NewCityBossLevel.class, "summoning_name");
+                    return Messages.get(CityBossLevel.class, "summoning_name");
                 }
             }
 
@@ -519,9 +519,9 @@ public class HardDKLevel extends Level {
                 //DK arena tiles
             } else {
                 if (Dungeon.level.map[cell] == Terrain.SIGN){
-                    return Messages.get(NewCityBossLevel.class, "throne_desc");
+                    return Messages.get(CityBossLevel.class, "throne_desc");
                 } else if (Dungeon.level.map[cell] == Terrain.PEDESTAL){
-                    return Messages.get(NewCityBossLevel.class, "summoning_desc");
+                    return Messages.get(CityBossLevel.class, "summoning_desc");
                 }
             }
 

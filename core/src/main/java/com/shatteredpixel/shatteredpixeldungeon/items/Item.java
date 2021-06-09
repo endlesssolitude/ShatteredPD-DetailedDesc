@@ -103,13 +103,16 @@ public class Item implements Bundlable {
 		actions.add( AC_THROW );
 		return actions;
 	}
+
+	public String actionName(String action, Hero hero){
+		return Messages.get(this, "ac_" + action);
+	}
 	
 	public boolean doPickUp( Hero hero ) {
 		if (collect( hero.belongings.backpack )) {
 			
 			GameScene.pickUp( this, hero.pos );
 			Sample.INSTANCE.play( Assets.Sounds.ITEM );
-			Talent.onItemCollected( hero, this );
 			hero.spendAndNext( TIME_TO_PICK_UP );
 			return true;
 			
@@ -202,6 +205,7 @@ public class Item implements Bundlable {
 				if (isSimilar( item )) {
 					item.merge( this );
 					item.updateQuickslot();
+					Talent.onItemCollected( Dungeon.hero, item );
 					return true;
 				}
 			}
@@ -209,6 +213,7 @@ public class Item implements Bundlable {
 
 		if (Dungeon.hero != null && Dungeon.hero.isAlive()) {
 			Badges.validateItemLevelAquired( this );
+			Talent.onItemCollected( Dungeon.hero, this );
 		}
 
 		items.add( this );
@@ -466,9 +471,9 @@ public class Item implements Bundlable {
 	public String status() {
 		return quantity != 1 ? Integer.toString( quantity ) : null;
 	}
-	
+
 	public static void updateQuickslot() {
-			QuickSlotButton.refresh();
+		QuickSlotButton.refresh();
 	}
 	
 	private static final String QUANTITY		= "quantity";
@@ -555,7 +560,7 @@ public class Item implements Bundlable {
 								if (enemy != null && enemy.alignment != curUser.alignment){
 									Sample.INSTANCE.play(Assets.Sounds.HIT);
 									Buff.affect(enemy, Blindness.class, 1f + curUser.pointsInTalent(Talent.IMPROVISED_PROJECTILES));
-									Buff.affect(curUser, Talent.ImprovisedProjectileCooldown.class, 30f);
+									Buff.affect(curUser, Talent.ImprovisedProjectileCooldown.class, 50f);
 								}
 							}
 							if (user.buff(Talent.LethalMomentumTracker.class) != null){
