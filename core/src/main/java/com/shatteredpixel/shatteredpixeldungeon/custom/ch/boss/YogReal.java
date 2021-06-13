@@ -203,7 +203,7 @@ public class YogReal extends Boss{
                 Buff.detach(this, YogScanRound.class);
                 int skill  = Random.chances(skillBalance);
                 if (skill == 0) {
-                    Char enemy = (this.enemy == null ? this.enemy : Dungeon.hero);
+                    Char enemy = (this.enemy == null ? Dungeon.hero : this.enemy);
                     int w = Dungeon.level.width();
                     int dx = enemy.pos % w - pos % w;
                     int dy = enemy.pos / w - pos / w;

@@ -32,7 +32,7 @@ public class Tidal extends CountInscription {
                 Char ch = Actor.findChar(i);
                 if(ch != null && ch != attacker){
                     WandOfBlastWave.throwChar(ch, HitBack.hitBack(attacker, ch), dist);
-                    ch.damage(GME.accurateRound(damage*.2f), attacker);
+                    ch.damage(GME.accurateRound(damage*.4f), attacker);
                 }
             }
         }

@@ -14,7 +14,6 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.GoldenKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.IronKey;
-import com.shatteredpixel.shatteredpixeldungeon.items.keys.SkeletonKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.GooBlob;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -34,7 +33,7 @@ import java.util.ArrayList;
 public class GooHard extends Boss{
     {
         initProperty();
-        initBaseStatus(3, 8, 14, 10, 144, 0, 2);
+        initBaseStatus(3, 8, 14, 10, 150, 0, 2);
         initStatus(20);
 
         properties.add(Property.DEMONIC);
@@ -252,7 +251,6 @@ public class GooHard extends Boss{
 
         GameScene.bossSlain();
         Dungeon.level.drop( new IronKey( Dungeon.depth ).quantity(2), pos ).sprite.drop();
-        Dungeon.level.drop( new SkeletonKey( Dungeon.depth ), pos ).sprite.drop();
         Dungeon.level.drop( new GoldenKey( Dungeon.depth ), pos ).sprite.drop();
 
         int blobs = Random.chances(new float[]{5, 4, 3, 2, 1}) + 3;

@@ -9,7 +9,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.watabou.utils.Bundle;
 
 public abstract class Stacking extends CountInscription {
-    protected int id;
+    protected int id = 0;
     protected int stacks = 0;
 
     @Override
@@ -34,10 +34,11 @@ public abstract class Stacking extends CountInscription {
         public int proc(Weapon weapon, Char attacker, Char defender, int damage) {
             if(defender.id() == id){
                 ++stacks;
-                damage = GME.accurateRound(damage + weapon.buffedLvl() * 1.35f * stacks);
+                damage = GME.accurateRound(damage + weapon.buffedLvl() * 1.25f * stacks);
                 consume(weapon, attacker);
             }else{
                 id = defender.id();
+                stacks = 0;
             }
             return damage;
         }
@@ -56,6 +57,7 @@ public abstract class Stacking extends CountInscription {
             }else{
                 id = defender.id();
                 Buff.affect(defender, Poison.class).extend(3f);
+                stacks = 0;
             }
             return damage;
         }
