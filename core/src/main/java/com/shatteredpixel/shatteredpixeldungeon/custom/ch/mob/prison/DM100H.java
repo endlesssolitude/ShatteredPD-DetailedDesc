@@ -30,7 +30,7 @@ import com.watabou.utils.Random;
 public class DM100H extends DM100 {
     {
         EXP = 7;
-        HT = HP = 23;
+        HT = HP = 21;
     }
 
     {
@@ -150,7 +150,7 @@ public class DM100H extends DM100 {
                 Sample.INSTANCE.play( Assets.Sounds.LIGHTNING, 1.5f);
                 boolean alive = aim.isAlive();
 
-                aim.damage(Random.Int(28, 38), new SkyLightning());
+                aim.damage(Random.Int(25, 35), new SkyLightning());
                 aim.sprite.centerEmitter().burst( SparkParticle.FACTORY, 32 );
                 aim.sprite.flash();
 

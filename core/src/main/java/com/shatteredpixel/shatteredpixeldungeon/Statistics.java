@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon;
 
+import com.shatteredpixel.shatteredpixeldungeon.custom.utils.CustomGameSettings;
 import com.watabou.utils.Bundle;
 
 public class Statistics {
@@ -149,23 +150,28 @@ public class Statistics {
 	public static int boss_enhance = 0;
 	public static int elite_enemies = 0;
 	public static float real_time_passed = 0;
+	public static boolean isCustomSeed = false;
 
 	private static void resetCustom(){
 		boss_enhance = 0;
 		elite_enemies = 0;
 		real_time_passed = 0f;
+		//Dungeon is inited, so write directly.
+		isCustomSeed = !CustomGameSettings.getSeedString().equals("");
 	}
 
 	private static void storeCustom(Bundle b){
 		b.put("boss_enhance", boss_enhance);
 		b.put("elite_enemies", elite_enemies);
 		b.put("real_time_passed", real_time_passed);
+		b.put("is_custom_seed", isCustomSeed);
 	}
 
 	private static void restoreCustom(Bundle b){
 		boss_enhance = b.getInt("boss_enhance");
 		elite_enemies = b.getInt("elite_enemies");
 		real_time_passed = b.getFloat("real_time_passed");
+		isCustomSeed = b.getBoolean("is_custom_seed");
 	}
 
 }

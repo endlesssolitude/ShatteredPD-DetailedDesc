@@ -944,7 +944,7 @@ public class TenguHard extends Boss{
                 if(ch != null){
                     if(ch.alignment != Alignment.ENEMY){
                         ch.damage(Random.IntRange(6, 10), TenguHard.class);
-                        Buff.affect(ch, Cripple.class, 3f);
+                        Buff.affect(ch, Cripple.class, 2f);
                         if (ch == Dungeon.hero && !ch.isAlive()) {
                             Dungeon.fail(getClass());
                         }

@@ -3,7 +3,6 @@ package com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.city;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
@@ -50,7 +49,7 @@ public class SeniorMonkH extends Monk {
     @Override
     public int attackProc(Char enemy, int damage){
         ++hitsForSkill;
-        if(enemy == Dungeon.hero && hitsForSkill>6){
+        if(enemy == Dungeon.hero && hitsForSkill>7){
             hitsForSkill = 0;
             Hero hero = Dungeon.hero;
             //cannot hitback rooted enemy!
@@ -60,7 +59,6 @@ public class SeniorMonkH extends Monk {
                     @Override
                     public void call() {
                         Camera.main.shake(3f, 0.5f);
-                        Buff.affect(hero, Blindness.class, 6f);
                         Buff.affect(hero, Vertigo.class, 8f);
                         Buff.affect(hero, Cripple.class, 8f);
                         hero.spendAndNext(TICK);
@@ -91,8 +89,8 @@ public class SeniorMonkH extends Monk {
     public void move( int step ) {
         // moving reduces cooldown by an additional 0.67, giving a total reduction of 1.67f.
         // basically monks will become focused notably faster if you kite them.
-        // additional 0.67
-        focusCooldown -= 0.67f;
+        // additional 0.5
+        focusCooldown -= 0.5f;
         super.move( step );
     }
 

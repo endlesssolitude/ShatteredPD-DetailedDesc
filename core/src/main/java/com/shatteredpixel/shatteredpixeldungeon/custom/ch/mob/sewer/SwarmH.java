@@ -50,7 +50,7 @@ public class SwarmH extends Mob {
                 Char ch = findChar(j);
                 if(ch!=null){
                     if(ch.alignment == Alignment.ENEMY){
-                        Buff.affect(ch, Healing.class).setHeal(13-3*i, 1, 0);
+                        Buff.affect(ch, Healing.class).setHeal(12-3*i, 1, 0);
                         ch.sprite.showStatus(CharSprite.POSITIVE, "%d",13-3*i);
                     }
                 }

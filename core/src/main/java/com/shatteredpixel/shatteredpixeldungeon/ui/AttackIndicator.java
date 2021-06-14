@@ -30,24 +30,25 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.watabou.input.GameAction;
 import com.watabou.noosa.Game;
 import com.watabou.utils.Random;
+import com.watabou.utils.Reflection;
 
 import java.util.ArrayList;
 
 //FIXME needs a refactor, lots of weird thread interaction here.
 public class AttackIndicator extends Tag {
-	
+
 	private static final float ENABLED	= 1.0f;
 	private static final float DISABLED	= 0.3f;
 
 	private static float delay;
-	
+
 	private static AttackIndicator instance;
-	
+
 	private CharSprite sprite = null;
-	
+
 	private Mob lastTarget;
 	private ArrayList<Mob> candidates = new ArrayList<>();
-	
+
 	public AttackIndicator() {
 		super( DangerIndicator.COLOR );
 
@@ -60,21 +61,21 @@ public class AttackIndicator extends Tag {
 			enable(false);
 		}
 	}
-	
+
 	@Override
 	public GameAction keyAction() {
 		return SPDAction.TAG_ATTACK;
 	}
-	
+
 	@Override
 	protected void createChildren() {
 		super.createChildren();
 	}
-	
+
 	@Override
 	protected synchronized void layout() {
 		super.layout();
-		
+
 		if (sprite != null) {
 			sprite.x = x + (width - sprite.width()) / 2 + 1;
 			sprite.y = y + (height - sprite.height()) / 2;
@@ -82,16 +83,9 @@ public class AttackIndicator extends Tag {
 		}
 	}
 
-	private boolean needsImageUpdate = false;
-	
 	@Override
 	public synchronized void update() {
 		super.update();
-
-		if (needsImageUpdate){
-			updateImage();
-			needsImageUpdate = false;
-		}
 
 		if (!bg.visible){
 			enable(false);
@@ -100,7 +94,7 @@ public class AttackIndicator extends Tag {
 		} else {
 			delay = 0.75f;
 			active = true;
-		
+
 			if (Dungeon.hero.isAlive()) {
 
 				enable(Dungeon.hero.ready);
@@ -111,7 +105,7 @@ public class AttackIndicator extends Tag {
 			}
 		}
 	}
-	
+
 	private synchronized void checkEnemies() {
 
 		candidates.clear();
@@ -122,14 +116,14 @@ public class AttackIndicator extends Tag {
 				candidates.add( mob );
 			}
 		}
-		
+
 		if (!candidates.contains( lastTarget )) {
 			if (candidates.isEmpty()) {
 				lastTarget = null;
 			} else {
 				active = true;
 				lastTarget = Random.element( candidates );
-				needsImageUpdate = true;
+				updateImage();
 				flash();
 			}
 		} else {
@@ -138,31 +132,29 @@ public class AttackIndicator extends Tag {
 				flash();
 			}
 		}
-		
+
 		visible( lastTarget != null );
 		enable( bg.visible );
 	}
-	
+
 	private synchronized void updateImage() {
-		
+
 		if (sprite != null) {
 			sprite.killAndErase();
 			sprite = null;
 		}
 
-		if (lastTarget != null) {
-			sprite = lastTarget.sprite();
-			active = true;
-			sprite.linkVisuals(lastTarget);
-			sprite.idle();
-			sprite.paused = true;
-			sprite.visible = bg.visible;
-			add(sprite);
-		}
+		sprite = Reflection.newInstance(lastTarget.spriteClass);
+		active = true;
+		sprite.linkVisuals(lastTarget);
+		sprite.idle();
+		sprite.paused = true;
+		sprite.visible = bg.visible;
+		add( sprite );
 
 		layout();
 	}
-	
+
 	private boolean enabled = true;
 	private synchronized void enable( boolean value ) {
 		enabled = value;
@@ -170,14 +162,14 @@ public class AttackIndicator extends Tag {
 			sprite.alpha( value ? ENABLED : DISABLED );
 		}
 	}
-	
+
 	private synchronized void visible( boolean value ) {
 		bg.visible = value;
 		if (sprite != null) {
 			sprite.visible = value;
 		}
 	}
-	
+
 	@Override
 	protected void onClick() {
 		if (enabled) {
@@ -186,16 +178,16 @@ public class AttackIndicator extends Tag {
 			}
 		}
 	}
-	
+
 	public static void target( Char target ) {
 		synchronized (instance) {
 			instance.lastTarget = (Mob) target;
-			instance.needsImageUpdate = true;
+			instance.updateImage();
 
 			TargetHealthIndicator.instance.target(target);
 		}
 	}
-	
+
 	public static void updateState() {
 		instance.checkEnemies();
 	}

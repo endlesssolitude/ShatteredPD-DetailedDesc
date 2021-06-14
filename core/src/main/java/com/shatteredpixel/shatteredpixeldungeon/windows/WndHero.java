@@ -31,7 +31,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hex;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.StrengthAndSacrifice;
-import com.shatteredpixel.shatteredpixeldungeon.custom.dict.Dict;
 import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
 import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfAccuracy;
@@ -40,6 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
+import com.shatteredpixel.shatteredpixeldungeon.text.HeroStat;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.IconButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
@@ -48,6 +48,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.ScrollPane;
 import com.shatteredpixel.shatteredpixeldungeon.ui.StatusPane;
 import com.shatteredpixel.shatteredpixeldungeon.ui.TalentsPane;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
+import com.shatteredpixel.shatteredpixeldungeon.utils.DungeonSeed;
 import com.watabou.gltextures.SmartTexture;
 import com.watabou.gltextures.TextureCache;
 import com.watabou.noosa.Group;
@@ -121,7 +122,7 @@ public class WndHero extends WndTabbed {
 
 	private class StatsTab extends Group {
 		
-		private static final int GAP = 6;
+		private static final int GAP = 5;
 		
 		private float pos;
 		
@@ -161,23 +162,25 @@ public class WndHero extends WndTabbed {
 			statSlot( Messages.get(this, "exp"), hero.exp + "/" + hero.maxExp() );
 
 			if(Dungeon.hero.buff(Hunger.class)!=null){
-				statSlot(M.L(Dict.HeroStat.class, "hunger"), Dungeon.hero.buff(Hunger.class).hunger() + "/" +Hunger.STARVING);
+				statSlot(M.L(HeroStat.class, "hunger"), Dungeon.hero.buff(Hunger.class).hunger() + "/" +Hunger.STARVING);
 			}
-			statSlot( M.L(Dict.HeroStat.class, "skill") , attackskillcal() + "/" + defenseskillcal());
+			statSlot( M.L(HeroStat.class, "skill") , attackskillcal() + "/" + defenseskillcal());
 
 			pos += GAP;
 
 			statSlot( Messages.get(this, "gold"), Statistics.goldCollected );
 			statSlot( Messages.get(this, "depth"), Statistics.deepestFloor );
-			statSlot( M.L(Dict.HeroStat.class,"duration"),(int)Statistics.duration);
+			statSlot( M.L(HeroStat.class,"duration"),(int)Statistics.duration);
 
-			statSlot( M.L( Dict.HeroStat.class, "score"), Statistics.goldCollected + Statistics.deepestFloor * hero.lvl * 100 * (Statistics.amuletObtained ? 2:1 ) );
+			statSlot( M.L(HeroStat.class, "score"), Statistics.goldCollected + Statistics.deepestFloor * hero.lvl * 100 * (Statistics.amuletObtained ? 2:1 ) );
 			int secs = Math.round(Statistics.real_time_passed);
 			int day = secs / 86400;
 			int hr = (secs % 86400)/3600;
 			int min = (secs % 3600)/60;
 			int sec = secs % 60;
-			statSlot( M.L(Dict.HeroStat.class, "real_time"), day+"："+hr+"："+min+"："+sec);
+			statSlot( M.L(HeroStat.class, "real_time"), day+"d "+hr+"h "+min+"m "+sec+"s");
+			statSlot( M.L(HeroStat.class,"seed_dungeon"),  M.L(HeroStat.class, Statistics.isCustomSeed ?"seed_custom_yes":"seed_custom_no")
+					+ "-" + DungeonSeed.convertToCode(Dungeon.seed).toUpperCase());
 			pos += GAP;
 		}
 
@@ -230,7 +233,7 @@ public class WndHero extends WndTabbed {
 			add( txt );
 			
 			txt = PixelScene.renderTextBlock( value, 8 );
-			txt.setPos(WIDTH * 0.6f, pos);
+			txt.setPos(WIDTH * 0.45f, pos);
 			PixelScene.align(txt);
 			add( txt );
 			

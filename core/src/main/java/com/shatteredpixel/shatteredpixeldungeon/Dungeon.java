@@ -41,6 +41,7 @@ import com.shatteredpixel.shatteredpixeldungeon.custom.ch.boss.HardDM300Level;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.boss.HardGooLevel;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.boss.HardTenguLevel;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.boss.YogRealLevel;
+import com.shatteredpixel.shatteredpixeldungeon.custom.utils.CustomGameSettings;
 import com.shatteredpixel.shatteredpixeldungeon.items.Ankh;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
@@ -182,7 +183,8 @@ public class Dungeon {
 		challenges = SPDSettings.challenges();
 		mobsToChampion = -1;
 
-		seed = DungeonSeed.randomSeed();
+		String str = CustomGameSettings.getSeedString();
+		seed = str.equals("")?DungeonSeed.randomSeed():DungeonSeed.convertFromText(str);//DungeonSeed.randomSeed();
 
 		Actor.clear();
 		Actor.resetNextID();
