@@ -39,7 +39,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.rogue.Smok
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.Endure;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.HeroicLeap;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.Shockwave;
-import com.shatteredpixel.shatteredpixeldungeon.custom.ch.NumInputTester;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.boss.BossTome;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.mimic.MimicScroll;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.EnemyTome;
@@ -397,7 +396,7 @@ public enum HeroClass {
 
 			//new ScrollOfTestInch().quantity(100).identify().collect();
 
-			new NumInputTester().collect();
+			//new NumInputTester().collect();
 		}
 
 		if(Dungeon.isChallenged(Challenges.MIMIC_DUNGEON)){

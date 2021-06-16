@@ -57,8 +57,8 @@ public class GoldenMimicForChallenge extends MimicForChallenge {
 
     //A higher level means more offensive modifiers, so golden ones are MUCH MORE strong
     @Override
-    public void setLevel(int level) {
-        super.setLevel(Math.round(level*1.5f));
+    public void setFloatLevel(int floatLevel) {
+        super.setFloatLevel(Math.round(floatLevel *1.5f));
     }
 
     @Override

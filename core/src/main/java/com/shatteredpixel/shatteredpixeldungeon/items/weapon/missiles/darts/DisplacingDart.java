@@ -26,34 +26,39 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.utils.BArray;
+import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DisplacingDart extends TippedDart {
-	
+
 	{
 		image = ItemSpriteSheet.DISPLACING_DART;
 	}
-	
+
 	int distance = 8;
-	
+
 	@Override
 	public int proc(Char attacker, Char defender, int damage) {
-		
+
 		if (!defender.properties().contains(Char.Property.IMMOVABLE)){
-			
+
 			int startDist = Dungeon.level.distance(attacker.pos, defender.pos);
-			
+
 			HashMap<Integer, ArrayList<Integer>> positions = new HashMap<>();
-			
+
+			PathFinder.buildDistanceMap(defender.pos, BArray.or(Dungeon.level.passable, Dungeon.level.avoid, null));
+
 			for (int pos = 0; pos < Dungeon.level.length(); pos++){
 				if (Dungeon.level.heroFOV[pos]
 						&& Dungeon.level.passable[pos]
+						&& PathFinder.distance[pos] != Integer.MAX_VALUE
 						&& (!Char.hasProp(defender, Char.Property.LARGE) || Dungeon.level.openSpace[pos])
 						&& Actor.findChar(pos) == null){
-					
+
 					int dist = Dungeon.level.distance(attacker.pos, pos);
 					if (dist > startDist){
 						if (positions.get(dist) == null){
@@ -61,28 +66,28 @@ public class DisplacingDart extends TippedDart {
 						}
 						positions.get(dist).add(pos);
 					}
-					
+
 				}
 			}
-			
+
 			float[] probs = new float[distance+1];
-			
+
 			for (int i = 0; i <= distance; i++){
 				if (positions.get(i) != null){
 					probs[i] = i - startDist;
 				}
 			}
-			
+
 			int chosenDist = Random.chances(probs);
-			
+
 			if (chosenDist != -1){
 				int pos = positions.get(chosenDist).get(Random.index(positions.get(chosenDist)));
 				ScrollOfTeleportation.appear( defender, pos );
 				Dungeon.level.occupyCell(defender );
 			}
-		
+
 		}
-		
+
 		return super.proc(attacker, defender, damage);
 	}
 }

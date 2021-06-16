@@ -64,8 +64,8 @@ public class MimicForChallenge extends Mimic {
         flying=true;
     }
 
-    protected float level;
-    private static final String LEVEL = "level";
+    protected float FloatLevel;
+    private static final String LEVEL = "level_float";
     private static final String BASIC_MOD_FACTOR = "b_mod";
     private static final String TYPE_FACTOR = "type_f";
     private static final String ATTACK_FACTOR = "attack_factor";
@@ -97,7 +97,7 @@ public class MimicForChallenge extends Mimic {
 
         m.items = new ArrayList<>( items );
 
-        m.setLevel( Dungeon.depth );
+        m.setFloatLevel( Dungeon.depth );
         m.pos = pos;
 
         //generate an extra reward for killing the mimic
@@ -127,11 +127,11 @@ public class MimicForChallenge extends Mimic {
     }
 
     protected int basicModLevel(){
-        return Random.chances(new float[]{17,13,11,7})+Math.min(4, Math.round(level/6));
+        return Random.chances(new float[]{17,13,11,7})+Math.min(4, Math.round(FloatLevel /6));
     }
 
     protected int basicPerkModLevel(){
-        return Random.chances(new float[]{7,7,5,5})+Math.min(4, Math.round(level/6));
+        return Random.chances(new float[]{7,7,5,5})+Math.min(4, Math.round(FloatLevel /6));
     }
 
     private int maxBasicTags(){
@@ -244,14 +244,14 @@ public class MimicForChallenge extends Mimic {
     private static final int TRK_THROW = 14;
 
     private int maxSpecialTags(){
-        if(level<5) return 1;
-        else if(level<10) return 2;
+        if(FloatLevel <5) return 1;
+        else if(FloatLevel <10) return 2;
         else return 3;
     }
     //We are much more offensive on distributing high-level perks to improve interest and difficulty, and provide richer reward in early run.
     private void createSpecialModFactor(){
 
-        int reslevel = Random.chances(new float[]{50f - level, 30f - level/2, 20f + level/2, 10f + level});
+        int reslevel = Random.chances(new float[]{50f - FloatLevel, 30f - FloatLevel /2, 20f + FloatLevel /2, 10f + FloatLevel});
         switch(Random.Int(3)){
             case 0: resistMod += reslevel << RES_MELEE; break;
             case 1: resistMod += reslevel << RES_MISSILE; break;
@@ -311,11 +311,11 @@ public class MimicForChallenge extends Mimic {
     }
 
     protected int perkLevel(){
-        return Random.chances(new float[]{60f - level, 45f - level / 2, 30f + level / 2, 20f + level});
+        return Random.chances(new float[]{60f - FloatLevel, 45f - FloatLevel / 2, 30f + FloatLevel / 2, 20f + FloatLevel});
     }
 
     protected int uniquePerkLevel(){
-        return Random.chances(new float[]{40f - level, 40f - level / 2, 40f + level / 2, 40f + level});
+        return Random.chances(new float[]{40f - FloatLevel, 40f - FloatLevel / 2, 40f + FloatLevel / 2, 40f + FloatLevel});
     }
 
     protected float berserkDamageFactor(){
@@ -596,9 +596,8 @@ public class MimicForChallenge extends Mimic {
         }
     }
 
-    @Override
-    public void setLevel(int level){
-        this.level = level;
+    public void setFloatLevel(int floatLevel){
+        this.FloatLevel = floatLevel;
         createType();
         createBasicModFactor();
         createSpecialModFactor();
@@ -606,8 +605,8 @@ public class MimicForChallenge extends Mimic {
     }
 
     protected void adjustStats(){
-        HP = HT = Math.round((6+level*6)*HealthModFactor());
-        defenseSkill = Math.round((2 + level/2)*EvasionModFactor());
+        HP = HT = Math.round((6+ FloatLevel *6)*HealthModFactor());
+        defenseSkill = Math.round((2 + FloatLevel /2)*EvasionModFactor());
         baseSpeed = MoveSpeedFactor();
         enemySeen = true;
     }
@@ -646,12 +645,12 @@ public class MimicForChallenge extends Mimic {
         if (target != null && alignment == Alignment.NEUTRAL && target.invisible <= 0){
             return INFINITE_ACCURACY;
         } else {
-            return Math.round((6 + level*1.2f)*AccuracyModFactor());
+            return Math.round((6 + FloatLevel *1.2f)*AccuracyModFactor());
         }
     }
     @Override
     public int damageRoll() {
-        float base = (alignment == Alignment.NEUTRAL? Random.NormalFloat( 2 + 2*level, 3 + 9*level/4) : Random.NormalFloat( 1 + level, 3 + 9*level/4));
+        float base = (alignment == Alignment.NEUTRAL? Random.NormalFloat( 2 + 2* FloatLevel, 3 + 9* FloatLevel /4) : Random.NormalFloat( 1 + FloatLevel, 3 + 9* FloatLevel /4));
         base = base * AttackModFactor() * berserkDamageFactor() * suppressDamageFactor() * comboDamageFactor();
         return Math.round(base);
     }
@@ -799,7 +798,7 @@ public class MimicForChallenge extends Mimic {
     @Override
     public void storeInBundle( Bundle bundle ) {
         super.storeInBundle( bundle );
-        bundle.put( LEVEL, level );
+        bundle.put( LEVEL, FloatLevel);
         bundle.put( BASIC_MOD_FACTOR, basicModFactor);
         bundle.put( TYPE_FACTOR, type);
         bundle.put( ATTACK_FACTOR, attackMod);
@@ -809,14 +808,17 @@ public class MimicForChallenge extends Mimic {
 
     @Override
     public void restoreFromBundle( Bundle bundle ) {
-        level = bundle.getFloat( LEVEL );
+        FloatLevel = bundle.getFloat( LEVEL );
         basicModFactor = bundle.getInt(BASIC_MOD_FACTOR);
         type = bundle.getInt(TYPE_FACTOR);
         attackMod = bundle.getInt(ATTACK_FACTOR);
         defendMod = bundle.getInt(DEFENSE_FACTOR);
         trickMod = bundle.getInt(TRICK_FACTOR);
-        adjustStats();
+        //WHY this fucking code works???
+        //Too bad that we use a same-name private parameter with superclass, refactor.
+        //adjustStatus()
         super.restoreFromBundle(bundle);
+        adjustStats();
     }
 
     @Override
@@ -824,7 +826,7 @@ public class MimicForChallenge extends Mimic {
 
         Item reward = null;
         float power = showPower();
-        power = Math.min(7f + level/2f, power);
+        power = Math.min(7f + FloatLevel /2f, power);
         if(power<2.3f){
             if(Random.Int(4)<3){
                 do {
