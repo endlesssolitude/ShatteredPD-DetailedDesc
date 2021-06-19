@@ -22,13 +22,13 @@ public class KillingWeak extends CountInscription {
                 ++debuffs;
             }
         }
-        //each debuff = 7.5%, plus 15% every 3 debuffs
-        damage = GME.accurateRound(damage * (1f + debuffs / 3 * 0.15f + debuffs * 0.075f));
+        //each debuff = 8%, plus 16% every 3 debuffs
+        damage = GME.accurateRound(damage * (1f + debuffs / 3 * 0.16f + debuffs * 0.08f));
         if(defender.HP <= damage){
-            for(int i: RangeMap.M1(defender.pos)){
+            for(int i: RangeMap.manhattanRing(defender.pos, 1, 2)){
                 Char ch = Actor.findChar(i);
                 if(ch != null && ch.alignment != Char.Alignment.ALLY){
-                    Buff.affect(ch, Bleeding.class).set(damage / 8f);
+                    Buff.affect(ch, Bleeding.class).set(damage / 5f);
                 }
             }
         }

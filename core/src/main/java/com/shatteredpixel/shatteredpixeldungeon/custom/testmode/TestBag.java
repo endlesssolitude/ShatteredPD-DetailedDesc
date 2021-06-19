@@ -6,7 +6,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 public class TestBag extends Bag {
     {
-        image = ItemSpriteSheet.SOMETHING;
+        image = ItemSpriteSheet.LOCKED_CHEST;
     }
 
     @Override

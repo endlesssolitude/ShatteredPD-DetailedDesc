@@ -4,6 +4,7 @@
  import com.shatteredpixel.shatteredpixeldungeon.Chrome;
  import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
  import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+ import com.shatteredpixel.shatteredpixeldungeon.custom.ch.ChallengeItem;
  import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
  import com.shatteredpixel.shatteredpixeldungeon.items.Item;
  import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
@@ -26,13 +27,11 @@
  import com.watabou.noosa.NinePatch;
  import com.watabou.noosa.audio.Sample;
  import com.watabou.noosa.ui.Component;
- import com.watabou.utils.Bundlable;
- import com.watabou.utils.Bundle;
  import com.watabou.utils.Reflection;
 
  import java.util.ArrayList;
 
-public class Enchanter extends Item {
+public class Enchanter extends ChallengeItem {
     {
         unique = true;
         defaultAction = AC_ENCHANT;
@@ -323,7 +322,6 @@ public class Enchanter extends Item {
         private final ArrayList<Float> bottomBoundary;
         private final ArrayList<Class<? extends Inscription>> storedInscription;
         private final ArrayList<Integer> triggers;
-        private float scrollToWhere;
         private ScrollPane sp;
         public WndInfoInscription(){
             super(0, 0,0, Chrome.get(Chrome.Type.WINDOW_SILVER));
@@ -353,6 +351,12 @@ public class Enchanter extends Item {
             add(sp);
             Component content = sp.content();
             float pos = GAP * 2;
+            RenderedTextBlock hint = PixelScene.renderTextBlock(M.L(Enchanter.class, "hint")+"\n\n", TEXT_SIZE);
+            hint.maxWidth(WIDTH);
+            content.add(hint);
+            hint.setPos(0, pos);
+            PixelScene.align(hint);
+            pos += GAP + hint.height();
             int i = 1;
             for(EnchRecipe recipe: EnchRecipe.values()){
                 StringBuilder sb = new StringBuilder();

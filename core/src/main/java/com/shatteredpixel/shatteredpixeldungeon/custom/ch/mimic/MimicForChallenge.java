@@ -123,7 +123,7 @@ public class MimicForChallenge extends Mimic {
     private static final int BASE_ATTACK_SPEED_MOVE = 15;
 
     protected void createType(){
-        type = Random.chances(new float[]{40f, 20f, 10f, 20f});
+        type = Random.chances(new float[]{40f, 25f, 15f, 20f});
     }
 
     protected int basicModLevel(){
@@ -173,7 +173,7 @@ public class MimicForChallenge extends Mimic {
             //before resistances
             for (int i = 0; i < 6; ++i) {
                 if (Random.Float() < (float) (maxMods - modded) / (maxRoll - i)) {
-                    int modLevel = (Random.Int(4)==0) ? basicPerkModLevel():basicModLevel();
+                    int modLevel = (Random.Int(2)==0) ? basicPerkModLevel():basicModLevel();
                     basicModFactor += modLevel << (3 * i);
                     modded++;
                 }
@@ -408,7 +408,7 @@ public class MimicForChallenge extends Mimic {
     protected float ComboResistanceFactor(int combo){
         int modlevel = (defendMod>>DEF_COMBO_RESIST)&0x3;
         if(modlevel>0) {
-            return 1f - modlevel / (3f * modlevel) * (1f - (float) Math.pow(0.75 - 0.05 * modlevel, combo));
+            return 1f - modlevel / (2.5f + modlevel) * (1f - (float) Math.pow(0.75 - 0.05 * modlevel, combo));
         }
         return 1f;
     }
@@ -420,7 +420,7 @@ public class MimicForChallenge extends Mimic {
         }
         int limit = Math.round((float)this.HT/(modlevel*2+1));
         if(damage > limit){
-            return Math.round(0.2f*(damage-limit)+limit);
+            return Math.round(0.1f*(damage-limit)+limit);
         }else{
             return damage;
         }
@@ -493,8 +493,8 @@ public class MimicForChallenge extends Mimic {
     protected void degradeProc(Char enemy){
         int modlevel = (trickMod>>TRK_DEGRADE)&0x3;
         if(modlevel>0){
-            if(Random.Int(8)==0){
-                float duration = (Random.Int(1000)==0)? 999999f : 1<<modlevel;
+            if(Random.Int(2)==0){
+                float duration = (Random.Int(500)==0)? 999999f : 1<<modlevel;
                 Buff.prolong(enemy, Degrade.class, duration);
             }
         }
@@ -506,7 +506,7 @@ public class MimicForChallenge extends Mimic {
         if(modlevel>0){
             for(Mob m: Dungeon.level.mobs.toArray(new Mob[0])){
                 if(m.alignment == Alignment.ENEMY) {
-                    if (Random.Int(4 - modlevel) == 0) {
+                    if (Random.Int(7 - 2*modlevel) == 0) {
                         m.beckon(target.pos);
                     }
                 }
@@ -741,7 +741,7 @@ public class MimicForChallenge extends Mimic {
         if(buff.type== Buff.buffType.NEGATIVE) {
             int modlevel = (defendMod >> DEF_NEGATIVE_IMMUNE) & 0x3;
             if (modlevel > 0) {
-                if (Random.Int(4 - modlevel) == 0  || Random.Int(5-modlevel) == 0) {
+                if (Random.Int(3) < modlevel) {
                     return;
                 }
             }
@@ -828,9 +828,9 @@ public class MimicForChallenge extends Mimic {
         float power = showPower();
         power = Math.min(7f + FloatLevel /2f, power);
         if(power<2.3f){
-            if(Random.Int(4)<3){
+            if(Random.Int(7)<3){
                 do {
-                    reward = (Random.Int(3)!=0)?
+                    reward = (Random.Int(2)==0)?
                             ((Random.Int(2)==0)?    (Generator.random(Generator.Category.POTION))   :   (Generator.random(Generator.Category.SCROLL)))
                             :(new Gold().random());
                 } while (reward == null || Challenges.isItemBlocked(reward));
@@ -846,13 +846,6 @@ public class MimicForChallenge extends Mimic {
                             :(new Gold().random());
                 } while (reward == null || Challenges.isItemBlocked(reward));
                 if(!(reward instanceof Gold)) reward.quantity(1);
-                items.add(reward);
-            }
-            if(Random.Int(6)<2){
-                do {
-                    reward = (Random.Int(2)==0)?    (Generator.random(Generator.Category.POTION))   :   (Generator.random(Generator.Category.SCROLL));
-                } while (reward == null || Challenges.isItemBlocked(reward));
-                reward.quantity(1);
                 items.add(reward);
             }
             if(Random.Int(4)==0) {
@@ -876,10 +869,10 @@ public class MimicForChallenge extends Mimic {
                 reward = (Random.Int(2)==0)?    (Generator.random(Generator.Category.POTION))   :   (Generator.random(Generator.Category.SCROLL));
             }while (reward == null || Challenges.isItemBlocked(reward));
 
-            if(Random.Int(3)==0) reward.quantity(2);
+            if(Random.Int(5)==0) reward.quantity(2);
             items.add(reward);
 
-            if(Random.Int(3)==0) {
+            if(Random.Int(5)==0) {
                 do {
                     switch(Random.Int(3)){
                         case 1:
@@ -895,7 +888,7 @@ public class MimicForChallenge extends Mimic {
                 } while (reward == null || Challenges.isItemBlocked(reward));
                 items.add(reward);
             }
-            if(Random.Int(5)==0){
+            if(Random.Int(8)==0){
                 do{
                     switch(Random.Int(4)){
                         case 0:
@@ -954,7 +947,7 @@ public class MimicForChallenge extends Mimic {
                 }while (reward == null || Challenges.isItemBlocked(reward));
                 if(reward.isUpgradable()) {
                     reward.cursed = false;
-                    if (power > 12.3f) {
+                    if (power > 12.6f) {
                         reward.level(Random.Int(4, 7));
                     } else if (power > 9.9f) {
                         reward.level(Random.Int(3, 6));

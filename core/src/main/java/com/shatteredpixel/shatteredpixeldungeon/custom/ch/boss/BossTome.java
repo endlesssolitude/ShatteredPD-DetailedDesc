@@ -2,8 +2,8 @@ package com.shatteredpixel.shatteredpixeldungeon.custom.ch.boss;
 
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.custom.ch.ChallengeItem;
 import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
-import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -13,7 +13,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 
 import java.util.ArrayList;
 
-public class BossTome extends Item {
+public class BossTome extends ChallengeItem {
     {
         unique = true;
         image = ItemSpriteSheet.ARTIFACT_SPELLBOOK;

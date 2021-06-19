@@ -2,8 +2,8 @@ package com.shatteredpixel.shatteredpixeldungeon.custom.dict;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.custom.ch.ChallengeItem;
 import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
-import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
@@ -20,7 +20,7 @@ import com.watabou.noosa.ui.Component;
 
 import java.util.ArrayList;
 
-public class DictBook extends Item {
+public class DictBook extends ChallengeItem {
     {
         image = ItemSpriteSheet.GUIDE_PAGE;
         defaultAction = AC_READ;
@@ -36,7 +36,7 @@ public class DictBook extends Item {
 
     @Override
     public boolean isUpgradable() {
-        return true;
+        return false;
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.custom.ch.ChallengeItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -14,7 +15,7 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 
 import java.util.ArrayList;
 
-public class MimicScroll extends Item {
+public class MimicScroll extends ChallengeItem {
     {
         image = ItemSpriteSheet.SCROLL_YNGVI;
         bones = false;

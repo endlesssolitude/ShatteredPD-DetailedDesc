@@ -11,6 +11,7 @@ public class AbsoluteBlindness extends Buff {
     {
         actPriority = VFX_PRIO;
         announced = true;
+        type=buffType.NEGATIVE;
     }
 
     protected float left=0f;

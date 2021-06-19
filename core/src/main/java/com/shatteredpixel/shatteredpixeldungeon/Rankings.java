@@ -133,8 +133,10 @@ public enum Rankings {
 					if (Dungeon.quickslot.contains(bagItem)) belongings.backpack.items.add(bagItem);
 				}
 				belongings.backpack.items.remove(item);
-			} else if (!Dungeon.quickslot.contains(item))
+			}
+			if (!Dungeon.quickslot.contains(item)) {
 				belongings.backpack.items.remove(item);
+			}
 		}
 
 		//remove all buffs (ones tied to equipment will be re-applied)

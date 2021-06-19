@@ -14,8 +14,8 @@ allprojects {
         appName = 'Statistical SPD'
         appPackageName = 'com.shatteredpixel.shatteredpixeldungeon.statistics'
 
-        appVersionCode = 20210609
-        appVersionName = '0.9.3-stat-2.1'
+        appVersionCode = 20210620
+        appVersionName = '0.9.3-stat-2.3'
 
         appJavaCompatibility = JavaVersion.VERSION_1_8
 

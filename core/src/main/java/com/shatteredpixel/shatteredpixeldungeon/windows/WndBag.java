@@ -27,6 +27,7 @@ import com.shatteredpixel.shatteredpixeldungeon.SPDAction;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Shopkeeper;
+import com.shatteredpixel.shatteredpixeldungeon.custom.ch.ChallengeBag;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.TestBag;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.alctech.container.PotionBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
@@ -59,6 +60,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ItemSlot;
 import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
+import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.watabou.gltextures.TextureCache;
 import com.watabou.input.KeyBindings;
 import com.watabou.input.KeyEvent;
@@ -69,9 +71,9 @@ import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Sample;
 
 public class WndBag extends WndTabbed {
-	
-	//only one wnditem can appear at a time
-	private static WndBag INSTANCE;
+
+	//only one bag window can appear at a time
+	public static Window INSTANCE;
 	
 	//FIXME this is getting cumbersome, there should be a better way to manage this
 	public static enum Mode {
@@ -179,7 +181,8 @@ public class WndBag extends WndTabbed {
 				stuff.getItem( PotionBandolier.class ),
 				stuff.getItem( MagicalHolster.class ),
 				stuff.getItem(TestBag.class),
-				stuff.getItem(PotionBag.class)
+				stuff.getItem(PotionBag.class),
+				stuff.getItem(ChallengeBag.class),
 		};
 
 		for (Bag b : bags) {
@@ -335,7 +338,9 @@ public class WndBag extends WndTabbed {
 			return Icons.get( Icons.WAND_HOLSTER );
 		} else if (bag instanceof PotionBandolier) {
 			return Icons.get( Icons.POTION_BANDOLIER );
-		} else {
+		} else if (bag instanceof ChallengeBag){
+			return Icons.get(Icons.CHALLENGE_ON);
+		}else{
 			return Icons.get( Icons.BACKPACK );
 		}
 	}

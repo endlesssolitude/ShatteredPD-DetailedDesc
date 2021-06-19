@@ -17,7 +17,7 @@ public class Curing extends CountInscription {
     @Override
     public int proc(Weapon weapon, Char attacker, Char defender, int damage) {
         if(defender.properties().contains(Char.Property.DEMONIC) || defender.properties().contains(Char.Property.UNDEAD)){
-            Buff.affect(defender, Poison.class).extend(defender.properties().contains(Char.Property.BOSS) ? 3f + weapon.buffedLvl()/4f : 6f + weapon.buffedLvl());
+            Buff.affect(defender, Poison.class).extend(defender.properties().contains(Char.Property.BOSS) ? 4f + weapon.buffedLvl()/4f : 7f + weapon.buffedLvl());
         }else{
             Buff.affect(defender, Healing.class).setHeal(2 + weapon.buffedLvl()/2, 1f, 0);
         }

@@ -1,14 +1,17 @@
-package com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep;
+package com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.GME;
-import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.baseclasses.Inscription;
+import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.baseclasses.CountInscription;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 
-public class Sacrificing extends Inscription {
+public class Sacrificing extends CountInscription {
+    {
+        defaultTriggers = 140;
+    }
     @Override
     public int proc(Weapon weapon, Char attacker, Char defender, int damage) {
-        float power = 1.28f + Math.min(weapon.buffedLvl() * 0.03f, 0.42f);
+        float power = 1.35f + Math.min(weapon.buffedLvl() * 0.05f, 0.65f);
         damage = Math.round(damage * power);
         float sacrifice = (damage - defender.HP)*0.334f;
         if(sacrifice < 0) sacrifice = 0;
@@ -17,6 +20,7 @@ public class Sacrificing extends Inscription {
         if(selfdmg>0) {
             attacker.damage(selfdmg, Sacrificing.class);
         }
+        consume(weapon, attacker);
         return damage;
     }
 }

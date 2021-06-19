@@ -22,7 +22,7 @@ public class DoubleAttack extends CountInscription {
             //only extra attack consumes the triggers
             consume(weapon, attacker);
         }
-        return GME.accurateRound(damage * (Math.min(weapon.buffedLvl() * 0.01f + 0.5f, 0.6f)));
+        return GME.accurateRound(damage * (Math.min(weapon.buffedLvl() * 0.01f + 0.55f, 0.65f)));
     }
 
 }

@@ -185,7 +185,7 @@ public class Dungeon {
 		mobsToChampion = -1;
 
 		String str = CustomGameSettings.getSeedString();
-		seed = str.equals("")?DungeonSeed.randomSeed(): SeedUtil.directConvert(str);//DungeonSeed.randomSeed();
+		seed = str.equals("")?DungeonSeed.randomSeed(): SeedUtil.directConvert(str, 'A', 26);//DungeonSeed.randomSeed();
 
 		Actor.clear();
 		Actor.resetNextID();

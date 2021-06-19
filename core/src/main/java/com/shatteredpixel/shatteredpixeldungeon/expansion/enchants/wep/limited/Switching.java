@@ -1,11 +1,14 @@
-package com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep;
+package com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.baseclasses.Inscription;
+import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.baseclasses.CountInscription;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 
-public class Switching extends Inscription {
+public class Switching extends CountInscription {
+    {
+        defaultTriggers = 333;
+    }
 
     @Override
     public int proc(Weapon weapon, Char attacker, Char defender, int damage) {
@@ -14,6 +17,7 @@ public class Switching extends Inscription {
             ScrollOfTeleportation.appear(defender, attacker.pos);
             ScrollOfTeleportation.appear(attacker, tempPos);
         }
+        consume(weapon, attacker);
 
         return damage*2/5;
     }

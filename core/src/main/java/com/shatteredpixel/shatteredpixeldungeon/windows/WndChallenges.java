@@ -22,6 +22,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.windows;
 
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
@@ -36,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.RedButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ScrollPane;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
+import com.shatteredpixel.shatteredpixeldungeon.utils.DungeonSeed;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.ui.Component;
 
@@ -159,7 +161,7 @@ public class WndChallenges extends Window {
 		cstf.setLarge(false);
 		cstf.setMaxStringLength(22);
 		cstf.setRect(0, pos, WIDTH-16-GAP, 22);
-		cstf.text(CustomGameSettings.getSeedString());
+		cstf.text(editable ? CustomGameSettings.getSeedString() : DungeonSeed.convertToCode(Dungeon.seed));
 
 		deleteSeedInput = new CanScrollButton(M.L(TextChallenges.class, "delete_seed_input")){
 			@Override

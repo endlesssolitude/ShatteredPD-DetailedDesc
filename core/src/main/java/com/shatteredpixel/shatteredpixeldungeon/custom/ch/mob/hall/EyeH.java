@@ -38,7 +38,7 @@ import com.watabou.utils.Random;
 import java.util.Collections;
 import java.util.List;
 
-public class EyeH extends Mob {
+public class  EyeH extends Mob {
 
     {
         spriteClass = EyeHSprite.class;

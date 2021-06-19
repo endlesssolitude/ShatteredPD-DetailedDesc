@@ -38,5 +38,7 @@ public class M {
     public static String TL(Object o, String k, Object...args){return T(L(o, k, args));}
     public static String TL(String key, Object...args){return T(L(key, args));}
 
+    public static String NNL(Class<?> c, String k, Object...args){return "\n\n"+L(c, k, args);}
+
     public static String F(String format, Object...args){return Messages.format(format, args);}
 }

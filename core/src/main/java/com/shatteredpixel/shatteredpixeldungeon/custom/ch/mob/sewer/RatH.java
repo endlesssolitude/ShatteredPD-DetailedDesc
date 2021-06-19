@@ -2,7 +2,6 @@ package com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.sewer;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Albino;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Rat;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
@@ -19,11 +18,12 @@ public class RatH extends Rat {
     @Override
     public void die(Object cause) {
 
-        int toSummon = Random.chances(new float[]{0.75f, 0.25f}) + 1;
+        int toSummon = Random.chances(new float[]{0.85f, 0.15f}) + 1;
 
         while (toSummon-- > 0) {
-            Albino white = new Albino();
+            AlbinoH white = new AlbinoH();
             white.pos = Dungeon.level.randomRespawnCell(white);
+            white.setModifier(Dungeon.hero.lvl - 1, true);
             GameScene.add(white, 1f);
             white.beckon(pos);
 

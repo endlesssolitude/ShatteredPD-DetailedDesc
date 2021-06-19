@@ -21,7 +21,7 @@ public class Overload extends CountInscription {
     protected void onGain() {
         super.onGain();
         if(!buffed) {
-            weapon.level(weapon.level() * 2 + 1);
+            weapon.level(weapon.level() * 2 + 3);
             buffed = true;
         }
     }

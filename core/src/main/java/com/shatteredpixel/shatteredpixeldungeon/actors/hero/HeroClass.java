@@ -39,7 +39,9 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.rogue.Smok
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.Endure;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.HeroicLeap;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.Shockwave;
+import com.shatteredpixel.shatteredpixeldungeon.custom.ch.ChallengeBag;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.boss.BossTome;
+import com.shatteredpixel.shatteredpixeldungeon.custom.ch.mimic.MimicDocs;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.mimic.MimicScroll;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.EnemyTome;
 import com.shatteredpixel.shatteredpixeldungeon.custom.dict.DictBook;
@@ -401,6 +403,10 @@ public enum HeroClass {
 
 		if(Dungeon.isChallenged(Challenges.MIMIC_DUNGEON)){
 			new MimicScroll().quantity(3).collect();
+			new MimicDocs().collect();
 		}
+
+		new ChallengeBag().collect();
+
 	}
 }
