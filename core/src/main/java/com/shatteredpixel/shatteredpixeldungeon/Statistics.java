@@ -149,29 +149,37 @@ public class Statistics {
 
 	public static int boss_enhance = 0;
 	public static int elite_enemies = 0;
-	public static float real_time_passed = 0;
+
 	public static boolean isCustomSeed = false;
+	//Directly add float time will cause accuracy lose and stop timing if time is long enough
+	//so use long to record seconds, float to count sub-seconds.
+	public static long real_seconds = 0;
+	public static float second_elapsed = 0;
+
 
 	private static void resetCustom(){
 		boss_enhance = 0;
 		elite_enemies = 0;
-		real_time_passed = 0f;
-		//Dungeon is inited, so write directly.
+		second_elapsed = 0f;
+		real_seconds = 0;
+		//Dungeon has been inited, so write directly.
 		isCustomSeed = !CustomGameSettings.getSeedString().equals("");
 	}
 
 	private static void storeCustom(Bundle b){
 		b.put("boss_enhance", boss_enhance);
 		b.put("elite_enemies", elite_enemies);
-		b.put("real_time_passed", real_time_passed);
+		b.put("real_time_passed", second_elapsed);
 		b.put("is_custom_seed", isCustomSeed);
+		b.put("real_seconds_passed", real_seconds);
 	}
 
 	private static void restoreCustom(Bundle b){
 		boss_enhance = b.getInt("boss_enhance");
 		elite_enemies = b.getInt("elite_enemies");
-		real_time_passed = b.getFloat("real_time_passed");
+		second_elapsed = b.getFloat("real_time_passed");
 		isCustomSeed = b.getBoolean("is_custom_seed");
+		real_seconds = b.getLong("real_seconds_passed");
 	}
 
 }

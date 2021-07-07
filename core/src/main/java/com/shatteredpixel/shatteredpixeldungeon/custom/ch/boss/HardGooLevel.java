@@ -6,7 +6,9 @@ import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
+import com.shatteredpixel.shatteredpixeldungeon.custom.utils.RangeMap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
@@ -18,6 +20,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.SewerLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.watabou.utils.Random;
 
 public class HardGooLevel extends Level {
         {
@@ -99,7 +102,17 @@ public class HardGooLevel extends Level {
             }
         }
 
-        @Override
+    @Override
+    public int randomRespawnCell(Char ch) {
+            //hero should not fall outside of arena.
+            if(ch instanceof Hero){
+                int[] area = RangeMap.centeredRect(entrance, 2, 2);
+                return entrance + area[Random.Int(area.length)];
+            }
+        return super.randomRespawnCell(ch);
+    }
+
+    @Override
         public void seal() {
             super.seal();
 

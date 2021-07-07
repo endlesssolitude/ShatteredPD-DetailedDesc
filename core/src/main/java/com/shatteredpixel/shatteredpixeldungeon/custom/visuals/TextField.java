@@ -92,6 +92,7 @@ public abstract class TextField extends RedButton {
                 }
             });
              */
+
         }else{
             TextInput.getTextInput(tinp, text.text(), inputText.text(), hint);
         }

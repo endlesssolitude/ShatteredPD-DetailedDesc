@@ -66,6 +66,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.rogue.DeathMark;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.Endure;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Elemental;
+import com.shatteredpixel.shatteredpixeldungeon.custom.interfaces.DamageListener;
+import com.shatteredpixel.shatteredpixeldungeon.custom.interfaces.DeathListener;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.AntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Potential;
@@ -484,6 +486,7 @@ public abstract class Char extends Actor {
 		if ( buff( Stamina.class ) != null) speed *= 1.5f;
 		if ( buff( Adrenaline.class ) != null) speed *= 2f;
 		if ( buff( Haste.class ) != null) speed *= 3f;
+
 		return speed;
 	}
 	
@@ -513,6 +516,13 @@ public abstract class Char extends Actor {
 		if(isInvulnerable(src.getClass())){
 			sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "invulnerable"));
 			return;
+		}
+
+		for(Buff b: this.buffs){
+			if(b instanceof DamageListener){
+				((DamageListener) b).onDamage(this, dmg, src);
+				dmg = ((DamageListener) b).modifyDamage(this, dmg, src);
+			}
 		}
 
 		for (ChampionEnemy buff : buffs(ChampionEnemy.class)){
@@ -631,6 +641,12 @@ public abstract class Char extends Actor {
 	public void die( Object src ) {
 		destroy();
 		if (src != Chasm.class) sprite.die();
+
+		for(Buff b: this.buffs){
+			if(b instanceof DeathListener){
+				((DeathListener) b).onDeath(this, src);
+			}
+		}
 	}
 	
 	public boolean isAlive() {

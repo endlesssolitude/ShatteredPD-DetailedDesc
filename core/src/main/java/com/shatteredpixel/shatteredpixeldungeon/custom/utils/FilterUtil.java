@@ -19,7 +19,7 @@ public class FilterUtil {
         return result;
     }
 
-    public static interface Filter<T> {
+    public interface Filter<T> {
         boolean pass(T t);
     }
 }

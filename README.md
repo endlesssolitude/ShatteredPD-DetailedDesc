@@ -1,6 +1,12 @@
 
 # ShatteredPixelDungeon-DetailedDescVersion #
 
+
+
+***FREEZING***
+
+
+
 A private mod of ShatteredPixelDungeon (Evan) working as a dictionary and a tester.
 
 Aim to help dungeon players know the data and mechanics of game, and have a platform to test game data and mechanics.

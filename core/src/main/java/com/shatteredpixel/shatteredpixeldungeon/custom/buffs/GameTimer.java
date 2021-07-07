@@ -3,7 +3,6 @@ package com.shatteredpixel.shatteredpixeldungeon.custom.buffs;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.watabou.noosa.Game;
 import com.watabou.noosa.Visual;
 
 public class GameTimer extends Buff {
@@ -35,7 +34,11 @@ public class GameTimer extends Buff {
         @Override
         public void update() {
             super.update();
-            Statistics.real_time_passed += Game.elapsed;
+            //Statistics.second_elapsed += Game.elapsed;
+            if(Statistics.second_elapsed > 1f){
+                Statistics.real_seconds += Math.floor(Statistics.second_elapsed);
+                Statistics.second_elapsed -= Math.floor(Statistics.second_elapsed);
+            }
         }
     }
 }

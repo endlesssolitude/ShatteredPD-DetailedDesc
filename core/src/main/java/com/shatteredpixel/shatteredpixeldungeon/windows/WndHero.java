@@ -173,12 +173,8 @@ public class WndHero extends WndTabbed {
 			statSlot( M.L(HeroStat.class,"duration"),(int)Statistics.duration);
 
 			statSlot( M.L(HeroStat.class, "score"), Statistics.goldCollected + Statistics.deepestFloor * hero.lvl * 100 * (Statistics.amuletObtained ? 2:1 ) );
-			int secs = Math.round(Statistics.real_time_passed);
-			int day = secs / 86400;
-			int hr = (secs % 86400)/3600;
-			int min = (secs % 3600)/60;
-			int sec = secs % 60;
-			statSlot( M.L(HeroStat.class, "real_time"), day+"d "+hr+"h "+min+"m "+sec+"s");
+			long secs = Statistics.real_seconds;
+			statSlot( M.L(HeroStat.class, "real_time"), secs/86400+"d "+(secs % 86400)/3600+"h "+(secs % 3600)/60+"m "+secs % 60+"s");
 			statSlot( M.L(HeroStat.class,"seed_dungeon"),  M.L(HeroStat.class, Statistics.isCustomSeed ?"seed_custom_yes":"seed_custom_no")
 					+ "-" + DungeonSeed.convertToCode(Dungeon.seed).toUpperCase());
 			pos += GAP;

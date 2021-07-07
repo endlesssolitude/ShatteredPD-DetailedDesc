@@ -77,8 +77,8 @@ public class RangeMap {
     }
 
     public static int[] centeredRect(int center, int w, int h){
-        if(w<0 || h<0) return null;
-        if(w*h>1000000) return null; //too large, might fail;
+        if(w<0 || h<0) return new int[]{center};
+        if(w*h>1000000) return new int[]{center}; //too large, might fail;
         int[] xyMap = new int[2*(2*w+1)*(2*h+1)];
         int count = 0;
         for(int i=-w;i<=w;++i){
@@ -123,7 +123,7 @@ public class RangeMap {
         if(maxRange >= minRange){
             return arrayCopy(manhattanCircle(center, maxRange), manhattanRing(center, minRange, maxRange-1));
         }
-        return new int[0];
+        return new int[center];
     }
 
     public static int manhattanDist(int a, int b){

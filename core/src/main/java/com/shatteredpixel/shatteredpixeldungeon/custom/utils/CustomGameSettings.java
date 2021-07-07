@@ -11,4 +11,6 @@ public class CustomGameSettings extends GameSettings {
     public static String getSeedString(){
         return getString("seed_string_input_val", "");
     }
+
+
 }
