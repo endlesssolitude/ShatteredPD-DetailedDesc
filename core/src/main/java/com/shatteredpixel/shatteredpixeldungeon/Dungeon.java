@@ -260,7 +260,7 @@ public class Dungeon {
 				level = new SewerLevel();
 				break;
 			case 5:
-				if((Statistics.boss_enhance & 0x1) != 0) level = new HardGooLevel();
+				if((Statistics.enhance_boss_settings & 0xf) != 0) level = new HardGooLevel();
 				else level = new SewerBossLevel();
 				break;
 			case 6:
@@ -270,7 +270,7 @@ public class Dungeon {
 				level = new PrisonLevel();
 				break;
 			case 10:
-				if((Statistics.boss_enhance & 0x2) != 0) level = new HardTenguLevel();
+				if((Statistics.enhance_boss_settings & 0xf0) != 0) level = new HardTenguLevel();
 				else level = new PrisonBossLevel();
 				break;
 			case 11:
@@ -280,7 +280,7 @@ public class Dungeon {
 				level = new CavesLevel();
 				break;
 			case 15:
-				if((Statistics.boss_enhance & 0x4) != 0) level =  new HardDM300Level();
+				if((Statistics.enhance_boss_settings & 0xf00) != 0) level =  new HardDM300Level();
 				else level = new CavesBossLevel();
 				break;
 			case 16:
@@ -290,7 +290,7 @@ public class Dungeon {
 				level = new CityLevel();
 				break;
 			case 20:
-				if((Statistics.boss_enhance & 0x8) != 0) level = new HardDKLevel();
+				if((Statistics.enhance_boss_settings & 0xf000) != 0) level = new HardDKLevel();
 				else level = new CityBossLevel();
 				break;
 			case 21:
@@ -314,7 +314,7 @@ public class Dungeon {
 				level = new HallsLevel();
 				break;
 			case 25:
-				if((Statistics.boss_enhance & 0x10) != 0) level = new YogRealLevel();
+				if((Statistics.enhance_boss_settings & 0xf0000) != 0) level = new YogRealLevel();
 				else level = new HallsBossLevel();
 				break;
 			case 26:

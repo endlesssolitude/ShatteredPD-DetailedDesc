@@ -601,14 +601,26 @@ public class MimicForChallenge extends Mimic {
         createType();
         createBasicModFactor();
         createSpecialModFactor();
-        adjustStats();
+        /*
+        basicModFactor = Integer.MAX_VALUE;
+        attackMod = Integer.MAX_VALUE;
+        defendMod = Integer.MAX_VALUE;
+        trickMod = Integer.MAX_VALUE;
+
+         */
+        initStatus();
     }
 
     protected void adjustStats(){
-        HP = HT = Math.round((6+ FloatLevel *6)*HealthModFactor());
+        HT = Math.round((6+ FloatLevel *6)*HealthModFactor());
         defenseSkill = Math.round((2 + FloatLevel /2)*EvasionModFactor());
         baseSpeed = MoveSpeedFactor();
         enemySeen = true;
+    }
+
+    protected void initStatus(){
+        adjustStats();
+        HP = HT;
     }
 
     @Override
@@ -619,9 +631,8 @@ public class MimicForChallenge extends Mimic {
 
     @Override
     public void stopHiding(){
-
-        summonProc();
         super.stopHiding();
+        summonProc();
     }
 
     @Override
@@ -738,15 +749,15 @@ public class MimicForChallenge extends Mimic {
 
     @Override
     public synchronized void add( Buff buff ) {
+        super.add(buff);
         if(buff.type== Buff.buffType.NEGATIVE) {
             int modlevel = (defendMod >> DEF_NEGATIVE_IMMUNE) & 0x3;
             if (modlevel > 0) {
                 if (Random.Int(3) < modlevel) {
-                    return;
+                    Buff.detach(this, buff.getClass());
                 }
             }
         }
-        super.add(buff);
     }
 
     private float basicModPower(int level){
@@ -790,6 +801,8 @@ public class MimicForChallenge extends Mimic {
            lvl = (trickMod>>(2*i))&0x3;
            power*=specialModPower(lvl);
        }
+
+       if(power > 20f) power = 20f;
 
        return power;
 

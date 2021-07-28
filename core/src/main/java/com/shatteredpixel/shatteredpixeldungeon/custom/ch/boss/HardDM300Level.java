@@ -127,7 +127,7 @@ public class HardDM300Level extends Level {
 
         for(int i=4*WIDTH;i<length-4*WIDTH;++i){
             if(!solid[i]) {
-                if (Random.Int(100) < 18) {
+                if (Random.Int(100) < 15) {
                     map[i] = Terrain.INACTIVE_TRAP;
                     Trap t = new ToxicTrap().reveal();
                     t.active = false;

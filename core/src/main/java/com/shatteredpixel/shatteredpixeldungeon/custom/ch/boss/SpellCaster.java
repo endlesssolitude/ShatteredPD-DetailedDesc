@@ -157,8 +157,8 @@ public abstract class SpellCaster extends Mob {
         if (alignment == Alignment.NEUTRAL){
             return;
         }
+        //prevents one-hit kill
         if (dmg >= 20){
-            //takes 15/16/17/18/19/20 dmg at 15/17/20/24/29/36 incoming dmg
             dmg = 20 + (int)(Math.sqrt(8*(dmg - 14) + 1) - 1)/2;
         }
         super.damage(dmg, src);

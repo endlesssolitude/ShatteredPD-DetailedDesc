@@ -57,9 +57,9 @@ public enum VirtualProc {
         return damage;
     }
 
-    //cant understand why hero.damage doesnt call super.damage()
     public int heroDamage(Hero hero, int damage, Object src){
         if(hero.buff(ImmortalShieldAffecter.ImmortalShield.class)!=null){
+            hero.sprite.showStatus(0x00FFFF, "%d", damage);
             damage = 0;
         }
         return damage;

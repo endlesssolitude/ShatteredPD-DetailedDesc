@@ -120,10 +120,12 @@ public class RangeMap {
 
     public static int[] manhattanRing(int center, int minRange, int maxRange){
         minRange = Math.max(minRange, 0);
-        if(maxRange >= minRange){
+        if(maxRange > minRange){
             return arrayCopy(manhattanCircle(center, maxRange), manhattanRing(center, minRange, maxRange-1));
+        }else if(maxRange == minRange){
+            return manhattanCircle(center, maxRange);
         }
-        return new int[center];
+        return new int[]{center};
     }
 
     public static int manhattanDist(int a, int b){

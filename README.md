@@ -1,11 +1,11 @@
 
 # ShatteredPixelDungeon-DetailedDescVersion #
 
-
-
 ***FREEZING***
 
+This project is updating very slowly...
 
+## General ##
 
 A private mod of ShatteredPixelDungeon (Evan) working as a dictionary and a tester.
 
@@ -23,9 +23,9 @@ Aim to help dungeon players know the data and mechanics of game, and have a plat
 
 - TestMode that has convinet access to most items and can travel between floors.
 
-- A few expansions for the original game. Expansions are quite limited because I can only add new contents via limited interfaces, or it would be a disaster when transferring between versions.
+- A few expansions for the original game. Expansions are quite limited because I can only add new contents via limited custom interfaces, or it would be a disaster when transferring between versions.
 
-- And other parts of the game is TOTALLY UNCHANGED to keep inline with the original ShatterdPD.
+- And other parts of the game is UNCHANGED to keep inline with the original ShatterdPD.
 
 *****************More*****************
 

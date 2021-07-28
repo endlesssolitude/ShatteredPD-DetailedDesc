@@ -25,7 +25,7 @@ public class WandOfScanningBeam extends WandOfDisintegration implements Scanning
         curUser.sprite.parent.add(new ScanningBeam
                 (Effects.Type.DEATH_RAY, BallisticaReal.STOP_SOLID,
                     new ScanningBeam.BeamData()
-                        .setPosition(center.x, center.y, angle, 8)
+                        .setPosition(center.x, center.y, angle, 999f)
                         .setSpeed(0f, 0f, 90f)
                         .setTime(0.4f, 1.5f, 0.4f)
                 ).setDiameter(1.6f)

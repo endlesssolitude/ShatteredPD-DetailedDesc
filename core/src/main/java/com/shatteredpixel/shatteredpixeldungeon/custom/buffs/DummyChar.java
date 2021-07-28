@@ -1,7 +1,9 @@
-package com.shatteredpixel.shatteredpixeldungeon.custom.actors;
+package com.shatteredpixel.shatteredpixeldungeon.custom.buffs;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+
+//It's called char, but it serves for buffs, not chars.
 
 //Currently DummyChar is only used to hold "level buffs".
 //Level buffs are buffs that neither affect chars, nor affected by char.

@@ -48,13 +48,13 @@ public class ScorpioH extends Scorpio {
             }
         }else {
             d += (enemy.drRoll() + enemy.drRoll()) * hasAttacked / 24;
-            if(hasAttacked > 5) Buff.affect(enemy, Blindness.class, 3f);
+            if(hasAttacked > 3) Buff.affect(enemy, Blindness.class, 3f);
         }
         return d;
     }
 
     protected boolean canHeadShot(Char enemy){
-        return hasAttacked > 6 && !enemy.fieldOfView[pos];
+        return hasAttacked > 4 && !enemy.fieldOfView[pos];
     }
 
     @Override

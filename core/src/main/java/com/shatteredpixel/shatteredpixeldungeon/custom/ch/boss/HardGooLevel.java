@@ -7,14 +7,15 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.custom.ch.boss.goo.HardGoo;
 import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.RangeMap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
-import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.LloydsBeacon;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.levels.HallsLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.SewerLevel;
@@ -79,7 +80,11 @@ public class HardGooLevel extends Level {
                 drop(item, pos).setHauntedIfCursed().type = Heap.Type.REMAINS;
             }
 
-            drop(new Gold().quantity(3456), 16 + WIDTH * 34).type = Heap.Type.LOCKED_CHEST;
+            MeleeWeapon mw = Generator.randomWeapon(11);
+            mw.level(2);
+            mw.cursed = false;
+            mw.identify();
+            drop(mw, 16 + WIDTH * 34).type = Heap.Type.LOCKED_CHEST;
             drop(new LloydsBeacon(), 18 + WIDTH * 34).type = Heap.Type.LOCKED_CHEST;
             Wand w;
             do {
@@ -116,7 +121,9 @@ public class HardGooLevel extends Level {
         public void seal() {
             super.seal();
 
-            GooHard boss = new GooHard();
+            //GooHard boss = new GooHard();
+            HardGoo boss = new HardGoo();
+            boss.initBoss(BossDifficulty.getEnumDifficulty(HardGoo.whichBoss), true);
             boss.pos = CENTER;
             GameScene.add(boss);
 

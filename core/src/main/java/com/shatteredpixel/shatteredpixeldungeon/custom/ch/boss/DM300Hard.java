@@ -370,7 +370,7 @@ public class DM300Hard extends Boss{
                     Char ch = findChar(i);
                     if(ch!=null){
                         if(ch.alignment != Alignment.ENEMY){
-                            SpellCaster.zapDamage(ch, 18, 28, 0.75f, m);
+                            SpellCaster.zapDamage(ch, 20, 30, 0.85f, m);
                         }
                     }
                 }
