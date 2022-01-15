@@ -54,14 +54,17 @@ public enum VirtualProc {
 
     public int damage(Char ch, int damage, Object src){
         Buff.detach(ch, PotionFrostEX.DiffusiveFrost.class);
+
+        if(ch.buff(ImmortalShieldAffecter.ImmortalShield.class)!=null){
+            ch.sprite.showStatus(0x00FFFF, "%d", damage);
+            damage = 0;
+        }
+
         return damage;
     }
 
     public int heroDamage(Hero hero, int damage, Object src){
-        if(hero.buff(ImmortalShieldAffecter.ImmortalShield.class)!=null){
-            hero.sprite.showStatus(0x00FFFF, "%d", damage);
-            damage = 0;
-        }
+
         return damage;
     }
 

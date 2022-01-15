@@ -9,6 +9,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 //Level buffs are buffs that neither affect chars, nor affected by char.
 //This kind of buff should be attached to a "static" char that is sealed in level, not existing chars.
 //Or it would be problematic if the holder dies, or leaves the level.
+
+//might be better to maintain a dummyChar array. Use id to distinguish between dcs.
 public final class DummyChar extends Char {
 
     {

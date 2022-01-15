@@ -25,7 +25,7 @@ import com.shatteredpixel.shatteredpixeldungeon.custom.utils.CustomGameSettings;
 import com.watabou.utils.Bundle;
 
 public class Statistics {
-	
+
 	public static int goldCollected;
 	public static int deepestFloor;
 	public static int enemiesSlain;
@@ -33,23 +33,23 @@ public class Statistics {
 	public static int potionsCooked;
 	public static int piranhasKilled;
 	public static int ankhsUsed;
-	
+
 	//used for hero unlock badges
 	public static int upgradesUsed;
 	public static int sneakAttacks;
 	public static int thrownAssists;
 
 	public static int spawnersAlive;
-	
+
 	public static float duration;
-	
+
 	public static boolean qualifiedForNoKilling = false;
 	public static boolean completedWithNoKilling = false;
-	
+
 	public static boolean amuletObtained = false;
-	
+
 	public static void reset() {
-		
+
 		goldCollected	= 0;
 		deepestFloor	= 0;
 		enemiesSlain	= 0;
@@ -57,23 +57,23 @@ public class Statistics {
 		potionsCooked	= 0;
 		piranhasKilled	= 0;
 		ankhsUsed		= 0;
-		
+
 		upgradesUsed    = 0;
 		sneakAttacks    = 0;
 		thrownAssists   = 0;
 
 		spawnersAlive   = 0;
-		
+
 		duration	= 0;
-		
+
 		qualifiedForNoKilling = false;
-		
+
 		amuletObtained = false;
 
 		resetCustom();
-		
+
 	}
-	
+
 	private static final String GOLD		= "score";
 	private static final String DEEPEST		= "maxDepth";
 	private static final String SLAIN		= "enemiesSlain";
@@ -81,19 +81,19 @@ public class Statistics {
 	private static final String ALCHEMY		= "potionsCooked";
 	private static final String PIRANHAS	= "priranhas";
 	private static final String ANKHS		= "ankhsUsed";
-	
+
 	private static final String UPGRADES	= "upgradesUsed";
 	private static final String SNEAKS		= "sneakAttacks";
 	private static final String THROWN		= "thrownAssists";
 
 	private static final String SPAWNERS	= "spawnersAlive";
-	
+
 	private static final String DURATION	= "duration";
 
 	private static final String NO_KILLING_QUALIFIED	= "qualifiedForNoKilling";
-	
+
 	private static final String AMULET		= "amuletObtained";
-	
+
 	public static void storeInBundle( Bundle bundle ) {
 		bundle.put( GOLD,		goldCollected );
 		bundle.put( DEEPEST,	deepestFloor );
@@ -102,22 +102,22 @@ public class Statistics {
 		bundle.put( ALCHEMY,	potionsCooked );
 		bundle.put( PIRANHAS,	piranhasKilled );
 		bundle.put( ANKHS,		ankhsUsed );
-		
+
 		bundle.put( UPGRADES,   upgradesUsed );
 		bundle.put( SNEAKS,		sneakAttacks );
 		bundle.put( THROWN,		thrownAssists );
 
 		bundle.put( SPAWNERS,	spawnersAlive );
-		
+
 		bundle.put( DURATION,	duration );
 
 		bundle.put(NO_KILLING_QUALIFIED, qualifiedForNoKilling);
-		
+
 		bundle.put( AMULET,		amuletObtained );
 
 		storeCustom(bundle);
 	}
-	
+
 	public static void restoreFromBundle( Bundle bundle ) {
 		goldCollected	= bundle.getInt( GOLD );
 		deepestFloor	= bundle.getInt( DEEPEST );
@@ -126,27 +126,28 @@ public class Statistics {
 		potionsCooked	= bundle.getInt( ALCHEMY );
 		piranhasKilled	= bundle.getInt( PIRANHAS );
 		ankhsUsed		= bundle.getInt( ANKHS );
-		
+
 		upgradesUsed    = bundle.getInt( UPGRADES );
 		sneakAttacks    = bundle.getInt( SNEAKS );
 		thrownAssists   = bundle.getInt( THROWN );
 
 		spawnersAlive   = bundle.getInt( SPAWNERS );
-		
+
 		duration		= bundle.getFloat( DURATION );
 
 		qualifiedForNoKilling = bundle.getBoolean( NO_KILLING_QUALIFIED );
-		
+
 		amuletObtained	= bundle.getBoolean( AMULET );
 
 		restoreCustom(bundle);
 	}
-	
+
 	public static void preview( GamesInProgress.Info info, Bundle bundle ){
 		info.goldCollected  = bundle.getInt( GOLD );
 		info.maxDepth       = bundle.getInt( DEEPEST );
 	}
 
+	public static int boss_enhance = 0;
 	public static int elite_enemies = 0;
 
 	public static boolean isCustomSeed = false;
@@ -154,34 +155,31 @@ public class Statistics {
 	//so use long to record seconds, float to count sub-seconds.
 	public static long real_seconds = 0;
 	public static float second_elapsed = 0;
-	//difficulty is identified by their enum ordinal.
-	//one difficulty takes 4 bits.
-	public static int enhance_boss_settings = 0;
+
 
 	private static void resetCustom(){
+		boss_enhance = 0;
 		elite_enemies = 0;
 		second_elapsed = 0f;
 		real_seconds = 0;
 		//Dungeon has been inited, so write directly.
 		isCustomSeed = !CustomGameSettings.getSeedString().equals("");
-
-		enhance_boss_settings = 0;
 	}
 
 	private static void storeCustom(Bundle b){
+		b.put("boss_enhance", boss_enhance);
 		b.put("elite_enemies", elite_enemies);
 		b.put("real_time_passed", second_elapsed);
 		b.put("is_custom_seed", isCustomSeed);
 		b.put("real_seconds_passed", real_seconds);
-		b.put("enhance_boss_settings", enhance_boss_settings);
 	}
 
 	private static void restoreCustom(Bundle b){
+		boss_enhance = b.getInt("boss_enhance");
 		elite_enemies = b.getInt("elite_enemies");
 		second_elapsed = b.getFloat("real_time_passed");
 		isCustomSeed = b.getBoolean("is_custom_seed");
 		real_seconds = b.getLong("real_seconds_passed");
-		enhance_boss_settings = b.getInt("enhance_boss_settings");
 	}
 
 }

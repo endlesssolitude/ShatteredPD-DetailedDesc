@@ -132,4 +132,53 @@ public class RangeMap {
         int w = Dungeon.level.width();
         return Math.abs(a/w-b/w)+Math.abs(a%w-b%w);
     }
+
+    public static int[] circleArea(int center, float radius){
+        int range = (int) Math.ceil(radius);
+        int[] map = centeredRect(center, range, range);
+        int contains = 0;
+        boolean[] inCircle = new boolean[map.length];
+        for(int i=0, L=map.length; i<L; ++i){
+            if(Dungeon.level.trueDistance(map[i], center) < radius +.001f){
+                ++contains;
+                inCircle[i]=true;
+            }else{
+                inCircle[i]=false;
+            }
+        }
+        int[] result = new int[contains];
+        int cur = 0;
+        for(int i=0, L=inCircle.length; i<L; ++i){
+            if(inCircle[i]){
+                result[cur]=map[i];
+                ++cur;
+            }
+        }
+        return result;
+    }
+
+    public static int[] ringArea(int center, float innerRadius, float outerRadius){
+        int rangeB = (int) Math.ceil(outerRadius);
+        int[] map = centeredRect(center, rangeB, rangeB);
+        int contains = 0;
+        boolean[] inCircle = new boolean[map.length];
+        for(int i=0, L=map.length; i<L; ++i){
+            float dist = Dungeon.level.trueDistance(map[i], center);
+            if(dist < outerRadius +.001f && dist > innerRadius - .001f){
+                ++contains;
+                inCircle[i]=true;
+            }else{
+                inCircle[i]=false;
+            }
+        }
+        int[] result = new int[contains];
+        int cur = 0;
+        for(int i=0, L=inCircle.length; i<L; ++i){
+            if(inCircle[i]){
+                result[cur]=map[i];
+                ++cur;
+            }
+        }
+        return result;
+    }
 }

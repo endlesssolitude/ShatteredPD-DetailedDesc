@@ -68,6 +68,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.En
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Elemental;
 import com.shatteredpixel.shatteredpixeldungeon.custom.interfaces.DamageListener;
 import com.shatteredpixel.shatteredpixeldungeon.custom.interfaces.DeathListener;
+import com.shatteredpixel.shatteredpixeldungeon.expansion.mergeManagers.VirtualProc;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.AntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Potential;
@@ -593,6 +594,8 @@ public abstract class Char extends Actor {
 		if (endure != null){
 			dmg = endure.enforceDamagetakenLimit(dmg);
 		}
+
+		dmg = VirtualProc.INSTANCE.damage(this, dmg, src);
 
 		int shielded = dmg;
 		//FIXME: when I add proper damage properties, should add an IGNORES_SHIELDS property to use here.

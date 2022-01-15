@@ -7,7 +7,6 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.custom.ch.boss.goo.HardGoo;
 import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.RangeMap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
@@ -122,8 +121,7 @@ public class HardGooLevel extends Level {
             super.seal();
 
             //GooHard boss = new GooHard();
-            HardGoo boss = new HardGoo();
-            boss.initBoss(BossDifficulty.getEnumDifficulty(HardGoo.whichBoss), true);
+            GooHard boss = new GooHard();
             boss.pos = CENTER;
             GameScene.add(boss);
 
