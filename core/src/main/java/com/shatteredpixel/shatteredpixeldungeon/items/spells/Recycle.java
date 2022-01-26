@@ -27,6 +27,8 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Transmuting;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Stone;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.AlchemicalCatalyst;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.Brew;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.Elixir;
@@ -35,20 +37,28 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.Runestone;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.TippedDart;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
 import com.watabou.utils.Reflection;
 
 public class Recycle extends InventorySpell {
 	
 	{
 		image = ItemSpriteSheet.RECYCLE;
-		mode = WndBag.Mode.RECYCLABLE;
 	}
-	
+
+	@Override
+	protected boolean usableOnItem(Item item) {
+		return (item instanceof Potion && !(item instanceof Elixir || item instanceof Brew || item instanceof AlchemicalCatalyst)) ||
+				item instanceof Scroll ||
+				item instanceof Plant.Seed ||
+				item instanceof Runestone ||
+				item instanceof TippedDart;
+	}
+
 	@Override
 	protected void onItemSelected(Item item) {
 		Item result;
@@ -65,8 +75,10 @@ public class Recycle extends InventorySpell {
 				}
 			} else if (item instanceof Plant.Seed) {
 				result = Generator.random(Generator.Category.SEED);
-			} else {
+			} else if (item instanceof Runestone) {
 				result = Generator.random(Generator.Category.STONE);
+			} else {
+				result = TippedDart.randomTipped(1);
 			}
 		} while (result.getClass() == item.getClass() || Challenges.isItemBlocked(result));
 		
@@ -77,13 +89,6 @@ public class Recycle extends InventorySpell {
 		}
 		Transmuting.show(curUser, item, result);
 		curUser.sprite.emitter().start(Speck.factory(Speck.CHANGE), 0.2f, 10);
-	}
-	
-	public static boolean isRecyclable(Item item){
-		return (item instanceof Potion && !(item instanceof Elixir || item instanceof Brew)) ||
-				item instanceof Scroll ||
-				item instanceof Plant.Seed ||
-				item instanceof Runestone;
 	}
 	
 	@Override

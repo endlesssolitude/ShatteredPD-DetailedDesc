@@ -42,6 +42,7 @@ public class ImmortalShieldAffecter extends TestItem {
         {
             type = buffType.NEUTRAL;
             announced = false;
+            revivePersists = true;
         }
 
         @Override

@@ -541,7 +541,7 @@ public class MimicForChallenge extends Mimic {
 
             for (Integer point : respawnPoints) {
                 Mob mob = Dungeon.level.createMob();
-                while (Char.hasProp(mob, Char.Property.LARGE) && !Dungeon.level.openSpace[point]){
+                while (Char.hasProp(mob, Property.LARGE) && !Dungeon.level.openSpace[point]){
                     mob = Dungeon.level.createMob();
                 }
                 if (mob != null) {

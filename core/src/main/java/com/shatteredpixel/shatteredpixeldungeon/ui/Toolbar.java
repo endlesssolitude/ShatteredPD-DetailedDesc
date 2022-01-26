@@ -85,8 +85,10 @@ public class Toolbar extends Component {
 		add(btnWait = new Tool(24, 0, 20, 26) {
 			@Override
 			protected void onClick() {
-				examining = false;
-				Dungeon.hero.rest(false);
+				if (!GameScene.cancel()) {
+					examining = false;
+					Dungeon.hero.rest(false);
+				}
 			}
 			
 			@Override
@@ -95,8 +97,10 @@ public class Toolbar extends Component {
 			}
 			
 			protected boolean onLongClick() {
-				examining = false;
-				Dungeon.hero.rest(true);
+				if (!GameScene.cancel()) {
+					examining = false;
+					Dungeon.hero.rest(true);
+				}
 				return true;
 			}
 		});
@@ -139,11 +143,11 @@ public class Toolbar extends Component {
 		});
 		
 		add(btnInventory = new Tool(0, 0, 24, 26) {
-			private GoldIndicator gold;
+			private CurrencyIndicator ind;
 
 			@Override
 			protected void onClick() {
-				GameScene.show(new WndBag(Dungeon.hero.belongings.backpack, null, WndBag.Mode.ALL, null));
+				GameScene.show(new WndBag(Dungeon.hero.belongings.backpack));
 			}
 			
 			@Override
@@ -160,14 +164,14 @@ public class Toolbar extends Component {
 			@Override
 			protected void createChildren() {
 				super.createChildren();
-				gold = new GoldIndicator();
-				add(gold);
+				ind = new CurrencyIndicator();
+				add(ind);
 			}
 
 			@Override
 			protected void layout() {
 				super.layout();
-				gold.fill(this);
+				ind.fill(this);
 			}
 		});
 
@@ -424,11 +428,11 @@ public class Toolbar extends Component {
 			Point screen = Camera.main.cameraToScreen(tile.x, tile.y);
 			PointF start = camera().screenToCamera(screen.x, screen.y);
 			
-			x = this.startX = start.x - ItemSprite.SIZE / 2;
-			y = this.startY = start.y - ItemSprite.SIZE / 2;
+			x = this.startX = start.x - width() / 2;
+			y = this.startY = start.y - width() / 2;
 			
-			this.endX = endX - ItemSprite.SIZE / 2;
-			this.endY = endY - ItemSprite.SIZE / 2;
+			this.endX = endX - width() / 2;
+			this.endY = endY - width() / 2;
 			left = DURATION;
 			
 			scale.set( startScale = Camera.main.zoom / camera().zoom );

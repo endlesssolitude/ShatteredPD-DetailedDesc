@@ -13,11 +13,13 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Rat;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClassArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.RatSprite;
+import com.shatteredpixel.shatteredpixeldungeon.ui.HeroIcon;
 import com.shatteredpixel.shatteredpixeldungeon.ui.TargetHealthIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
@@ -112,6 +114,8 @@ public class Ratmogrify extends ArmorAbility {
 			TargetHealthIndicator.instance.target(null);
 			CellEmitter.get(rat.pos).burst(Speck.factory(Speck.WOOL), 4);
 			Sample.INSTANCE.play(Assets.Sounds.PUFF);
+
+			Dungeon.level.occupyCell(rat);
 		}
 
 		armor.charge -= chargeUse(hero);
@@ -119,6 +123,11 @@ public class Ratmogrify extends ArmorAbility {
 		Invisibility.dispel();
 		hero.spendAndNext(Actor.TICK);
 
+	}
+
+	@Override
+	public int icon() {
+		return HeroIcon.RATMOGRIFY;
 	}
 
 	@Override
@@ -130,8 +139,6 @@ public class Ratmogrify extends ArmorAbility {
 
 		{
 			spriteClass = RatSprite.class;
-
-			maxLvl = -2;
 		}
 
 		private Mob original;
@@ -146,6 +153,7 @@ public class Ratmogrify extends ArmorAbility {
 			defenseSkill = original.defenseSkill;
 
 			EXP = original.EXP;
+			maxLvl = original.maxLvl;
 
 			if (original.state == original.SLEEPING) {
 				state = SLEEPING;
@@ -157,9 +165,36 @@ public class Ratmogrify extends ArmorAbility {
 
 		}
 
+		private float timeLeft = 6f;
+
+		@Override
+		protected boolean act() {
+			if (timeLeft <= 0){
+				original.HP = HP;
+				original.pos = pos;
+				original.clearTime();
+				GameScene.add(original);
+
+				destroy();
+				sprite.killAndErase();
+				CellEmitter.get(original.pos).burst(Speck.factory(Speck.WOOL), 4);
+				Sample.INSTANCE.play(Assets.Sounds.PUFF);
+				return true;
+			} else {
+				return super.act();
+			}
+		}
+
+		@Override
+		protected void spend(float time) {
+			if (!allied) timeLeft -= time;
+			super.spend(time);
+		}
+
 		public void makeAlly() {
 			allied = true;
 			alignment = Alignment.ALLY;
+			timeLeft = Float.POSITIVE_INFINITY;
 		}
 
 		public int attackSkill(Char target) {
@@ -174,7 +209,7 @@ public class Ratmogrify extends ArmorAbility {
 		public int damageRoll() {
 			int damage = original.damageRoll();
 			if (!allied && Dungeon.hero.hasTalent(Talent.RATSISTANCE)){
-				damage = Math.round(damage * (1f - .1f*Dungeon.hero.pointsInTalent(Talent.RATSISTANCE)));
+				damage *= Math.pow(0.9f, Dungeon.hero.pointsInTalent(Talent.RATSISTANCE));
 			}
 			return damage;
 		}
@@ -182,6 +217,12 @@ public class Ratmogrify extends ArmorAbility {
 		@Override
 		public float attackDelay() {
 			return original.attackDelay();
+		}
+
+		@Override
+		public void rollToDropLoot() {
+			original.pos = pos;
+			original.rollToDropLoot();
 		}
 
 		@Override

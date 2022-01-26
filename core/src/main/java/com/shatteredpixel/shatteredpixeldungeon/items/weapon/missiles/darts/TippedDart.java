@@ -93,6 +93,9 @@ public abstract class TippedDart extends Dart {
 					} else if (index == 1){
 						detach(hero.belongings.backpack);
 						if (!new Dart().collect()) Dungeon.level.drop(new Dart(), hero.pos).sprite.drop();
+
+						//reset durability if there are darts left in the stack
+						durability = MAX_DURABILITY;
 						
 						hero.spend( 1f );
 						hero.busy();
@@ -115,7 +118,7 @@ public abstract class TippedDart extends Dart {
 		if (durability <= 0){
 			//attempt to stick the dart to the enemy, just drop it if we can't.
 			Dart d = new Dart();
-			if (enemy.isAlive() && sticky) {
+			if (sticky && enemy != null && enemy.isAlive() && enemy.alignment != Char.Alignment.ALLY){
 				PinCushion p = Buff.affect(enemy, PinCushion.class);
 				if (p.target == enemy){
 					p.stick(d);
@@ -129,7 +132,7 @@ public abstract class TippedDart extends Dart {
 	private static int targetPos = -1;
 
 	@Override
-	protected float durabilityPerUse() {
+	public float durabilityPerUse() {
 		float use = super.durabilityPerUse();
 		
 		use /= (1 + Dungeon.hero.pointsInTalent(Talent.DURABLE_TIPS));

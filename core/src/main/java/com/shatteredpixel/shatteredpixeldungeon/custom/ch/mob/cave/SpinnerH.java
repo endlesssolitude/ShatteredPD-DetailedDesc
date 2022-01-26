@@ -16,9 +16,9 @@ public class SpinnerH extends Spinner {
     }
 
     @Override
-    public void move(int step){
+    public void move(int step, boolean traveling){
         GameScene.add(Blob.seed(step, 8, Web.class));
-        super.move(step);
+        super.move(step, traveling);
     }
 
 

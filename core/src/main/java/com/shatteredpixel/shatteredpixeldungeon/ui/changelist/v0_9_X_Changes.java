@@ -27,9 +27,11 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Spinner;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.ChaliceOfBlood;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
+import com.shatteredpixel.shatteredpixeldungeon.items.bombs.WoollyBomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfFrost;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfTransfusion;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.ChangesScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
@@ -38,8 +40,10 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.GolemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.SpawnerSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.SpectralNecromancerSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.SpinnerSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
+import com.shatteredpixel.shatteredpixeldungeon.ui.TalentIcon;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.watabou.noosa.Image;
 
@@ -111,9 +115,18 @@ public class v0_9_X_Changes {
 				"_-_ Overhauled the subclass selection interface, now much more informative."));
 
 		changes.addButton(new ChangeButton(Icons.get(Icons.PREFS), Messages.get(ChangesScene.class, "misc"),
-				"_-_ Long pressing now uses the system long-press time (default 0.5 sec), instead of taking 1 second.\n\n" +
-				"_-_ Deactivating the cloak of shadows no longer takes time.\n\n" +
+				"_-_ Quickslotting a bag or long-pressing the inventory now shows a quick-use windows!\n" +
+				"_-_ Added quickslot actions for some items that were missing them\n" +
+				"_-_ Bags can now appear in the rankings\n\n" +
+
+				"_-_ Long pressing now uses the system long-press time (default 0.5 sec).\n" +
+				"_-_ Google Play Games and sharing gameplay data can now be enabled separately.\n\n" +
+
+				"_-_ Deactivating the cloak of shadows no longer takes time.\n" +
+				"_-_ Runestones now press tiles when they are thrown.\n" +
+				"_-_ The hero can now collect dew on stairs, even if they are at full HP.\n" +
 				"_-_ Improved the functionality for allies following the hero into locked boss arenas.\n\n" +
+
 				"_-_ Improved the descriptions of combo abilities\n" +
 				"_-_ Added dev commentary for v0.6.0-v0.6.5\n" +
 				"_-_ The Unstable Spellbook now greys out scrolls that have already been fed to it.\n" +
@@ -126,8 +139,8 @@ public class v0_9_X_Changes {
 				"_-_ Various rare crash issues\n" +
 				"_-_ Various minor VFX/SFX/text issues\n" +
 				"_-_ Various exploits caused by window stacking and multitaps\n" +
-				"_-_ Resting causing time to pass faster at high framerates\n\n" +
-				"_-_ Errors when zooming with mouse and keyboard keys\n" +
+				"_-_ Resting causing time to pass faster at high framerates\n" +
+				"_-_ Errors when zooming with mouse and keyboard keys\n\n" +
 
 				"_-_ Thief's Intuition not working in rare cases\n" +
 				"_-_ Berries rarely appearing in hero's remains\n" +
@@ -142,6 +155,7 @@ public class v0_9_X_Changes {
 				"_-_ Various rare AI bugs with Ghost hero"));
 
 		changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+				"Fixed:\n" +
 				"_-_ Incendiary darts being instantly used up when used on terrain\n" +
 				"_-_ Wands of regrowth and fireblast using more than 3 charges in rare cases\n" +
 				"_-_ Knockback effects not always working on dead characters\n" +
@@ -149,18 +163,26 @@ public class v0_9_X_Changes {
 				"_-_ Hero accepting input while using potion of dragon's breath\n" +
 				"_-_ Vision effects from talisman and arcane vision not working after save/load\n" +
 				"_-_ Aqua rejuv working while hero is levitating\n" +
-				"_-_ Seeds disappearing if they fall into a chasm with the barren land challenge enabled\n\n" +
+				"_-_ Seeds disappearing if they fall into a chasm with the barren land challenge enabled\n" +
+				"_-_ Displacing darts sometimes teleporting enemies into unreachable places\n" +
+				"_-_ Items with boosted levels being remove-cursable\n" +
+				"_-_ Magical infusion not clearing the degrade debuff"));
 
+		changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+				"Fixed:\n" +
 				"_-_ Giant swarms duplicating in enclosed spaces\n" +
 				"_-_ Giant champions being able to attack through other characters\n" +
-				"_-_ Ghouls rarely healing without reviving\n\n" +
+				"_-_ Ghouls rarely healing without reviving\n" +
+				"_-_ Necromancers sometimes losing track of their skeleton\n" +
+				"_-_ Chaos elemental teleportation not interrupting the hero\n" +
+				"_-_ On-hit effects triggering on invulnerable pylons\n" +
+				"_-_ Deaths to Dwarf King rarely not being recorded in rankings\n\n" +
 
 				"_-_ Quickslots not appearing greyed out when they should\n" +
 				"_-_ Rare cases where non-visible cells would appear visible\n" +
-				"_-_ Game log entries not appearing from alchemy scene\n\n" +
-
-				"_-_ Items with boosted levels being remove-cursable\n" +
-				"_-_ Magical infusion not clearing the degrade debuff"));
+				"_-_ Pacifist badge not triggering if hero descended by falling\n" +
+				"_-_ Wells of healing not fully healing the hero in all cases\n" +
+				"_-_ Game log entries not appearing from alchemy scene"));
 
 		changes = new ChangeInfo(Messages.get(ChangesScene.class, "buffs"), false, null);
 		changes.hardlight(CharSprite.POSITIVE);
@@ -331,7 +353,7 @@ public class v0_9_X_Changes {
 				"_-_ Rather than having a 1/8 chance per enemy, the game now guarantees that every 8th enemy is a champion. This should make champion spawn rates much more consistent.\n" +
 				"_-_ Removed champion enemy caps, no longer needed now that spawning is more consistent."));
 
-		changes.addButton(new ChangeButton(new Image(Assets.Interfaces.TALENT_ICONS, 80, 16, 16, 16), "On-Upgrade Talents",
+		changes.addButton(new ChangeButton(new TalentIcon(Talent.ENERGIZING_UPGRADE), "On-Upgrade Talents",
 				"T2 talents are doing very well overall, but I'm handing out a buff to each on-upgrade talent as they're a bit weak and aren't picked often:\n\n" +
 				"_- Energizing Upgrade_ staff charges increased to 2/3 at +1/+2, up from 1/2 at +1/+2.\n" +
 				"_- Mystical Upgrade_ cloak of shadows charges increased to 2/3 at +1/+2, up from 1/2 at +1/+2."));
@@ -350,7 +372,7 @@ public class v0_9_X_Changes {
 				"_- the Chalice of Blood_ now grants more HP per turn with artifact charging based on its level, instead of based on dungeon depth.\n" +
 				"_-_ This scaling occurs in the same way as how the chalice scales up health regen. The max heal per turn is unchanged at 5."));
 
-		changes.addButton(new ChangeButton(new Image(Assets.Interfaces.TALENT_ICONS, 48, 48, 16, 16), "Nature's Aid",
+		changes.addButton(new ChangeButton(new TalentIcon(Talent.NATURES_AID), "Nature's Aid",
 				"I'm nudging nature's down slightly as it is currently the strongest T1 talent by a fair margin:\n\n" +
 				"_- Nature's Aid_ turns of barkskin reduced to 3/5 at +1/+2, from 4/6 at +1/+2."));
 
@@ -496,7 +518,7 @@ public class v0_9_X_Changes {
 		changes.hardlight(CharSprite.NEGATIVE);
 		changeInfos.add(changes);
 
-		changes.addButton( new ChangeButton( new Image(Assets.Interfaces.TALENT_ICONS, 0, 0, 16, 16), Talent.HEARTY_MEAL.title(),
+		changes.addButton( new ChangeButton( new TalentIcon(Talent.HEARTY_MEAL), Talent.HEARTY_MEAL.title(),
 				"_Hearty Meal_ is currently the strongest tier one talent in the game, so I'm deepening the missing health requirement slightly to make its power a bit harder to access:\n\n" +
 				"_-_ Now grants 2/3 healing when hero is below 50% health, down from 3/5\n" +
 				"_-_ The full 3/5 heal is still available if the hero is below 25% health"));

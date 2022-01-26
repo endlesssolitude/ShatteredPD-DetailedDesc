@@ -26,8 +26,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3FileHandle;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3NativesLoader;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Preferences;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.GdxNativesLoader;
 import com.badlogic.gdx.utils.SharedLibraryLoader;
 import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
@@ -50,6 +52,15 @@ public class DesktopLauncher {
 
 		if (!DesktopLaunchValidator.verifyValidJVMState(args)){
 			return;
+		}
+
+		//detection for FreeBSD (which is equivalent to linux for us)
+		//TODO might want to merge request this to libGDX
+		if (System.getProperty("os.name").contains("FreeBSD")) {
+			SharedLibraryLoader.isLinux = true;
+			//this overrides incorrect values set in SharedLibraryLoader's static initializer
+			SharedLibraryLoader.isIos = false;
+			SharedLibraryLoader.is64Bit = System.getProperty("os.arch").contains("64") || System.getProperty("os.arch").startsWith("armv8");
 		}
 		
 		final String title;
@@ -143,14 +154,19 @@ public class DesktopLauncher {
 		config.setWindowSizeLimits( 480, 320, -1, -1 );
 		Point p = SPDSettings.windowResolution();
 		config.setWindowedMode( p.x, p.y );
-		config.setAutoIconify( true );
+
+		config.setMaximized(SPDSettings.windowMaximized());
+
+		if (SPDSettings.fullscreen()) {
+			config.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
+		}
 		
 		//we set fullscreen/maximized in the listener as doing it through the config seems to be buggy
 		DesktopWindowListener listener = new DesktopWindowListener();
 		config.setWindowListener( listener );
 		
-		config.setWindowIcon("icons/icon_16.png", "icons/icon_32.png", "icons/icon_64.png",
-				"icons/icon_128.png", "icons/icon_256.png");
+		config.setWindowIcon("icons/icon_16.png", "icons/icon_32.png", "icons/icon_48.png",
+				"icons/icon_64.png", "icons/icon_128.png", "icons/icon_256.png");
 
 		new Lwjgl3Application(new ShatteredPixelDungeon(new DesktopPlatformSupport()), config);
 	}

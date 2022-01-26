@@ -22,6 +22,8 @@
 package com.shatteredpixel.shatteredpixeldungeon.windows;
 
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
+import com.shatteredpixel.shatteredpixeldungeon.ui.IconButton;
+import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RedButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
@@ -90,9 +92,23 @@ public class WndOptions extends Window {
 					onSelect( index );
 				}
 			};
+			if (hasIcon(i)) btn.icon(getIcon(i));
 			btn.enable(enabled(i));
-			btn.setRect( 0, pos, width, BUTTON_HEIGHT );
 			add( btn );
+
+			if (!hasInfo(i)) {
+				btn.setRect(0, pos, width, BUTTON_HEIGHT);
+			} else {
+				btn.setRect(0, pos, width - BUTTON_HEIGHT, BUTTON_HEIGHT);
+				IconButton info = new IconButton(Icons.get(Icons.INFO)){
+					@Override
+					protected void onClick() {
+						onInfo( index );
+					}
+				};
+				info.setRect(width-BUTTON_HEIGHT, pos, BUTTON_HEIGHT, BUTTON_HEIGHT);
+				add(info);
+			}
 
 			pos += BUTTON_HEIGHT + MARGIN;
 		}
@@ -105,4 +121,18 @@ public class WndOptions extends Window {
 	}
 	
 	protected void onSelect( int index ) {}
+
+	protected boolean hasInfo( int index ) {
+		return false;
+	}
+
+	protected void onInfo( int index ) {}
+
+	protected boolean hasIcon( int index ) {
+		return false;
+	}
+
+	protected Image getIcon( int index ) {
+		return null;
+	}
 }

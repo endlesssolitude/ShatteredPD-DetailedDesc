@@ -79,6 +79,7 @@ public class VaultRoom extends SpecialRoom {
 				level.drop(i2, i2Pos).type = Heap.Type.CRYSTAL_CHEST;
 			}
 		}
+
 		Painter.set(level, i1Pos, Terrain.PEDESTAL);
 		Painter.set(level, i2Pos, Terrain.PEDESTAL);
 

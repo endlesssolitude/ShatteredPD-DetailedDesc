@@ -86,12 +86,12 @@ public class SeniorMonkH extends Monk {
     }
 
     @Override
-    public void move( int step ) {
+    public void move( int step, boolean traveling ) {
         // moving reduces cooldown by an additional 0.67, giving a total reduction of 1.67f.
         // basically monks will become focused notably faster if you kite them.
         // additional 0.5
         focusCooldown -= 0.5f;
-        super.move( step );
+        super.move( step, traveling );
     }
 
     @Override

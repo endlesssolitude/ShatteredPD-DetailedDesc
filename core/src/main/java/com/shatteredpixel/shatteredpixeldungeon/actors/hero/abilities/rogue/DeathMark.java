@@ -36,6 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.ArmorAbili
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClassArmor;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
+import com.shatteredpixel.shatteredpixeldungeon.ui.HeroIcon;
 import com.shatteredpixel.shatteredpixeldungeon.utils.BArray;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
@@ -57,8 +58,8 @@ public class DeathMark extends ArmorAbility {
 	public float chargeUse( Hero hero ) {
 		float chargeUse = super.chargeUse(hero);
 		if (hero.buff(DoubleMarkTracker.class) != null){
-			//reduced charge use by 33%/55%/70%/80%
-			chargeUse *= Math.pow(0.67, hero.pointsInTalent(Talent.DOUBLE_MARK));
+			//reduced charge use by 30%/50%/65%/75%
+			chargeUse *= Math.pow(0.707, hero.pointsInTalent(Talent.DOUBLE_MARK));
 		}
 		return chargeUse;
 	}
@@ -104,7 +105,7 @@ public class DeathMark extends ArmorAbility {
 
 		if (Dungeon.hero.hasTalent(Talent.FEAR_THE_REAPER)) {
 			if (Dungeon.hero.pointsInTalent(Talent.FEAR_THE_REAPER) >= 2) {
-				Buff.prolong(ch, Terror.class, 5f).target = Dungeon.hero;
+				Buff.prolong(ch, Terror.class, 5f).object = Dungeon.hero.id();
 			}
 			Buff.prolong(ch, Cripple.class, 5f);
 
@@ -116,7 +117,7 @@ public class DeathMark extends ArmorAbility {
 					if (near != ch && near.alignment == Char.Alignment.ENEMY
 							&& PathFinder.distance[near.pos] != Integer.MAX_VALUE) {
 						if (Dungeon.hero.pointsInTalent(Talent.FEAR_THE_REAPER) == 4) {
-							Buff.prolong(near, Terror.class, 5f).target = Dungeon.hero;
+							Buff.prolong(near, Terror.class, 5f).object = Dungeon.hero.id();
 						}
 						Buff.prolong(near, Cripple.class, 5f);
 					}
@@ -126,6 +127,11 @@ public class DeathMark extends ArmorAbility {
 	}
 
 	public static class DoubleMarkTracker extends FlavourBuff{};
+
+	@Override
+	public int icon() {
+		return HeroIcon.DEATH_MARK;
+	}
 
 	@Override
 	public Talent[] talents() {
@@ -164,8 +170,19 @@ public class DeathMark extends ArmorAbility {
 		}
 
 		@Override
+		public boolean attachTo(Char target) {
+			if (super.attachTo(target)){
+				target.deathMarked = true;
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		@Override
 		public void detach() {
 			super.detach();
+			target.deathMarked = false;
 			if (!target.isAlive()){
 				target.sprite.flash();
 				target.sprite.bloodBurstA(target.sprite.center(), target.HT*2);

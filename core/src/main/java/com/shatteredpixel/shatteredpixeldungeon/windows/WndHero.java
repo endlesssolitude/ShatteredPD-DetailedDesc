@@ -25,27 +25,23 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bless;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hex;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.custom.ch.StrengthAndSacrifice;
 import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
-import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
-import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfAccuracy;
-import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEvasion;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
 import com.shatteredpixel.shatteredpixeldungeon.text.HeroStat;
+import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIcon;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.IconButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ScrollPane;
 import com.shatteredpixel.shatteredpixeldungeon.ui.StatusPane;
+import com.shatteredpixel.shatteredpixeldungeon.ui.TalentButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.TalentsPane;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.shatteredpixel.shatteredpixeldungeon.utils.DungeonSeed;
@@ -88,14 +84,14 @@ public class WndHero extends WndTabbed {
 		buffs.setRect(0, 0, WIDTH, HEIGHT);
 		buffs.setupList();
 		
-		add( new LabeledTab( Messages.get(this, "stats") ) {
+		add( new IconTab( Icons.get(Icons.RANKINGS) ) {
 			protected void select( boolean value ) {
 				super.select( value );
 				if (selected) lastIdx = 0;
 				stats.visible = stats.active = selected;
 			}
 		} );
-		add( new LabeledTab( Messages.get(this, "talents") ) {
+		add( new IconTab( Icons.get(Icons.TALENT) ) {
 			protected void select( boolean value ) {
 				super.select( value );
 				if (selected) lastIdx = 1;
@@ -103,7 +99,7 @@ public class WndHero extends WndTabbed {
 				talents.visible = talents.active = selected;
 			}
 		} );
-		add( new LabeledTab( Messages.get(this, "buffs") ) {
+		add( new IconTab( Icons.get(Icons.BUFFS) ) {
 			protected void select( boolean value ) {
 				super.select( value );
 				if (selected) lastIdx = 2;
@@ -122,7 +118,7 @@ public class WndHero extends WndTabbed {
 
 	private class StatsTab extends Group {
 		
-		private static final int GAP = 5;
+		private static final int GAP = 6;
 		
 		private float pos;
 		
@@ -152,10 +148,6 @@ public class WndHero extends WndTabbed {
 
 			pos = title.bottom() + 2*GAP;
 
-
-
-			pos = title.bottom() + 2*GAP;
-
 			statSlot( Messages.get(this, "str"), hero.STR() );
 			if (hero.shielding() > 0) statSlot( Messages.get(this, "health"), hero.HP + "+" + hero.shielding() + "/" + hero.HT );
 			else statSlot( Messages.get(this, "health"), (hero.HP) + "/" + hero.HT );
@@ -164,7 +156,6 @@ public class WndHero extends WndTabbed {
 			if(Dungeon.hero.buff(Hunger.class)!=null){
 				statSlot(M.L(HeroStat.class, "hunger"), Dungeon.hero.buff(Hunger.class).hunger() + "/" +Hunger.STARVING);
 			}
-			statSlot( M.L(HeroStat.class, "skill") , attackskillcal() + "/" + defenseskillcal());
 
 			pos += GAP;
 
@@ -180,48 +171,6 @@ public class WndHero extends WndTabbed {
 			pos += GAP;
 		}
 
-		//FIXME why so COMPLEX
-		private int attackskillcal(){
-			Hero hero = Dungeon.hero;
-			float atkskl = hero.lvl +9;
-
-			atkskl *= RingOfAccuracy.accuracyMultiplier( hero );
-			KindOfWeapon wep = hero.belongings.weapon;
-			if(wep != null){
-				atkskl *= wep.accuracyFactor( hero );
-			}
-			if( hero.buff(Bless.class)!=null){
-				atkskl *= 1.25;
-			}
-			if (hero.buff(  Hex.class) != null) atkskl *= 0.8f;
-
-			StrengthAndSacrifice b = Dungeon.hero.buff(StrengthAndSacrifice.class);
-			if(b!=null){
-				atkskl *= b.AccuracyBonusFactor();
-			}
-
-			return Math.round(atkskl);
-		}
-
-		private int defenseskillcal(){
-			Hero hero = Dungeon.hero;
-			float defskl = hero.lvl + 4;
-			defskl *= RingOfEvasion.evasionMultiplier( hero );
-			if( hero.belongings.armor != null){
-				defskl = hero.belongings.armor.evasionFactor( hero, defskl );
-			}
-
-			if( hero.buff(Bless.class)!=null){
-				defskl *= 1.25;
-			}
-			if (hero.buff(  Hex.class) != null) defskl *= 0.8f;
-			StrengthAndSacrifice s = Dungeon.hero.buff(StrengthAndSacrifice.class);
-			if(s!=null){
-				defskl *= s.EvasionCorruptionFactor();
-			}
-			return Math.round(defskl);
-		}
-
 		private void statSlot( String label, String value ) {
 			
 			RenderedTextBlock txt = PixelScene.renderTextBlock( label, 8 );
@@ -229,7 +178,7 @@ public class WndHero extends WndTabbed {
 			add( txt );
 			
 			txt = PixelScene.renderTextBlock( value, 8 );
-			txt.setPos(WIDTH * 0.45f, pos);
+			txt.setPos(WIDTH * 0.6f, pos);
 			PixelScene.align(txt);
 			add( txt );
 			
@@ -252,7 +201,7 @@ public class WndHero extends WndTabbed {
 		@Override
 		protected void createChildren() {
 			super.createChildren();
-			pane = new TalentsPane(true);
+			pane = new TalentsPane(TalentButton.Mode.UPGRADE);
 			add(pane);
 		}
 
@@ -267,9 +216,6 @@ public class WndHero extends WndTabbed {
 	private class BuffsTab extends Component {
 		
 		private static final int GAP = 2;
-
-		private SmartTexture icons;
-		private TextureFilm film;
 		
 		private float pos;
 		private ScrollPane buffList;
@@ -277,8 +223,6 @@ public class WndHero extends WndTabbed {
 
 		@Override
 		protected void createChildren() {
-			icons = TextureCache.get( Assets.Interfaces.BUFFS_LARGE );
-			film = new TextureFilm( icons, 16, 16 );
 
 			super.createChildren();
 
@@ -327,11 +271,8 @@ public class WndHero extends WndTabbed {
 			public BuffSlot( Buff buff ){
 				super();
 				this.buff = buff;
-				int index = buff.icon();
 
-				icon = new Image( icons );
-				icon.frame( film.get( index ) );
-				buff.tintIcon(icon);
+				icon = new BuffIcon(buff, true);
 				icon.y = this.y;
 				add( icon );
 
@@ -349,10 +290,12 @@ public class WndHero extends WndTabbed {
 			protected void layout() {
 				super.layout();
 				icon.y = this.y;
+				txt.maxWidth((int)(width - icon.width()));
 				txt.setPos(
 						icon.width + GAP,
 						this.y + (icon.height - txt.height()) / 2
 				);
+				PixelScene.align(txt);
 			}
 			
 			protected boolean onClick ( float x, float y ) {

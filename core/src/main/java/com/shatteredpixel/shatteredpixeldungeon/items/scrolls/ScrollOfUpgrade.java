@@ -25,6 +25,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Degrade;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
@@ -37,17 +38,21 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
 
 public class ScrollOfUpgrade extends InventoryScroll {
 	
 	{
 		icon = ItemSpriteSheet.Icons.SCROLL_UPGRADE;
-		mode = WndBag.Mode.UPGRADEABLE;
+		preferredBag = Belongings.Backpack.class;
 
 		unique = true;
 	}
-	
+
+	@Override
+	protected boolean usableOnItem(Item item) {
+		return item.isUpgradable();
+	}
+
 	@Override
 	protected void onItemSelected( Item item ) {
 
@@ -96,7 +101,7 @@ public class ScrollOfUpgrade extends InventoryScroll {
 
 			item.upgrade();
 
-			if (wasCursed && !item.cursed){
+			if (item.cursedKnown && wasCursed && !item.cursed){
 				removeCurse( Dungeon.hero );
 			}
 
@@ -128,5 +133,10 @@ public class ScrollOfUpgrade extends InventoryScroll {
 	@Override
 	public int value() {
 		return isKnown() ? 50 * quantity : super.value();
+	}
+
+	@Override
+	public int energyVal() {
+		return isKnown() ? 8 * quantity : super.energyVal();
 	}
 }

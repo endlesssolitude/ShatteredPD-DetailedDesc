@@ -38,6 +38,7 @@ public class SpellSprite extends Image {
 	public static final int CHARGE		= 2;
 	public static final int MASTERY		= 3;
 	public static final int BERSERK     = 4;
+	public static final int ANKH        = 5;
 	
 	private static final int SIZE	= 16;
 	
@@ -85,17 +86,21 @@ public class SpellSprite extends Image {
 			x = target.sprite.center().x - SIZE / 2;
 			y = target.sprite.y - SIZE;
 		}
+
+		if (phase == null){
+			return;
+		}
 		
 		switch (phase) {
-		case FADE_IN:
-			alpha( passed / duration );
-			scale.set( passed / duration );
-			break;
-		case STATIC:
-			break;
-		case FADE_OUT:
-			alpha( 1 - passed / duration );
-			break;
+			case FADE_IN:
+				alpha( passed / duration );
+				scale.set( passed / duration );
+				break;
+			case STATIC:
+				break;
+			case FADE_OUT:
+				alpha( 1 - passed / duration );
+				break;
 		}
 		
 		if ((passed += Game.elapsed) > duration) {
@@ -135,9 +140,9 @@ public class SpellSprite extends Image {
 		}
 		
 		SpellSprite sprite = GameScene.spellSprite();
-		sprite.revive();
-		sprite.reset( index );
 		sprite.target = ch;
-		all.put( ch,  sprite );
+		sprite.reset( index );
+		sprite.revive();
+		all.put( ch, sprite );
 	}
 }

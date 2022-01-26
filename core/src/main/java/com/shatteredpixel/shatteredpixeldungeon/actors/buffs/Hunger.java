@@ -26,7 +26,11 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HornOfPlenty;
+import com.shatteredpixel.shatteredpixeldungeon.items.journal.Guidebook;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfChallenge;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Bundle;
@@ -61,7 +65,9 @@ public class Hunger extends Buff implements Hero.Doom {
 	@Override
 	public boolean act() {
 
-		if (Dungeon.level.locked || target.buff(WellFed.class) != null){
+		if (Dungeon.level.locked
+				|| target.buff(WellFed.class) != null
+				|| target.buff(ScrollOfChallenge.ChallengeArena.class) != null){
 			spend(STEP);
 			return true;
 		}
@@ -93,6 +99,11 @@ public class Hunger extends Buff implements Hero.Doom {
 				} else if (newLevel >= HUNGRY && level < HUNGRY) {
 
 					GLog.w( Messages.get(this, "onhungry") );
+
+					if (!Document.ADVENTURERS_GUIDE.isPageRead(Document.GUIDE_FOOD)){
+						GLog.p(Messages.get(Guidebook.class, "hint"));
+						GameScene.flashForDocument(Document.GUIDE_FOOD);
+					}
 
 				}
 				level = newLevel;

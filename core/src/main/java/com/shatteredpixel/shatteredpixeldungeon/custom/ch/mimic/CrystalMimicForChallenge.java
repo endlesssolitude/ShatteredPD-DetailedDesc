@@ -35,7 +35,7 @@ public class CrystalMimicForChallenge extends MimicForChallenge {
     {
         spriteClass = MimicSprite.Crystal.class;
 
-        FLEEING = new CrystalMimicForChallenge.Fleeing();
+        FLEEING = new Fleeing();
     }
 
     @Override

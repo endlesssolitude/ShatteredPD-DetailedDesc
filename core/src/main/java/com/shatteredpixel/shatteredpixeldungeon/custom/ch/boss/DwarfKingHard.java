@@ -208,7 +208,7 @@ public class DwarfKingHard extends Boss{
         } else if (phase == 2){
             actPhaseTwoSummon();
             return true;
-        } else if (phase == 3 && buffs(DwarfKingHard.Summoning.class).size() < 4){
+        } else if (phase == 3 && buffs(Summoning.class).size() < 4){
             if (summonSubject(2)) summonsMade++;
         }
 

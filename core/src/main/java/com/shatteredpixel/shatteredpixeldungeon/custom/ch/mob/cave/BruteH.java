@@ -87,7 +87,7 @@ public class BruteH extends Mob {
     }
 
     protected void enrage(){
-        Buff.affect(this, BruteH.BruteRage.class).setShield(revived>0 ? HT/2 : HT * 3 / 4);
+        Buff.affect(this, BruteRage.class).setShield(revived>0 ? HT/2 : HT * 3 / 4);
         if (Dungeon.level.heroFOV[pos]) {
             sprite.showStatus( CharSprite.NEGATIVE, Messages.get(Brute.class, "enraged") );
         }
@@ -103,7 +103,7 @@ public class BruteH extends Mob {
             if (!raging){
                 enrage();
             }
-            return !buffs(BruteH.BruteRage.class).isEmpty();
+            return !buffs(BruteRage.class).isEmpty();
         }
     }
 
@@ -125,7 +125,7 @@ public class BruteH extends Mob {
 
     @Override
     public int damageRoll() {
-        int dmg =  (buff(BruteH.BruteRage.class) != null ?
+        int dmg =  (buff(BruteRage.class) != null ?
                 Random.NormalIntRange( 15, 40 ) :
                 Random.NormalIntRange( 5, 25 ));
         return Math.round(dmg*(rangedAttack?0.75f:1f)*(revived>0?1.2f:1f));

@@ -9,6 +9,7 @@ import com.watabou.noosa.Visual;
 public class GameTimer extends Buff {
     {
         actPriority = VFX_PRIO - 1;
+        revivePersists = true;
     }
     private VirtualVisualTimer vvt;
 

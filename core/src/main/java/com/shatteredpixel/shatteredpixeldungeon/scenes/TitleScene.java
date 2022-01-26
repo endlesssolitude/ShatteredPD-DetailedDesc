@@ -31,12 +31,14 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Fireball;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Languages;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.services.news.News;
+import com.shatteredpixel.shatteredpixeldungeon.services.updates.AvailableUpdateData;
 import com.shatteredpixel.shatteredpixeldungeon.services.updates.Updates;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Archs;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
 import com.shatteredpixel.shatteredpixeldungeon.ui.StyledButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndSettings;
 import com.watabou.glwrap.Blending;
 import com.watabou.noosa.BitmapText;
@@ -47,6 +49,8 @@ import com.watabou.noosa.audio.Music;
 import com.watabou.utils.ColorMath;
 import com.watabou.utils.DeviceCompat;
 
+import java.util.Date;
+
 public class TitleScene extends PixelScene {
 	
 	@Override
@@ -54,7 +58,10 @@ public class TitleScene extends PixelScene {
 		
 		super.create();
 
-		Music.INSTANCE.play( Assets.Music.THEME, true );
+		Music.INSTANCE.playTracks(
+				new String[]{Assets.Music.THEME_1, Assets.Music.THEME_2},
+				new float[]{1, 1},
+				false);
 
 		uiCamera.visible = false;
 		
@@ -222,7 +229,7 @@ public class TitleScene extends PixelScene {
 		@Override
 		public void update() {
 			super.update();
-/*
+
 			if (unreadCount == -1 && News.articlesAvailable()){
 				long lastRead = SPDSettings.newsLastRead();
 				if (lastRead == 0){
@@ -241,14 +248,12 @@ public class TitleScene extends PixelScene {
 			if (unreadCount > 0){
 				textColor(ColorMath.interpolate( 0xFFFFFF, Window.SHPX_COLOR, 0.5f + (float)Math.sin(Game.timeTotal*5)/2f));
 			}
-
- */
 		}
 
 		@Override
 		protected void onClick() {
 			super.onClick();
-			//ShatteredPixelDungeon.switchNoFade( NewsScene.class );
+			ShatteredPixelDungeon.switchNoFade( NewsScene.class );
 		}
 	}
 
@@ -256,61 +261,14 @@ public class TitleScene extends PixelScene {
 
 		public ChangesButton( Chrome.Type type, String label ){
 			super(type, label);
-			if (SPDSettings.updates()) Updates.checkForUpdate();
 		}
 
 		boolean updateShown = false;
 
 		@Override
-		public void update() {
-			super.update();
-/*
-			if (!updateShown && (Updates.updateAvailable() || Updates.isInstallable())){
-				updateShown = true;
-				if (Updates.isInstallable())    text(Messages.get(TitleScene.class, "install"));
-				else                            text(Messages.get(TitleScene.class, "update"));
-			}
-
-			if (updateShown){
-				textColor(ColorMath.interpolate( 0xFFFFFF, Window.SHPX_COLOR, 0.5f + (float)Math.sin(Game.timeTotal*5)/2f));
-			}
-
- */
-		}
-
-		@Override
 		protected void onClick() {
-			/*
-			if (Updates.isInstallable()){
-				Updates.launchInstall();
-
-			} else if (Updates.updateAvailable()){
-				AvailableUpdateData update = Updates.updateData();
-
-				ShatteredPixelDungeon.scene().addToFront( new WndOptions(
-						Icons.get(Icons.CHANGES),
-						update.versionName == null ? Messages.get(this,"title") : Messages.get(this,"versioned_title", update.versionName),
-						update.desc == null ? Messages.get(this,"desc") : update.desc,
-						Messages.get(this,"update"),
-						Messages.get(this,"changes")
-				) {
-					@Override
-					protected void onSelect(int index) {
-						if (index == 0) {
-							Updates.launchUpdate(Updates.updateData());
-						} else if (index == 1){
-							ChangesScene.changesSelected = 0;
-							ShatteredPixelDungeon.switchNoFade( ChangesScene.class );
-						}
-					}
-				});
-
-			} else {
-			*/
-
-				ChangesScene.changesSelected = 0;
-				ShatteredPixelDungeon.switchNoFade( ChangesScene.class );
-			//}
+			ChangesScene.changesSelected = 0;
+			ShatteredPixelDungeon.switchNoFade( ChangesScene.class );
 		}
 
 	}
@@ -354,9 +312,6 @@ public class TitleScene extends PixelScene {
 		}
 
 		@Override
-		protected void onClick() {
-			super.onClick();
-			//ShatteredPixelDungeon.switchNoFade(SupporterScene.class);
-		}
+		protected void onClick() { }
 	}
 }

@@ -25,9 +25,15 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Electricity;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Freezing;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyBuff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.BlobImmunity;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corrosion;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
@@ -39,7 +45,9 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClassArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.BatSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.MobSprite;
+import com.shatteredpixel.shatteredpixeldungeon.ui.HeroIcon;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.TextureFilm;
 import com.watabou.utils.Bundle;
@@ -119,6 +127,11 @@ public class SpiritHawk extends ArmorAbility {
 	}
 
 	@Override
+	public int icon() {
+		return HeroIcon.SPIRIT_HAWK;
+	}
+
+	@Override
 	public Talent[] talents() {
 		return new Talent[]{Talent.EAGLE_EYE, Talent.GO_FOR_THE_EYES, Talent.SWIFT_SPIRIT, Talent.HEROIC_ENERGY};
 	}
@@ -138,7 +151,7 @@ public class SpiritHawk extends ArmorAbility {
 			spriteClass = HawkSprite.class;
 
 			HP = HT = 10;
-			defenseSkill = 50;
+			defenseSkill = 60;
 
 			flying = true;
 			viewDistance = (int)GameMath.gate(6, 6+Dungeon.hero.pointsInTalent(Talent.EAGLE_EYE), 8);
@@ -146,19 +159,21 @@ public class SpiritHawk extends ArmorAbility {
 			attacksAutomatically = false;
 
 			immunities.addAll(new BlobImmunity().immunities());
+			immunities.add(AllyBuff.class);
 		}
 
 		@Override
 		public int attackSkill(Char target) {
-			return 50;
+			return 60;
 		}
 
 		private int dodgesUsed = 0;
-		private float timeRemaining = 50f;
+		private float timeRemaining = 100f;
 
 		@Override
 		public int defenseSkill(Char enemy) {
-			if (dodgesUsed < Dungeon.hero.pointsInTalent(Talent.SWIFT_SPIRIT)){
+			if (Dungeon.hero.hasTalent(Talent.SWIFT_SPIRIT) &&
+					dodgesUsed < 1 + Dungeon.hero.pointsInTalent(Talent.SWIFT_SPIRIT)) {
 				dodgesUsed++;
 				return Char.INFINITE_EVASION;
 			}
@@ -174,7 +189,7 @@ public class SpiritHawk extends ArmorAbility {
 		public int attackProc(Char enemy, int damage) {
 			damage = super.attackProc( enemy, damage );
 			if (Dungeon.hero.hasTalent(Talent.GO_FOR_THE_EYES)) {
-				Buff.prolong( enemy, Blindness.class, 1 + Dungeon.hero.pointsInTalent(Talent.GO_FOR_THE_EYES) );
+				Buff.prolong( enemy, Blindness.class, 2*Dungeon.hero.pointsInTalent(Talent.GO_FOR_THE_EYES) );
 			}
 
 			return damage;

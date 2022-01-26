@@ -20,12 +20,15 @@ public class HaloQuick extends Image {
         super();
 
         if (!TextureCache.contains( CACHE_KEY )) {
-            Pixmap pixmap = new Pixmap(2*RADIUS+1, 2*RADIUS+1, Pixmap.Format.RGBA8888);
+            Pixmap pixmap = TextureCache.create( CACHE_KEY, 2*RADIUS+1, 2*RADIUS+1 ).bitmap;
+
+            pixmap.setColor( 0x00000000 );
+            pixmap.fill();
+
             pixmap.setColor( 0xFFFFFF08 );
             for (int i = 0; i < RADIUS; i+=2) {
                 pixmap.fillCircle(RADIUS, RADIUS, (RADIUS - i));
             }
-            TextureCache.add( CACHE_KEY, new SmartTexture( pixmap ) );
         }
 
         texture( CACHE_KEY );

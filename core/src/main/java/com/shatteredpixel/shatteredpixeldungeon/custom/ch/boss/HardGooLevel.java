@@ -167,7 +167,7 @@ public class HardGooLevel extends Level {
                 case Terrain.BOOKSHELF:
                     return M.L(HallsLevel.class, "bookshelf_desc");
                 case Terrain.EMPTY_WELL:
-                    return M.L(com.shatteredpixel.shatteredpixeldungeon.custom.ch.boss.YogRealLevel.class, "well_desc");
+                    return M.L(YogRealLevel.class, "well_desc");
                 default:
                     return super.tileDesc(tile);
             }

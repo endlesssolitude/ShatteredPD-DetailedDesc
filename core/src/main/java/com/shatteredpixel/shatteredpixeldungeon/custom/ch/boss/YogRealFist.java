@@ -565,19 +565,19 @@ public abstract class YogRealFist extends Mob {
 
             TextureFilm frames = new TextureFilm( texture, 24, 17 );
 
-            idle = new MovieClip.Animation( 2, true );
+            idle = new Animation( 2, true );
             idle.frames( frames, c+0, c+0, c+1 );
 
-            run = new MovieClip.Animation( 3, true );
+            run = new Animation( 3, true );
             run.frames( frames, c+0, c+1 );
 
-            attack = new MovieClip.Animation( Math.round(1 / SLAM_TIME), false );
+            attack = new Animation( Math.round(1 / SLAM_TIME), false );
             attack.frames( frames, c+0 );
 
-            zap = new MovieClip.Animation( 8, false );
+            zap = new Animation( 8, false );
             zap.frames( frames, c+0, c+5, c+6 );
 
-            die = new MovieClip.Animation( 10, false );
+            die = new Animation( 10, false );
             die.frames( frames, c+0, c+2, c+3, c+4 );
 
             play( idle );
@@ -643,7 +643,7 @@ public abstract class YogRealFist extends Mob {
         }
 
         @Override
-        public void onComplete( MovieClip.Animation anim ) {
+        public void onComplete( Animation anim ) {
             super.onComplete( anim );
             if (anim == attack) {
                 Camera.main.shake( 4, 0.2f );

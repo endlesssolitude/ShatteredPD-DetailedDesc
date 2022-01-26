@@ -41,6 +41,7 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Swiftthistle;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.InterlevelScene;
+import com.shatteredpixel.shatteredpixeldungeon.ui.HeroIcon;
 import com.shatteredpixel.shatteredpixeldungeon.utils.BArray;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
@@ -112,10 +113,12 @@ public class WarpBeacon extends ArmorAbility {
 						if (tracker.depth == Dungeon.depth){
 							Char existing = Actor.findChar(tracker.pos);
 
+							ScrollOfTeleportation.appear(hero, tracker.pos);
+
 							if (existing != null && existing != hero){
 								if (hero.hasTalent(Talent.TELEFRAG)){
 									int heroHP = hero.HP + hero.shielding();
-									int heroDmg = Math.round(1.666f + 3.333f*hero.pointsInTalent(Talent.TELEFRAG));
+									int heroDmg = 5 * hero.pointsInTalent(Talent.TELEFRAG);
 									hero.damage(Math.min(heroDmg, heroHP-1), WarpBeacon.this);
 
 									int damage = Random.NormalIntRange(10*hero.pointsInTalent(Talent.TELEFRAG), 15*hero.pointsInTalent(Talent.TELEFRAG));
@@ -128,29 +131,29 @@ public class WarpBeacon extends ArmorAbility {
 								}
 
 								if (existing.isAlive()){
+									Char toPush = Char.hasProp(existing, Char.Property.IMMOVABLE) ? hero : existing;
+
 									ArrayList<Integer> candidates = new ArrayList<>();
 									for (int n : PathFinder.NEIGHBOURS8) {
-										int cell = target + n;
+										int cell = tracker.pos + n;
 										if (!Dungeon.level.solid[cell] && Actor.findChar( cell ) == null
-												&& (!Char.hasProp(existing, Char.Property.LARGE) || Dungeon.level.openSpace[cell])) {
+												&& (!Char.hasProp(toPush, Char.Property.LARGE) || Dungeon.level.openSpace[cell])) {
 											candidates.add( cell );
 										}
 									}
 									Random.shuffle(candidates);
-									Char toPush = Char.hasProp(existing, Char.Property.IMMOVABLE) ? hero : existing;
 
 									if (!candidates.isEmpty()){
 										Actor.addDelayed( new Pushing( toPush, toPush.pos, candidates.get(0) ), -1 );
 
-										existing.pos = candidates.get(0);
-										Dungeon.level.occupyCell(existing);
+										toPush.pos = candidates.get(0);
+										Dungeon.level.occupyCell(toPush);
 										hero.next();
 									}
 								}
 							}
 
 							Invisibility.dispel();
-							ScrollOfTeleportation.appear(hero, tracker.pos);
 							Dungeon.observe();
 
 						} else {
@@ -160,11 +163,11 @@ public class WarpBeacon extends ArmorAbility {
 								return;
 							}
 
+							TimekeepersHourglass.timeFreeze timeFreeze = hero.buff(TimekeepersHourglass.timeFreeze.class);
+							if (timeFreeze != null) timeFreeze.disarmPressedTraps();
+							Swiftthistle.TimeBubble timeBubble = hero.buff(Swiftthistle.TimeBubble.class);
+							if (timeBubble != null) timeBubble.disarmPressedTraps();
 							Invisibility.dispel();
-							Buff buff = Dungeon.hero.buff(TimekeepersHourglass.timeFreeze.class);
-							if (buff != null) buff.detach();
-							buff = Dungeon.hero.buff(Swiftthistle.TimeBubble.class);
-							if (buff != null) buff.detach();
 
 							InterlevelScene.mode = InterlevelScene.Mode.RETURN;
 							InterlevelScene.returnDepth = tracker.depth;
@@ -183,7 +186,7 @@ public class WarpBeacon extends ArmorAbility {
 				return;
 			}
 
-			if (Dungeon.level.distance(hero.pos, target) > 3*hero.pointsInTalent(Talent.REMOTE_BEACON)){
+			if (Dungeon.level.distance(hero.pos, target) > 4*hero.pointsInTalent(Talent.REMOTE_BEACON)){
 				GLog.w( Messages.get(WarpBeacon.class, "too_far") );
 				return;
 			}
@@ -209,6 +212,10 @@ public class WarpBeacon extends ArmorAbility {
 	}
 
 	public static class WarpBeaconTracker extends Buff {
+
+		{
+			revivePersists = true;
+		}
 
 		int pos;
 		int depth;
@@ -240,6 +247,11 @@ public class WarpBeacon extends ArmorAbility {
 			pos = bundle.getInt(POS);
 			depth = bundle.getInt(DEPTH);
 		}
+	}
+
+	@Override
+	public int icon() {
+		return HeroIcon.WARP_BEACON;
 	}
 
 	@Override

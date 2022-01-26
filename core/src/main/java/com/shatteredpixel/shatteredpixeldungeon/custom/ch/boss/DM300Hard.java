@@ -158,9 +158,9 @@ public class DM300Hard extends Boss{
     }
 
     @Override
-    public void move(int step) {
+    public void move(int step, boolean traveling) {
 
-        super.move(step);
+        super.move(step, traveling);
 
         Camera.main.shake(  1, 0.25f );
 

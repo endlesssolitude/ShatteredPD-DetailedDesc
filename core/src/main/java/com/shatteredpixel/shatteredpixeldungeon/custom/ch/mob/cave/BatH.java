@@ -43,9 +43,9 @@ public class BatH extends Bat {
     boolean justAttacked = false;
 
     @Override
-    public void move(int step){
+    public void move(int step, boolean traveling){
         justAttacked = false;
-        super.move(step);
+        super.move(step, traveling);
     }
 
     @Override

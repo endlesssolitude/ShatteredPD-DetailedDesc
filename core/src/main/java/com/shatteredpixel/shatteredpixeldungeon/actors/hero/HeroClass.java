@@ -28,29 +28,26 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.QuickSlot;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.ArmorAbility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.huntress.NaturesPower;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.huntress.SpectralBlades;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.huntress.SpiritHawk;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.mage.ElementalBlast;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.mage.WarpBeacon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.huntress.SpectralBlades;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.mage.WildMagic;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.mage.WarpBeacon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.mage.ElementalBlast;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.rogue.DeathMark;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.rogue.ShadowClone;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.rogue.SmokeBomb;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.Endure;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.HeroicLeap;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.Shockwave;
-import com.shatteredpixel.shatteredpixeldungeon.custom.ch.ChallengeBag;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.Endure;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.boss.BossTome;
-import com.shatteredpixel.shatteredpixeldungeon.custom.ch.mimic.MimicDocs;
-import com.shatteredpixel.shatteredpixeldungeon.custom.ch.mimic.MimicScroll;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.EnemyTome;
 import com.shatteredpixel.shatteredpixeldungeon.custom.dict.DictBook;
-import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.AlchemizeSimulator;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.BackpackCleaner;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.CustomWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.ImmortalShieldAffecter;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.LevelTeleporter;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.MobPlacer;
+import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.ScrollOfDebug;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.TestBag;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.TimeReverser;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.TrapPlacer;
@@ -83,6 +80,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfLullaby;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRage;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfDivination;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Dagger;
@@ -92,6 +90,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WornShortswor
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingKnife;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingStone;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.watabou.utils.DeviceCompat;
 
 public enum HeroClass {
 
@@ -330,19 +329,19 @@ public enum HeroClass {
 		}
 	}
 
-	private static void doChallengeSpawn(){
+	private static void doChallengeSpawn() {
 		new DictBook().collect();
-		if(Dungeon.isChallenged(Challenges.ELITE_ENEMIES)){
+		if (Dungeon.isChallenged(Challenges.ELITE_ENEMIES)) {
 			new EnemyTome().collect();
 		}
-		if(Dungeon.isChallenged(Challenges.ELITE_BOSSES)){
+		if (Dungeon.isChallenged(Challenges.ELITE_BOSSES)) {
 			new BossTome().collect();
 		}
-		if(Dungeon.isChallenged(Challenges.EXPANSION_ENCH)) {
+		if (Dungeon.isChallenged(Challenges.EXPANSION_ENCH)) {
 			//new AlchemyEX().collect();
 			new Enchanter().collect();
 		}
-		if(Dungeon.isChallenged(Challenges.TEST_MODE)){
+		if (Dungeon.isChallenged(Challenges.TEST_MODE)) {
 			new WandOfScanningBeam().identify().collect();
 
 			new MobPlacer().collect();
@@ -368,8 +367,6 @@ public enum HeroClass {
 
 			new LevelTeleporter().collect();
 
-			new AlchemizeSimulator().collect();
-
 			new LazyTest().collect();
 
 			new TestArmor().collect();
@@ -386,7 +383,7 @@ public enum HeroClass {
 			new PotionBandolier().collect();
 			Dungeon.LimitedDrops.POTION_BANDOLIER.drop();
 
-			if(!Dungeon.LimitedDrops.VELVET_POUCH.dropped()) {
+			if (!Dungeon.LimitedDrops.VELVET_POUCH.dropped()) {
 				new VelvetPouch().collect();
 				Dungeon.LimitedDrops.VELVET_POUCH.drop();
 			}
@@ -399,14 +396,9 @@ public enum HeroClass {
 			//new ScrollOfTestInch().quantity(100).identify().collect();
 
 			//new NumInputTester().collect();
+
+			new ScrollOfDebug().identify().collect();
 		}
-
-		if(Dungeon.isChallenged(Challenges.MIMIC_DUNGEON)){
-			new MimicScroll().quantity(3).collect();
-			new MimicDocs().collect();
-		}
-
-		new ChallengeBag().collect();
-
 	}
+
 }

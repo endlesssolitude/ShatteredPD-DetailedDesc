@@ -177,10 +177,10 @@ public class LloydsBeacon extends Artifact {
 				GameScene.updateFog();
 			} else {
 
-				Buff buff = Dungeon.hero.buff(TimekeepersHourglass.timeFreeze.class);
-				if (buff != null) buff.detach();
-				buff = Dungeon.hero.buff(Swiftthistle.TimeBubble.class);
-				if (buff != null) buff.detach();
+				TimekeepersHourglass.timeFreeze timeFreeze = Dungeon.hero.buff(TimekeepersHourglass.timeFreeze.class);
+				if (timeFreeze != null) timeFreeze.disarmPressedTraps();
+				Swiftthistle.TimeBubble timeBubble = Dungeon.hero.buff(Swiftthistle.TimeBubble.class);
+				if (timeBubble != null) timeBubble.disarmPressedTraps();
 
 				InterlevelScene.mode = InterlevelScene.Mode.RETURN;
 				InterlevelScene.returnDepth = returnDepth;
@@ -204,14 +204,14 @@ public class LloydsBeacon extends Artifact {
 			updateQuickslot();
 
 			if (Actor.findChar(target) == curUser){
-				ScrollOfTeleportation.teleportHero(curUser);
+				ScrollOfTeleportation.teleportChar(curUser);
 				curUser.spendAndNext(1f);
 			} else {
 				final Ballistica bolt = new Ballistica( curUser.pos, target, Ballistica.MAGIC_BOLT );
 				final Char ch = Actor.findChar(bolt.collisionPos);
 
 				if (ch == curUser){
-					ScrollOfTeleportation.teleportHero(curUser);
+					ScrollOfTeleportation.teleportChar(curUser);
 					curUser.spendAndNext( 1f );
 				} else {
 					Sample.INSTANCE.play( Assets.Sounds.ZAP );

@@ -36,19 +36,19 @@ import java.util.ArrayList;
 
 //FIXME needs a refactor, lots of weird thread interaction here.
 public class AttackIndicator extends Tag {
-
+	
 	private static final float ENABLED	= 1.0f;
 	private static final float DISABLED	= 0.3f;
 
 	private static float delay;
-
+	
 	private static AttackIndicator instance;
-
+	
 	private CharSprite sprite = null;
-
+	
 	private Mob lastTarget;
 	private ArrayList<Mob> candidates = new ArrayList<>();
-
+	
 	public AttackIndicator() {
 		super( DangerIndicator.COLOR );
 
@@ -56,33 +56,34 @@ public class AttackIndicator extends Tag {
 			instance = this;
 			lastTarget = null;
 
-			setSize(24, 24);
+			setSize(SIZE, SIZE);
 			visible(false);
 			enable(false);
 		}
 	}
-
+	
 	@Override
 	public GameAction keyAction() {
 		return SPDAction.TAG_ATTACK;
 	}
-
+	
 	@Override
 	protected void createChildren() {
 		super.createChildren();
 	}
-
+	
 	@Override
 	protected synchronized void layout() {
 		super.layout();
 
 		if (sprite != null) {
-			sprite.x = x + (width - sprite.width()) / 2 + 1;
-			sprite.y = y + (height - sprite.height()) / 2;
+			if (!flipped)   sprite.x = x + (SIZE - sprite.width()) / 2f + 1;
+			else            sprite.x = x + width - (SIZE + sprite.width()) / 2f - 1;
+			sprite.y = y + (height - sprite.height()) / 2f;
 			PixelScene.align(sprite);
 		}
 	}
-
+	
 	@Override
 	public synchronized void update() {
 		super.update();
@@ -94,7 +95,7 @@ public class AttackIndicator extends Tag {
 		} else {
 			delay = 0.75f;
 			active = true;
-
+		
 			if (Dungeon.hero.isAlive()) {
 
 				enable(Dungeon.hero.ready);
@@ -105,7 +106,7 @@ public class AttackIndicator extends Tag {
 			}
 		}
 	}
-
+	
 	private synchronized void checkEnemies() {
 
 		candidates.clear();
@@ -116,7 +117,7 @@ public class AttackIndicator extends Tag {
 				candidates.add( mob );
 			}
 		}
-
+		
 		if (!candidates.contains( lastTarget )) {
 			if (candidates.isEmpty()) {
 				lastTarget = null;
@@ -132,18 +133,18 @@ public class AttackIndicator extends Tag {
 				flash();
 			}
 		}
-
+		
 		visible( lastTarget != null );
 		enable( bg.visible );
 	}
-
+	
 	private synchronized void updateImage() {
-
+		
 		if (sprite != null) {
 			sprite.killAndErase();
 			sprite = null;
 		}
-
+		
 		sprite = Reflection.newInstance(lastTarget.spriteClass);
 		active = true;
 		sprite.linkVisuals(lastTarget);
@@ -154,7 +155,7 @@ public class AttackIndicator extends Tag {
 
 		layout();
 	}
-
+	
 	private boolean enabled = true;
 	private synchronized void enable( boolean value ) {
 		enabled = value;
@@ -162,14 +163,14 @@ public class AttackIndicator extends Tag {
 			sprite.alpha( value ? ENABLED : DISABLED );
 		}
 	}
-
+	
 	private synchronized void visible( boolean value ) {
 		bg.visible = value;
 		if (sprite != null) {
 			sprite.visible = value;
 		}
 	}
-
+	
 	@Override
 	protected void onClick() {
 		if (enabled) {
@@ -178,7 +179,7 @@ public class AttackIndicator extends Tag {
 			}
 		}
 	}
-
+	
 	public static void target( Char target ) {
 		synchronized (instance) {
 			instance.lastTarget = (Mob) target;
@@ -187,7 +188,7 @@ public class AttackIndicator extends Tag {
 			TargetHealthIndicator.instance.target(target);
 		}
 	}
-
+	
 	public static void updateState() {
 		instance.checkEnemies();
 	}

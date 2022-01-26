@@ -25,7 +25,6 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Momentum;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.PinCushion;
@@ -40,6 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Projecting;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.Dart;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
@@ -60,7 +60,7 @@ abstract public class MissileWeapon extends Weapon {
 	
 	protected boolean sticky = true;
 	
-	protected static final float MAX_DURABILITY = 100;
+	public static final float MAX_DURABILITY = 100;
 	protected float durability = MAX_DURABILITY;
 	protected float baseUses = 10;
 	
@@ -242,7 +242,7 @@ abstract public class MissileWeapon extends Weapon {
 		decrementDurability();
 		if (durability > 0){
 			//attempt to stick the missile weapon to the enemy, just drop it if we can't.
-			if (sticky && enemy != null && enemy.isAlive() && enemy.buff(Corruption.class) == null){
+			if (sticky && enemy != null && enemy.isAlive() && enemy.alignment != Char.Alignment.ALLY){
 				PinCushion p = Buff.affect(enemy, PinCushion.class);
 				if (p.target == enemy){
 					p.stick(this);
@@ -257,8 +257,17 @@ abstract public class MissileWeapon extends Weapon {
 		parent = null;
 		super.onThrow(cell);
 	}
+
+	public float durabilityLeft(){
+		return durability;
+	}
+
+	public void repair( float amount ){
+		durability += amount;
+		durability = Math.min(durability, MAX_DURABILITY);
+	}
 	
-	protected float durabilityPerUse(){
+	public float durabilityPerUse(){
 		float usages = baseUses * (float)(Math.pow(3, level()));
 
 		//+50%/75% durability
@@ -359,9 +368,9 @@ abstract public class MissileWeapon extends Weapon {
 	}
 	
 	@Override
-	public boolean doPickUp(Hero hero) {
+	public boolean doPickUp(Hero hero, int pos) {
 		parent = null;
-		return super.doPickUp(hero);
+		return super.doPickUp(hero, pos);
 	}
 	
 	@Override
@@ -435,6 +444,23 @@ abstract public class MissileWeapon extends Weapon {
 		bundleRestoring = true;
 		super.restoreFromBundle(bundle);
 		bundleRestoring = false;
-		durability = bundle.getInt(DURABILITY);
+		durability = bundle.getFloat(DURABILITY);
+	}
+
+	public static class PlaceHolder extends MissileWeapon {
+
+		{
+			image = ItemSpriteSheet.MISSILE_HOLDER;
+		}
+
+		@Override
+		public boolean isSimilar(Item item) {
+			return item instanceof MissileWeapon;
+		}
+
+		@Override
+		public String info() {
+			return "";
+		}
 	}
 }

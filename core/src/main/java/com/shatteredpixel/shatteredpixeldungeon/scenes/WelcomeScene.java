@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.scenes;
 
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Chrome;
@@ -29,19 +30,27 @@ import com.shatteredpixel.shatteredpixeldungeon.Rankings;
 import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.effects.BannerSprites;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Fireball;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Languages;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.ui.Archs;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.StyledButton;
 import com.watabou.glwrap.Blending;
 import com.watabou.noosa.Camera;
+import com.watabou.noosa.ColorBlock;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Image;
+import com.watabou.noosa.audio.Music;
 import com.watabou.utils.FileUtils;
+
+import java.util.ArrayList;
 
 public class WelcomeScene extends PixelScene {
 
-	private static final int LATEST_UPDATE = ShatteredPixelDungeon.v0_9_3;
+	private static final int LATEST_UPDATE = ShatteredPixelDungeon.v1_1_0;
 
 	@Override
 	public void create() {
@@ -54,13 +63,24 @@ public class WelcomeScene extends PixelScene {
 			return;
 		}
 
+		Music.INSTANCE.playTracks(
+				new String[]{Assets.Music.THEME_1, Assets.Music.THEME_2},
+				new float[]{1, 1},
+				false);
+
 		uiCamera.visible = false;
 
 		int w = Camera.main.width;
 		int h = Camera.main.height;
 
+		Archs archs = new Archs();
+		archs.setSize( w, h );
+		add( archs );
+
+		//darkens the arches
+		add(new ColorBlock(w, h, 0x88000000));
+
 		Image title = BannerSprites.get( BannerSprites.Type.PIXEL_DUNGEON );
-		title.brightness(0.6f);
 		add( title );
 
 		float topRegion = Math.max(title.height - 6, h*0.45f);
@@ -69,6 +89,9 @@ public class WelcomeScene extends PixelScene {
 		title.y = 2 + (topRegion - title.height()) / 2f;
 
 		align(title);
+
+		placeTorch(title.x + 22, title.y + 46);
+		placeTorch(title.x + title.width - 22, title.y + 46);
 
 		Image signs = new Image( BannerSprites.get( BannerSprites.Type.PIXEL_DUNGEON_SIGNS ) ) {
 			private float time = 0;
@@ -156,17 +179,21 @@ public class WelcomeScene extends PixelScene {
 
 	}
 
+	private void placeTorch( float x, float y ) {
+		Fireball fb = new Fireball();
+		fb.setPos( x, y );
+		add( fb );
+	}
+
 	private void updateVersion(int previousVersion){
 
 		//update rankings, to update any data which may be outdated
 		if (previousVersion < LATEST_UPDATE){
-			int highestChalInRankings = 0;
 			try {
 				Rankings.INSTANCE.load();
 				for (Rankings.Record rec : Rankings.INSTANCE.records.toArray(new Rankings.Record[0])){
 					try {
 						Rankings.INSTANCE.loadGameData(rec);
-						if (rec.win) highestChalInRankings = Math.max(highestChalInRankings, Challenges.activeChallenges());
 						Rankings.INSTANCE.saveGameData(rec);
 					} catch (Exception e) {
 						//if we encounter a fatal per-record error, then clear that record
@@ -181,16 +208,18 @@ public class WelcomeScene extends PixelScene {
 				ShatteredPixelDungeon.reportException(e);
 			}
 
-			//fixes a bug from v0.9.0- where champion badges would rarely not save
-			if (highestChalInRankings > 0){
-				Badges.loadGlobal();
-				if (highestChalInRankings >= 1) Badges.addGlobal(Badges.Badge.CHAMPION_1);
-				if (highestChalInRankings >= 3) Badges.addGlobal(Badges.Badge.CHAMPION_2);
-				if (highestChalInRankings >= 6) Badges.addGlobal(Badges.Badge.CHAMPION_3);
-				Badges.saveGlobal();
+		}
+
+		//if the player has beaten Goo, automatically give all guidebook pages
+		if (previousVersion <= ShatteredPixelDungeon.v0_9_3c){
+			Badges.loadGlobal();
+			if (Badges.isUnlocked(Badges.Badge.BOSS_SLAIN_1)){
+				for (String page : Document.ADVENTURERS_GUIDE.pageNames()){
+					Document.ADVENTURERS_GUIDE.readPage(page);
+				}
 			}
 		}
-		
+
 		SPDSettings.version(ShatteredPixelDungeon.versionCode);
 	}
 	

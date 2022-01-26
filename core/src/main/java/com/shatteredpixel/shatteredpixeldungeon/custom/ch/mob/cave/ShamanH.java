@@ -470,18 +470,18 @@ public abstract class ShamanH extends Mob {
 
             TextureFilm frames = new TextureFilm( texture, 12, 15 );
 
-            idle = new MovieClip.Animation( 2, true );
+            idle = new Animation( 2, true );
             idle.frames( frames, c+0, c+0, c+0, c+1, c+0, c+0, c+1, c+1 );
 
-            run = new MovieClip.Animation( 12, true );
+            run = new Animation( 12, true );
             run.frames( frames, c+4, c+5, c+6, c+7 );
 
-            attack = new MovieClip.Animation( 12, false );
+            attack = new Animation( 12, false );
             attack.frames( frames, c+2, c+3, c+0 );
 
             zap = attack.clone();
 
-            die = new MovieClip.Animation( 12, false );
+            die = new Animation( 12, false );
             die.frames( frames, c+8, c+9, c+10 );
 
             play( idle );

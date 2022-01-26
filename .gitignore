@@ -18,4 +18,3 @@ local.properties
 #intellij project files
 *.iml
 *.idea
-idea/

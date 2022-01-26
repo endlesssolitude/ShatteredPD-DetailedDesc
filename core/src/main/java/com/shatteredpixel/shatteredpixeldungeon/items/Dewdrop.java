@@ -22,11 +22,13 @@
 package com.shatteredpixel.shatteredpixeldungeon.items;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
@@ -44,18 +46,19 @@ public class Dewdrop extends Item {
 	}
 	
 	@Override
-	public boolean doPickUp( Hero hero ) {
+	public boolean doPickUp(Hero hero, int pos) {
 		
 		Waterskin flask = hero.belongings.getItem( Waterskin.class );
 		
 		if (flask != null && !flask.isFull()){
 
 			flask.collectDew( this );
-			GameScene.pickUp( this, hero.pos );
+			GameScene.pickUp( this, pos );
 
 		} else {
 
-			if (!consumeDew(1, hero)){
+			int terr = Dungeon.level.map[pos];
+			if (!consumeDew(1, hero, terr == Terrain.ENTRANCE|| terr == Terrain.EXIT || terr == Terrain.UNLOCKED_EXIT)){
 				return false;
 			}
 			
@@ -67,7 +70,7 @@ public class Dewdrop extends Item {
 		return true;
 	}
 
-	public static boolean consumeDew(int quantity, Hero hero){
+	public static boolean consumeDew(int quantity, Hero hero, boolean force){
 		//20 drops for a full heal
 		int heal = Math.round( hero.HT * 0.05f * quantity );
 
@@ -92,7 +95,7 @@ public class Dewdrop extends Item {
 				hero.sprite.showStatus( CharSprite.POSITIVE, Messages.get(Dewdrop.class, "shield", shield) );
 			}
 
-		} else {
+		} else if (!force) {
 			GLog.i( Messages.get(Dewdrop.class, "already_full") );
 			return false;
 		}
@@ -101,7 +104,27 @@ public class Dewdrop extends Item {
 	}
 
 	@Override
+	public boolean isUpgradable() {
+		return false;
+	}
+
+	@Override
+	public boolean isIdentified() {
+		return true;
+	}
+
 	//max of one dew in a stack
+
+	@Override
+	public Item merge( Item other ){
+		if (isSimilar( other )){
+			quantity = 1;
+			other.quantity = 0;
+		}
+		return this;
+	}
+
+	@Override
 	public Item quantity(int value) {
 		quantity = Math.min( value, 1);
 		return this;

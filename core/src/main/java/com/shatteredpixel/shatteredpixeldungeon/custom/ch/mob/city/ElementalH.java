@@ -476,18 +476,18 @@ public abstract class ElementalH extends Mob {
 
             TextureFilm frames = new TextureFilm( texture, 12, 14 );
 
-            idle = new MovieClip.Animation( 10, true );
+            idle = new Animation( 10, true );
             idle.frames( frames, c+0, c+1, c+2 );
 
-            run = new MovieClip.Animation( 12, true );
+            run = new Animation( 12, true );
             run.frames( frames, c+0, c+1, c+3 );
 
-            attack = new MovieClip.Animation( 15, false );
+            attack = new Animation( 15, false );
             attack.frames( frames, c+4, c+5, c+6 );
 
             zap = attack.clone();
 
-            die = new MovieClip.Animation( 15, false );
+            die = new Animation( 15, false );
             die.frames( frames, c+7, c+8, c+9, c+10, c+11, c+12, c+13, c+12 );
 
             play( idle );
@@ -546,7 +546,7 @@ public abstract class ElementalH extends Mob {
         }
 
         @Override
-        public void onComplete( MovieClip.Animation anim ) {
+        public void onComplete( Animation anim ) {
             if (anim == zap) {
                 idle();
             }

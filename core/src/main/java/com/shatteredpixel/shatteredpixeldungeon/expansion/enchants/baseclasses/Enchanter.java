@@ -8,6 +8,7 @@
  import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
  import com.shatteredpixel.shatteredpixeldungeon.items.Item;
  import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
  import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
  import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
  import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -101,7 +102,7 @@ public class Enchanter extends ChallengeItem {
                                 slot.item(new WndBag.Placeholder(ItemSpriteSheet.SOMETHING));
                                 updateState();
                             }else{
-                                GameScene.show(WndBag.lastBag(inputSelector, WndBag.Mode.ALL, M.L(Enchanter.class, "select_ingredient")));
+                                GameScene.show(WndBag.lastBag(inputSelector));
                             }
                         }
 
@@ -178,6 +179,7 @@ public class Enchanter extends ChallengeItem {
                         slot.item(new WndBag.Placeholder(ItemSpriteSheet.WEAPON_HOLDER));
                         updateState();
                     }else{
+                        /*
                         GameScene.show(WndBag.lastBag(item -> {
                             if(item != null) {
                                 if(item.isEquipped(Dungeon.hero)){
@@ -188,6 +190,31 @@ public class Enchanter extends ChallengeItem {
                                 updateState();
                             }
                         }, WndBag.Mode.WEAPON, M.L(Enchanter.class, "select_weapon")));
+
+                         */
+                        GameScene.show(WndBag.lastBag(new WndBag.ItemSelector() {
+                            @Override
+                            public String textPrompt() {
+                                 return M.L(Enchanter.class, "select_weapon");
+                            }
+
+                            @Override
+                            public boolean itemSelectable(Item item) {
+                                return item instanceof MeleeWeapon;
+                            }
+
+                            @Override
+                            public void onSelect(Item item) {
+                                if(item != null){
+                                    if(item.isEquipped(Dungeon.hero)){
+                                        GLog.w(M.L(Enchanter.class, "unequip_first"));
+                                        return;
+                                    }
+                                    toEnchant.item(item.detach(Dungeon.hero.belongings.backpack));
+                                    updateState();
+                                }
+                            }
+                        }));
                     }
                 }
 
@@ -290,7 +317,39 @@ public class Enchanter extends ChallengeItem {
             super.onBackPressed();
         }
 
-        protected WndBag.Listener inputSelector = item -> {
+        protected WndBag.ItemSelector inputSelector = new WndBag.ItemSelector() {
+            @Override
+            public String textPrompt() {
+                return  M.L(Enchanter.class, "select_ingredient");
+            }
+
+            @Override
+            public boolean itemSelectable(Item item) {
+                return true;
+            }
+
+            @Override
+            public void onSelect(Item item) {
+                synchronized (inputs) {
+                    if (item != null && inputs[0] != null) {
+                        if(item.isEquipped(Dungeon.hero)){
+                            GLog.w(M.L(Enchanter.class, "unequip_first"));
+                            return;
+                        }
+                        for (int i = 0; i < inputs.length; i++) {
+                            if (inputs[i].item == null) {
+                                inputs[i].item(item.detach(Dungeon.hero.belongings.backpack));
+                                break;
+                            }
+                        }
+                        updateState();
+                    }
+                }
+            }
+        };
+
+        /*
+        protected WndBag.ItemSelector inputSelector = item -> {
             synchronized (inputs) {
                 if (item != null && inputs[0] != null) {
                     if(item.isEquipped(Dungeon.hero)){
@@ -306,7 +365,9 @@ public class Enchanter extends ChallengeItem {
                     updateState();
                 }
             }
-        };
+        };#
+
+         */
     }
 
     public static class WndInfoInscription extends Window{

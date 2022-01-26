@@ -8,7 +8,7 @@ import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
 
 public class ScrollOfTestInch extends InventoryScroll {
     {
-        mode = WndBag.Mode.EQUIPMENT;
+        //mode = WndBag.Mode.EQUIPMENT;
     }
 
     @Override

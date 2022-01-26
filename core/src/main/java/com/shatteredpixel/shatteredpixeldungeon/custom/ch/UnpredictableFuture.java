@@ -287,7 +287,7 @@ public class UnpredictableFuture extends Buff {
         int r = Random.Int(100);
          if(r<39){
             for(Buff b: target.buffs()){
-                if(b.type == Buff.buffType.POSITIVE && !(b instanceof Regeneration)){
+                if(b.type == buffType.POSITIVE && !(b instanceof Regeneration)){
                     b.detach();
                 }
             }

@@ -729,7 +729,7 @@ public class HardTenguLevel extends Level {
     public static class exitVisual extends CustomTilemap {
 
         {
-            texture = Assets.Environment.PRISON_EXIT_NEW;
+            texture = Assets.Environment.PRISON_EXIT;
 
             tileW = 14;
             tileH = 11;
@@ -775,7 +775,7 @@ public class HardTenguLevel extends Level {
     public static class exitVisualWalls extends CustomTilemap {
 
         {
-            texture = Assets.Environment.PRISON_EXIT_NEW;
+            texture = Assets.Environment.PRISON_EXIT;
 
             tileW = 14;
             tileH = 22;

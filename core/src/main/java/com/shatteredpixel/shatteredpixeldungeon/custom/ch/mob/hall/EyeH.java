@@ -320,7 +320,7 @@ public class  EyeH extends Mob {
 
     {
         immunities.add( Terror.class );
-        immunities.add( EyeH.DeathGaze.class );
+        immunities.add( DeathGaze.class );
     }
 
     protected void summonRipper(){
@@ -353,7 +353,7 @@ public class  EyeH extends Mob {
 
         private int zapPos;
 
-        private MovieClip.Animation charging;
+        private Animation charging;
         private Emitter chargeParticles;
 
         public EyeHSprite() {
@@ -363,20 +363,20 @@ public class  EyeH extends Mob {
 
             TextureFilm frames = new TextureFilm( texture, 16, 18 );
 
-            idle = new MovieClip.Animation( 8, true );
+            idle = new Animation( 8, true );
             idle.frames( frames, 0, 1, 2 );
 
-            charging = new MovieClip.Animation( 12, true);
+            charging = new Animation( 12, true);
             charging.frames( frames, 3, 4 );
 
-            run = new MovieClip.Animation( 12, true );
+            run = new Animation( 12, true );
             run.frames( frames, 5, 6 );
 
-            attack = new MovieClip.Animation( 8, false );
+            attack = new Animation( 8, false );
             attack.frames( frames, 4, 3 );
             zap = attack.clone();
 
-            die = new MovieClip.Animation( 8, false );
+            die = new Animation( 8, false );
             die.frames( frames, 7, 8, 9 );
 
             play( idle );
@@ -426,7 +426,7 @@ public class  EyeH extends Mob {
         }
 
         @Override
-        public void play(MovieClip.Animation anim) {
+        public void play(Animation anim) {
             if (chargeParticles != null) chargeParticles.on = anim == charging;
             super.play(anim);
         }
@@ -438,7 +438,7 @@ public class  EyeH extends Mob {
         }
 
         @Override
-        public void onComplete( MovieClip.Animation anim ) {
+        public void onComplete( Animation anim ) {
             super.onComplete( anim );
 
             if (anim == zap) {

@@ -25,6 +25,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Adrenaline;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ChampionEnemy;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
@@ -63,7 +64,7 @@ public class Necromancer extends Mob {
 	public boolean summoning = false;
 	public int summoningPos = -1;
 	
-	private boolean firstSummon = true;
+	protected boolean firstSummon = true;
 	
 	private NecroSkeleton mySkeleton;
 	private int storedSkeletonID = -1;
@@ -131,6 +132,8 @@ public class Necromancer extends Mob {
 		}
 		if (mySkeleton != null){
 			bundle.put( MY_SKELETON, mySkeleton.id() );
+		} else if (storedSkeletonID != -1){
+			bundle.put( MY_SKELETON, storedSkeletonID );
 		}
 	}
 	
@@ -174,6 +177,54 @@ public class Necromancer extends Mob {
 		
 		next();
 	}
+
+	public void summonMinion(){
+		if (Actor.findChar(summoningPos) != null) {
+			int pushPos = pos;
+			for (int c : PathFinder.NEIGHBOURS8) {
+				if (Actor.findChar(summoningPos + c) == null
+						&& Dungeon.level.passable[summoningPos + c]
+						&& (Dungeon.level.openSpace[summoningPos + c] || !hasProp(Actor.findChar(summoningPos), Property.LARGE))
+						&& Dungeon.level.trueDistance(pos, summoningPos + c) > Dungeon.level.trueDistance(pos, pushPos)) {
+					pushPos = summoningPos + c;
+				}
+			}
+
+			//push enemy, or wait a turn if there is no valid pushing position
+			if (pushPos != pos) {
+				Char ch = Actor.findChar(summoningPos);
+				Actor.addDelayed( new Pushing( ch, ch.pos, pushPos ), -1 );
+
+				ch.pos = pushPos;
+				Dungeon.level.occupyCell(ch );
+
+			} else {
+
+				Char blocker = Actor.findChar(summoningPos);
+				if (blocker.alignment != alignment){
+					blocker.damage( Random.NormalIntRange(2, 10), this );
+				}
+
+				spend(TICK);
+				return;
+			}
+		}
+
+		summoning = firstSummon = false;
+
+		mySkeleton = new NecroSkeleton();
+		mySkeleton.pos = summoningPos;
+		GameScene.add( mySkeleton );
+		Dungeon.level.occupyCell( mySkeleton );
+		((NecromancerSprite)sprite).finishSummoning();
+
+		for (Buff b : buffs(AllyBuff.class)){
+			Buff.affect(mySkeleton, b.getClass());
+		}
+		for (Buff b : buffs(ChampionEnemy.class)){
+			Buff.affect( mySkeleton, b.getClass());
+		}
+	}
 	
 	private class Hunting extends Mob.Hunting{
 		
@@ -190,55 +241,7 @@ public class Necromancer extends Mob {
 			}
 			
 			if (summoning){
-				
-				//push anything on summoning spot away, to the furthest valid cell
-				if (Actor.findChar(summoningPos) != null) {
-					int pushPos = pos;
-					for (int c : PathFinder.NEIGHBOURS8) {
-						if (Actor.findChar(summoningPos + c) == null
-								&& Dungeon.level.passable[summoningPos + c]
-								&& (Dungeon.level.openSpace[summoningPos + c] || !hasProp(Actor.findChar(summoningPos), Property.LARGE))
-								&& Dungeon.level.trueDistance(pos, summoningPos + c) > Dungeon.level.trueDistance(pos, pushPos)) {
-							pushPos = summoningPos + c;
-						}
-					}
-					
-					//push enemy, or wait a turn if there is no valid pushing position
-					if (pushPos != pos) {
-						Char ch = Actor.findChar(summoningPos);
-						Actor.addDelayed( new Pushing( ch, ch.pos, pushPos ), -1 );
-						
-						ch.pos = pushPos;
-						Dungeon.level.occupyCell(ch );
-						
-					} else {
-
-						Char blocker = Actor.findChar(summoningPos);
-						if (blocker.alignment != alignment){
-							blocker.damage( Random.NormalIntRange(2, 10), this );
-						}
-
-						spend(TICK);
-						return true;
-					}
-				}
-				
-				summoning = firstSummon = false;
-				
-				mySkeleton = new NecroSkeleton();
-				mySkeleton.pos = summoningPos;
-				GameScene.add( mySkeleton );
-				Dungeon.level.occupyCell( mySkeleton );
-				((NecromancerSprite)sprite).finishSummoning();
-				
-				if (buff(Corruption.class) != null){
-					Buff.affect(mySkeleton, Corruption.class);
-				}
-				for (Buff b : buffs(ChampionEnemy.class)){
-					Buff.affect( mySkeleton, b.getClass());
-				}
-				
-				spend(TICK);
+				summonMinion();
 				return true;
 			}
 			

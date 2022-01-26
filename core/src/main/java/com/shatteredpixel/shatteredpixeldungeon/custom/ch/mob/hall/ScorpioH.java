@@ -58,8 +58,8 @@ public class ScorpioH extends Scorpio {
     }
 
     @Override
-    public void move(int step){
-        super.move(step);
+    public void move(int step, boolean traveling){
+        super.move(step, traveling);
         hasAttacked=Math.max(0,--hasAttacked);
     }
 

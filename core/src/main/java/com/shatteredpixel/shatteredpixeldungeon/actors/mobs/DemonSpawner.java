@@ -25,6 +25,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Amok;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Dread;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Sleep;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
@@ -103,9 +104,9 @@ public class DemonSpawner extends Mob {
 				spawn.pos = Random.element( candidates );
 				spawn.state = spawn.HUNTING;
 
+				GameScene.add( spawn, 1 );
 				Dungeon.level.occupyCell(spawn);
 
-				GameScene.add( spawn, 1 );
 				if (sprite.visible) {
 					Actor.addDelayed(new Pushing(spawn, pos, spawn.pos), -1);
 				}
@@ -117,6 +118,7 @@ public class DemonSpawner extends Mob {
 				}
 			}
 		}
+		alerted = false;
 		return super.act();
 	}
 
@@ -161,6 +163,7 @@ public class DemonSpawner extends Mob {
 		immunities.add( Paralysis.class );
 		immunities.add( Amok.class );
 		immunities.add( Sleep.class );
+		immunities.add( Dread.class );
 		immunities.add( Terror.class );
 		immunities.add( Vertigo.class );
 	}

@@ -35,6 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
+import com.watabou.noosa.Game;
 import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.DeviceCompat;
@@ -132,7 +133,6 @@ public enum Rankings {
 				for (Item bagItem : ((Bag) item).items.toArray( new Item[0])){
 					if (Dungeon.quickslot.contains(bagItem)) belongings.backpack.items.add(bagItem);
 				}
-				belongings.backpack.items.remove(item);
 			}
 			if (!Dungeon.quickslot.contains(item)) {
 				belongings.backpack.items.remove(item);

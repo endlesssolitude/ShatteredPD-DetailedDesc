@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.CustomGameSettings;
 import com.shatteredpixel.shatteredpixeldungeon.custom.visuals.TextField;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.text.TextChallenges;
 import com.shatteredpixel.shatteredpixeldungeon.ui.CheckBox;
@@ -233,7 +234,7 @@ public class WndChallenges extends Window {
 		}
 	}
 
-	public static class CanScrollTextField extends TextField{
+	public static class CanScrollTextField extends TextField {
 
 		public CanScrollTextField(String label) {
 			super(label);
@@ -263,7 +264,7 @@ public class WndChallenges extends Window {
 		}
 	}
 
-	public static class CanScrollButton extends RedButton{
+	public static class CanScrollButton extends RedButton {
 
 		public CanScrollButton(String label) {
 			super(label, 7);

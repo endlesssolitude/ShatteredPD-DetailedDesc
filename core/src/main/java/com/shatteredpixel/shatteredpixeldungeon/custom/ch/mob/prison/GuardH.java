@@ -47,7 +47,7 @@ public class GuardH extends Mob {
 
         properties.add(Property.UNDEAD);
 
-        HUNTING = new GuardH.Hunting();
+        HUNTING = new Hunting();
     }
 
     @Override

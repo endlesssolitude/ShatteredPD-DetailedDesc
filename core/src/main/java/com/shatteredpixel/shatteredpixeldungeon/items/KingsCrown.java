@@ -46,7 +46,9 @@ public class KingsCrown extends Item {
 	
 	{
 		image = ItemSpriteSheet.CROWN;
-		
+
+		defaultAction = AC_WEAR;
+
 		unique = true;
 	}
 	
@@ -65,8 +67,8 @@ public class KingsCrown extends Item {
 		if (action.equals(AC_WEAR)) {
 
 			curUser = hero;
-			if (hero.belongings.armor != null){
-				GameScene.show( new WndChooseAbility(this, hero.belongings.armor, hero));
+			if (hero.belongings.armor() != null){
+				GameScene.show( new WndChooseAbility(this, hero.belongings.armor(), hero));
 			} else {
 				GLog.w( Messages.get(this, "naked"));
 			}

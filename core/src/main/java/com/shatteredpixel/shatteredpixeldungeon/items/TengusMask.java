@@ -40,12 +40,14 @@ import java.util.ArrayList;
 
 public class TengusMask extends Item {
 	
-	public static final String AC_WEAR	= "WEAR";
+	private static final String AC_WEAR	= "WEAR";
 	
 	{
 		stackable = false;
 		image = ItemSpriteSheet.MASK;
-		
+
+		defaultAction = AC_WEAR;
+
 		unique = true;
 	}
 	
@@ -71,9 +73,9 @@ public class TengusMask extends Item {
 	}
 	
 	@Override
-	public boolean doPickUp( Hero hero ) {
+	public boolean doPickUp(Hero hero, int pos) {
 		Badges.validateMastery();
-		return super.doPickUp( hero );
+		return super.doPickUp( hero, pos );
 	}
 	
 	@Override

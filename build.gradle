@@ -4,7 +4,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.2.1'
+        classpath 'com.android.tools.build:gradle:7.0.4'
     }
 }
 
@@ -14,22 +14,24 @@ allprojects {
         appName = 'Statistical SPD'
         appPackageName = 'com.shatteredpixel.shatteredpixeldungeon.statistics'
 
-        appVersionCode = 20210620
-        appVersionName = '0.9.3-stat-2.3'
+        appVersionCode = 20220120
+        appVersionName = '1.1.2-stat-1.0'
 
         appJavaCompatibility = JavaVersion.VERSION_1_8
 
-        appAndroidCompileSDK = 30
-        appAndroidMinSDK = 9
-        appAndroidTargetSDK = 30
+        appAndroidCompileSDK = 31
+        appAndroidMinSDK = 14
+        appAndroidTargetSDK = 31
 
-        gdxVersion = '1.9.10'
+        gdxVersion = '1.10.0'
+        robovmVersion = '2.3.14'
     }
     version = appVersionName
 
     repositories {
         google()
         mavenCentral()
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
     }
 
 }

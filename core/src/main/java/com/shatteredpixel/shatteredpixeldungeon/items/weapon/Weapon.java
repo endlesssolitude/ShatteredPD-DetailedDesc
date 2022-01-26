@@ -100,6 +100,7 @@ abstract public class Weapon extends KindOfWeapon {
 	
 	public Enchantment enchantment;
 	public boolean curseInfusionBonus = false;
+	public boolean masteryPotionBonus = false;
 
 	public Inscription inscription;
 	
@@ -140,6 +141,7 @@ abstract public class Weapon extends KindOfWeapon {
 	private static final String AVAILABLE_USES  = "available_uses";
 	private static final String ENCHANTMENT	    = "enchantment";
 	private static final String CURSE_INFUSION_BONUS = "curse_infusion_bonus";
+	private static final String MASTERY_POTION_BONUS = "mastery_potion_bonus";
 	private static final String AUGMENT	        = "augment";
 
 	@Override
@@ -149,6 +151,7 @@ abstract public class Weapon extends KindOfWeapon {
 		bundle.put( AVAILABLE_USES, availableUsesToID );
 		bundle.put( ENCHANTMENT, enchantment );
 		bundle.put( CURSE_INFUSION_BONUS, curseInfusionBonus );
+		bundle.put( MASTERY_POTION_BONUS, masteryPotionBonus );
 		bundle.put( AUGMENT, augment );
 
 		bundle.put("Inscription_for_weapon", inscription);
@@ -161,6 +164,7 @@ abstract public class Weapon extends KindOfWeapon {
 		availableUsesToID = bundle.getFloat( AVAILABLE_USES );
 		enchantment = (Enchantment)bundle.get( ENCHANTMENT );
 		curseInfusionBonus = bundle.getBoolean( CURSE_INFUSION_BONUS );
+		masteryPotionBonus = bundle.getBoolean( MASTERY_POTION_BONUS );
 
 		augment = bundle.getEnum(AUGMENT, Augment.class);
 
@@ -219,7 +223,11 @@ abstract public class Weapon extends KindOfWeapon {
 	}
 
 	public int STRReq(){
-		return STRReq(level());
+		int req = STRReq(level());
+		if (masteryPotionBonus){
+			req -= 2;
+		}
+		return req;
 	}
 
 	public abstract int STRReq(int lvl);
@@ -254,7 +262,7 @@ abstract public class Weapon extends KindOfWeapon {
 	public Item upgrade(boolean enchant ) {
 
 		if (enchant){
-			if (enchantment == null || hasCurseEnchant()){
+			if (enchantment == null){
 				enchant(Enchantment.random());
 			}
 		} else {
@@ -368,6 +376,14 @@ abstract public class Weapon extends KindOfWeapon {
 				if (rage != null) {
 					multi += (rage.rageAmount() / 6f) * ((Hero) attacker).pointsInTalent(Talent.ENRAGED_CATALYST);
 				}
+			}
+			if (attacker.buff(Talent.SpiritBladesTracker.class) != null
+					&& ((Hero)attacker).pointsInTalent(Talent.SPIRIT_BLADES) == 4){
+				multi += 0.1f;
+			}
+			if (attacker.buff(Talent.StrikingWaveTracker.class) != null
+					&& ((Hero)attacker).pointsInTalent(Talent.STRIKING_WAVE) == 4){
+				multi += 0.2f;
 			}
 			return multi;
 		}

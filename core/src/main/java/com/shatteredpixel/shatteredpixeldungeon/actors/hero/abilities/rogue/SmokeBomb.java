@@ -25,10 +25,15 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Amok;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Charm;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Dread;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Haste;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Sleep;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.ArmorAbility;
@@ -42,6 +47,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportat
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.MobSprite;
+import com.shatteredpixel.shatteredpixeldungeon.ui.HeroIcon;
 import com.shatteredpixel.shatteredpixeldungeon.utils.BArray;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.TextureFilm;
@@ -61,8 +67,8 @@ public class SmokeBomb extends ArmorAbility {
 		if (!hero.hasTalent(Talent.SHADOW_STEP) || hero.invisible <= 0){
 			return super.chargeUse(hero);
 		} else {
-			//reduced charge use by 24%/42%/56%/67%
-			return (float)(super.chargeUse(hero) * Math.pow(0.76, hero.pointsInTalent(Talent.SHADOW_STEP)));
+			//reduced charge use by 20%/36%/50%/60%
+			return (float)(super.chargeUse(hero) * Math.pow(0.795, hero.pointsInTalent(Talent.SHADOW_STEP)));
 		}
 	}
 
@@ -70,7 +76,7 @@ public class SmokeBomb extends ArmorAbility {
 	protected void activate(ClassArmor armor, Hero hero, Integer target) {
 		if (target != null) {
 
-			PathFinder.buildDistanceMap(hero.pos, BArray.not(Dungeon.level.solid,null), 8);
+			PathFinder.buildDistanceMap(hero.pos, BArray.not(Dungeon.level.solid,null), 6);
 
 			if ( PathFinder.distance[target] == Integer.MAX_VALUE ||
 					!Dungeon.level.heroFOV[target] ||
@@ -107,7 +113,8 @@ public class SmokeBomb extends ArmorAbility {
 				}
 
 				if (hero.hasTalent(Talent.HASTY_RETREAT)){
-					int duration = 1+hero.pointsInTalent(Talent.HASTY_RETREAT);
+					//effectively 1/2/3/4 turns
+					float duration = 0.67f + hero.pointsInTalent(Talent.HASTY_RETREAT);
 					Buff.affect(hero, Haste.class, duration);
 					Buff.affect(hero, Invisibility.class, duration);
 				}
@@ -126,6 +133,11 @@ public class SmokeBomb extends ArmorAbility {
 				hero.next();
 			}
 		}
+	}
+
+	@Override
+	public int icon() {
+		return HeroIcon.SMOKE_BOMB;
 	}
 
 	@Override
@@ -149,7 +161,15 @@ public class SmokeBomb extends ArmorAbility {
 		@Override
 		public int drRoll() {
 			return Random.NormalIntRange(Dungeon.hero.pointsInTalent(Talent.BODY_REPLACEMENT),
-					5*Dungeon.hero.pointsInTalent(Talent.BODY_REPLACEMENT));
+					3*Dungeon.hero.pointsInTalent(Talent.BODY_REPLACEMENT));
+		}
+
+		{
+			immunities.add( Dread.class );
+			immunities.add( Terror.class );
+			immunities.add( Amok.class );
+			immunities.add( Charm.class );
+			immunities.add( Sleep.class );
 		}
 
 	}

@@ -690,7 +690,7 @@ public class TenguHard extends Boss{
             }
 
             @Override
-            public boolean doPickUp( Hero hero ) {
+            public boolean doPickUp( Hero hero, int pos) {
                 GLog.w( Messages.get(this, "cant_pickup") );
                 return false;
             }
@@ -1037,7 +1037,7 @@ public class TenguHard extends Boss{
             }
 
             @Override
-            public boolean doPickUp( Hero hero ) {
+            public boolean doPickUp( Hero hero, int pos ) {
                 GLog.w( Messages.get(this, "cant_pickup") );
                 return false;
             }

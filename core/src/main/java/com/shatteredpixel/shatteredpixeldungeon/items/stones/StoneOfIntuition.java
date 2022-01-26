@@ -22,6 +22,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.stones;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Identification;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
@@ -40,7 +41,6 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.IconTitle;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
 import com.watabou.noosa.Image;
 import com.watabou.utils.Reflection;
 
@@ -48,13 +48,12 @@ import java.util.ArrayList;
 
 public class StoneOfIntuition extends InventoryStone {
 	
-	
 	{
-		mode = WndBag.Mode.INTUITIONABLE;
 		image = ItemSpriteSheet.STONE_INTUITION;
 	}
 
-	public static boolean isIntuitionable( Item item ){
+	@Override
+	protected boolean usableOnItem(Item item) {
 		if (item instanceof Ring){
 			return !((Ring) item).isKnown();
 		} else if (item instanceof Potion){
@@ -71,6 +70,8 @@ public class StoneOfIntuition extends InventoryStone {
 		GameScene.show( new WndGuess(item));
 		
 	}
+
+	public static class IntuitionUseTracker extends Buff {{ revivePersists = true; }};
 	
 	private static Class curGuess = null;
 	
@@ -106,7 +107,18 @@ public class StoneOfIntuition extends InventoryStone {
 						}
 						GLog.p( Messages.get(WndGuess.class, "correct") );
 						curUser.sprite.parent.add( new Identification( curUser.sprite.center().offset( 0, -16 ) ) );
+
+						if (curUser.buff(IntuitionUseTracker.class) == null){
+							GLog.h( Messages.get(WndGuess.class, "preserved") );
+							new StoneOfIntuition().collect();
+							Buff.affect(curUser, IntuitionUseTracker.class);
+						} else {
+							curUser.buff(IntuitionUseTracker.class).detach();
+						}
 					} else {
+						if (curUser.buff(IntuitionUseTracker.class) != null) {
+							curUser.buff(IntuitionUseTracker.class).detach();
+						}
 						GLog.n( Messages.get(WndGuess.class, "incorrect") );
 					}
 					curGuess = null;
