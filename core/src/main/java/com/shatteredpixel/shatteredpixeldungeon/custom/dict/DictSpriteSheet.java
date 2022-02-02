@@ -78,6 +78,8 @@ public class DictSpriteSheet {
                 return new Image(Assets.Sprites.ROT_LASH, 0, 0, 12, 16);
             case NEW_FIRE_ELE:
                 return new Image(Assets.Sprites.ELEMENTAL, 168, 0, 12, 14);
+            case SPECTRAL_NECROMANCER:
+                return new Image(Assets.Sprites.NECRO, 0, 16, 16, 16);
 
             case BAT:
                 return new Image(Assets.Sprites.BAT, 0, 0, 15, 15);
@@ -226,6 +228,7 @@ public class DictSpriteSheet {
     public static final int ROT_HEART       = 306 + 10000;
     public static final int ROT_LASHER      = 307 + 10000;
     public static final int NEW_FIRE_ELE    = 308 + 10000;
+    public static final int SPECTRAL_NECROMANCER = 309 + 10000;
 
     public static final int BAT             = 400 + 10000;
     public static final int BRUTE           = 401 + 10000;

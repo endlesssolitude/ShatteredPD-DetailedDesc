@@ -32,9 +32,6 @@ public enum DictionaryJournal {
         ARMORS.d.put("armor_scale",         ItemSpriteSheet.ARMOR_SCALE);
         ARMORS.d.put("armor_plate",         ItemSpriteSheet.ARMOR_PLATE);
         ARMORS.d.put("armor_epic",          ItemSpriteSheet.ARMOR_WARRIOR);
-        //ARMORS.d.put("armor_mage",          ItemSpriteSheet.ARMOR_MAGE);
-        //ARMORS.d.put("armor_rogue",         ItemSpriteSheet.ARMOR_ROGUE);
-        //ARMORS.d.put("armor_huntress",      ItemSpriteSheet.ARMOR_HUNTRESS);
         ARMORS.d.put("armor_glyph_1",       ItemSpriteSheet.STYLUS);
         ARMORS.d.put("armor_glyph_2",       ItemSpriteSheet.STYLUS);
         ARMORS.d.put("armor_glyph_3",       ItemSpriteSheet.STYLUS);
@@ -112,6 +109,7 @@ public enum DictionaryJournal {
         ALCHEMY.d.put("potion_elixirs",     ItemSpriteSheet.ELIXIR_AQUA);
         //spells, 2, 1 general//useless, 1 detail
         ALCHEMY.d.put("spell_spells",       ItemSpriteSheet.PHASE_SHIFT);
+        ALCHEMY.d.put("enforcers_details",  ItemSpriteSheet.LIQUID_METAL);
         //MOBS
         //ch1
         MOBS.d.put("ch1",                   DictSpriteSheet.AREA_SEWER);
@@ -137,6 +135,7 @@ public enum DictionaryJournal {
         MOBS.d.put("mob_dm100",             DictSpriteSheet.DM100);
         MOBS.d.put("mob_guard",             DictSpriteSheet.GUARD);
         MOBS.d.put("mob_necro",             DictSpriteSheet.NECROMANCER);
+        MOBS.d.put("mob_spe_necro",         DictSpriteSheet.SPECTRAL_NECROMANCER);
         MOBS.d.put("mob_rot_heart",         DictSpriteSheet.ROT_HEART);
         MOBS.d.put("mob_rot_lash",          DictSpriteSheet.ROT_LASHER);
         MOBS.d.put("mob_new_ele_fire",      DictSpriteSheet.NEW_FIRE_ELE);

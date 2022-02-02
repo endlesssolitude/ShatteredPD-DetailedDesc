@@ -41,6 +41,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Shaman;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Skeleton;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Slime;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Snake;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.SpectralNecromancer;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Spinner;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Statue;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Succubus;
@@ -357,6 +358,7 @@ public class MobPlacer extends TestItem{
         DM100(DM100.class, DictSpriteSheet.DM100),
         GUARD(Guard.class, DictSpriteSheet.GUARD),
         NECRO(Necromancer.class, DictSpriteSheet.NECROMANCER),
+        SPECTRAL_NECRO(SpectralNecromancer.class, DictSpriteSheet.SPECTRAL_NECROMANCER),
         ROT_LASHER(RotLasher.class, DictSpriteSheet.ROT_LASHER),
         ROT_HEART(RotHeart.class, DictSpriteSheet.ROT_HEART),
         NEW_FIRE_ELE(Elemental.NewbornFireElemental.class, DictSpriteSheet.NEW_FIRE_ELE),

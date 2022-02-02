@@ -20,6 +20,8 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.traps.ExplosiveTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.FlashingTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.FlockTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.FrostTrap;
+import com.shatteredpixel.shatteredpixeldungeon.levels.traps.GatewayTrap;
+import com.shatteredpixel.shatteredpixeldungeon.levels.traps.GeyserTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.GrimTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.GrippingTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.GuardianTrap;
@@ -93,8 +95,8 @@ public class TrapPlacer extends TestItem {
     public static final int LARGE_DOT   = 6;
      */
 
-    //index = row * COLS + column
-    private static HashMap<Integer, Class<? extends Trap>> trapLib = new HashMap<>(30);
+    //index = row * COLS + column, where COLS = 8;
+    private static HashMap<Integer, Class<? extends Trap>> trapLib = new HashMap<>(40);
     static {
         trapLib.put(0, AlarmTrap.class);
         trapLib.put(48, DisarmingTrap.class);
@@ -125,6 +127,8 @@ public class TrapPlacer extends TestItem {
         trapLib.put(7, GrippingTrap.class);
         trapLib.put(39, RockfallTrap.class);
         trapLib.put(47, WornDartTrap.class);
+        trapLib.put(36, GeyserTrap.class);
+        trapLib.put(44, GatewayTrap.class);
     }
 
     @Override
