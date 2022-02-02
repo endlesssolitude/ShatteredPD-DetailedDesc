@@ -86,7 +86,7 @@ public class DM300Hard extends Boss{
 
     private int phase = 0;
 
-    private float summonCD = 50f;
+    private float summonCD = 60f;
 
     private int lastTargeting = -1;
 
@@ -112,12 +112,12 @@ public class DM300Hard extends Boss{
             places.add(17*Dungeon.level.width()+4);
             places.add(18*Dungeon.level.width()-5);
             Random.shuffle(places);
-            for(int i=0;i<Math.min(phase/2, 4);++i){
+            for(int i=0;i<Math.min(phase/2-1, 3);++i){
                 summonCaster(Random.Int(4), places.get(i),false);
             }
         }else{
             destroyAll();
-            for(int i=0;i<phase/2+1;++i){
+            for(int i=0;i<phase/2;++i){
                 summonCaster(Random.Int(6), findRandomPlaceForCaster(), false);
             }
         }

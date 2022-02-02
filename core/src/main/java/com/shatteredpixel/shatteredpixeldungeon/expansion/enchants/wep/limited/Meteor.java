@@ -56,9 +56,9 @@ public class Meteor extends CountInscription {
 
     @Override
     public void useUp(Weapon w, Char attacker) {
-        super.useUp(w, attacker);
+
         int[] map = RangeMap.centeredRect(attacker.pos, 4, 4);
-        RepeatedCallback.executeChain(0.2f, Math.min(14 + w.buffedLvl()/2, 22), () -> {
+        RepeatedCallback.executeChain(0.2f, Math.min(12 + w.buffedLvl(), 25), () -> {
             final int targetCell = map[Random.Int(map.length)];
             final float radius = Math.min(3.2f + w.buffedLvl() * 0.04f, 3.6f);
             skyFire(targetCell, radius, () -> {
@@ -71,6 +71,7 @@ public class Meteor extends CountInscription {
                 }
             });
         });
+        super.useUp(w, attacker);
     }
 
     @Override
@@ -118,12 +119,12 @@ public class Meteor extends CountInscription {
         final float ang = Random.Float(60f, 120f)*3.1416f/180f;
         mm.reset(MagicMissile.FIRE, center.clone().offset((float) (200f * Math.cos(ang)), (float) (200f * Math.sin(-ang))), center, ()->{
             CellEmitter.center(pos).burst(BlastParticle.FACTORY, 50);
-            Sample.INSTANCE.play(Assets.Sounds.BLAST, Random.Float(1.1f, 1.35f));
+            Sample.INSTANCE.play(Assets.Sounds.BLAST, Random.Float(1.0f, 1.2f));
             if(callback != null) callback.call();
         });
         mm.setSpeed(400f);
 
-        VirtualActor.delay(0.55f, true, PotionFireEX.class, null);
+        VirtualActor.delay(0.55f, true, Meteor.class, null);
         VirtualTimer.countTime(1f, mm::destroy);
         //DelayerEffect.delay(0.5f, null);
 

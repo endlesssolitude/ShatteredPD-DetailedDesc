@@ -23,7 +23,7 @@ public class EnchRepeating extends CountInscription {
 
     @Override
     public void useUp(Weapon w, Char attacker) {
-        super.useUp(w, attacker);
+
         if(weapon.enchantment != null) {
             for (Char ch : Actor.chars()) {
                 if (ch != attacker && ch.alignment != Char.Alignment.ALLY && attacker.fieldOfView[ch.pos]) {
@@ -33,5 +33,6 @@ public class EnchRepeating extends CountInscription {
                 }
             }
         }
+        super.useUp(w, attacker);
     }
 }

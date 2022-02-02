@@ -33,4 +33,10 @@ public class Invisible extends CountInscription {
         }
         return damage;
     }
+
+    @Override
+    public void useUp(Weapon w, Char attacker) {
+        Buff.affect(attacker, Invisibility.class, 75f + 8.5f * Math.min(w.buffedLvl(), 15));
+        super.useUp(w, attacker);
+    }
 }

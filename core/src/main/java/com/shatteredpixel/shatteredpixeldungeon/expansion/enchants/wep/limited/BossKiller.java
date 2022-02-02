@@ -13,7 +13,7 @@ public class BossKiller extends CountInscription {
     @Override
     public int proc(Weapon weapon, Char attacker, Char defender, int damage) {
         if(defender.properties().contains(Char.Property.BOSS) || defender.properties().contains(Char.Property.MINIBOSS)){
-            damage = GME.accurateRound(damage * (Math.min(1.5f + weapon.buffedLvl() * 0.05f, 2.2f)));
+            damage = GME.accurateRound(damage * (Math.min(1.5f + weapon.buffedLvl() * 0.075f, 2.3f)));
             defender.sprite.centerEmitter().burst(Speck.factory(Speck.STAR), 8);
             consume(weapon, attacker);
         }

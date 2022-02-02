@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.CustomGameSettings;
 import com.shatteredpixel.shatteredpixeldungeon.custom.visuals.TextField;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.text.TextChallenges;
 import com.shatteredpixel.shatteredpixeldungeon.ui.CheckBox;
@@ -38,8 +39,12 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.RedButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ScrollPane;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
+import com.shatteredpixel.shatteredpixeldungeon.ui.WndTextInput;
 import com.shatteredpixel.shatteredpixeldungeon.utils.DungeonSeed;
+import com.watabou.noosa.Game;
 import com.watabou.noosa.Image;
+import com.watabou.noosa.NinePatch;
+import com.watabou.noosa.TextInput;
 import com.watabou.noosa.ui.Component;
 
 import java.util.ArrayList;
@@ -54,7 +59,7 @@ public class WndChallenges extends Window {
 	private boolean editable;
 	private ArrayList<CanScrollCheckBox> boxes;
 	private ArrayList<CanScrollInfo> infos;
-	private CanScrollTextField cstf;
+	private CanScrollButton seedButton;
 	private CanScrollButton deleteSeedInput;
 
 	public WndChallenges( long checked, boolean editable ) {
@@ -79,7 +84,7 @@ public class WndChallenges extends Window {
 						return;
 					}
 				}
-				if(cstf.onClick(x, y)){
+				if(seedButton.onClick(x, y)){
 					return;
 				}
 				if(deleteSeedInput.onClick(x, y)){
@@ -155,28 +160,43 @@ public class WndChallenges extends Window {
 
 		pos += GAP;
 
-		cstf = new CanScrollTextField(M.L(TextChallenges.class, "seed_custom_title"));
-		cstf.setHint(M.L(TextChallenges.class, "hint"));
-		content.add(cstf);
-		cstf.enable(editable);
-		cstf.setLarge(false);
-		cstf.setMaxStringLength(22);
-		cstf.setRect(0, pos, WIDTH-16-GAP, 22);
-		cstf.text(editable ? CustomGameSettings.getSeedString() : DungeonSeed.convertToCode(Dungeon.seed));
+		seedButton = new CanScrollButton(""){
+			@Override
+			protected void onClick() {
+				super.onClick();
+				WndTextInput wti = new WndTextInput(M.L(TextChallenges.class, "seed_custom_title"), "",
+						99, false, "ok", "cancel"){
+					@Override
+					public void onSelect(boolean positive, String text) {
+						super.onSelect(positive, text);
+						if(positive){
+							CustomGameSettings.putSeedString(text);
+							updateSeedText(text, true);
+						}
+					}
+				};
+				Game.scene().add(wti);
+			}
+		};
+
+		content.add(seedButton);
+		seedButton.enable(editable);
+		seedButton.setRect(0, pos, WIDTH-GAP-16, 22);
+		updateSeedText("", false);
 
 		deleteSeedInput = new CanScrollButton(M.L(TextChallenges.class, "delete_seed_input")){
 			@Override
 			protected void onClick() {
 				super.onClick();
-				cstf.text("");
-				cstf.onTextChange();
+				CustomGameSettings.putSeedString("");
+				updateSeedText("", false);
 			}
 		};
 		content.add(deleteSeedInput);
 		deleteSeedInput.enable(editable);
-		deleteSeedInput.setRect(cstf.right() + GAP, pos, 16, 22);
+		deleteSeedInput.setRect(seedButton.right() + GAP, pos, 16, 22);
 
-		pos = cstf.bottom();
+		pos = seedButton.bottom();
 
 		content.setSize(WIDTH, (int) pos + GAP*2);
 		pane.scrollTo(0, 0);
@@ -196,6 +216,18 @@ public class WndChallenges extends Window {
 		}
 
 		super.onBackPressed();
+	}
+	private void updateSeedText(String text, boolean update){
+		if(CustomGameSettings.getSeedString().equals("") && editable){
+			seedButton.text(M.L(TextChallenges.class, "hint"));
+		}else{
+			seedButton.text(
+					M.L(TextChallenges.class, "seed_custom_title") +
+					(update ? text :
+						(editable ? CustomGameSettings.getSeedString() : DungeonSeed.convertToCode(Dungeon.seed))
+					)
+			);
+		}
 	}
 
 	public static class CanScrollCheckBox extends CheckBox{
@@ -234,35 +266,6 @@ public class WndChallenges extends Window {
 		}
 	}
 
-	public static class CanScrollTextField extends TextField {
-
-		public CanScrollTextField(String label) {
-			super(label);
-		}
-
-		@Override
-		public void onTextChange() {
-			CustomGameSettings.putSeedString(text());
-		}
-
-		@Override
-		public void onTextCancel() {
-
-		}
-
-		@Override
-		protected void layout() {
-			super.layout();
-			hotArea.height = hotArea.width = 0;
-		}
-
-		protected boolean onClick(float x, float y){
-			if(!inside(x,y)) return false;
-			if(active) onClick();
-
-			return true;
-		}
-	}
 
 	public static class CanScrollButton extends RedButton {
 

@@ -9,6 +9,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.baseclasses.CountInscription;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfDread;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.watabou.utils.Random;
 
@@ -40,5 +41,11 @@ public class Terrifying extends CountInscription {
             consume(weapon, attacker);
         }
         return damage;
+    }
+
+    @Override
+    public void useUp(Weapon w, Char attacker) {
+        new ScrollOfDread().doRead();
+        super.useUp(w, attacker);
     }
 }

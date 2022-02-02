@@ -25,11 +25,11 @@ public class IceBreaking extends CountInscription {
     @Override
     public int proc(Weapon weapon, Char attacker, Char defender, int damage) {
         if(defender.buff(Frost.class) != null){
-            damage *= Math.min(2.2f + weapon.buffedLvl() * 0.12f, 4f);
+            damage *= Math.min(2.2f + weapon.buffedLvl() * 0.15f, 4f);
             Sample.INSTANCE.play(Assets.Sounds.HIT_SLASH, Random.Float(1.0f, 1.3f));
             Wound.hit(defender);
 
-            float radius = Math.min(2.4f + weapon.buffedLvl()*0.1f, 3.3f);
+            float radius = Math.min(2f + weapon.buffedLvl()*0.12f, 3.6f);
             for(Char ch: Actor.chars()){
                 if(ch.alignment == Char.Alignment.ENEMY && ch != defender && ch != attacker){
                     if(Dungeon.level.trueDistance(ch.pos, defender.pos)<radius){
@@ -54,8 +54,9 @@ public class IceBreaking extends CountInscription {
                             return super.act();
                         }
                     }.attachTo(defender);
+                }else {
+                    Buff.affect(defender, Chill.class, Random.Float(3f, 4f + weapon.buffedLvl() / 2f));
                 }
-                Buff.affect(defender, Chill.class, Random.Float(3f, 4f + weapon.buffedLvl()/2f));
             }else{
                 Buff.affect(defender, Chill.class, Random.Float(3f, 4f + weapon.buffedLvl()/2f));
             }
@@ -67,12 +68,14 @@ public class IceBreaking extends CountInscription {
 
     @Override
     public void useUp(Weapon w, Char attacker) {
-        super.useUp(w, attacker);
+
         GameScene.flash(0x4479F2);
         for(Char ch: Actor.chars()){
             if(ch.alignment == Char.Alignment.ENEMY){
-                Buff.affect(ch, Frost.class, Random.Float(8f, 20f));
+                Buff.affect(ch, Frost.class, Random.Float(12f, 25f) + 2f * Math.min(w.buffedLvl(), 15));
             }
         }
+
+        super.useUp(w, attacker);
     }
 }

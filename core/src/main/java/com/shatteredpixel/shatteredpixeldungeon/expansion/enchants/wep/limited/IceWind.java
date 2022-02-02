@@ -11,7 +11,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.watabou.utils.Random;
 
-public class IceGuard extends CountInscription {
+public class IceWind extends CountInscription {
     {
         defaultTriggers = 40;
     }

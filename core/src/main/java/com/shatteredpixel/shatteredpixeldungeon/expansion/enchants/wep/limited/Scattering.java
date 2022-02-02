@@ -23,10 +23,11 @@ public abstract class Scattering extends CountInscription {
         defaultTriggers = 32;
     }
     protected int colorRGB888 = 0xFFFFFF;
+    protected int sideBeam = 1;
+    protected float angle = 10f;
     @Override
     public int proc(Weapon weapon, Char attacker, Char defender, int damage) {
-        float angle = 10f;
-        for(int i=-1; i<=1; ++i){
+        for(int i=-sideBeam; i<=sideBeam; ++i){
             BallisticaFloat baf = new BallisticaFloat(attacker.pos, GME.angle(attacker.pos, defender.pos) + angle* i, weapon.RCH * 2 + 4, Ballistica.STOP_TARGET | BallisticaFloat.STOP_SOLID);
             attacker.sprite.parent.add(new BeamCustom(attacker.sprite.center(), baf.collisionPosF.clone().scale(DungeonTilemap.SIZE), Effects.Type.LIGHT_RAY)
                     .setColor(colorRGB888).setLifespan(0.4f));
@@ -42,19 +43,21 @@ public abstract class Scattering extends CountInscription {
     @Override
     protected void onGain() {
         super.onGain();
-        weapon.RCH += 1;
+        weapon.RCH += 2;
     }
 
     @Override
     protected void onLose() {
         super.onLose();
-        weapon.RCH -= 1;
+        weapon.RCH -= 2;
     }
 
     public static class LightScattering extends Scattering{
         {
-            defaultTriggers = 32;
+            defaultTriggers = 40;
             colorRGB888 = 0xFFFFFF;
+            angle = 30f;
+            sideBeam = 3;
         }
 
         @Override
@@ -62,17 +65,19 @@ public abstract class Scattering extends CountInscription {
             for(int cell: baf.subPath(1, baf.dist)){
                 Char ch = Actor.findChar(cell);
                 if(ch != null && ch.alignment != Char.Alignment.ALLY){
-                    ch.damage(GME.accurateRound(damage*Random.Float(0.4f, 0.5f)), attacker);
+                    ch.damage(GME.accurateRound(damage*Random.Float(0.2f, 0.3f)), attacker);
                     Buff.affect(ch, Blindness.class, 5f);
                 }
             }
         }
     }
 
-    public static class FireyScattering extends LightScattering {
+    public static class FieryScattering extends Scattering {
         {
             defaultTriggers = 25;
             colorRGB888 = 0xFFE0B0;
+            sideBeam = 1;
+            angle = 15f;
         }
 
         @Override
@@ -80,17 +85,19 @@ public abstract class Scattering extends CountInscription {
             for(int cell: baf.subPath(1, baf.dist)){
                 Char ch = Actor.findChar(cell);
                 if(ch != null && ch.alignment != Char.Alignment.ALLY){
-                    ch.damage(GME.accurateRound(damage*Random.Float(0.1f, 0.9f)), attacker);
+                    ch.damage(GME.accurateRound(damage*Random.Float(0.47f, 0.57f)), attacker);
                     Buff.affect(ch, Burning.class).reignite(ch, 4f);
                 }
             }
         }
     }
 
-    public static class IceyScattering extends LightScattering {
+    public static class IceyScattering extends Scattering {
         {
             defaultTriggers = 25;
             colorRGB888 = 0x6097F4;
+            sideBeam = 2;
+            angle = 22.5f;
         }
 
         @Override
@@ -98,7 +105,7 @@ public abstract class Scattering extends CountInscription {
             for(int cell: baf.subPath(1, baf.dist)){
                 Char ch = Actor.findChar(cell);
                 if(ch != null && ch.alignment != Char.Alignment.ALLY){
-                    ch.damage(GME.accurateRound(damage* Random.Float(0.3f, 0.7f)), attacker);
+                    ch.damage(GME.accurateRound(damage* Random.Float(0.25f, 0.45f)), attacker);
                     Freezing.freeze(ch.pos);
                 }
             }

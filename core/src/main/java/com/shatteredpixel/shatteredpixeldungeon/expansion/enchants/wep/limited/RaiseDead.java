@@ -1,5 +1,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
@@ -30,13 +31,16 @@ public class RaiseDead extends CountInscription {
 
     @Override
     public void useUp(Weapon w, Char attacker) {
-        super.useUp(w, attacker);
+
         for(int i: PathFinder.NEIGHBOURS4){
             Wraith wraith = Wraith.spawnAt(attacker.pos + i);
             if(wraith != null){
                 Buff.affect(wraith, Corruption.class);
+                wraith.HT = wraith.HP = Dungeon.depth * 5 / 2 + 5;
             }
             new Flare(5, 32).show(attacker.sprite, 2f).color(0x222222, false);
         }
+
+        super.useUp(w, attacker);
     }
 }

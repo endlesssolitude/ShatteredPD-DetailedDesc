@@ -26,6 +26,7 @@ public enum VirtualProc {
 
     //This is just temporary, should implement interfaces for procs in buffs.
     public int attackProc(Weapon weapon, Char attacker, Char defender, int damage) {
+        /*
         PotionExpEX.PlainVampire pv = attacker.buff(PotionExpEX.PlainVampire.class);
         if(pv != null){
             damage = pv.trigger(weapon, attacker, defender, damage);
@@ -34,10 +35,15 @@ public enum VirtualProc {
         if(fb != null){
             damage = fb.trigger(weapon, attacker, defender, damage);
         }
+
+         */
         return damage;
     }
 
     public int defenseProc(Armor armor, Char attacker, Char defender, int damage){
+        /*
+
+
         PotionFrostEX.IceArmor ia = defender.buff(PotionFrostEX.IceArmor.class);
         if(ia != null){
             damage = ia.trigger(armor, attacker, defender, damage);
@@ -48,22 +54,19 @@ public enum VirtualProc {
             damage = fa.trigger(armor, attacker, defender, damage);
         }
 
+         */
+
         return damage;
 
     }
 
-    public int damage(Char ch, int damage, Object src){
-        Buff.detach(ch, PotionFrostEX.DiffusiveFrost.class);
+    public int damage(Char ch, int damage, Object src) {
+        //Buff.detach(ch, PotionFrostEX.DiffusiveFrost.class);
 
-        if(ch.buff(ImmortalShieldAffecter.ImmortalShield.class)!=null){
+        if (ch.buff(ImmortalShieldAffecter.ImmortalShield.class) != null) {
             ch.sprite.showStatus(0x00FFFF, "%d", damage);
             damage = 0;
         }
-
-        return damage;
-    }
-
-    public int heroDamage(Hero hero, int damage, Object src){
 
         return damage;
     }

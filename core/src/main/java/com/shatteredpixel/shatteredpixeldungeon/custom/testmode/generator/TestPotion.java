@@ -3,11 +3,14 @@ package com.shatteredpixel.shatteredpixeldungeon.custom.testmode.generator;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Elemental;
 import com.shatteredpixel.shatteredpixeldungeon.items.Ankh;
+import com.shatteredpixel.shatteredpixeldungeon.items.ArcaneResin;
 import com.shatteredpixel.shatteredpixeldungeon.items.Dewdrop;
 import com.shatteredpixel.shatteredpixeldungeon.items.Honeypot;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.KingsCrown;
+import com.shatteredpixel.shatteredpixeldungeon.items.LiquidMetal;
 import com.shatteredpixel.shatteredpixeldungeon.items.TengusMask;
 import com.shatteredpixel.shatteredpixeldungeon.items.Torch;
 import com.shatteredpixel.shatteredpixeldungeon.items.Waterskin;
@@ -57,6 +60,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfIc
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfMight;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfToxicEssence;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.ExoticPotion;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.CorpseDust;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.Embers;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.GooBlob;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.MetalShard;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
@@ -85,6 +90,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.spells.PhaseShift;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.ReclaimTrap;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.Recycle;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.Spell;
+import com.shatteredpixel.shatteredpixeldungeon.items.spells.SummonElemental;
+import com.shatteredpixel.shatteredpixeldungeon.items.spells.TelekineticGrab;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.WildEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.Runestone;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAggression;
@@ -423,12 +430,13 @@ public class TestPotion extends TestGenerator {
             case 3: return CurseInfusion.class;
             case 4: return FeatherFall.class;
             case 5: return MagicalInfusion.class;
-            case 6: return MagicalPorter.class;
+            case 6: return TelekineticGrab.class;
             case 7: return PhaseShift.class;
             case 8: return ReclaimTrap.class;
             case 9: return Recycle.class;
             case 10: return WildEnergy.class;
-            case 11: default: return ArcaneCatalyst.class;
+            case 11: return SummonElemental.class;
+            case 12: default: return ArcaneCatalyst.class;
         }
     }
 
@@ -457,13 +465,18 @@ public class TestPotion extends TestGenerator {
             case 6: return Dewdrop.class;
             case 7: default: return KingsCrown.class;
             case 8: return TengusMask.class;
+            case 9: return LiquidMetal.class;
+            case 10: return ArcaneResin.class;
+            case 11: return Embers.class;
+            case 12: return CorpseDust.class;
         }
     }
 
     private int maxIndex(int cate){
         if(cate == 7) return 10;
+        if(cate == 9) return 12;
         if(cate == 10) return 8;
-        if(cate == 11) return 8;
+        if(cate == 11) return 12;
         return 11;
     }
 

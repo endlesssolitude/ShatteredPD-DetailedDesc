@@ -21,6 +21,7 @@ public class ChallengeBag extends Bag {
 
     private static final ArrayList<Class<? extends Item>> miscItems=new ArrayList<>();
     static {
+        /*
         miscItems.add(Ankh.class);
         miscItems.add(Stylus.class);
         miscItems.add(TengusMask.class);
@@ -29,6 +30,7 @@ public class ChallengeBag extends Bag {
         miscItems.add(Honeypot.class);
         miscItems.add(Torch.class);
         miscItems.add(MerchantsBeacon.class);
+         */
     }
 
     @Override

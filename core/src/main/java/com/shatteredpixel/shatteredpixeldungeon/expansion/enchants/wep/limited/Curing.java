@@ -17,7 +17,7 @@ public class Curing extends CountInscription {
     @Override
     public int proc(Weapon weapon, Char attacker, Char defender, int damage) {
         if(defender.properties().contains(Char.Property.DEMONIC) || defender.properties().contains(Char.Property.UNDEAD)){
-            Buff.affect(defender, Poison.class).extend(defender.properties().contains(Char.Property.BOSS) ? 4f + weapon.buffedLvl()/4f : 7f + weapon.buffedLvl());
+            Buff.affect(defender, Poison.class).extend(defender.properties().contains(Char.Property.BOSS) ? 4f + weapon.buffedLvl()/4f : 8f + weapon.buffedLvl());
         }else{
             Buff.affect(defender, Healing.class).setHeal(2 + weapon.buffedLvl()/2, 1f, 0);
         }
@@ -27,7 +27,7 @@ public class Curing extends CountInscription {
 
     @Override
     public void useUp(Weapon w, Char attacker) {
-        super.useUp(w, attacker);
+
         GameScene.flash(0xAAFFC4);
         for(Char ch: Actor.chars()){
             if(ch.properties().contains(Char.Property.DEMONIC) ||ch.properties().contains(Char.Property.UNDEAD)){
@@ -40,8 +40,9 @@ public class Curing extends CountInscription {
                     ch.sprite.centerEmitter().burst(PurpleParticle.BURST, 5);
                 }
             }else{
-                Buff.affect(ch, Healing.class).setHeal(ch.HT / 3, 0.05f, 1);
+                Buff.affect(ch, Healing.class).setHeal(ch.HT / 2, 0.05f, 1);
             }
         }
+        super.useUp(w, attacker);
     }
 }

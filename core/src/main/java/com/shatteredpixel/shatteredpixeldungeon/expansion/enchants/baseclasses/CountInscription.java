@@ -10,6 +10,7 @@ import com.watabou.utils.Bundle;
 public abstract class CountInscription extends Inscription{
     protected int leftTriggers;
     protected int defaultTriggers = 30;
+    protected boolean warned = false;
 
     public CountInscription(){
         super();
@@ -40,6 +41,12 @@ public abstract class CountInscription extends Inscription{
         if(leftTriggers<=0){
             useUp(w, attacker);
             return true;
+        }
+        if(!warned){
+            if(leftTriggers <= 5){
+                GLog.w(M.L(this, "use_up_warn", w.inscription.name()));
+                warned = true;
+            }
         }
         return false;
     }

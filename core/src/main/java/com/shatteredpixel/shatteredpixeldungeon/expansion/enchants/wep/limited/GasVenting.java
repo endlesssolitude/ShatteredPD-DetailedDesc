@@ -5,6 +5,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ToxicGas;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.BlobImmunity;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ToxicImbue;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.GME;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.baseclasses.CountInscription;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
@@ -27,6 +28,12 @@ public class GasVenting extends CountInscription {
 
         consume(weapon, attacker);
         return GME.accurateRound(damage*.3f);
+    }
+
+    @Override
+    public void useUp(Weapon w, Char attacker) {
+        Buff.affect(attacker, ToxicImbue.class).set(Math.min(30f + w.buffedLvl() * 3f, 75f));
+        super.useUp(w, attacker);
     }
 
     @Override

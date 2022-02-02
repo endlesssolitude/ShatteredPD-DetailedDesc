@@ -1,8 +1,12 @@
 package com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.wep.limited;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.custom.buffs.ConsistBleeding;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Wound;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.baseclasses.CountInscription;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 
@@ -22,5 +26,23 @@ public class BleedingBlast extends CountInscription {
         }
         consume(weapon, attacker);
         return damage;
+    }
+
+    @Override
+    public void useUp(Weapon w, Char attacker) {
+
+        for(Mob m: Dungeon.level.mobs.toArray(new Mob[0])){
+            if(m.alignment == Char.Alignment.ENEMY){
+                if(Dungeon.level.distance(m.pos, attacker.pos) < 4){
+                    if(!(m.properties().contains(Char.Property.BOSS))){
+                        if(m.buff(Bleeding.class) != null || m.buff(ConsistBleeding.class) != null){
+                            m.damage(m.HP + 1, attacker);
+                            Wound.hit(m);
+                        }
+                    }
+                }
+            }
+        }
+        super.useUp(w, attacker);
     }
 }

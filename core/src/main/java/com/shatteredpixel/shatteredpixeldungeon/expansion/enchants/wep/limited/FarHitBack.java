@@ -31,8 +31,8 @@ public class FarHitBack extends CountInscription {
 
     @Override
     public void useUp(Weapon w, Char attacker) {
-        super.useUp(w, attacker);
-        float maxDist = Math.min(5f + weapon.buffedLvl()*0.25f, 8f);
+
+        float maxDist = Math.min(7f + weapon.buffedLvl()*0.5f, 12f);
         for(Char ch : Actor.chars()){
             if(!ch.properties().contains(Char.Property.IMMOVABLE) && ch != attacker){
                 float distance = Dungeon.level.trueDistance(attacker.pos, ch.pos);
@@ -42,5 +42,7 @@ public class FarHitBack extends CountInscription {
             }
         }
         SpreadWave.blast(attacker.sprite.center(), maxDist, 1f, 0xA0A0A0, null);
+
+        super.useUp(w, attacker);
     }
 }

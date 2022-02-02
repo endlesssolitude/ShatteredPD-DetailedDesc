@@ -6,10 +6,14 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.StormCloud;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.GME;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.HitBack;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.RangeMap;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.enchants.baseclasses.CountInscription;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Flow;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -32,7 +36,7 @@ public class Tidal extends CountInscription {
                 Char ch = Actor.findChar(i);
                 if(ch != null && ch != attacker){
                     WandOfBlastWave.throwChar(ch, HitBack.hitBack(attacker, ch), dist);
-                    ch.damage(GME.accurateRound(damage*.4f), attacker);
+                    ch.damage(GME.accurateRound(damage*(.25f+.01f*Math.min(weapon.buffedLvl(), 10))), attacker);
                 }
             }
         }
@@ -44,7 +48,18 @@ public class Tidal extends CountInscription {
 
     @Override
     public void useUp(Weapon w, Char attacker) {
+
+        if(attacker instanceof Hero){
+            Armor a = ((Hero)attacker).belongings.armor;
+            if(a != null){
+                a.inscribe(new Flow());
+            }
+        }
+
+        for(int i=Dungeon.level.length()-1; i>=0; --i){
+            Dungeon.level.setCellToWater(false, i);
+        }
+
         super.useUp(w, attacker);
-        GameScene.add(Blob.seed(attacker.pos, 500, StormCloud.class));
     }
 }

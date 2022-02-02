@@ -48,7 +48,7 @@ public class LightningDamnation extends CountInscription {
         aim.sprite.parent.add(new Lightning(aim.sprite.center(), new PointF( x + Random.Float(-4f, 4f), y-300f), null));
         Sample.INSTANCE.play( Assets.Sounds.LIGHTNING, 1.0f);
 
-        aim.damage(Random.Int(Dungeon.depth * 4 / 3 + 4, Dungeon.depth * 2 + 7), LightningDamnation.class);
+        aim.damage(Random.Int(Dungeon.depth + 4, Dungeon.depth * 2 + 9), LightningDamnation.class);
         aim.sprite.centerEmitter().burst( SparkParticle.FACTORY, 10 );
         aim.sprite.flash();
         killed = aim.isAlive() ? -1 : 1;

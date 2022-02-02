@@ -19,7 +19,7 @@ public class Switching extends CountInscription {
         }
         consume(weapon, attacker);
 
-        return damage*2/5;
+        return damage/2;
     }
 
     @Override

@@ -400,7 +400,7 @@ public enum HeroClass {
 
 			//new NumInputTester().collect();
 
-			new ScrollOfDebug().identify().collect();
+			//new ScrollOfDebug().identify().collect();
 		}
 	}
 
