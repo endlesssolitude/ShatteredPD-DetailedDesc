@@ -341,8 +341,8 @@ public class MobPlacer extends TestItem{
     }
 
     private enum DataPack{
-        //RAT(Rat.class, DictSpriteSheet.RAT),
-        TESTRAT(TestRat.class, DictSpriteSheet.RAT),
+        RAT(Rat.class, DictSpriteSheet.RAT),
+        //TESTRAT(TestRat.class, DictSpriteSheet.RAT),
         GNOLL(Gnoll.class, DictSpriteSheet.GNOLL),
         SNAKE(Snake.class, DictSpriteSheet.SNAKE),
         ALBINO(Albino.class, DictSpriteSheet.ALBINO),
