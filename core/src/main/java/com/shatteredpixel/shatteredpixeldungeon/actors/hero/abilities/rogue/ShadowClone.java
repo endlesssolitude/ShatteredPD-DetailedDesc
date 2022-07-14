@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2021 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -75,7 +75,7 @@ public class ShadowClone extends ArmorAbility {
 	}
 
 	{
-		baseChargeUse = 50f;
+		baseChargeUse = 35f;
 	}
 
 	@Override
@@ -150,7 +150,7 @@ public class ShadowClone extends ArmorAbility {
 		{
 			spriteClass = ShadowSprite.class;
 
-			HP = HT = 100;
+			HP = HT = 80;
 
 			immunities.add(AllyBuff.class);
 		}
@@ -203,7 +203,7 @@ public class ShadowClone extends ArmorAbility {
 			int damage = Random.NormalIntRange(10, 20);
 			int heroDamage = Dungeon.hero.damageRoll();
 			heroDamage /= Dungeon.hero.attackDelay(); //normalize hero damage based on atk speed
-			heroDamage = Math.round(0.075f * Dungeon.hero.pointsInTalent(Talent.SHADOW_BLADE) * heroDamage);
+			heroDamage = Math.round(0.08f * Dungeon.hero.pointsInTalent(Talent.SHADOW_BLADE) * heroDamage);
 			if (heroDamage > 0){
 				damage += heroDamage;
 			}
@@ -225,7 +225,7 @@ public class ShadowClone extends ArmorAbility {
 		public int drRoll() {
 			int dr = super.drRoll();
 			int heroRoll = Dungeon.hero.drRoll();
-			heroRoll = Math.round(0.15f * Dungeon.hero.pointsInTalent(Talent.CLONED_ARMOR) * heroRoll);
+			heroRoll = Math.round(0.12f * Dungeon.hero.pointsInTalent(Talent.CLONED_ARMOR) * heroRoll);
 			if (heroRoll > 0){
 				dr += heroRoll;
 			}

@@ -1,10 +1,6 @@
 
 # ShatteredPixelDungeon-DetailedDescVersion #
 
-***FREEZING***
-
-This project is updating very slowly...
-
 ## General ##
 
 A private mod of ShatteredPixelDungeon (Evan) working as a dictionary and a tester.

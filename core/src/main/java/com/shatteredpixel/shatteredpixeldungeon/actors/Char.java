@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2021 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,12 +22,14 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Electricity;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ToxicGas;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Adrenaline;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ArcaneArmor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barkskin;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Berserk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding;
@@ -72,6 +74,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.rogue.DeathMark;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.Endure;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Elemental;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.MirrorImage;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.PrismaticImage;
 import com.shatteredpixel.shatteredpixeldungeon.expansion.mergeManagers.VirtualProc;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.AntiMagic;
@@ -86,6 +90,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAggression;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfFireblast;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfFrost;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLightning;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLivingEarth;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Blazing;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Blocking;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Grim;
@@ -311,7 +316,7 @@ public abstract class Char extends Actor {
 
 		} else if (hit( this, enemy, accMulti )) {
 			
-			int dr = enemy.drRoll();
+			int dr = Math.round(enemy.drRoll() * AscensionChallenge.statModifier(enemy));
 
 			Barkskin bark = enemy.buff(Barkskin.class);
 			if (bark != null)   dr += Random.NormalIntRange( 0 , bark.level() );
@@ -327,8 +332,10 @@ public abstract class Char extends Actor {
 					dr = 0;
 				}
 			}
-			
-			int dmg;
+
+			//we use a float here briefly so that we don't have to constantly round while
+			// potentially applying various multiplier effects
+			float dmg;
 			Preparation prep = buff(Preparation.class);
 			if (prep != null){
 				dmg = prep.damageRoll(this);
@@ -348,6 +355,13 @@ public abstract class Char extends Actor {
 				dmg *= 1.5f;
 			}
 
+			for (ChampionEnemy buff : buffs(ChampionEnemy.class)){
+				dmg *= buff.meleeDamageFactor();
+			}
+
+			dmg *= AscensionChallenge.statModifier(this);
+
+			//flat damage bonus is applied after positive multipliers, but before negative ones
 			dmg += dmgBonus;
 
 			//friendly endure
@@ -363,10 +377,15 @@ public abstract class Char extends Actor {
 			if (enemy.buff(ScrollOfChallenge.ChallengeArena.class) != null){
 				dmg *= 0.67f;
 			}
+
+			if ( buff(Weakness.class) != null ){
+				dmg *= 0.67f;
+			}
 			
-			int effectiveDamage = enemy.defenseProc( this, dmg );
+			int effectiveDamage = enemy.defenseProc( this, Math.round(dmg) );
 			effectiveDamage = Math.max( effectiveDamage - dr, 0 );
-			
+
+			//vulnerable specifically applies after armor reductions
 			if ( enemy.buff( Vulnerable.class ) != null){
 				effectiveDamage *= 1.33f;
 			}
@@ -390,7 +409,7 @@ public abstract class Char extends Actor {
 			if (buff(FireImbue.class) != null)  buff(FireImbue.class).proc(enemy);
 			if (buff(FrostImbue.class) != null) buff(FrostImbue.class).proc(enemy);
 
-			if (enemy.isAlive() && prep != null && prep.canKO(enemy)){
+			if (enemy.isAlive() && enemy.alignment != alignment && prep != null && prep.canKO(enemy)){
 				enemy.HP = 0;
 				if (!enemy.isAlive()) {
 					enemy.die(this);
@@ -412,6 +431,10 @@ public abstract class Char extends Actor {
 						return true;
 					}
 
+					if (this instanceof WandOfLivingEarth.EarthGuardian
+							|| this instanceof MirrorImage || this instanceof PrismaticImage){
+						Badges.validateDeathFromFriendlyMagic();
+					}
 					Dungeon.fail( getClass() );
 					GLog.n( Messages.capitalize(Messages.get(Char.class, "kill", name())) );
 					
@@ -460,6 +483,7 @@ public abstract class Char extends Actor {
 		for (ChampionEnemy buff : attacker.buffs(ChampionEnemy.class)){
 			acuRoll *= buff.evasionAndAccuracyFactor();
 		}
+		acuRoll *= AscensionChallenge.statModifier(attacker);
 		
 		float defRoll = Random.Float( defStat );
 		if (defender.buff(Bless.class) != null) defRoll *= 1.25f;
@@ -467,6 +491,7 @@ public abstract class Char extends Actor {
 		for (ChampionEnemy buff : defender.buffs(ChampionEnemy.class)){
 			defRoll *= buff.evasionAndAccuracyFactor();
 		}
+		defRoll *= AscensionChallenge.statModifier(defender);
 		
 		return (acuRoll * accMulti) >= defRoll;
 	}
@@ -495,11 +520,7 @@ public abstract class Char extends Actor {
 	// atm attack is always post-armor and defence is already pre-armor
 	
 	public int attackProc( Char enemy, int damage ) {
-		if ( buff(Weakness.class) != null ){
-			damage *= 0.67f;
-		}
 		for (ChampionEnemy buff : buffs(ChampionEnemy.class)){
-			damage *= buff.meleeDamageFactor();
 			buff.onAttackProc( enemy );
 		}
 		return damage;
@@ -550,6 +571,7 @@ public abstract class Char extends Actor {
 		for (ChampionEnemy buff : buffs(ChampionEnemy.class)){
 			dmg = (int) Math.ceil(dmg * buff.damageTakenFactor());
 		}
+		dmg = (int)Math.ceil(dmg / AscensionChallenge.statModifier(this));
 
 		if (!(src instanceof LifeLink) && buff(LifeLink.class) != null){
 			HashSet<LifeLink> links = buffs(LifeLink.class);

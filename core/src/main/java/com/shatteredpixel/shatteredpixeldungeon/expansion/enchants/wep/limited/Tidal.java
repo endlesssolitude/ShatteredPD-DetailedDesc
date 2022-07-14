@@ -35,7 +35,7 @@ public class Tidal extends CountInscription {
                 Dungeon.level.setCellToWater(true, i);
                 Char ch = Actor.findChar(i);
                 if(ch != null && ch != attacker){
-                    WandOfBlastWave.throwChar(ch, HitBack.hitBack(attacker, ch), dist);
+                    WandOfBlastWave.throwChar(ch, HitBack.hitBack(attacker, ch), dist, true, true, attacker.getClass());
                     ch.damage(GME.accurateRound(damage*(.25f+.01f*Math.min(weapon.buffedLvl(), 10))), attacker);
                 }
             }

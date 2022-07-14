@@ -39,7 +39,7 @@ public class ScorpioH extends Scorpio {
         int d = super.attackProc(enemy, damage);
         hasAttacked = Math.min(8, ++hasAttacked);
         if(canHeadShot(enemy)) {
-            d = Math.max(Math.max(enemy.HP - 1, enemy.HT * 2 / 3), d);
+            d = Math.max(Math.min(enemy.HP - 1, enemy.HT * 2 / 3), d + (enemy.drRoll() + enemy.drRoll()) * hasAttacked / 24);
             Wound.hit(enemy);
             enemy.sprite.showStatus(CharSprite.NEGATIVE, M.L(this, "head_shot"));
             enemy.sprite.bloodBurstA(sprite.center(), enemy.HT);

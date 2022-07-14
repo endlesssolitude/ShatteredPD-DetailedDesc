@@ -5,9 +5,9 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Annoying;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Dazzling;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Displacing;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Exhausting;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Fragile;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Explosive;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Friendly;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Polarized;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Sacrificial;
@@ -86,8 +86,8 @@ public class CustomWeapon extends MeleeWeapon {
 
         enchPrio.put(Annoying.class, 0);
         enchPrio.put(Displacing.class, 1);
-        enchPrio.put(Exhausting.class, 0);
-        enchPrio.put(Fragile.class, 2);
+        enchPrio.put(Dazzling.class, 0);
+        enchPrio.put(Explosive.class, 2);
         enchPrio.put(Friendly.class, 0);
         enchPrio.put(Polarized.class, 2);
         enchPrio.put(Sacrificial.class, 1);
@@ -133,6 +133,7 @@ public class CustomWeapon extends MeleeWeapon {
             }
 
         }
+
         return damage;
     }
 

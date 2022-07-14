@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2021 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,13 @@ import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.GameMath;
 
+import java.text.DecimalFormat;
+
 public class Berserk extends Buff {
+
+	{
+		type = buffType.POSITIVE;
+	}
 
 	private enum State{
 		NORMAL, BERSERK, RECOVERING
@@ -116,9 +122,8 @@ public class Berserk extends Buff {
 		return Math.min(1f, power);
 	}
 
-	public int damageFactor(int dmg){
-		float bonus = Math.min(1.5f, 1f + (power / 2f));
-		return Math.round(dmg * bonus);
+	public float damageFactor(float dmg){
+		return dmg * Math.min(1.5f, 1f + (power / 2f));
 	}
 
 	public boolean berserking(){
@@ -143,7 +148,7 @@ public class Berserk extends Buff {
 	
 	public void damage(int damage){
 		if (state == State.RECOVERING) return;
-		float maxPower = 1f + 0.15f*((Hero)target).pointsInTalent(Talent.ENDLESS_RAGE);
+		float maxPower = 1f + 0.1f*((Hero)target).pointsInTalent(Talent.ENDLESS_RAGE);
 		power = Math.min(maxPower, power + (damage/(float)target.HT)/3f );
 		BuffIndicator.refreshHero(); //show new power immediately
 		powerLossBuffer = 3; //2 turns until rage starts dropping
@@ -192,6 +197,15 @@ public class Berserk extends Buff {
 		}
 	}
 
+	public String iconTextDisplay(){
+		switch (state){
+			case NORMAL: case BERSERK: default:
+				return (int)(power*100) + "%";
+			case RECOVERING:
+				return new DecimalFormat("#.#").format(levelRecovery);
+		}
+	}
+
 	@Override
 	public String toString() {
 		switch (state){
@@ -206,7 +220,7 @@ public class Berserk extends Buff {
 
 	@Override
 	public String desc() {
-		float dispDamage = (damageFactor(10000) / 100f) - 100f;
+		float dispDamage = ((int)damageFactor(10000) / 100f) - 100f;
 		switch (state){
 			case NORMAL: default:
 				return Messages.get(this, "angered_desc", Math.floor(power * 100f), dispDamage);

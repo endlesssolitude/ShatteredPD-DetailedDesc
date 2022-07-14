@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2021 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ public class Bestiary {
 	}
 
 	public static ArrayList<Class<? extends Mob>> getMobRotation( int depth ){
-		ArrayList<Class<? extends Mob>> mobs;
+		ArrayList<Class<? extends Mob>> mobs = standardMobRotation( depth );
 		if(!hasReinforce(depth)){
 			mobs = standardMobRotation(depth);
 			addRareMobs(depth, mobs);
@@ -43,7 +43,6 @@ public class Bestiary {
 		}else{
 			mobs = MobList.HardMobList(depth);
 		}
-		Random.shuffle(mobs);
 		return mobs;
 	}
 	
@@ -136,10 +135,10 @@ public class Bestiary {
 				
 			// City
 			case 16:
-				//2x ghoul, 2x elemental, 1x warlock
+				//3x ghoul, 1x elemental, 1x warlock
 				return new ArrayList<>(Arrays.asList(
-						Ghoul.class, Ghoul.class,
-						Elemental.random(), Elemental.random(),
+						Ghoul.class, Ghoul.class, Ghoul.class,
+						Elemental.random(),
 						Warlock.class));
 			case 17:
 				//1x ghoul, 2x elemental, 1x warlock, 1x monk

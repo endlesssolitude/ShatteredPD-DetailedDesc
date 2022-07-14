@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2021 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,8 +39,10 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
+import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
 import com.watabou.utils.Bundle;
@@ -70,8 +72,9 @@ public class TimekeepersHourglass extends Artifact {
 	@Override
 	public ArrayList<String> actions( Hero hero ) {
 		ArrayList<String> actions = super.actions( hero );
-		if (isEquipped( hero ) && charge > 0 && !cursed)
+		if (isEquipped( hero ) && !cursed && (charge > 0 || activeBuff != null)) {
 			actions.add(AC_ACTIVATE);
+		}
 		return actions;
 	}
 
@@ -262,17 +265,19 @@ public class TimekeepersHourglass extends Artifact {
 
 				int usedCharge = Math.min(charge, 2);
 				//buffs always act last, so the stasis buff should end a turn early.
-				spend((5*usedCharge) - 1);
-				((Hero) target).spendAndNext(5*usedCharge);
+				spend(5*usedCharge);
 
 				//shouldn't punish the player for going into stasis frequently
 				Hunger hunger = Buff.affect(target, Hunger.class);
-				if (hunger != null && !hunger.isStarving())
-					hunger.satisfy(5*usedCharge);
+				if (hunger != null && !hunger.isStarving()) {
+					hunger.satisfy(5 * usedCharge);
+				}
 
 				charge -= usedCharge;
 
 				target.invisible++;
+				target.paralysed++;
+				target.next();
 
 				updateQuickslot();
 
@@ -294,8 +299,8 @@ public class TimekeepersHourglass extends Artifact {
 
 		@Override
 		public void detach() {
-			if (target.invisible > 0)
-				target.invisible --;
+			if (target.invisible > 0) target.invisible--;
+			if (target.paralysed > 0) target.paralysed--;
 			super.detach();
 			activeBuff = null;
 			Dungeon.observe();
@@ -378,6 +383,36 @@ public class TimekeepersHourglass extends Artifact {
 					if (mob.paralysed <= 0) mob.sprite.remove(CharSprite.State.PARALYSED);
 				}
 			}
+		}
+
+		@Override
+		public int icon() {
+			return BuffIndicator.TIME;
+		}
+
+		@Override
+		public void tintIcon(Image icon) {
+			icon.hardlight(1f, 0.5f, 0);
+		}
+
+		@Override
+		public float iconFadePercent() {
+			return Math.max(0, (2f - (turnsToCost+1)) / 2f);
+		}
+
+		@Override
+		public String iconTextDisplay() {
+			return Integer.toString((int)turnsToCost+1);
+		}
+
+		@Override
+		public String toString() {
+			return Messages.get(this, "name");
+		}
+
+		@Override
+		public String desc() {
+			return Messages.get(this, "desc");
 		}
 
 		private static final String PRESSES = "presses";

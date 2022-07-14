@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2021 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,13 +51,7 @@ public class Fadeleaf extends Plant {
 			
 			((Hero)ch).curAction = null;
 			
-			if (((Hero) ch).subClass == HeroSubClass.WARDEN){
-				
-				if (Dungeon.bossLevel()) {
-					GLog.w( Messages.get(ScrollOfTeleportation.class, "no_tele") );
-					return;
-					
-				}
+			if (((Hero) ch).subClass == HeroSubClass.WARDEN && Dungeon.interfloorTeleportAllowed()){
 
 				TimekeepersHourglass.timeFreeze timeFreeze = Dungeon.hero.buff(TimekeepersHourglass.timeFreeze.class);
 				if (timeFreeze != null) timeFreeze.disarmPressedTraps();
@@ -66,6 +60,7 @@ public class Fadeleaf extends Plant {
 				
 				InterlevelScene.mode = InterlevelScene.Mode.RETURN;
 				InterlevelScene.returnDepth = Math.max(1, (Dungeon.depth - 1));
+				InterlevelScene.returnBranch = 0;
 				InterlevelScene.returnPos = -2;
 				Game.switchScene( InterlevelScene.class );
 				

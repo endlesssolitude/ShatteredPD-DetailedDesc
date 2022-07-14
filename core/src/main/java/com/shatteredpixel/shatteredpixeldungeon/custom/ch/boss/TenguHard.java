@@ -84,7 +84,7 @@ public class TenguHard extends Boss{
         if(((HardTenguLevel)(Dungeon.level)).state() == HardTenguLevel.State.FIGHT_ARENA) {
             if(HP <= 80) {
                 if (buff(BackgroundBeamCounter.class) == null) {
-                    Buff.affect(this, BackgroundBeamCounter.class).setDensity(7, 7, 2, 3);
+                    Buff.affect(this, BackgroundBeamCounter.class).setDensity(9, 9, 1, 1);
                     yell(Messages.get(this, "more_interesting"));
                 }
             }
@@ -253,7 +253,7 @@ public class TenguHard extends Boss{
                     //trim it to just be the part that goes past them
                     trajectory = new Ballistica(trajectory.collisionPos, trajectory.path.get(trajectory.path.size()-1), Ballistica.PROJECTILE);
                     //knock them back along that ballistica
-                    WandOfBlastWave.throwChar(enemy, trajectory, comboSinceJump/3);
+                    WandOfBlastWave.throwChar(enemy, trajectory, comboSinceJump/3, true, true, TenguHard.class);
             }
         }
         return damage;

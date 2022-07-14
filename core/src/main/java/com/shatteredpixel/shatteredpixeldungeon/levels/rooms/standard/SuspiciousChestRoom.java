@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2021 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,8 +21,6 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard;
 
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
@@ -63,14 +61,10 @@ public class SuspiciousChestRoom extends StandardRoom {
 
 		Painter.set(level, center, Terrain.PEDESTAL);
 
-		if(Dungeon.isChallenged(Challenges.MIMIC_DUNGEON)){
+		if (Random.Int(3) == 0) {
 			level.mobs.add(Mimic.spawnAt(center, i));
-		}else {
-			if (Random.Int(3) == 0) {
-				level.mobs.add(Mimic.spawnAt(center, i));
-			} else {
-				level.drop(i, center).type = Heap.Type.CHEST;
-			}
+		} else {
+			level.drop(i, center).type = Heap.Type.CHEST;
 		}
 	}
 }

@@ -700,7 +700,7 @@ public class DwarfKingHard extends Boss{
             super.detach();
             for (Mob m : Dungeon.level.mobs){
                 if (m instanceof DwarfKingHard){
-                    m.damage(24, this);
+                    m.damage(30, this);
                 }
             }
         }
@@ -845,18 +845,15 @@ public class DwarfKingHard extends Boss{
             summonSubject(1, DKGhoul.class);
             summonSubject(5, DKMonk.class);
             ++wave;
-            spend(TICK*12);
+            spend(TICK*13);
         }else if(wave == 2){
             summonSubject(1, DKGhoul.class);
             summonSubject(2, DKWarlock.class);
-            summonSubject(6, DKGhoul.class);
-            summonSubject(6, DKGhoul.class);
             ++wave;
-            spend(TICK*15);
+            spend(TICK*14);
         }else if(wave == 3){
             yell(Messages.get(this, "wave_2"));
             summonSubject(1, DKGhoul.class);
-            summonSubject(2, DKWarlock.class);
             summonSubject(2, DKGhoul.class);
             summonSubject(11, DKMonk.class);
             ++wave;
@@ -865,13 +862,11 @@ public class DwarfKingHard extends Boss{
             summonSubject(2, DKGhoul.class);
             summonSubject(5, DKWarlock.class);
             summonSubject(5, DKMonk.class);
-            summonSubject(2, DKGhoul.class);
             ++wave;
             spend(TICK*14);
         }else if(wave == 5){
             yell(Messages.get(this,"wave_3"));
-            summonSubject(2, DKGhoul.class);
-            summonSubject(4, DKWarlock.class);
+            summonSubject(2, DKWarlock.class);
             summonSubject(4, DKMonk.class);
             summonSubject(8, DKMonk.class);
             ++wave;

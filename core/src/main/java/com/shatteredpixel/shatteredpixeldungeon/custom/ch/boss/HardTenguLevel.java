@@ -18,8 +18,10 @@ import com.shatteredpixel.shatteredpixeldungeon.items.keys.IronKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.HeavyBoomerang;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Patch;
+import com.shatteredpixel.shatteredpixeldungeon.levels.PrisonBossLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.PrisonLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
+import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.TenguDartTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
@@ -97,6 +99,19 @@ public class HardTenguLevel extends Level {
         super.restoreFromBundle(bundle);
         state = bundle.getEnum( STATE, State.class );
 
+        if (bundle.contains("entrance")){
+            transitions.clear();
+            if (state == State.START || state == State.WON){
+                transitions.add(new LevelTransition(this, ENTRANCE_POS, LevelTransition.Type.REGULAR_ENTRANCE));
+            }
+            if (state == State.WON){
+                LevelTransition exit = new LevelTransition(this, pointToCell(levelExit), LevelTransition.Type.REGULAR_EXIT);
+                exit.right+=2;
+                exit.bottom+=3;
+                transitions.add(exit);
+            }
+        }
+
         //in some states tengu won't be in the world, in others he will be.
         if (state == State.START || state == State.TRAP_MAZES || state == State.FIGHT_PAUSE) {
             tengu = (TenguHard) bundle.get( TENGU );
@@ -141,15 +156,14 @@ public class HardTenguLevel extends Level {
             new Point(8, 23), new Point(12, 23)};
 
     private void setMapStart(){
-        entrance = ENTRANCE_POS;
-        exit = 0;
+        transitions.add(new LevelTransition(this, ENTRANCE_POS, LevelTransition.Type.REGULAR_ENTRANCE));
 
         Painter.fill(this, 0, 0, 32, 32, Terrain.WALL);
 
         //Start
         Painter.fill(this, entranceRoom, Terrain.WALL);
         Painter.fill(this, entranceRoom, 1, Terrain.EMPTY);
-        Painter.set(this, entrance, Terrain.ENTRANCE);
+        Painter.set(this, ENTRANCE_POS, Terrain.ENTRANCE);
 
         Painter.fill(this, startHallway, Terrain.WALL);
         Painter.fill(this, startHallway, 1, Terrain.EMPTY);
@@ -273,7 +287,12 @@ public class HardTenguLevel extends Level {
             cell += width();
         }
 
-        exit = pointToCell(levelExit);
+        LevelTransition exit = new LevelTransition(this, pointToCell(levelExit), LevelTransition.Type.REGULAR_EXIT);
+        exit.right+=2;
+        exit.bottom+=3;
+        transitions.add(exit);
+
+
     }
 
     //keep track of removed items as the level is changed. Dump them back into the level at the end.

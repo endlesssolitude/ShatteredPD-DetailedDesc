@@ -79,7 +79,7 @@ public class Enchanter extends ChallengeItem {
         private EnchRecipe currentAvailableRecipe;
 
         public WndEnchant(){
-            super(0, 0, 0, Chrome.get(Chrome.Type.WINDOW_SILVER));
+            super(0, 0, Chrome.get(Chrome.Type.WINDOW_SILVER));
 
             resize(WIDTH, 100);
 
@@ -385,7 +385,7 @@ public class Enchanter extends ChallengeItem {
         private final ArrayList<Integer> triggers;
         private ScrollPane sp;
         public WndInfoInscription(){
-            super(0, 0,0, Chrome.get(Chrome.Type.WINDOW_SILVER));
+            super(0, 0, Chrome.get(Chrome.Type.WINDOW_SILVER));
             upperBoundary = new ArrayList<>(50);
             bottomBoundary = new ArrayList<>(50);
             storedInscription = new ArrayList<>(50);

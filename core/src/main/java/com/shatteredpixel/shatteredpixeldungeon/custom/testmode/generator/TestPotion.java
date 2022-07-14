@@ -109,6 +109,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfShock;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.AdrenalineDart;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.BlindingDart;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.ChillingDart;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.CleansingDart;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.Dart;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.DisplacingDart;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.HealingDart;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.HolyDart;
@@ -117,15 +119,14 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.Para
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.PoisonDart;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.RotDart;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.ShockingDart;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.SleepDart;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.TippedDart;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Blindweed;
-import com.shatteredpixel.shatteredpixeldungeon.plants.Dreamfoil;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Earthroot;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Fadeleaf;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Firebloom;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Icecap;
+import com.shatteredpixel.shatteredpixeldungeon.plants.Mageroyal;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Rotberry;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Sorrowmoss;
@@ -299,7 +300,7 @@ public class TestPotion extends TestGenerator {
             case 8:
                 return Earthroot.Seed.class;
             case 9:
-                return Dreamfoil.Seed.class;
+                return Mageroyal.Seed.class;
             case 10:
                 return Rotberry.Seed.class;
             case 11:
@@ -319,7 +320,7 @@ public class TestPotion extends TestGenerator {
             case 6: return IncendiaryDart.class;
             case 7: return DisplacingDart.class;
             case 8: return ParalyticDart.class;
-            case 9: return SleepDart.class;
+            case 9: return CleansingDart.class;
             case 10: return RotDart.class;
             case 11: default: return PoisonDart.class;
         }

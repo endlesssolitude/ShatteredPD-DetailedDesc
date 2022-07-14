@@ -7,9 +7,9 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Annoying;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Dazzling;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Displacing;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Exhausting;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Fragile;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Explosive;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Friendly;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Polarized;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Sacrificial;
@@ -162,9 +162,9 @@ public class TestMelee extends TestGenerator {
             case 1:
                 return Displacing.class;
             case 2:
-                return Exhausting.class;
+                return Explosive.class;
             case 3:
-                return Fragile.class;
+                return Dazzling.class;
             case 4:
                 return Friendly.class;
             case 5:

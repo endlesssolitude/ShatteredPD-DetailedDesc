@@ -23,7 +23,7 @@ public class RatH extends Rat {
         while (toSummon-- > 0) {
             AlbinoH white = new AlbinoH();
             white.pos = Dungeon.level.randomRespawnCell(white);
-            white.setModifier(Dungeon.hero.lvl - 1, true);
+            white.setModifier(Dungeon.hero.lvl / 2 , true);
             GameScene.add(white, 1f);
             white.beckon(pos);
 

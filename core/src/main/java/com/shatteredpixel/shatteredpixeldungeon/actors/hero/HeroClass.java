@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2021 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,7 +48,6 @@ import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.CustomWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.ImmortalShieldAffecter;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.LevelTeleporter;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.MobPlacer;
-import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.ScrollOfDebug;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.TestBag;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.TimeReverser;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.TrapPlacer;
@@ -151,6 +150,7 @@ public enum HeroClass {
 		}
 
 		doChallengeSpawn();
+
 
 	}
 
@@ -396,12 +396,8 @@ public enum HeroClass {
 
 			new WandOfReflectDisintegration().identify().collect();
 
-			//new ScrollOfTestInch().quantity(100).identify().collect();
-
-			//new NumInputTester().collect();
-
-			//new ScrollOfDebug().identify().collect();
 		}
 	}
+
 
 }

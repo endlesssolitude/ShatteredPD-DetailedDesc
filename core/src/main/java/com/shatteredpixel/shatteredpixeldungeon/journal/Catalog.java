@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2021 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -217,13 +217,11 @@ public enum Catalog {
 		RINGS.seen.put( RingOfWealth.class,                 true);
 	
 		ARTIFACTS.seen.put( AlchemistsToolkit.class,        true);
-		//ARTIFACTS.seen.put( CapeOfThorns.class,           false);
 		ARTIFACTS.seen.put( ChaliceOfBlood.class,           true);
 		ARTIFACTS.seen.put( CloakOfShadows.class,           true);
 		ARTIFACTS.seen.put( DriedRose.class,                true);
 		ARTIFACTS.seen.put( EtherealChains.class,           true);
 		ARTIFACTS.seen.put( HornOfPlenty.class,             true);
-		//ARTIFACTS.seen.put( LloydsBeacon.class,             false);
 		ARTIFACTS.seen.put( MasterThievesArmband.class,     true);
 		ARTIFACTS.seen.put( SandalsOfNature.class,          true);
 		ARTIFACTS.seen.put( TalismanOfForesight.class,      true);

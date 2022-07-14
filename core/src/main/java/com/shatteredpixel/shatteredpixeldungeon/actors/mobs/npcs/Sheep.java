@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2021 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ public class Sheep extends NPC {
 
 		} else {
 			initialized = true;
-			spend( lifespan + Random.Float(2) );
+			spend( lifespan + Random.Float(-2, 2) );
 		}
 		return true;
 	}
@@ -77,6 +77,10 @@ public class Sheep extends NPC {
 		if (c == Dungeon.hero) {
 			Dungeon.hero.spendAndNext(1f);
 			Sample.INSTANCE.play(Assets.Sounds.SHEEP, 1, Random.Float(0.91f, 1.1f));
+			//sheep summoned by woolly bomb can be dispelled by interacting
+			if (lifespan >= 20){
+				spend(-cooldown());
+			}
 		}
 		return true;
 	}

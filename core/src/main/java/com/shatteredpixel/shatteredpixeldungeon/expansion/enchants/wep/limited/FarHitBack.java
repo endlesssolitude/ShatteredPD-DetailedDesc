@@ -19,11 +19,11 @@ public class FarHitBack extends CountInscription {
     public int proc(Weapon weapon, Char attacker, Char defender, int damage) {
         int opposite = attacker.pos + (attacker.pos - defender.pos);
         Ballistica trajectory = new Ballistica(attacker.pos, opposite, Ballistica.MAGIC_BOLT);
-        WandOfBlastWave.throwChar(attacker, trajectory, 2, true);
+        WandOfBlastWave.throwChar(attacker, trajectory, 2, true, true, attacker.getClass());
 
         trajectory = new Ballistica(attacker.pos, defender.pos, Ballistica.STOP_TARGET);
         trajectory = new Ballistica(trajectory.collisionPos, trajectory.path.get(trajectory.path.size()-1), Ballistica.PROJECTILE);
-        WandOfBlastWave.throwChar(defender, trajectory, Math.min(7 + weapon.buffedLvl()*2/3, 14), true);
+        WandOfBlastWave.throwChar(defender, trajectory, Math.min(7 + weapon.buffedLvl()*2/3, 14), true, true, attacker.getClass());
 
         consume(weapon, attacker);
         return GME.accurateRound(damage / 2f);
@@ -37,7 +37,7 @@ public class FarHitBack extends CountInscription {
             if(!ch.properties().contains(Char.Property.IMMOVABLE) && ch != attacker){
                 float distance = Dungeon.level.trueDistance(attacker.pos, ch.pos);
                 if(distance < maxDist){
-                    WandOfBlastWave.throwChar(ch, HitBack.hitBack(attacker, ch), GME.accurateRound(2f * (maxDist - distance)));
+                    WandOfBlastWave.throwChar(ch, HitBack.hitBack(attacker, ch), GME.accurateRound(2f * (maxDist - distance)) ,true, true, attacker.getClass());
                 }
             }
         }

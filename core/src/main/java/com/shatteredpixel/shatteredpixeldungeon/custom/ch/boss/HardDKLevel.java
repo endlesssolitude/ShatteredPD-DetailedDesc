@@ -14,6 +14,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.CityLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.HallsLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
+import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.CityPainter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.ImpShopRoom;
@@ -84,6 +85,11 @@ public class HardDKLevel extends Level {
     @Override
     public void restoreFromBundle( Bundle bundle ) {
         super.restoreFromBundle( bundle );
+        if (bundle.contains("exit")){
+            LevelTransition exit = getTransition(LevelTransition.Type.REGULAR_EXIT);
+            exit.set(end.left+4, end.top+4, end.left+4+6, end.top+4+4);
+            transitions.add(exit);
+        }
         impShop = (ImpShopRoom) bundle.get( IMP_SHOP );
         if (map[topDoor] != Terrain.LOCKED_DOOR && Imp.Quest.isCompleted() && !impShop.shopSpawned()){
             spawnShop();
@@ -112,8 +118,9 @@ public class HardDKLevel extends Level {
 
         Painter.set(this, c.x, entry.top, Terrain.DOOR);
 
-        entrance = c.x + (c.y+2)*width();
+        int entrance = c.x + (c.y+2)*width();
         Painter.set(this, entrance, Terrain.ENTRANCE);
+        transitions.add(new LevelTransition(this, entrance, LevelTransition.Type.REGULAR_ENTRANCE));
 
         //DK's throne room
         Painter.fillDiamond(this, arena, 1, Terrain.EMPTY);
@@ -138,7 +145,11 @@ public class HardDKLevel extends Level {
         Painter.fill(this, end, Terrain.CHASM);
         Painter.fill(this, end.left+4, end.top+5, 7, 18, Terrain.EMPTY);
         Painter.fill(this, end.left+4, end.top+5, 7, 4, Terrain.EXIT);
-        exit = end.left+7 + (end.top+8)*width();
+
+        int exitCell = end.left+7 + (end.top+8)*width();
+        LevelTransition exit = new LevelTransition(this, exitCell, LevelTransition.Type.REGULAR_EXIT);
+        exit.set(end.left+4, end.top+4, end.left+4+6, end.top+4+4);
+        transitions.add(exit);
 
         impShop = new ImpShopRoom();
         impShop.set(end.left+3, end.top+12, end.left+11, end.top+20);

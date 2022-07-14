@@ -14,7 +14,7 @@ public class SlimeH extends Slime {
     public int attackProc(Char enemy, int damage){
         Ballistica trajectory = new Ballistica(pos, enemy.pos, Ballistica.STOP_TARGET);
         trajectory = new Ballistica(trajectory.collisionPos, trajectory.path.get(trajectory.path.size()-1), Ballistica.PROJECTILE);
-        WandOfBlastWave.throwChar(enemy, trajectory, 2);
+        WandOfBlastWave.throwChar(enemy, trajectory, 2, true, false, SlimeH.class);
         return super.attackProc(enemy,damage);
     }
 

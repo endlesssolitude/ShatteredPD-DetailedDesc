@@ -50,11 +50,11 @@ import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfFlock;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Greatsword;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.Dart;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Blindweed;
-import com.shatteredpixel.shatteredpixeldungeon.plants.Dreamfoil;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Earthroot;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Fadeleaf;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Firebloom;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Icecap;
+import com.shatteredpixel.shatteredpixeldungeon.plants.Mageroyal;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Rotberry;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Sorrowmoss;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Starflower;
@@ -137,7 +137,7 @@ public class LazyTest extends TestGenerator {
             new StoneOfAugmentation().quantity(100).collect();
 
             new Blindweed.Seed().quantity(100).identify().collect();
-            new Dreamfoil.Seed().quantity(100).identify().collect();
+            new Mageroyal.Seed().quantity(100).identify().collect();
             new Earthroot.Seed().quantity(100).identify().collect();
             new Fadeleaf.Seed().quantity(100).identify().collect();
             new Firebloom.Seed().quantity(100).identify().collect();

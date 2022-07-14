@@ -205,7 +205,7 @@ public enum DictionaryJournal {
 
         //plants
         PLANTS.d.put("seed_blindweed",      ItemSpriteSheet.SEED_BLINDWEED);
-        PLANTS.d.put("seed_dreamfoil",      ItemSpriteSheet.SEED_DREAMFOIL);
+        PLANTS.d.put("seed_dreamfoil",      ItemSpriteSheet.SEED_MAGEROYAL);
         PLANTS.d.put("seed_earthroot",      ItemSpriteSheet.SEED_EARTHROOT);
         PLANTS.d.put("seed_fadeleaf",       ItemSpriteSheet.SEED_FADELEAF);
         PLANTS.d.put("seed_firebloom",      ItemSpriteSheet.SEED_FIREBLOOM);

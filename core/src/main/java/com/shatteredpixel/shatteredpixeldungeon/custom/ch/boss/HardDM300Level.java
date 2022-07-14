@@ -13,6 +13,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.CavesLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.CityLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
+import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.ToxicTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -136,10 +137,18 @@ public class HardDM300Level extends Level {
             }
         }
 
-        entrance = 10+19*21;
-        exit = 10 + 3*21;
+        int entranceCell = 10 + 19*21;
+        int exitCell = 10 + 3*21;
+        this.entrance = entranceCell;
+        this.exit = exitCell;
 
-        map[exit] = Terrain.LOCKED_EXIT;
+        LevelTransition entrance = new LevelTransition(this, entranceCell, LevelTransition.Type.REGULAR_ENTRANCE);
+        transitions.add(entrance);
+
+        LevelTransition exit = new LevelTransition(this, exitCell, LevelTransition.Type.REGULAR_EXIT);
+        transitions.add(exit);
+
+        map[exitCell] = Terrain.LOCKED_EXIT;
 
         return true;
     }

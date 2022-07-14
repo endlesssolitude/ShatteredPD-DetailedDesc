@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2021 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,6 +38,8 @@ public class Challenges {
 	public static final int NO_SCROLLS		    = 64;
 	public static final int CHAMPION_ENEMIES	= 128;
 	public static final int STRONGER_BOSSES 	= 256;
+
+	public static final int SPD_CHALLENGE_MAX = 511;
 
 	public static final int TEST_MODE			= 1<<9;
 	//hero.live for buff, mimic spawning
@@ -83,7 +85,7 @@ public class Challenges {
 	public static int activeChallenges(){
 		int chCount = 0;
 		for (long ch : Challenges.MASKS){
-			if ((Dungeon.challenges & ch) != 0) chCount++;
+			if ((Dungeon.challenges & ch) != 0 && ch <= SPD_CHALLENGE_MAX) chCount++;
 		}
 		return chCount;
 	}

@@ -246,7 +246,7 @@ public class YogReal extends Boss{
             int dist = Dungeon.level.distance(pos, ch.pos);
             if(dist <= 4 && dist > 0){
                 Ballistica ba = HitBack.bounceBack(ch, this);
-                WandOfBlastWave.throwChar(ch, ba, 10 - 2 * dist);
+                WandOfBlastWave.throwChar(ch, ba, 10 - 2 * dist, true, false, YogReal.class);
             }
         }
 

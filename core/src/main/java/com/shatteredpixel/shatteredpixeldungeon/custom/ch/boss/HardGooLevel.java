@@ -19,6 +19,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.HallsLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.SewerLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
+import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.watabou.utils.Random;
 
@@ -53,8 +54,14 @@ public class HardGooLevel extends Level {
                 map[i] = codeToTerrain(codedMap[i]);
             }
 
-            entrance = ENTRANCE;
-            exit = EXIT;
+            this.entrance = ENTRANCE;
+            this.exit = EXIT;
+
+            LevelTransition entrance = new LevelTransition(this, ENTRANCE, LevelTransition.Type.REGULAR_ENTRANCE);
+            transitions.add(entrance);
+
+            LevelTransition exit = new LevelTransition(this, EXIT, LevelTransition.Type.REGULAR_EXIT);
+            transitions.add(exit);
 
             return true;
         }

@@ -456,7 +456,7 @@ public class MimicForChallenge extends Mimic {
         int modlevel = (defendMod>>DEF_PUSH_BACK)&0x3;
         if(modlevel>0){
             if(Random.Int(2)==0) {
-                WandOfBlastWave.throwChar(enemy, new Ballistica(enemy.pos, 2*enemy.pos - this.pos, Ballistica.MAGIC_BOLT), 1 + modlevel );
+                WandOfBlastWave.throwChar(enemy, new Ballistica(enemy.pos, 2*enemy.pos - this.pos, Ballistica.MAGIC_BOLT), 1 + modlevel, true, true, MimicForChallenge.class );
                 damage = damage/5;
             }
         }
@@ -595,7 +595,7 @@ public class MimicForChallenge extends Mimic {
                 Ballistica trajectory = new Ballistica(this.pos, enemy.pos, Ballistica.STOP_TARGET);
                 //trim it to just be the part that goes past them
                 trajectory = new Ballistica(trajectory.collisionPos, trajectory.path.get(trajectory.path.size() - 1), Ballistica.PROJECTILE);
-                WandOfBlastWave.throwChar(enemy, trajectory, 2 * modlevel);
+                WandOfBlastWave.throwChar(enemy, trajectory, 2 * modlevel, true, true, MimicForChallenge.class);
             }
         }
     }

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2021 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Amok;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
@@ -57,6 +58,10 @@ import com.watabou.utils.Random;
 
 public class SmokeBomb extends ArmorAbility {
 
+	{
+		baseChargeUse = 50;
+	}
+
 	@Override
 	public String targetingPrompt() {
 		return Messages.get(this, "prompt");
@@ -76,7 +81,7 @@ public class SmokeBomb extends ArmorAbility {
 	protected void activate(ClassArmor armor, Hero hero, Integer target) {
 		if (target != null) {
 
-			PathFinder.buildDistanceMap(hero.pos, BArray.not(Dungeon.level.solid,null), 6);
+			PathFinder.buildDistanceMap(hero.pos, BArray.not(Dungeon.level.solid,null), 10);
 
 			if ( PathFinder.distance[target] == Integer.MAX_VALUE ||
 					!Dungeon.level.heroFOV[target] ||
@@ -170,6 +175,7 @@ public class SmokeBomb extends ArmorAbility {
 			immunities.add( Amok.class );
 			immunities.add( Charm.class );
 			immunities.add( Sleep.class );
+			immunities.add( AllyBuff.class );
 		}
 
 	}

@@ -255,7 +255,7 @@ public class  EyeH extends Mob {
 
     //generates an average of 1 dew, 0.25 seeds, and 0.25 stones
     @Override
-    protected Item createLoot() {
+    public Item createLoot() {
         Item loot;
         switch(Random.Int(4)){
             case 0: case 1: default:

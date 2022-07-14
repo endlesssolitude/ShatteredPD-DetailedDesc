@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2021 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,6 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurse;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
@@ -46,6 +47,9 @@ public class Belongings implements Iterable<Item> {
 	private Hero owner;
 
 	public static class Backpack extends Bag {
+		{
+			image = ItemSpriteSheet.BACKPACK;
+		}
 		public int capacity(){
 			int cap = super.capacity();
 			for (Item item : items){
@@ -306,6 +310,7 @@ public class Belongings implements Iterable<Item> {
 				item.cursedKnown = true;
 			}
 		}
+		Item.updateQuickslot();
 	}
 	
 	public void uncurseEquipped() {

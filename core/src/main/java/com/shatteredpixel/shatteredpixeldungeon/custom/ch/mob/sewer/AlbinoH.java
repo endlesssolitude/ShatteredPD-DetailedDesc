@@ -13,7 +13,7 @@ public class AlbinoH extends Albino {
     private int modifier = 0;
 
     public void setModifier(int modifier, boolean init) {
-        this.modifier = modifier;
+        this.modifier = Math.min(modifier, 5);
         setAttribute(init);
     }
 

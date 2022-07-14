@@ -277,7 +277,7 @@ public class BruteH extends Mob {
                                                      float dist = Dungeon.level.trueDistance(ch.pos, target.pos);
                                                      if (dist < 3.5f) {
                                                          int back = Math.round((3.5f - dist) * (3.5f - dist) / 2f + (4.5f - dist));
-                                                         WandOfBlastWave.throwChar(ch, HitBack.hitBack(target, ch), back);
+                                                         WandOfBlastWave.throwChar(ch, HitBack.hitBack(target, ch), back, true, false, BruteH.class);
                                                      }
                                                  }
                                              }

@@ -226,7 +226,7 @@ public class DictBook extends ChallengeItem {
 
             public boolean onClick(float x, float y) {
                 if (inside(x, y)) {
-                    GameScene.show(new WndTitledMessage(new Image(icon), M.TL(Dict.class, k ), M.L(Dict.class, k + "_d")));
+                    GameScene.show(new WndScrollTitledMessage(new Image(icon), M.TL(Dict.class, k ), M.L(Dict.class, k + "_d"), 152));
                     return true;
                 }
                 return false;
