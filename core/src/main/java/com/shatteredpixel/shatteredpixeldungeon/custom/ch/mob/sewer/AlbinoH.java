@@ -1,11 +1,26 @@
 package com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.sewer;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Albino;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.AlbinoSprite;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.Random;
 
-public class AlbinoH extends Albino {
+public class AlbinoH extends Mob {
+    {
+        spriteClass = AlbinoSprite.class;
+
+        HP = HT = 15;
+        EXP = 3;
+
+        loot = new MysteryMeat();
+        lootChance = 1f;
+    }
     {
         immunities.add(Corruption.class);
     }
@@ -54,5 +69,15 @@ public class AlbinoH extends Albino {
     @Override
     public int drRoll() {
         return super.drRoll() + modifier/2;
+    }
+
+    @Override
+    public int attackProc( Char enemy, int damage ) {
+        damage = super.attackProc( enemy, damage );
+        if (Random.Int( 2 ) == 0) {
+            Buff.affect( enemy, Bleeding.class ).set( damage );
+        }
+
+        return damage;
     }
 }

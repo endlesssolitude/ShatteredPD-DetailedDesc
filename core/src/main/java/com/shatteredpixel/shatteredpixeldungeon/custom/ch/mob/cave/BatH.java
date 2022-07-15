@@ -10,6 +10,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.RangeMap;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.timing.VirtualActor;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEvasion;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfHaste;
@@ -17,6 +19,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.BatSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
@@ -24,12 +27,23 @@ import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 
-public class BatH extends Bat {
+public class BatH extends Mob {
     {
         EXP = 10;
         defenseSkill = 20;
         HT=HP=40;
         HUNTING = new Hunting();
+
+        spriteClass = BatSprite.class;
+
+        baseSpeed = 2f;
+
+        maxLvl = 15;
+
+        flying = true;
+
+        loot = new PotionOfHealing();
+        lootChance = 0.1667f; //by default, see lootChance()
     }
     {
         immunities.add(Corruption.class);
@@ -84,8 +98,8 @@ public class BatH extends Bat {
 
     @Override
     public int attackProc(Char enemy, int damage){
-        //compensate
-        int reg = Math.min( 4, HT - HP );
+
+        int reg = Math.min( damage , HT - HP );
 
         if (reg > 0) {
             HP += reg;
@@ -227,6 +241,32 @@ public class BatH extends Bat {
             //default cases
             return super.act(enemyInFOV, justAlerted);
         }
+    }
+
+    @Override
+    public int damageRoll() {
+        return Random.NormalIntRange( 5, 18 );
+    }
+
+    @Override
+    public int attackSkill( Char target ) {
+        return 16;
+    }
+
+    @Override
+    public int drRoll() {
+        return Random.NormalIntRange(0, 4);
+    }
+
+    @Override
+    public float lootChance(){
+        return super.lootChance() * ((7f - Dungeon.LimitedDrops.BAT_HP.count) / 7f);
+    }
+
+    @Override
+    public Item createLoot(){
+        Dungeon.LimitedDrops.BAT_HP.count++;
+        return super.createLoot();
     }
 
 }

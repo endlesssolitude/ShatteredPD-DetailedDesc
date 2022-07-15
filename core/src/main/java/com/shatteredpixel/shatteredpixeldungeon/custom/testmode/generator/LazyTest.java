@@ -1,6 +1,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.custom.testmode.generator;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.items.EnergyCrystal;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Honeypot;
 import com.shatteredpixel.shatteredpixeldungeon.items.TengusMask;
@@ -107,7 +108,9 @@ public class LazyTest extends TestGenerator {
             greatsword.level(15);
             greatsword.identify().collect();
 
-            new Gold().quantity(16777216).doPickUp(hero);
+            new Gold().quantity(16000000).doPickUp(hero);
+
+            new EnergyCrystal().quantity(10000).doPickUp(hero);
 
             new Pasty().quantity(100).collect();
 

@@ -26,6 +26,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.QuickSlot;
+import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.ArmorAbility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.huntress.NaturesPower;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.huntress.SpiritHawk;
@@ -336,9 +337,11 @@ public enum HeroClass {
 		new DictBook().collect();
 		if (Dungeon.isChallenged(Challenges.ELITE_ENEMIES)) {
 			new EnemyTome().collect();
+			Statistics.elite_enemies = 31;
 		}
 		if (Dungeon.isChallenged(Challenges.ELITE_BOSSES)) {
 			new BossTome().collect();
+			Statistics.boss_enhance = 31;
 		}
 		if (Dungeon.isChallenged(Challenges.EXPANSION_ENCH)) {
 			//new AlchemyEX().collect();

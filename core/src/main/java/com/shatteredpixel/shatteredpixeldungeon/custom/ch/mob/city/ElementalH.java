@@ -217,13 +217,14 @@ public abstract class ElementalH extends Mob {
                 }.attachTo(enemy);
                 Splash.at( enemy.sprite.center(), sprite.blood(), 5);
             }
-            Dungeon.level.setCellToWater(false, enemy.pos);
+            Dungeon.level.setCellToWater(true, enemy.pos);
         }
 
         @Override
         protected void rangedProc(Char enemy) {
             if(enemy.buff(Frost.class)==null) {
                 Freezing.freeze(enemy.pos);
+                Dungeon.level.setCellToWater(true, enemy.pos);
                 Splash.at( enemy.sprite.center(), sprite.blood(), 5);
             } else {
                 iceBreak(enemy);
@@ -232,7 +233,7 @@ public abstract class ElementalH extends Mob {
 
         protected void iceBreak(Char enemy){
             Buff.detach(enemy, Frost.class);
-            enemy.damage(Math.max(enemy.HP/7, enemy.HT/10), this);
+            enemy.damage(Math.max(enemy.HP/5, enemy.HT/8), this);
             enemy.sprite.burst(0x3325D4, 18);
             enemy.sprite.showStatus(0x2299FF, "!!!");
             int[] iceArea = RangeMap.C1(enemy.pos);

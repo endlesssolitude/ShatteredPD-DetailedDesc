@@ -270,9 +270,9 @@ public class YogReal extends Boss{
 
     }
     // 6, 9, 12 enemies on destroy.
-    private static final int[] destroySummon_1 = {3, 2, 1};
-    private static final int[] destroySummon_2 = {3, 3, 3};
-    private static final int[] destroySummon_3 = {0, 6, 6};
+    private static final int[] destroySummon_1 = {3, 2, 0};
+    private static final int[] destroySummon_2 = {3, 2, 2};
+    private static final int[] destroySummon_3 = {2, 4, 4};
 
     private void actDestroy(){
         if(findFist() == null && phase > destroyed + 1 && phase <= 4) {

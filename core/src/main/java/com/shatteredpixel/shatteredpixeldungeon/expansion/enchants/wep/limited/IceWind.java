@@ -18,7 +18,7 @@ public class IceWind extends CountInscription {
     @Override
     public int proc(Weapon weapon, Char attacker, Char defender, int damage) {
         if(Random.Int(5) < 2){
-            int dist = 1 + Math.min(2, weapon.buffedLvl() / 5);
+            int dist = 1 + Math.min(3, weapon.buffedLvl() / 4);
             for(int i: RangeMap.manhattanRing(attacker.pos, 1, dist)){
                 GameScene.add(Blob.seed(i, 5, Freezing.class));
             }

@@ -129,7 +129,7 @@ public class TestRing extends TestGenerator {
 
     private void modifyWand(Wand w) {
         w.level(levelToGen);
-        w.cursed = false;
+        w.cursed = cursed;
     }
 
     private Class<? extends Ring> idToRing(int id) {

@@ -31,18 +31,20 @@ import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
 import com.watabou.utils.Random;
 
-public class SeniorMonkH extends Monk {
+public class SeniorMonkH extends MonkH {
     {
         spriteClass = SeniorSprite.class;
         lootChance=1f;
         loot = new Pasty();
+
+        hitsToDisarm = 99999;
     }
     {
         immunities.add(Corruption.class);
     }
 
     @Override
-    public float attackDelay(){return super.attackDelay()*0.85f;}
+    public float attackDelay(){return super.attackDelay()*0.94f;}
 
     protected int hitsForSkill = 0;
 

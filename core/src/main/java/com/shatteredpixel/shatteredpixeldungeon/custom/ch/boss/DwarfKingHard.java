@@ -35,7 +35,9 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.LloydsBeacon;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRetribution;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfPsionicBlast;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCorruption;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -403,10 +405,13 @@ public class DwarfKingHard extends Boss{
         } else if (phase == 3 && !(src instanceof Viscosity.DeferedDamage)){
 
             if(src instanceof KingDamager) dmg = 1;
+            if(src instanceof ScrollOfPsionicBlast) dmg = HT / 10;
+            if(src instanceof ScrollOfRetribution) dmg = 1;
 
             if (dmg >= 0) {
                 Viscosity.DeferedDamage deferred = Buff.affect( this, Viscosity.DeferedDamage.class );
                 deferred.prolong( dmg );
+
 
                 sprite.showStatus( CharSprite.WARNING, Messages.get(Viscosity.class, "deferred", dmg) );
             }
@@ -634,7 +639,7 @@ public class DwarfKingHard extends Boss{
                     Char ch = Actor.findChar(pos);
                     ch.damage(Random.NormalIntRange(20, 40), summon);
                     if (((DwarfKingHard)target).phase == 2){
-                        target.damage(24, new KingDamager());
+                        target.damage(12, new KingDamager());
                     }
                 }
 

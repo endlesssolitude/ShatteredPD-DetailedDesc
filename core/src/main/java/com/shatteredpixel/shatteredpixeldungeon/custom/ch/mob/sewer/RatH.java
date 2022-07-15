@@ -1,18 +1,60 @@
 package com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.sewer;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Rat;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.RatSprite;
+import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
 import com.watabou.utils.Random;
 
-public class RatH extends Rat {
+public class RatH extends Mob {
     {
         immunities.add(Corruption.class);
+
+        spriteClass = RatSprite.class;
+
+        HP = HT = 8;
+        defenseSkill = 2;
+
+        maxLvl = 5;
+
+        EXP = 1;
+    }
+
+    @Override
+    public int damageRoll() {
+        return Random.NormalIntRange( 1, 4 );
+    }
+
+    @Override
+    public int attackSkill( Char target ) {
+        return 8;
+    }
+
+    @Override
+    public int drRoll() {
+        return Random.NormalIntRange(0, 1);
+    }
+
+    private static final String RAT_ALLY = "rat_ally";
+
+    @Override
+    public void storeInBundle(Bundle bundle) {
+        super.storeInBundle(bundle);
+        if (alignment == Alignment.ALLY) bundle.put(RAT_ALLY, true);
+    }
+
+    @Override
+    public void restoreFromBundle(Bundle bundle) {
+        super.restoreFromBundle(bundle);
+        if (bundle.contains(RAT_ALLY)) alignment = Alignment.ALLY;
     }
 
     @Override

@@ -202,6 +202,7 @@ public enum DictionaryJournal {
         MOBS.d.put("mob_pris_image",        DictSpriteSheet.PRISMATIC_IMAGE);
         MOBS.d.put("mob_ratking",           DictSpriteSheet.RAT_KING);
         MOBS.d.put("mob_sheep",             DictSpriteSheet.SHEEP);
+        MOBS.d.put("mob_red_sentry",        DictSpriteSheet.RED_SENTRY);
 
         //plants
         PLANTS.d.put("seed_blindweed",      ItemSpriteSheet.SEED_BLINDWEED);
@@ -320,7 +321,6 @@ public enum DictionaryJournal {
         DOCUMENTS.d.put("info_spawn",       DictSpriteSheet.SPAWNER);
         DOCUMENTS.d.put("info_special_mob", DictSpriteSheet.ALBINO);
         DOCUMENTS.d.put("info_trap",        DictSpriteSheet.TRAP_GREEN_RECT);
-        DOCUMENTS.d.put("info_room",        ItemSpriteSheet.LOCKED_CHEST);
         DOCUMENTS.d.put("info_shop",        ItemSpriteSheet.GOLD);
         DOCUMENTS.d.put("info_feeling",     DictSpriteSheet.AREA_HALL);
         DOCUMENTS.d.put("info_chasm",       DictSpriteSheet.CHASM);
@@ -331,18 +331,12 @@ public enum DictionaryJournal {
         //unclassified
         //buffs
         UNCLASSIFIED.d.put("buff_neg1",     DictSpriteSheet.BUFF_NEGATIVE);
-        UNCLASSIFIED.d.put("buff_neg2",     DictSpriteSheet.BUFF_NEGATIVE);
-        UNCLASSIFIED.d.put("buff_neg3",     DictSpriteSheet.BUFF_NEGATIVE);
         UNCLASSIFIED.d.put("buff_pos1",     DictSpriteSheet.BUFF_POSITIVE);
-        UNCLASSIFIED.d.put("buff_pos2",     DictSpriteSheet.BUFF_POSITIVE);
-        UNCLASSIFIED.d.put("buff_pos3",     DictSpriteSheet.BUFF_POSITIVE);
-        UNCLASSIFIED.d.put("buff_pos4",     DictSpriteSheet.BUFF_POSITIVE);
-        UNCLASSIFIED.d.put("buff_pos5",     DictSpriteSheet.BUFF_POSITIVE);
         //traps
         UNCLASSIFIED.d.put("trap_1",        DictSpriteSheet.TRAP_GREEN_RECT);
-        UNCLASSIFIED.d.put("trap_2",        DictSpriteSheet.TRAP_GREEN_RECT);
-        UNCLASSIFIED.d.put("trap_3",        DictSpriteSheet.TRAP_GREEN_RECT);
-        UNCLASSIFIED.d.put("trap_4",        DictSpriteSheet.TRAP_GREEN_RECT);
+
+        UNCLASSIFIED.d.put("misc_amulet_curse",  DictSpriteSheet.BUFF_AMULET_CURSE);
+        UNCLASSIFIED.d.put("misc_sac_fire", DictSpriteSheet.BUFF_SAC_FIRE);
         //miscs
         UNCLASSIFIED.d.put("misc_ankh",  ItemSpriteSheet.ANKH);
         UNCLASSIFIED.d.put("misc_seal",  ItemSpriteSheet.SEAL);

@@ -220,6 +220,8 @@ public abstract class YogRealFist extends Mob {
 
         {
             spriteClass = YogRealFistSprite.Soiled.class;
+
+            immunities.add(Burning.class);
         }
 
         @Override
@@ -301,11 +303,6 @@ public abstract class YogRealFist extends Mob {
                     && !Dungeon.level.solid[cell] && terrain != Terrain.GRASS && terrain != Terrain.FURROWED_GRASS
                     && !isNearYog();
         }
-
-        {
-            resistances.add(Burning.class);
-        }
-
 
     }
 

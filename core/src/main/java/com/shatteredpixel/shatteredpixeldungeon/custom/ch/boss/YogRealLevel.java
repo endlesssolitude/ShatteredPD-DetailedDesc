@@ -107,9 +107,6 @@ public class YogRealLevel extends Level {
             map[i] = codeToTerrain(codedMap[i]);
         }
 
-        this.entrance = ENTRANCE;
-        this.exit = EXIT;
-
         LevelTransition entrance = new LevelTransition(this, ENTRANCE, LevelTransition.Type.REGULAR_ENTRANCE);
         transitions.add(entrance);
 
@@ -173,8 +170,8 @@ public class YogRealLevel extends Level {
     public void occupyCell( Char ch ) {
         super.occupyCell( ch );
 
-        if (map[entrance] == Terrain.ENTRANCE && map[exit] != Terrain.EXIT
-                && ch == Dungeon.hero && Dungeon.level.distance(ch.pos, entrance) >= 2) {
+        if (map[ENTRANCE] == Terrain.ENTRANCE && map[EXIT] != Terrain.EXIT
+                && ch == Dungeon.hero && Dungeon.level.distance(ch.pos, ENTRANCE) >= 2) {
             seal();
         }
 
@@ -200,9 +197,9 @@ public class YogRealLevel extends Level {
     @Override
     public void seal() {
         super.seal();
-        set( entrance, Terrain.WALL );
-        GameScene.updateMap( entrance );
-        CellEmitter.get( entrance ).start( FlameParticle.FACTORY, 0.1f, 10 );
+        set( ENTRANCE, Terrain.WALL );
+        GameScene.updateMap( ENTRANCE );
+        CellEmitter.get( ENTRANCE ).start( FlameParticle.FACTORY, 0.1f, 10 );
 
         Dungeon.observe();
 
@@ -215,11 +212,11 @@ public class YogRealLevel extends Level {
     @Override
     public void unseal() {
         super.unseal();
-        set( entrance, Terrain.ENTRANCE );
-        GameScene.updateMap( entrance );
+        set( ENTRANCE, Terrain.ENTRANCE );
+        GameScene.updateMap( ENTRANCE );
 
-        set( exit, Terrain.EXIT );
-        GameScene.updateMap( exit );
+        set( EXIT, Terrain.EXIT );
+        GameScene.updateMap( EXIT );
 
         CellEmitter.get(CENTER-1).burst(ShadowParticle.UP, 25);
         CellEmitter.get(CENTER).burst(ShadowParticle.UP, 100);

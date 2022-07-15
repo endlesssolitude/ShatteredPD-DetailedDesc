@@ -1,36 +1,62 @@
 package com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.prison;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.CounterBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DM100;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.timing.VirtualActor;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Effects;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Lightning;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SparkParticle;
+import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLightning;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.DM100Sprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.MobSprite;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Image;
+import com.watabou.noosa.MovieClip;
+import com.watabou.noosa.TextureFilm;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.Callback;
 import com.watabou.utils.GameMath;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
 
-public class DM100H extends DM100 {
+public class DM100H extends Mob implements Callback {
+    private static final float TIME_TO_ZAP	= 1f;
     {
         EXP = 7;
         HT = HP = 21;
+
+        spriteClass = DM100HSprite.class;
+
+        defenseSkill = 8;
+
+        maxLvl = 13;
+
+        loot = Generator.Category.SCROLL;
+        lootChance = 0.25f;
+
+        properties.add(Property.ELECTRIC);
+        properties.add(Property.INORGANIC);
     }
 
     {
@@ -79,7 +105,7 @@ public class DM100H extends DM100 {
 
     @Override
     protected boolean canAttack(Char enemy){
-        boolean can = super.canAttack(enemy);
+        boolean can = new Ballistica( pos, enemy.pos, Ballistica.MAGIC_BOLT).collisionPos == enemy.pos;
         if(!can && buff(LightningPrediction.class)==null){
             cd -= 1f;
         }
@@ -206,6 +232,73 @@ public class DM100H extends DM100 {
 
     }
 
+    @Override
+    public int damageRoll() {
+        return Random.NormalIntRange( 2, 8 );
+    }
+
+    @Override
+    public int attackSkill( Char target ) {
+        return 11;
+    }
+
+    @Override
+    public int drRoll() {
+        return Random.NormalIntRange(0, 4);
+    }
+
+    //used so resistances can differentiate between melee and magical attacks
+    public static class LightningBolt{}
+
+    @Override
+    protected boolean doAttack( Char enemy ) {
+
+        if (Dungeon.level.distance( pos, enemy.pos ) <= 1) {
+
+            return super.doAttack( enemy );
+
+        } else {
+
+            spend( TIME_TO_ZAP );
+
+            if (hit( this, enemy, true )) {
+                int dmg = Random.NormalIntRange(3, 10);
+                dmg = Math.round(dmg * AscensionChallenge.statModifier(this));
+                enemy.damage( dmg, new DM100H.LightningBolt() );
+
+                if (enemy.sprite.visible) {
+                    enemy.sprite.centerEmitter().burst(SparkParticle.FACTORY, 3);
+                    enemy.sprite.flash();
+                }
+
+                if (enemy == Dungeon.hero) {
+
+                    Camera.main.shake( 2, 0.3f );
+
+                    if (!enemy.isAlive()) {
+                        Badges.validateDeathFromEnemyMagic();
+                        Dungeon.fail( getClass() );
+                        GLog.n( Messages.get(this, "zap_kill") );
+                    }
+                }
+            } else {
+                enemy.sprite.showStatus( CharSprite.NEUTRAL,  enemy.defenseVerb() );
+            }
+
+            if (sprite != null && (sprite.visible || enemy.sprite.visible)) {
+                sprite.zap( enemy.pos );
+                return false;
+            } else {
+                return true;
+            }
+        }
+    }
+
+    @Override
+    public void call() {
+        next();
+    }
+
     public static class WarnWave extends Image {
 
         private static final float TIME_TO_FADE = 1f;
@@ -281,4 +374,75 @@ public class DM100H extends DM100 {
     }
 
 
+    public static class DM100HSprite extends MobSprite {
+
+        public DM100HSprite () {
+            super();
+
+            texture( Assets.Sprites.DM100 );
+
+            TextureFilm frames = new TextureFilm( texture, 16, 14 );
+
+            idle = new MovieClip.Animation( 1, true );
+            idle.frames( frames, 0, 1 );
+
+            run = new MovieClip.Animation( 12, true );
+            run.frames( frames, 6, 7, 8, 9 );
+
+            attack = new MovieClip.Animation( 12, false );
+            attack.frames( frames, 2, 3, 4, 0 );
+
+            zap = new MovieClip.Animation( 8, false );
+            zap.frames( frames, 5, 5, 1 );
+
+            die = new MovieClip.Animation( 12, false );
+            die.frames( frames, 10, 11, 12, 13, 14, 15 );
+
+            play( idle );
+        }
+
+        public void zap( int pos ) {
+
+            Char enemy = Actor.findChar(pos);
+
+            //shoot lightning from eye, not sprite center.
+            PointF origin = center();
+            if (flipHorizontal){
+                origin.y -= 6*scale.y;
+                origin.x -= 1*scale.x;
+            } else {
+                origin.y -= 8*scale.y;
+                origin.x += 1*scale.x;
+            }
+            if (enemy != null) {
+                parent.add(new Lightning(origin, enemy.sprite.destinationCenter(), (DM100H) ch));
+            } else {
+                parent.add(new Lightning(origin, pos, (DM100H) ch));
+            }
+            Sample.INSTANCE.play( Assets.Sounds.LIGHTNING );
+
+            turnTo( ch.pos, pos );
+            flash();
+            play( zap );
+        }
+
+        @Override
+        public void die() {
+            emitter().burst( Speck.factory( Speck.WOOL ), 5 );
+            super.die();
+        }
+
+        @Override
+        public void onComplete( MovieClip.Animation anim ) {
+            if (anim == zap) {
+                idle();
+            }
+            super.onComplete( anim );
+        }
+
+        @Override
+        public int blood() {
+            return 0xFFFFFF88;
+        }
+    }
 }

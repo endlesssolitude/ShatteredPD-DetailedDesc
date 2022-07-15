@@ -56,17 +56,17 @@ public class GooHard extends Boss{
 
     @Override
     public int damageRoll() {
-        return Math.round(super.damageRoll() * (berserk()?1.4f:1f) * (pumpedUp>0?3f:1f) *(surroundingWater()>7?1.75f:1f));
+        return Math.round(super.damageRoll() * (berserk()?1.33f:1f) * (pumpedUp>0?3f:1f) *(surroundingWater()>7?1.8f:1f));
     }
 
     @Override
     public int attackSkill( Char target ) {
-        return Math.round(super.attackSkill(target)*(pumpedUp>0?3f:1f)*(HP*2<HT?1.5f:1f)*(surroundingWater()>7?10f:1f));
+        return Math.round(super.attackSkill(target)*(pumpedUp>0?3f:1f)*(HP*2<HT?1.5f:1f)*(surroundingWater()>7?1000f:1f));
     }
 
     @Override
     public int defenseSkill(Char enemy) {
-        return (int)(super.defenseSkill(enemy) * ((HP*2 <= HT)? 1.5f : 1f)*(surroundingWater()>7?2f:1f));
+        return (int)(super.defenseSkill(enemy) * ((HP*2 <= HT)? 1.5f : 1f)*(surroundingWater()>7?0f:1f));
     }
 
     @Override
@@ -75,6 +75,7 @@ public class GooHard extends Boss{
     }
 
     private boolean berserk(){ return HP*2<HT; }
+
 
     @Override
     public boolean act() {
@@ -230,6 +231,9 @@ public class GooHard extends Boss{
             BossHealthBar.assignBoss( this );
         }
         if(src instanceof Wand){ summonMiniGoo(); }
+        if(surroundingWater() > 7){
+            dmg = dmg * 3 / 2;
+        }
         boolean bleeding = (HP*2 <= HT);
         super.damage(dmg, src);
         if ((HP*2 <= HT) && !bleeding){

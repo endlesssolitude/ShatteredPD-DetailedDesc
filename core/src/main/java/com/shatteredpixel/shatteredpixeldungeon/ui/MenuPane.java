@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.windows.WndGame;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndJournal;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndKeyBindings;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndStory;
+import com.watabou.glwrap.Blending;
 import com.watabou.input.GameAction;
 import com.watabou.noosa.BitmapText;
 import com.watabou.noosa.Game;
@@ -135,8 +136,36 @@ public class MenuPane extends Component {
 		btnMenu = new MenuButton();
 		add( btnMenu );
 
-		version = new BitmapText( "v" + Game.version, PixelScene.pixelFont);
-		version.alpha( 0.5f );
+		if(!Dungeon.isChallenged(Challenges.TEST_MODE)){version = new BitmapText( "v" + Game.version , PixelScene.pixelFont);version.alpha( 0.5f );}
+		else {
+			version = new BitmapText("v" + Game.version + "-TEST", PixelScene.pixelFont) {
+				private float time;
+
+				@Override
+				public void update() {
+					super.update();
+					//am = 1f + 0.01f*Math.max(0f, (float)Math.sin( time += Game.elapsed/5 ));
+					time += Game.elapsed / 5f;
+					//float r = 0.43f+0.57f*Math.max(0f, (float)Math.sin( time));
+					//float g = 0.43f+0.57f*Math.max(0f, (float)Math.sin( time + 2*Math.PI/3 ));
+					//float b = 0.43f+0.57f*Math.max(0f, (float)Math.sin( time + 4*Math.PI/3 ));
+					float base = 0.65f;
+					float r = base + (1f - base) * (float) Math.sin(time);
+					float g = base + (1f - base) * (float) Math.sin(time + 2 * Math.PI / 3);
+					float b = base + (1f - base) * (float) Math.sin(time + 4 * Math.PI / 3);
+					version.hardlight(r, g, b);
+					if (time >= 2f * Math.PI) time = 0;
+				}
+
+				@Override
+				public void draw() {
+					Blending.setLightMode();
+					super.draw();
+					Blending.setNormalMode();
+				}
+			};
+			version.alpha(1f);
+		}
 		add(version);
 
 		danger = new DangerIndicator();

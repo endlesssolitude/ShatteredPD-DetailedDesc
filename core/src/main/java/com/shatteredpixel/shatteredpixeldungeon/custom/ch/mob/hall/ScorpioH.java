@@ -5,22 +5,44 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Scorpio;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Wound;
+import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfSharpshooting;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ScorpioSprite;
 import com.watabou.noosa.Camera;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
+import com.watabou.utils.Reflection;
 
 //yeah it's already annoying enough
-public class ScorpioH extends Scorpio {
+public class ScorpioH extends Mob {
     {
         viewDistance = 99;
+
+        spriteClass = ScorpioSprite.class;
+
+        HP = HT = 110;
+        defenseSkill = 24;
+
+        EXP = 14;
+        maxLvl = 27;
+
+        loot = Generator.Category.POTION;
+        lootChance = 0.5f;
+
+        properties.add(Property.DEMONIC);
     }
 
     {
@@ -31,12 +53,15 @@ public class ScorpioH extends Scorpio {
 
     @Override
     public int attackSkill(Char enemy){
-        return super.attackSkill(enemy)*(5+hasAttacked)/5;
+        return 36*(5+hasAttacked)/5;
     }
 
     @Override
     public int attackProc(Char enemy, int damage) {
         int d = super.attackProc(enemy, damage);
+        if (Random.Int( 2 ) == 0) {
+            Buff.prolong( enemy, Cripple.class, Cripple.DURATION );
+        }
         hasAttacked = Math.min(8, ++hasAttacked);
         if(canHeadShot(enemy)) {
             d = Math.max(Math.min(enemy.HP - 1, enemy.HT * 2 / 3), d + (enemy.drRoll() + enemy.drRoll()) * hasAttacked / 24);
@@ -98,5 +123,49 @@ public class ScorpioH extends Scorpio {
 
         super.rollToDropLoot();
 
+    }
+
+    @Override
+    public int damageRoll() {
+        return Random.NormalIntRange( 30, 40 );
+    }
+
+
+    @Override
+    public int drRoll() {
+        return Random.NormalIntRange(0, 16);
+    }
+
+    @Override
+    protected boolean canAttack( Char enemy ) {
+        Ballistica attack = new Ballistica( pos, enemy.pos, Ballistica.PROJECTILE);
+        return !Dungeon.level.adjacent( pos, enemy.pos ) && attack.collisionPos == enemy.pos;
+    }
+
+    @Override
+    protected boolean getCloser( int target ) {
+        if (state == HUNTING) {
+            return enemySeen && getFurther( target );
+        } else {
+            return super.getCloser( target );
+        }
+    }
+
+    @Override
+    public void aggro(Char ch) {
+        //cannot be aggroed to something it can't see
+        if (ch == null || fieldOfView == null || fieldOfView[ch.pos]) {
+            super.aggro(ch);
+        }
+    }
+
+    @Override
+    public Item createLoot() {
+        Class<?extends Potion> loot;
+        do{
+            loot = (Class<? extends Potion>) Random.oneOf(Generator.Category.POTION.classes);
+        } while (loot == PotionOfHealing.class || loot == PotionOfStrength.class);
+
+        return Reflection.newInstance(loot);
     }
 }

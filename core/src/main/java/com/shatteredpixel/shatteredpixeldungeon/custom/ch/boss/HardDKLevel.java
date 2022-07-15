@@ -231,7 +231,7 @@ public class HardDKLevel extends Level {
             int pos;
             do {
                 pos = randomRespawnCell(null);
-            } while (pos == entrance);
+            } while (pos == entrance());
             drop( item, pos ).setHauntedIfCursed().type = Heap.Type.REMAINS;
         }
     }
@@ -240,7 +240,7 @@ public class HardDKLevel extends Level {
     public int randomRespawnCell( Char ch ) {
         int cell;
         do {
-            cell = entrance + PathFinder.NEIGHBOURS8[Random.Int(8)];
+            cell = entrance() + PathFinder.NEIGHBOURS8[Random.Int(8)];
         } while (!passable[cell]
                 || (Char.hasProp(ch, Char.Property.LARGE) && !openSpace[cell])
                 || Actor.findChar(cell) != null);

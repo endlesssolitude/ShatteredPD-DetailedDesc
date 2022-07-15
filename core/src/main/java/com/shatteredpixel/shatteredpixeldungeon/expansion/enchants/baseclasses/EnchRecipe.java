@@ -95,12 +95,12 @@ import java.util.Arrays;
 
 public enum EnchRecipe{
     METEOR(Meteor.class, 66, InfernalBrew.class, PotionOfLiquidFlame.class, PotionOfLevitation.class),
-    ICE_BREAK(IceBreaking.class, 80, BlizzardBrew.class, PotionOfSnapFreeze.class, PotionOfLevitation.class),
+    ICE_BREAK(IceBreaking.class, 75, BlizzardBrew.class, PotionOfSnapFreeze.class, PotionOfLevitation.class),
     UNHOLY(Unholy.class, 100, ScrollOfTerror.class, ScrollOfRage.class, ScrollOfRetribution.class),
     CURE(Curing.class, 150, PotionOfHealing.class, Sungrass.Seed.class, PotionOfHealing.class),
     LIGHT_SCATTERING(Scattering.LightScattering.class, 56, ScrollOfRecharging.class, StoneOfBlast.class, PotionOfInvisibility.class),
     FIERY_SCATTERING(Scattering.FieryScattering.class, 44, ScrollOfRecharging.class, StoneOfBlast.class, PotionOfLiquidFlame.class),
-    ICEY_SCATTERING(Scattering.IceyScattering.class, 48, ScrollOfRecharging.class, StoneOfBlast.class, PotionOfFrost.class),
+    ICEY_SCATTERING(Scattering.IceyScattering.class, 50, ScrollOfRecharging.class, StoneOfBlast.class, PotionOfFrost.class),
     OVERLOAD(Overload.class, 66, MetalShard.class, ScrollOfUpgrade.class),
     DARK_FOG(DarkFog.class, 60, PotionOfShroudingFog.class, PotionOfLevitation.class, StoneOfBlast.class),
     IMAGING(Imaging.class, 60, ScrollOfMirrorImage.class, ScrollOfMirrorImage.class, StoneOfFlock.class),

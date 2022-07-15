@@ -6,12 +6,44 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Weakness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Crab;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.CrabSprite;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
-public class CrabH extends Crab {
+public class CrabH extends Mob {
     {
         immunities.add(Corruption.class);
+    }
+
+    {
+        spriteClass = CrabSprite.class;
+
+        HP = HT = 15;
+        defenseSkill = 5;
+        baseSpeed = 2f;
+
+        EXP = 4;
+        maxLvl = 9;
+
+        loot = new MysteryMeat();
+        lootChance = 0.167f;
+    }
+
+    @Override
+    public int damageRoll() {
+        return Random.NormalIntRange( 1, 7 );
+    }
+
+    @Override
+    public int attackSkill( Char target ) {
+        return 12;
+    }
+
+    @Override
+    public int drRoll() {
+        return Random.NormalIntRange(0, 4);
     }
 
     private float deduced = 0;
@@ -22,8 +54,8 @@ public class CrabH extends Crab {
             float reduce = -Random.Float(5f, 12f);
             h.satisfy(reduce);
             deduced += -reduce;
-            if(deduced > 30f){
-                Buff.affect(enemy, Weakness.class, (deduced-25f)/5f);
+            if(deduced > 20f){
+                Buff.affect(enemy, Weakness.class, (deduced-20f)/5f);
             }
             enemy.sprite.showStatus(0x505050, "%d", (int)reduce);
         }

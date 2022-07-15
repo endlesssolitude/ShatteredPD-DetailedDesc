@@ -51,7 +51,7 @@ public abstract class ShamanH extends Mob {
         maxLvl = 16;
 
         loot = Generator.Category.WAND;
-        lootChance = 0.00001f; //initially, see rollToDropLoot
+        lootChance = 0.1f; //initially, see rollToDropLoot
     }
     {
         immunities.add(Corruption.class);

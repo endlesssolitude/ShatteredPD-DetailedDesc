@@ -108,7 +108,7 @@ public class HardGooLevel extends Level {
             super.occupyCell(ch);
 
             if (map[ENTRANCE]==Terrain.ENTRANCE && map[EXIT]==Terrain.LOCKED_EXIT &&
-                    ch == Dungeon.hero && Dungeon.level.distance(ch.pos, entrance) >= 2) {
+                    ch == Dungeon.hero && Dungeon.level.distance(ch.pos, entrance()) >= 2) {
                 seal();
             }
         }
@@ -117,8 +117,8 @@ public class HardGooLevel extends Level {
     public int randomRespawnCell(Char ch) {
             //hero should not fall outside of arena.
             if(ch instanceof Hero){
-                int[] area = RangeMap.centeredRect(entrance, 2, 2);
-                return entrance + area[Random.Int(area.length)];
+                int[] area = RangeMap.centeredRect(entrance(), 2, 2);
+                return entrance() + area[Random.Int(area.length)];
             }
         return super.randomRespawnCell(ch);
     }

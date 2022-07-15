@@ -57,6 +57,7 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.ui.CheckBox;
 import com.shatteredpixel.shatteredpixeldungeon.ui.IconButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.OptionSlider;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RedButton;
@@ -67,6 +68,7 @@ import com.watabou.utils.Bundle;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Reflection;
 
+import java.awt.Checkbox;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -84,6 +86,7 @@ public class MobPlacer extends TestItem{
     private int mobIndex = 0;
     private int elite = 0;
     private static final int MAX_ELITE = 6;
+    private int elite_op = 0;
 
     private final ArrayList<Class<? extends ChampionEnemy>> eliteBuffs = new ArrayList<>();
     {
@@ -116,10 +119,11 @@ public class MobPlacer extends TestItem{
                                 Mob m = Reflection.newInstance(allData.get(dataThreshold(mobTier) + mobIndex).mobClass);
                                 m.pos = cell;
                                 GameScene.add(m);
-                                if(elite>0){
-                                    Collections.shuffle(eliteBuffs);
-                                    for(int i=0;i<elite;++i){
-                                        Buff.affect(m, eliteBuffs.get(i));
+                                if(elite_op>0){
+                                    for(int i=0;i<6;++i){
+                                        if((elite_op & (1<<i))>0){
+                                            Buff.affect(m, eliteBuffs.get(i));
+                                        }
                                     }
                                 }
                                 ScrollOfTeleportation.appear(m, cell);
@@ -182,6 +186,7 @@ public class MobPlacer extends TestItem{
         b.put("mobTier", mobTier);
         b.put("mobIndex", mobIndex);
         b.put("eliteTags", elite);
+        b.put("elite_ops", elite_op);
     }
 
     @Override
@@ -190,6 +195,7 @@ public class MobPlacer extends TestItem{
         mobTier = b.getInt("mobTier");
         mobIndex = b.getInt("mobIndex");
         elite = b.getInt("eliteTags");
+        elite_op = b.getInt("elite_ops");
     }
 
 
@@ -203,6 +209,7 @@ public class MobPlacer extends TestItem{
         private RenderedTextBlock selectedPage;
         private ArrayList<IconButton> mobButtons = new ArrayList<>();
         private RenderedTextBlock selectedMob;
+        private ArrayList<CheckBox> eliteOptions = new ArrayList<>(6);
 
         public WndSetMob(){
             super();
@@ -247,7 +254,7 @@ public class MobPlacer extends TestItem{
             selectedMob.hardlight(0xFFFF44);
             PixelScene.align(selectedMob);
             add(selectedMob);
-
+/*
             OptionSlider op = new OptionSlider
                     (M.L(MobPlacer.class, "elite"), "0", String.valueOf(MAX_ELITE), 0, MAX_ELITE) {
                 @Override
@@ -259,10 +266,34 @@ public class MobPlacer extends TestItem{
             op.setSelectedValue(elite);
             add(op);
 
+ */
+            float pos = 92;
+            for(int i=0;i<6;++i){
+                CheckBox cb = new CheckBox(M.L(MobPlacer.class, "elite_name"+Integer.toString(i)));
+                cb.active = true;
+                cb.checked((elite_op & (1<<i))>0);
+                add(cb);
+                eliteOptions.add(cb);
+                if((i&1)==0) {
+                    cb.setRect(0, pos, WIDTH/2f -  GAP/2f, 16);
+                }else{
+                    cb.setRect(WIDTH/2f+GAP/2f, pos, WIDTH/2f -  GAP/2f, 16);
+                    pos += 16 + GAP;
+                }
+            }
+
             createMobImage();
 
             updateSelectedMob();
             layout();
+        }
+
+        private void updateEliteSettings(){
+            int el = 0;
+            for(int i=0;i<6;++i){
+                el += eliteOptions.get(i).checked() ? (1<<i) : 0;
+            }
+            elite_op = el;
         }
 
         private void updateSelectedMob(){
@@ -286,6 +317,7 @@ public class MobPlacer extends TestItem{
             selectedPage.setPos((WIDTH - selectedPage.width())/2, 5);
             selectedMob.maxWidth(WIDTH);
             selectedMob.setPos((WIDTH - selectedMob.width())/2, 80);
+            resize(WIDTH, (int)eliteOptions.get(5).bottom() + 1);
         }
 
         private void createMobImage() {
@@ -328,6 +360,12 @@ public class MobPlacer extends TestItem{
         private void refreshImage(){
             clearImage();
             createMobImage();
+        }
+
+        @Override
+        public void onBackPressed() {
+            updateEliteSettings();
+            super.onBackPressed();
         }
     }
 

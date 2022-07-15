@@ -171,6 +171,8 @@ public class DictSpriteSheet {
                 return new Image(Assets.Sprites.RATKING, 0, 17, 16, 17);
             case SHEEP:
                 return new Image(Assets.Sprites.SHEEP, 0, 0, 16, 15);
+            case RED_SENTRY:
+                    return new Image(Assets.Sprites.RED_SENTRY, 0, 0, 8, 15);
             case HERO:
                 return new Image(Assets.Sprites.ROGUE, 0, 15, 12, 15);
             case TRAP_GREEN_RECT:
@@ -185,6 +187,10 @@ public class DictSpriteSheet {
                 return new Image(Assets.Interfaces.BUFFS_LARGE, 112 ,32, 16, 16);
             case BUFF_NEGATIVE:
                 return new Image(Assets.Interfaces.BUFFS_LARGE, 224 ,0, 16, 16);
+            case BUFF_AMULET_CURSE:
+                return new Image(Assets.Interfaces.BUFFS_LARGE, 176, 48, 16, 16);
+            case BUFF_SAC_FIRE:
+                return new Image(Assets.Interfaces.BUFFS_LARGE, 112, 32, 16, 16);
 
         }
         return new ItemSprite(ItemSpriteSheet.SOMETHING);
@@ -277,6 +283,7 @@ public class DictSpriteSheet {
     public static final int PRISMATIC_IMAGE = 805 + 10000;
     public static final int RAT_KING        = 806 + 10000;
     public static final int SHEEP           = 807 + 10000;
+    public static final int RED_SENTRY      = 808 + 10000;
 
     public static final int HERO            = 2000 + 10000;
 
@@ -287,4 +294,6 @@ public class DictSpriteSheet {
     public static final int BUFF_POSITIVE   = 4000 + 10000;
     public static final int BUFF_NEUTRAL    = 4001 + 10000;
     public static final int BUFF_NEGATIVE   = 4002 + 10000;
+    public static final int BUFF_AMULET_CURSE   = 4003 + 10000;
+    public static final int BUFF_SAC_FIRE   = 4004 + 10000;
 }

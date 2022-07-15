@@ -7,18 +7,24 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Gnoll;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.custom.visuals.MissileSpriteCustom;
+import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.GnollSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
+import com.watabou.utils.Random;
 
-public class GnollH extends Gnoll {
+public class GnollH extends Mob {
     {
         EXP = 3;
-
         lootChance = 1f;
-
+        spriteClass = GnollSprite.class;
+        HP = HT = 12;
+        defenseSkill = 4;
+        maxLvl = 8;
+        loot = Gold.class;
 
     }
 
@@ -87,12 +93,17 @@ public class GnollH extends Gnoll {
 
     @Override
     public int damageRoll(){
-        return super.damageRoll() - (rangedAttack ? 1:0);
+        return Random.NormalIntRange( 1, 6 ) - (rangedAttack ? 1:0);
     }
 
     @Override
     public int attackSkill(Char enemy){
-        return Math.round(super.attackSkill(enemy)*(rangedAttack?1.5f:1f));
+        return Math.round(10*(rangedAttack?1.5f:1f));
+    }
+
+    @Override
+    public int drRoll() {
+        return Random.NormalIntRange(0, 2);
     }
 
     @Override

@@ -53,18 +53,19 @@ public class MobList {
                 return new ArrayList<>(Arrays.asList(SkeletonH.class, DM100H.class, DM100H.class, DM100H.class, GuardH.class, GuardH.class, Necromancer.class));
             case 9: case 10:
                 //Heaven of crime!!!
-                return new ArrayList<>(Arrays.asList(ThiefH.class, ThiefH.class, BanditH.class, BanditH.class, GuardH.class, GuardH.class, DM100H.class, DM100H.class));
+                return new ArrayList<>(Arrays.asList(ThiefH.class, ThiefH.class, BanditH.class, BanditH.class, GuardH.class, DM100H.class));
             case 11:
                 return new ArrayList<>(Arrays.asList(BatH.class, BatH.class, BatH.class, BruteH.class, ShamanH.random()));
             case 12:
                 return new ArrayList<>(Arrays.asList(BatH.class, BruteH.class, BruteH.class, ShamanH.random(), ShamanH.random()));
             case 13:
-                return new ArrayList<>(Arrays.asList(BatH.class, BruteH.class, BruteH.class, ShamanH.random(), ShamanH.random(), SpinnerH.class, DM200.class));
+                //Magic!
+                return new ArrayList<>(Arrays.asList(ShamanH.random(), BruteH.class, BruteH.class, ShamanH.random(), ShamanH.random(), SpinnerH.class, ShamanH.random()));
             case 14: case 15:
                 return new ArrayList<>(Arrays.asList(BatH.class, BruteH.class, ShamanH.random(), SpinnerH.class, SpinnerH.class, DM200.class));
             case 16:
                 //element!
-                return new ArrayList<>(Arrays.asList(Ghoul.class, ElementalH.random(), ElementalH.random(), ElementalH.random(), WarlockH.class));
+                return new ArrayList<>(Arrays.asList(Ghoul.class, ElementalH.random(), ElementalH.random(), ElementalH.random()));
             case 17:
                 //darkness!
                 return new ArrayList<>(Arrays.asList(Ghoul.class, ElementalH.random(), WarlockH.class, WarlockH.class, WarlockH.class));
@@ -72,13 +73,14 @@ public class MobList {
                 return new ArrayList<>(Arrays.asList(ElementalH.random(), WarlockH.class, MonkH.class, MonkH.class, GolemH.class));
             case 19: case 20:
                 //face senior directly!
-                return new ArrayList<>(Arrays.asList(WarlockH.class, WarlockH.class, MonkH.class, MonkH.class, GolemH.class, GolemH.class, SeniorMonkH.class));
+                return new ArrayList<>(Arrays.asList(WarlockH.class, MonkH.class, MonkH.class, GolemH.class, GolemH.class, SeniorMonkH.class));
             case 21:
                 return new ArrayList<>(Arrays.asList(SuccubusH.class, SuccubusH.class, SuccubusH.class, EyeH.class, RipperH.class));
             case 22:
-                return new ArrayList<>(Arrays.asList(SuccubusH.class, EyeH.class, EyeH.class, RipperH.class));
+                return new ArrayList<>(Arrays.asList(SuccubusH.class, EyeH.class, RipperH.class));
             case 23:
-                return new ArrayList<>(Arrays.asList(SuccubusH.class, EyeH.class, EyeH.class, ScorpioH.class));
+                //Destroy!
+                return new ArrayList<>(Arrays.asList(SuccubusH.class, EyeH.class, EyeH.class, EyeH.class, EyeH.class, ScorpioH.class));
             case 24: case 25:
                 //HEAD SHOT!!!
                 return new ArrayList<>(Arrays.asList(SuccubusH.class, EyeH.class, EyeH.class, ScorpioH.class, ScorpioH.class, ScorpioH.class));
