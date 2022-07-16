@@ -7,6 +7,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
 import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
+import com.shatteredpixel.shatteredpixeldungeon.custom.utils.RangeMap;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FlameParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
@@ -165,6 +166,17 @@ public class YogRealLevel extends Level {
         drop(new SpiritBow(), plates[3]).type = Heap.Type.LOCKED_CHEST;
 
     }
+
+    @Override
+    public int randomRespawnCell(Char ch) {
+        //hero should not fall outside of arena.
+        if(/*ch instanceof Hero*/true){
+            int[] area = RangeMap.centeredRect(entrance(), 2, 2);
+            return entrance() + area[Random.Int(area.length)];
+        }
+        return super.randomRespawnCell(ch);
+    }
+
 
     @Override
     public void occupyCell( Char ch ) {

@@ -5,6 +5,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Bones;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.custom.utils.RangeMap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.SkeletonKey;
@@ -282,6 +283,17 @@ public class HardDM300Level extends Level {
             Sample.INSTANCE.play( Assets.Sounds.ROCKS );
         }
     }
+
+    @Override
+    public int randomRespawnCell(Char ch) {
+        //hero should not fall outside of arena.
+        if(/*ch instanceof Hero*/true){
+            int[] area = RangeMap.centeredRect(entrance(), 1, 1);
+            return entrance() + area[Random.Int(area.length)];
+        }
+        return super.randomRespawnCell(ch);
+    }
+
 
     @Override
     public Heap drop( Item item, int cell ) {

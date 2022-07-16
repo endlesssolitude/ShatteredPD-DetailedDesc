@@ -372,7 +372,14 @@ public class WndRanking extends WndTabbed {
 			camera = WndRanking.this.camera;
 
 			//temp choice, should rework
-			add(new WndChallenges(Dungeon.challenges, false));
+			WndChallenges wc = new WndChallenges(Dungeon.challenges, false){
+				@Override
+				public void onBackPressed() {
+					super.onBackPressed();
+				}
+			};
+            add(wc);
+
 		}
 
 	}

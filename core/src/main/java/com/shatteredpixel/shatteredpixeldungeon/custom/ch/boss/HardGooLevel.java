@@ -116,7 +116,7 @@ public class HardGooLevel extends Level {
     @Override
     public int randomRespawnCell(Char ch) {
             //hero should not fall outside of arena.
-            if(ch instanceof Hero){
+            if(/*ch instanceof Hero*/true){
                 int[] area = RangeMap.centeredRect(entrance(), 2, 2);
                 return entrance() + area[Random.Int(area.length)];
             }

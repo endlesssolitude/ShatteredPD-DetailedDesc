@@ -16,5 +16,6 @@ release/
 local.properties
 
 #intellij project files
+.idea/
 *.iml
 *.idea

@@ -58,17 +58,17 @@ public class AlbinoH extends Mob {
 
     @Override
     public int damageRoll() {
-        return super.damageRoll() + modifier*4/5;
+        return Random.IntRange(1, 4) + modifier;
     }
 
     @Override
     public int attackSkill(Char target) {
-        return super.attackSkill(target) + modifier*5/4;
+        return 10 + modifier*2;
     }
 
     @Override
     public int drRoll() {
-        return super.drRoll() + modifier/2;
+        return Random.IntRange(0, 1) + Random.IntRange(0, modifier);
     }
 
     @Override

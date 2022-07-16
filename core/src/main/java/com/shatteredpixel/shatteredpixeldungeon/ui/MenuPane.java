@@ -44,6 +44,7 @@ import com.watabou.noosa.Game;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.ui.Component;
+import com.watabou.utils.PointF;
 
 public class MenuPane extends Component {
 
@@ -145,11 +146,11 @@ public class MenuPane extends Component {
 				public void update() {
 					super.update();
 					//am = 1f + 0.01f*Math.max(0f, (float)Math.sin( time += Game.elapsed/5 ));
-					time += Game.elapsed / 5f;
+					time += Game.elapsed/10f;
 					//float r = 0.43f+0.57f*Math.max(0f, (float)Math.sin( time));
 					//float g = 0.43f+0.57f*Math.max(0f, (float)Math.sin( time + 2*Math.PI/3 ));
 					//float b = 0.43f+0.57f*Math.max(0f, (float)Math.sin( time + 4*Math.PI/3 ));
-					float base = 0.65f;
+					float base = 0.60f;
 					float r = base + (1f - base) * (float) Math.sin(time);
 					float g = base + (1f - base) * (float) Math.sin(time + 2 * Math.PI / 3);
 					float b = base + (1f - base) * (float) Math.sin(time + 4 * Math.PI / 3);
@@ -165,6 +166,7 @@ public class MenuPane extends Component {
 				}
 			};
 			version.alpha(1f);
+			version.scale = new PointF(1.4f, 1.4f);
 		}
 		add(version);
 
