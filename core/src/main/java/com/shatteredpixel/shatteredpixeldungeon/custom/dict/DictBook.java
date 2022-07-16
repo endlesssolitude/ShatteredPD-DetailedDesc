@@ -79,7 +79,7 @@ public class DictBook extends ChallengeItem {
         private static final int ITEM_HEIGHT = 18;
 
         private RedButton[] itemButtons;
-        private static final int NUM_BUTTONS = 10;
+        private static final int NUM_BUTTONS = 9;
 
         private static int currentItemIdx = 0;
 
@@ -91,11 +91,10 @@ public class DictBook extends ChallengeItem {
         private static final int ARTIFACTS_IDX = 4;
         private static final int ALCHEMY_IDX = 5;
         private static final int MOB_IDX = 6;
-        private static final int PLANTS_IDX = 7;
-        private static final int UNCLASSIFIED_IDX = 8;
-        private static final int DOCUMENTS_IDX = 9;
+        private static final int UNCLASSIFIED_IDX = 7;
+        private static final int DOCUMENTS_IDX = 8;
 
-        private static final int spriteIndexes[] = {2, 1, 4, 5, 6, 13, 0, 10, 0, 0};
+        private static final int spriteIndexes[] = {2, 1, 4, 5, 6, 13, 0, 0, 0};
 
         private ScrollPane list;
 
@@ -184,9 +183,6 @@ public class DictBook extends ChallengeItem {
             } else if (currentItemIdx == MOB_IDX) {
                 keys = new ArrayList<>(DictionaryJournal.MOBS.keyList());
                 imageSheets = new ArrayList<>(DictionaryJournal.MOBS.imageList());
-            } else if (currentItemIdx == PLANTS_IDX) {
-                keys = new ArrayList<>(DictionaryJournal.PLANTS.keyList());
-                imageSheets = new ArrayList<>(DictionaryJournal.PLANTS.imageList());
             } else if (currentItemIdx == UNCLASSIFIED_IDX) {
                 keys = new ArrayList<>(DictionaryJournal.UNCLASSIFIED.keyList());
                 imageSheets = new ArrayList<>(DictionaryJournal.UNCLASSIFIED.imageList());

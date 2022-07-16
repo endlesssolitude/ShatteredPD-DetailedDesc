@@ -11,7 +11,6 @@ public enum DictionaryJournal {
     ARTIFACTS,
     ALCHEMY,
     WEAPONS,
-    PLANTS,
     WANDS,
     RINGS,
     MOBS,
@@ -204,19 +203,6 @@ public enum DictionaryJournal {
         MOBS.d.put("mob_sheep",             DictSpriteSheet.SHEEP);
         MOBS.d.put("mob_red_sentry",        DictSpriteSheet.RED_SENTRY);
 
-        //plants
-        PLANTS.d.put("seed_blindweed",      ItemSpriteSheet.SEED_BLINDWEED);
-        PLANTS.d.put("seed_dreamfoil",      ItemSpriteSheet.SEED_MAGEROYAL);
-        PLANTS.d.put("seed_earthroot",      ItemSpriteSheet.SEED_EARTHROOT);
-        PLANTS.d.put("seed_fadeleaf",       ItemSpriteSheet.SEED_FADELEAF);
-        PLANTS.d.put("seed_firebloom",      ItemSpriteSheet.SEED_FIREBLOOM);
-        PLANTS.d.put("seed_icecap",         ItemSpriteSheet.SEED_ICECAP);
-        PLANTS.d.put("seed_rotberry",       ItemSpriteSheet.SEED_ROTBERRY);
-        PLANTS.d.put("seed_sorrowmoss",     ItemSpriteSheet.SEED_SORROWMOSS);
-        PLANTS.d.put("seed_starflower",     ItemSpriteSheet.SEED_STARFLOWER);
-        PLANTS.d.put("seed_stromvine",      ItemSpriteSheet.SEED_STORMVINE);
-        PLANTS.d.put("seed_sungrass",       ItemSpriteSheet.SEED_SUNGRASS);
-        PLANTS.d.put("seed_swiftthistle",   ItemSpriteSheet.SEED_SWIFTTHISTLE);
         //ring
         RINGS.d.put("ring_accuracy",        ItemSpriteSheet.RING_AGATE);
         RINGS.d.put("ring_element",         ItemSpriteSheet.RING_AGATE);
@@ -297,7 +283,6 @@ public enum DictionaryJournal {
 
         //Documents
         DOCUMENTS.d.put("info_intro",       ItemSpriteSheet.EBONY_CHEST);
-        DOCUMENTS.d.put("info_item",        ItemSpriteSheet.BREW_INFERNAL);
         DOCUMENTS.d.put("info_tier",        ItemSpriteSheet.GLAIVE);
         DOCUMENTS.d.put("info_melee",       ItemSpriteSheet.GREATAXE);
         DOCUMENTS.d.put("info_ranged",      ItemSpriteSheet.TOMAHAWK);
@@ -309,24 +294,19 @@ public enum DictionaryJournal {
         DOCUMENTS.d.put("info_scroll",      ItemSpriteSheet.SCROLL_ISAZ);
         DOCUMENTS.d.put("info_potion",      ItemSpriteSheet.POTION_BISTRE);
         DOCUMENTS.d.put("info_lim_drop",    ItemSpriteSheet.POTION_CRIMSON);
-        DOCUMENTS.d.put("info_seed",        ItemSpriteSheet.SEED_BLINDWEED);
-        DOCUMENTS.d.put("info_bomb",        ItemSpriteSheet.BOMB);
         DOCUMENTS.d.put("info_food",        ItemSpriteSheet.RATION);
-        DOCUMENTS.d.put("info_gold",        ItemSpriteSheet.GOLD);
-        DOCUMENTS.d.put("info_alchemy",     ItemSpriteSheet.ARTIFACT_TOOLKIT);
         DOCUMENTS.d.put("info_priority",    ItemSpriteSheet.ARTIFACT_HOURGLASS);
         DOCUMENTS.d.put("info_hero",        DictSpriteSheet.HERO);
         DOCUMENTS.d.put("info_mob",         DictSpriteSheet.RAT);
         DOCUMENTS.d.put("info_property",    DictSpriteSheet.ELEMENTAL_CHAOS);
         DOCUMENTS.d.put("info_spawn",       DictSpriteSheet.SPAWNER);
-        DOCUMENTS.d.put("info_special_mob", DictSpriteSheet.ALBINO);
-        DOCUMENTS.d.put("info_trap",        DictSpriteSheet.TRAP_GREEN_RECT);
         DOCUMENTS.d.put("info_shop",        ItemSpriteSheet.GOLD);
         DOCUMENTS.d.put("info_feeling",     DictSpriteSheet.AREA_HALL);
         DOCUMENTS.d.put("info_chasm",       DictSpriteSheet.CHASM);
         DOCUMENTS.d.put("info_lck_floor",   DictSpriteSheet.LOCKED_FLOOR);
         DOCUMENTS.d.put("info_ranking",     ItemSpriteSheet.AMULET);
         DOCUMENTS.d.put("info_bones",       ItemSpriteSheet.REMAINS);
+        DOCUMENTS.d.put("fight_mech",       ItemSpriteSheet.DAGGER);
 
         //unclassified
         //buffs
@@ -340,7 +320,6 @@ public enum DictionaryJournal {
         //miscs
         UNCLASSIFIED.d.put("misc_ankh",  ItemSpriteSheet.ANKH);
         UNCLASSIFIED.d.put("misc_seal",  ItemSpriteSheet.SEAL);
-        UNCLASSIFIED.d.put("misc_vial",  ItemSpriteSheet.VIAL);
         UNCLASSIFIED.d.put("misc_gold",  ItemSpriteSheet.GOLD);
         UNCLASSIFIED.d.put("misc_dust",  ItemSpriteSheet.DUST);
         UNCLASSIFIED.d.put("misc_soon",  ItemSpriteSheet.SOMETHING);

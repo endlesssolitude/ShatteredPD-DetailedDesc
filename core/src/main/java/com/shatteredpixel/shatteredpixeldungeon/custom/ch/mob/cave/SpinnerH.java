@@ -235,7 +235,7 @@ public class SpinnerH extends Mob {
         }
     }
 
-    public class SpinnerHSprite extends MobSprite {
+    public static class SpinnerHSprite extends MobSprite {
 
         public SpinnerHSprite() {
             super();
