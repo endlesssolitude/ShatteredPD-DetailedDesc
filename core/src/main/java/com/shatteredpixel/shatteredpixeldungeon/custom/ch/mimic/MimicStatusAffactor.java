@@ -1,13 +1,17 @@
 package com.shatteredpixel.shatteredpixeldungeon.custom.ch.mimic;
 
+import com.badlogic.gdx.utils.IntMap;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.watabou.utils.Bundle;
 
 public class MimicStatusAffactor extends Buff {
     {
         this.announced = false;
+        actPriority = VFX_PRIO;
+        revivePersists = true;
     }
 
     private boolean affected = false;
@@ -18,6 +22,7 @@ public class MimicStatusAffactor extends Buff {
     @Override
     public boolean act(){
         if(!affected){
+
             affected = true;
             for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])){
                 if(mob instanceof MimicForChallenge){

@@ -374,7 +374,7 @@ public class NewHardDK extends Boss{
     private int getSummoningAlive(){
         int count = 0;
         for(Mob m: Dungeon.level.mobs.toArray(new Mob[0])){
-            if(isSummonedMob(m)){
+            if(isSummonedMob(m) && m.alignment == Alignment.ENEMY){
                 ++count;
             }
         }
@@ -770,7 +770,7 @@ public class NewHardDK extends Boss{
         }
 
         if(phase == 4 && !sacrifice_prepared){
-            sacrifice_cd -= lostHP / 2f;
+            sacrifice_cd -= lostHP / 2.1f;
             if(sacrifice_cd < 0){
                 spend(-TICK);
             }

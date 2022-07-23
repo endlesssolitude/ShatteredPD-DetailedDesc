@@ -13,6 +13,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.ArmoredStatue;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Bandit;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Bat;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Brute;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.CausticSlime;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Crab;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DM100;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DM200;
@@ -387,6 +388,7 @@ public class MobPlacer extends TestItem{
         CRAB(Crab.class, DictSpriteSheet.CRAB),
         SWARM(Swarm.class, DictSpriteSheet.SWARM),
         SLIME(Slime.class, DictSpriteSheet.SLIME),
+        C_SLIME(CausticSlime.class, DictSpriteSheet.CAUSTIC_SLIME),
         F_RAT(FetidRat.class, DictSpriteSheet.F_RAT),
         GNOLL_DARTER(GnollTrickster.class, DictSpriteSheet.GNOLL_DARTER),
         GREAT_CRAB(GreatCrab.class, DictSpriteSheet.GREAT_CRAB),

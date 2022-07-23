@@ -5,6 +5,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Sheep;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.ChallengeItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -12,6 +13,7 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.TargetHealthIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 
@@ -46,11 +48,20 @@ public class MimicScroll extends ChallengeItem {
                             && !mob.properties().contains(Char.Property.MINIBOSS)){
                         int pos = mob.pos;
 
+                        if(mob instanceof Sheep){
+                            if(Random.Int(5)!=0){
+                                continue;
+                            }
+                        }
+
                         //loot, copied from mimic
                         Item reward = null;
-
-                        MimicForChallenge mimic = MimicForChallenge.spawnAt(pos,reward);
-                        mimic.adjustStats(Dungeon.depth + Dungeon.hero.lvl/4);
+                        MimicForChallenge mimic;
+                        if(Random.Int(10)==0) {
+                            mimic = MimicForChallenge.spawnAt(pos, reward, GoldenMimicForChallenge.class);
+                        }else {
+                            mimic = MimicForChallenge.spawnAt(pos, reward);
+                        }
 
                         mob.EXP = 0;
                         mob.destroy();

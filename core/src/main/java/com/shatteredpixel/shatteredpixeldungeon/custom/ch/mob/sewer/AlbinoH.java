@@ -17,8 +17,8 @@ public class AlbinoH extends Mob {
     {
         spriteClass = AlbinoSprite.class;
 
-        HP = HT = 15 + Dungeon.depth * 4 - 4;
-        defenseSkill = 6 + Dungeon.depth - 1;
+        HP = HT = 12 + Dungeon.depth * 4 - 4;
+        defenseSkill = 5 + Dungeon.depth - 1;
         EXP = 3;
 
         loot = new MysteryMeat();
@@ -30,23 +30,23 @@ public class AlbinoH extends Mob {
     }
     @Override
     public int damageRoll() {
-        return Random.IntRange(1, 4 + Dungeon.depth);
+        return Random.IntRange(1, 4 + Dungeon.depth - 1);
     }
 
     @Override
     public int attackSkill(Char target) {
-        return 12 + 2*Dungeon.depth;
+        return 10 + 2*Dungeon.depth;
     }
 
     @Override
     public int drRoll() {
-        return Random.IntRange(0, 1+Dungeon.depth);
+        return Random.IntRange(0, Dungeon.depth);
     }
 
     @Override
     public int attackProc( Char enemy, int damage ) {
         damage = super.attackProc( enemy, damage );
-        if (Random.Int( 2 ) == 0) {
+        if (Random.Int( 100 ) < 38 + Dungeon.depth * 7) {
             Buff.affect( enemy, Bleeding.class ).set( damage );
         }
 

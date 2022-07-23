@@ -144,10 +144,10 @@ public class MimicDocs extends ChallengeItem {
         }
 
         private float healthModFactor(int modlevel){
-            return 1f + modlevel/14f + modlevel*modlevel / 98f;
+            return 1f + modlevel/16f + modlevel*modlevel / 112f;
         }
         private float attackModFactor(int modlevel){
-            return 1f + modlevel/12f + modlevel*modlevel / 84f;
+            return 1f + modlevel/14f + modlevel*modlevel / 98f;
         }
         private float accuracyModFactor(int modlevel){
             return 1f + 0.2f * (2<<(modlevel-1));
@@ -156,28 +156,28 @@ public class MimicDocs extends ChallengeItem {
             return 1f + 0.08f * (2<<(modlevel-1));
         }
         private float moveSpeedFactor(int modlevel){
-            return 1f + modlevel/12f + modlevel*modlevel / 84f;
+            return 1f + modlevel/14f + modlevel*modlevel / 98f;
         }
         private float attackSpeedFactor(int modlevel){
-            return 1f + modlevel/12f + modlevel*modlevel / 84f;
+            return 1f + modlevel/14f + modlevel*modlevel / 98f;
         }
         private float meleeResistanceFactor(int modlevel) {
-            return 0.225f*modlevel;
+            return 0.21f*modlevel;
         }
         private float missileResistanceFactor(int modlevel) {
-            return 0.3f*modlevel;
+            return 0.26f*modlevel;
         }
         private float magicalResistanceFactor(int modlevel){
-            return 0.3f*modlevel;
+            return 0.31f*modlevel;
         }
         private float berserkFactor(int modlevel){
-            return modlevel*0.45f;
+            return modlevel*0.33f;
         }
         private float suppressFactor(int modlevel){
-            return modlevel*0.27f;
+            return modlevel*0.25f;
         }
         private float defenseKillerFactor(int modlevel){
-            return 0.5f*modlevel-0.2f;
+            return 0.4f*modlevel-0.2f;
         }
         private float comboFactor(int modlevel){
             return modlevel*0.1f;
@@ -204,7 +204,7 @@ public class MimicDocs extends ChallengeItem {
             return 1f/(Math.max(1, 5-modlevel));
         }
         private float defenseCopyFactor(int modlevel){
-            return 0.5f*modlevel;
+            return 0.4f*modlevel;
         }
         private float comboResistanceFactor(int modlevel){
             if(modlevel < 1) return 0f;
@@ -217,7 +217,7 @@ public class MimicDocs extends ChallengeItem {
             return 0.08f*modlevel-0.01f*modlevel*modlevel;
         }
         private float vampireFactor(int modlevel){
-            return 0.25f*modlevel;
+            return 0.17f*modlevel;
         }
         private float pushBackFactor(int modlevel){
             return 1 + modlevel;
@@ -228,7 +228,7 @@ public class MimicDocs extends ChallengeItem {
         private float negativeImmuneFactor(int modlevel){ return modlevel/3f;}
         private float attackRangeFactor(int modlevel){
             switch (modlevel){
-                case 3: return 6;
+                case 3: return 4;
                 case 2: return 3;
                 case 1: return 2;
                 case 0: default: return 1;
@@ -257,16 +257,16 @@ public class MimicDocs extends ChallengeItem {
         }
         private float basicModPower(int level){
             if(level>0 && level<8){
-                return 1f + level/14f + level*level / 98f;
+                return 1f + level/17f + level*level / 119f;
             }
             return 1f;
         }
         private float specialModPower(int level){
             switch (level){
                 case 0: default: return 1f;
-                case 1: return 1.25f;
-                case 2: return 1.55f;
-                case 3: return 1.95f;
+                case 1: return 1.2f;
+                case 2: return 1.4f;
+                case 3: return 1.7f;
             }
         }
     }

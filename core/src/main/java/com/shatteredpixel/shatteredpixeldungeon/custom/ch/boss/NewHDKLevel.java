@@ -138,7 +138,7 @@ public class NewHDKLevel extends Level {
         drop(pickaxe, HELP_ITEM_1);
 
         StoneOfBlink stoneOfBlink = new StoneOfBlink();
-        stoneOfBlink.quantity(3);
+        stoneOfBlink.quantity(5);
         drop(stoneOfBlink, HELP_ITEM_2);
 
         HDKItem.KingAmulet kingAmulet = new HDKItem.KingAmulet();

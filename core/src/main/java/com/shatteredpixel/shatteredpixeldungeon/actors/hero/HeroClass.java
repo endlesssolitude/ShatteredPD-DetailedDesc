@@ -27,6 +27,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.QuickSlot;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.ArmorAbility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.huntress.NaturesPower;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.huntress.SpiritHawk;
@@ -43,7 +44,11 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.En
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.ChallengeBag;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.boss.BossTome;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.boss.HDKItem;
+import com.shatteredpixel.shatteredpixeldungeon.custom.ch.mimic.MimicDocs;
+import com.shatteredpixel.shatteredpixeldungeon.custom.ch.mimic.MimicScroll;
+import com.shatteredpixel.shatteredpixeldungeon.custom.ch.mimic.MimicStatusAffactor;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.EnemyTome;
+import com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.ScrollOfUpgradeEater;
 import com.shatteredpixel.shatteredpixeldungeon.custom.dict.DictBook;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.BackpackCleaner;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.CustomWeapon;
@@ -152,7 +157,7 @@ public enum HeroClass {
 			}
 		}
 
-		doChallengeSpawn();
+		doChallengeSpawn(hero);
 
 
 	}
@@ -333,12 +338,21 @@ public enum HeroClass {
 		}
 	}
 
-	private static void doChallengeSpawn() {
+	private static void doChallengeSpawn(Hero hero) {
 		new ChallengeBag().collect();
 
 		new DictBook().collect();
+		if(Dungeon.isChallenged(Challenges.MIMIC_DUNGEON)){
+			MimicScroll ms = new MimicScroll();
+			ms.quantity(3).collect();
+			new MimicDocs().collect();
+			Buff.affect(hero, MimicStatusAffactor.class);
+		}
 		if (Dungeon.isChallenged(Challenges.ELITE_ENEMIES)) {
 			new EnemyTome().collect();
+
+			new ScrollOfUpgradeEater().collect();
+
 			Statistics.elite_enemies = 31;
 		}
 		if (Dungeon.isChallenged(Challenges.ELITE_BOSSES)) {
@@ -407,7 +421,6 @@ public enum HeroClass {
 			ka.setUses(999);
 			ka.collect();
 			 */
-
 		}
 	}
 

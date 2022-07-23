@@ -67,7 +67,7 @@ public class HDKItem {
 
         @Override
         public int STRReq(int lvl) {
-            return super.STRReq(lvl) - 10;
+            return super.STRReq(lvl) - 20;
         }
     }
 

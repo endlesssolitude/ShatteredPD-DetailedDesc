@@ -121,11 +121,14 @@ public class WndChallenges extends Window {
 			CanScrollCheckBox cb = new CanScrollCheckBox( M.TL(isCustom ? TextChallenges.class : Challenges.class, challenge));
 			cb.checked((checked & Challenges.MASKS[i]) != 0);
 			cb.active = editable;
+			/*
 			if(Challenges.NAME_IDS[i].equals("mimic_dungeon")){
 				cb.active = false;
 				cb.checked(false);
 				cb.alpha(0.5f);
 			}
+
+			 */
 
 			if (i > 0) {
 				pos += GAP;

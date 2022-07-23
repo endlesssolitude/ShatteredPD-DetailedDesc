@@ -24,11 +24,14 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Weakness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Stone;
+import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRetribution;
@@ -131,11 +134,11 @@ public class MimicForChallenge extends Mimic {
     }
 
     protected int basicModLevel(){
-        return Random.chances(new float[]{17,13,11,7})+Math.min(4, Math.round(FloatLevel /6));
+        return Random.chances(new float[]{15,13,11,7})+Math.min(4, Math.round(FloatLevel /6));
     }
 
     protected int basicPerkModLevel(){
-        return Random.chances(new float[]{7,7,5,5})+Math.min(4, Math.round(FloatLevel /6));
+        return Random.chances(new float[]{5,5,4,4})+Math.min(4, Math.round(FloatLevel /6));
     }
 
     private int maxBasicTags(){
@@ -188,11 +191,11 @@ public class MimicForChallenge extends Mimic {
     //6 basic arguments
     protected float HealthModFactor(){
         int modlevel = (basicModFactor>>BASE_HEALTH_MOVE) & 0x7;
-        return 1f + modlevel/14f + modlevel*modlevel / 98f;
+        return 1f + modlevel/16f + modlevel*modlevel / 112f;
     }
     protected float AttackModFactor(){
         int modlevel = (basicModFactor>>BASE_ATTACK_MOVE) & 0x7;
-        return 1f + modlevel/12f + modlevel*modlevel / 84f;
+        return 1f + modlevel/14f + modlevel*modlevel / 98f;
     }
     protected float AccuracyModFactor(){
         int modlevel = (basicModFactor>>BASE_ACCURACY_MOVE) & 0x7;
@@ -204,11 +207,11 @@ public class MimicForChallenge extends Mimic {
     }
     protected float MoveSpeedFactor(){
         int modlevel = (basicModFactor>>BASE_MOVE_SPEED_MOVE) & 0x7;
-        return 1f + modlevel/12f + modlevel*modlevel / 84f;
+        return 1f + modlevel/14f + modlevel*modlevel / 98f;
     }
     protected float AttackSpeedFactor(){
         int modlevel = (basicModFactor>>BASE_ATTACK_SPEED_MOVE) & 0x7;
-        return 1f + modlevel/12f + modlevel*modlevel / 84f;
+        return 1f + modlevel/14f + modlevel*modlevel / 98f;
     }
 
     protected int attackMod = 0;
@@ -255,7 +258,7 @@ public class MimicForChallenge extends Mimic {
     //We are much more offensive on distributing high-level perks to improve interest and difficulty, and provide richer reward in early run.
     private void createSpecialModFactor(){
 
-        int reslevel = Random.chances(new float[]{50f - FloatLevel, 30f - FloatLevel /2, 20f + FloatLevel /2, 10f + FloatLevel});
+        int reslevel = Random.chances(new float[]{45f - FloatLevel, 30f - FloatLevel /2, 23f + FloatLevel /2, 12f + FloatLevel});
         switch(Random.Int(3)){
             case 0: resistMod += reslevel << RES_MELEE; break;
             case 1: resistMod += reslevel << RES_MISSILE; break;
@@ -315,23 +318,23 @@ public class MimicForChallenge extends Mimic {
     }
 
     protected int perkLevel(){
-        return Random.chances(new float[]{60f - FloatLevel, 45f - FloatLevel / 2, 30f + FloatLevel / 2, 20f + FloatLevel});
+        return Random.chances(new float[]{50f - FloatLevel, 40f - FloatLevel / 2, 30f + FloatLevel / 2, 20f + FloatLevel});
     }
 
     protected int uniquePerkLevel(){
-        return Random.chances(new float[]{40f - FloatLevel, 40f - FloatLevel / 2, 40f + FloatLevel / 2, 40f + FloatLevel});
+        return Random.chances(new float[]{30f - FloatLevel, 30f - FloatLevel / 2, 30f + FloatLevel / 2, 30f + FloatLevel});
     }
 
     protected float berserkDamageFactor(){
         int modlevel = (attackMod>>ATK_BERSERK)&0x3;
         float lose = 1f-(float)this.HP/this.HT;
-        return 1f+modlevel*lose*lose*0.45f;
+        return 1f+modlevel*lose*lose*0.33f;
     }
 
     protected float suppressDamageFactor(){
         int modlevel = (attackMod>>ATK_SUPPRESS)&0x3;
         float left = (float)this.HP/this.HT;
-        return 1f+modlevel*left*left*0.27f;
+        return 1f+modlevel*left*left*0.25f;
     }
     //add damage = dr(enemy) * multiplier
     protected float highDefenseAddDamageMultiplier(){
@@ -339,7 +342,7 @@ public class MimicForChallenge extends Mimic {
         if(modlevel == 0){
             return 0f;
         }
-        return 0.5f*modlevel-0.2f;
+        return 0.4f*modlevel-0.2f;
     }
 
     protected int attacked=0;
@@ -391,22 +394,22 @@ public class MimicForChallenge extends Mimic {
 
     protected float MeleeResistanceFactor() {
         int modlevel = (resistMod>>RES_MELEE) & 0x3;
-        return 0.225f*modlevel;
+        return 0.21f*modlevel;
     }
 
     protected float MissileResistanceFactor() {
         int modlevel = (resistMod>>RES_MISSILE)&0x3;
-        return 0.3f*modlevel;
+        return 0.26f*modlevel;
     }
 
     protected float MagicalResistanceFactor(){
         int modlevel = (resistMod>>RES_MAGIC)&0x3;
-        return 0.3f*modlevel;
+        return 0.31f*modlevel;
     }
 
     protected float defenseCopyFactor(){
         int modlevel = (defendMod>>DEF_DEFENSE_COPY)&0x3;
-        return 0.5f*modlevel;
+        return 0.4f*modlevel;
     }
 
     protected float ComboResistanceFactor(int combo){
@@ -424,7 +427,7 @@ public class MimicForChallenge extends Mimic {
         }
         int limit = Math.round((float)this.HT/(modlevel*2+1));
         if(damage > limit){
-            return Math.round(0.1f*(damage-limit)+limit);
+            return Math.round(0.2f*(damage-limit)+limit);
         }else{
             return damage;
         }
@@ -435,7 +438,7 @@ public class MimicForChallenge extends Mimic {
         if(modlevel == 0){
             return damage;
         }
-        int limit = Math.round(this.HT*(0.08f*modlevel-0.01f*modlevel*modlevel));
+        int limit = Math.round(this.HT*(0.075f*modlevel-0.01f*modlevel*modlevel));
         if(damage<limit){
             return 1;
         }else{
@@ -446,7 +449,7 @@ public class MimicForChallenge extends Mimic {
     protected void vampireProc(int damage){
         int modlevel = (defendMod>>DEF_VAMPIRE)&0x3;
         if(modlevel>0){
-            this.HP = Math.min(this.HT, Math.round(this.HP + damage*0.25f*modlevel));
+            this.HP = Math.min(this.HT, Math.round(this.HP + damage*0.17f*modlevel));
             sprite.emitter().burst( Speck.factory( Speck.HEALING ), 1 );
         }
     }
@@ -476,7 +479,7 @@ public class MimicForChallenge extends Mimic {
     protected int attackRange(){
         int modlevel = (trickMod>>TRK_RANGE)&0x3;
         switch (modlevel){
-            case 3: return 6;
+            case 3: return 4;
             case 2: return 3;
             case 1: return 2;
             case 0: default: return 1;
@@ -498,7 +501,7 @@ public class MimicForChallenge extends Mimic {
         int modlevel = (trickMod>>TRK_DEGRADE)&0x3;
         if(modlevel>0){
             if(Random.Int(2)==0){
-                float duration = (Random.Int(500)==0)? 999999f : 1<<modlevel;
+                float duration = (Random.Int(666)==0)? 999999f : 1<<modlevel;
                 Buff.prolong(enemy, Degrade.class, duration);
             }
         }
@@ -616,8 +619,8 @@ public class MimicForChallenge extends Mimic {
     }
 
     protected void adjustStats(){
-        HT = Math.round((6+ FloatLevel *6)*HealthModFactor());
-        defenseSkill = Math.round((2 + FloatLevel /2)*EvasionModFactor());
+        HT = Math.round((6+ FloatLevel *6f)*HealthModFactor());
+        defenseSkill = Math.round((2 + FloatLevel *2/5)*EvasionModFactor());
         baseSpeed = MoveSpeedFactor();
         enemySeen = true;
     }
@@ -665,7 +668,7 @@ public class MimicForChallenge extends Mimic {
     }
     @Override
     public int damageRoll() {
-        float base = (alignment == Alignment.NEUTRAL? Random.NormalFloat( 2 + 2* FloatLevel, 3 + 9* FloatLevel /4) : Random.NormalFloat( 1 + FloatLevel, 3 + 9* FloatLevel /4));
+        float base = (alignment == Alignment.NEUTRAL? Random.NormalFloat( 2 +  FloatLevel * 3 / 2, 3 + 2* FloatLevel) : Random.NormalFloat( 1 + FloatLevel, 3 + 7 * FloatLevel / 5));
         base = base * AttackModFactor() * berserkDamageFactor() * suppressDamageFactor() * comboDamageFactor();
         return Math.round(base);
     }
@@ -711,11 +714,14 @@ public class MimicForChallenge extends Mimic {
         float meleeRes = MeleeResistanceFactor();
         float missileRes = MissileResistanceFactor();
 
+
+
         if(enemy instanceof Hero){
-            if(((Hero) enemy).belongings.weapon instanceof MeleeWeapon) {
-                damage = Math.round(damage * (1f - meleeRes));
-            }else if(((Hero) enemy).belongings.weapon instanceof MissileWeapon || ((Hero) enemy).belongings.weapon instanceof SpiritBow.SpiritArrow){
+
+            if(((Hero) enemy).belongings.thrownWeapon != null){
                 damage = Math.round(damage * (1f - missileRes));
+            } else if(((Hero) enemy).belongings.weapon instanceof MeleeWeapon) {
+                damage = Math.round(damage * (1f - meleeRes));
             }
         }
 		
@@ -733,7 +739,7 @@ public class MimicForChallenge extends Mimic {
         }
         dmg=shieldProc(dmg);
         float magicalRes = MagicalResistanceFactor();
-        if(src instanceof Wand || src instanceof Buff || src instanceof Blob || src instanceof Scroll || src instanceof Stone){
+        if(src instanceof Wand || src instanceof Buff || src instanceof Blob || src instanceof Scroll || src instanceof Stone || src instanceof Bomb){
             dmg = Math.round(dmg * (1f - magicalRes));
         }
 
@@ -766,7 +772,7 @@ public class MimicForChallenge extends Mimic {
 
     private float basicModPower(int level){
         if(level>0 && level<8){
-            return 1f + level/14f + level*level / 98f;
+            return 1f + level/17f + level*level / 119f;
         }
         return 1f;
     }
@@ -774,9 +780,9 @@ public class MimicForChallenge extends Mimic {
     private float specialModPower(int level){
         switch (level){
             case 0: default: return 1f;
-            case 1: return 1.25f;
-            case 2: return 1.55f;
-            case 3: return 1.95f;
+            case 1: return 1.2f;
+            case 2: return 1.4f;
+            case 3: return 1.7f;
         }
     }
 
@@ -806,7 +812,7 @@ public class MimicForChallenge extends Mimic {
            power*=specialModPower(lvl);
        }
 
-       if(power > 20f) power = 20f;
+       if(power > 50f) power = 50f;
 
        return power;
 
@@ -843,71 +849,48 @@ public class MimicForChallenge extends Mimic {
 
         Item reward = null;
         float power = showPower();
-        power = Math.min(7f + FloatLevel /2f, power);
-        if(power<2.3f){
-            if(Random.Int(7)<3){
+        power = Math.min(power, 32f);
+        if(power < 2f){
+            if(Random.Float()<0.15f + (power - 1f)*0.25f){
                 do {
                     reward = (Random.Int(2)==0)?
-                            ((Random.Int(2)==0)?    (Generator.random(Generator.Category.POTION))   :   (Generator.random(Generator.Category.SCROLL)))
-                            :(new Gold().random());
+                         Generator.random(Generator.Category.STONE)   :   Generator.random(Generator.Category.SEED);
                 } while (reward == null || Challenges.isItemBlocked(reward));
-                if(!(reward instanceof Gold)) reward.quantity(1);
+                reward.quantity(Random.Float()<(power-1f)*0.05f?2:1);
                 items.add(reward);
             }
         }
-        else if(power <4.6f){
-            if(Random.Int(6)<5){
-                do {
-                    reward = (Random.Int(3)!=0)?
-                            ((Random.Int(2)==0)?    (Generator.random(Generator.Category.POTION))   :   (Generator.random(Generator.Category.SCROLL)))
-                            :(new Gold().random());
-                } while (reward == null || Challenges.isItemBlocked(reward));
-                if(!(reward instanceof Gold)) reward.quantity(1);
-                items.add(reward);
-            }
-            if(Random.Int(4)==0) {
-                do {
-                    switch(Random.Int(4)){
-                        case 1: case 2:
-                            reward = Generator.randomMissile().quantity(Random.Int(1,4));
-                            break;
-                        case 3:
-                            reward = Generator.random(Generator.Category.SEED);
-                            break;
-                        case 0:
-                            reward =  Generator.random(Generator.Category.STONE);
-                            break;
-                    }
-                } while (reward == null || Challenges.isItemBlocked(reward));
-                items.add(reward);
-            }
-        }else if(power < 7.9f){
-            do{
-                reward = (Random.Int(2)==0)?    (Generator.random(Generator.Category.POTION))   :   (Generator.random(Generator.Category.SCROLL));
-            }while (reward == null || Challenges.isItemBlocked(reward));
-
-            if(Random.Int(5)==0) reward.quantity(2);
+        else if(power < 4f){
+            do {
+                if(Random.Float()<0.2f + (power-2f)*0.15f){
+                    reward = (Random.Int(2)==0)?
+                        Generator.random(Generator.Category.POTION)   :   Generator.random(Generator.Category.SCROLL);
+                }else{
+                    reward = (Random.Int(2)==0)?
+                        Generator.random(Generator.Category.STONE)   :   Generator.random(Generator.Category.SEED);
+                }
+            } while (reward == null || Challenges.isItemBlocked(reward));
+            reward.quantity(Random.Float()<(power-2f)*0.05f?2:1);
             items.add(reward);
-
-            if(Random.Int(5)==0) {
+            if(Random.Float()<(power-2f)*0.05f){
                 do {
-                    switch(Random.Int(3)){
-                        case 1:
-                            reward = Generator.randomMissile().quantity(Random.Int(1,4));
-                            break;
-                        case 2:
-                            reward = Generator.random(Generator.Category.SEED);
-                            break;
-                        case 0:
-                            reward =  Generator.random(Generator.Category.STONE);
-                            break;
-                    }
+                    reward = Generator.randomMissile().quantity(Random.Int(1,3));
                 } while (reward == null || Challenges.isItemBlocked(reward));
-                items.add(reward);
             }
-            if(Random.Int(8)==0){
-                do{
-                    switch(Random.Int(4)){
+            items.add(reward);
+        }
+        else if(power<8f){
+            if(Random.Float()<0.5f + (power-4f)*0.125f) {
+                do {
+                    reward = (Random.Int(2) == 0) ?
+                        Generator.random(Generator.Category.POTION) : Generator.random(Generator.Category.SCROLL);
+
+                } while (reward == null || Challenges.isItemBlocked(reward));
+            }
+            items.add(reward);
+            if(Random.Float()<0.05f + (power-4f)*0.025f){
+                do {
+                    switch(Random.Int(4)) {
                         case 0:
                             reward = Generator.randomArmor();
                             break;
@@ -919,57 +902,90 @@ public class MimicForChallenge extends Mimic {
                             break;
                         case 3:
                             reward = Generator.random(Generator.Category.WAND);
+                            break;
+                    }
+                } while (reward == null || Challenges.isItemBlocked(reward));
+                if(reward.isUpgradable()) {
+                    for(int i=0; i<3; ++i) {
+                        if (Random.Float() < 0.1f + (power - 4f) * 0.05f) {
+                            reward.upgrade();
+                        }
+                    }
+                }
+                items.add(reward);
+            }
+        }else if(power < 16f){
+            do {
+                reward = (Random.Int(2) == 0) ?
+                    Generator.random(Generator.Category.POTION) : Generator.random(Generator.Category.SCROLL);
+
+            } while (reward == null || Challenges.isItemBlocked(reward));
+            items.add(reward);
+            if(Random.Float()<0.05f+(power-8f)*0.025f) {reward = new StoneOfEnchantment();reward.quantity(1);items.add(reward);}
+            if(Random.Float()<0.05f+(power-8f)*0.025f) {reward = new ScrollOfTransmutation();reward.quantity(1);items.add(reward);}
+            if(Random.Float()<0.05f+(power-8f)*0.025f) {reward = new PotionOfExperience();reward.quantity(1);items.add(reward);}
+            if(Random.Float()<0.05f+(power-8f)*0.025f){
+                do{
+                    switch(Random.Int(3)){
+                        case 0:
+                            reward = Generator.randomArmor();
+                            break;
+                        case 1:
+                            reward = Generator.randomWeapon();
+                            break;
+                        case 2:
+                            reward = Generator.random(Generator.Category.RING);
+                            break;
+                        case 3:
+                            reward = Generator.random(Generator.Category.WAND);
+                            break;
                     }
                 }while (reward == null || Challenges.isItemBlocked(reward));
-                if(reward.isUpgradable()){
-                    reward.upgrade();
-                    if(Random.Int(8)==0){
-                        reward.upgrade();
-                    }
-                    if(Random.Int(8)==0){
-                        reward.upgrade();
+                if(reward.isUpgradable()) {
+                    reward.cursed = false;
+                    reward.level(2);
+                    for(int i=0; i<4; ++i){
+                        if(Random.Float()<0.12f+(power-8f)*0.03f){
+                            reward.upgrade();
+                        }
                     }
                 }
                 items.add(reward);
             }
         }else{
             do {
-                switch(Random.Int(2)){
-                    case 1:
-                        reward = Generator.random(Generator.Category.SEED);
-                        break;
-                    case 0: default:
-                        reward =  Generator.random(Generator.Category.STONE);
-                        break;
-                }
+                reward = (Random.Int(2) == 0) ?
+                    Generator.random(Generator.Category.POTION) : Generator.random(Generator.Category.SCROLL);
             } while (reward == null || Challenges.isItemBlocked(reward));
             reward.quantity(2);
             items.add(reward);
-
-            if(Random.Int(4)==0) {reward = new StoneOfEnchantment();reward.quantity(1);items.add(reward);}
-            if(Random.Int(4)==0) {reward = new ScrollOfTransmutation();reward.quantity(1);items.add(reward);}
-            if(Random.Int(4)==0) {reward = new PotionOfExperience();reward.quantity(1);items.add(reward);}
-            if(Random.Int(5)==0){
+            if(Random.Float()<0.25f+(power-16f)*0.0125f) {reward = new StoneOfEnchantment();reward.quantity(1);items.add(reward);}
+            if(Random.Float()<0.25f+(power-16f)*0.0125f) {reward = new ScrollOfTransmutation();reward.quantity(1);items.add(reward);}
+            if(Random.Float()<0.25f+(power-16f)*0.0125f) {reward = new PotionOfExperience();reward.quantity(1);items.add(reward);}
+            if(Random.Float()<0.25f+(power-16f)*0.0125f){
                 do{
                     switch(Random.Int(3)){
                         case 0:
-                            reward = Generator.randomWeapon();
+                            reward = Generator.randomArmor();
                             break;
                         case 1:
-                            reward = Generator.random(Generator.Category.RING);
+                            reward = Generator.randomWeapon();
                             break;
                         case 2:
+                            reward = Generator.random(Generator.Category.RING);
+                            break;
+                        case 3:
                             reward = Generator.random(Generator.Category.WAND);
+                            break;
                     }
                 }while (reward == null || Challenges.isItemBlocked(reward));
                 if(reward.isUpgradable()) {
                     reward.cursed = false;
-                    if (power > 12.6f) {
-                        reward.level(Random.Int(4, 7));
-                    } else if (power > 9.9f) {
-                        reward.level(Random.Int(3, 6));
-                    } else {
-                        reward.level(Random.Int(2, 5));
+                    reward.level(4);
+                    for(int i=0; i<5; ++i){
+                        if(Random.Float()<0.3f+(power-16f)*0.0125f){
+                            reward.upgrade();
+                        }
                     }
                 }
                 items.add(reward);
@@ -1018,6 +1034,8 @@ public class MimicForChallenge extends Mimic {
             lvl = (trickMod>>(2*i))&0x3;
             if(lvl>0) desc.append(Messages.get(this, "trick_"+(i + 1), lvl));
         }
+
+        desc.append(Messages.get(this, "power", showPower()));
 
 
         return desc.toString();

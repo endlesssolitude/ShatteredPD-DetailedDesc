@@ -62,6 +62,11 @@ public class GoldenMimicForChallenge extends MimicForChallenge {
     }
 
     @Override
+    public float showPower() {
+        return super.showPower()*1.75f;
+    }
+
+    @Override
     protected void generatePrize() {
         super.generatePrize();
         //all existing prize items are guaranteed uncursed, and +1
@@ -75,7 +80,7 @@ public class GoldenMimicForChallenge extends MimicForChallenge {
                 if (i instanceof Armor && ((Armor) i).hasCurseGlyph()){
                     ((Armor) i).inscribe(null);
                 }
-                if (!(i instanceof MissileWeapon)){
+                if (!(i instanceof MissileWeapon) && i.level() < 6){
                     i.upgrade();
                 }
             }

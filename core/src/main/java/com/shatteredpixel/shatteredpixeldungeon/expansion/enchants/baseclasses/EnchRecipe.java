@@ -163,7 +163,7 @@ public enum EnchRecipe{
     public static EnchRecipe searchForRecipe(ArrayList<Class<? extends Item>> in){
         for(EnchRecipe recipe: EnchRecipe.values()) {
             if(in.size()<recipe.input.size()) continue;
-            ArrayList<Class<? extends Item>> recipe_to_consume = recipe.input;
+            ArrayList<Class<? extends Item>> recipe_to_consume = new ArrayList<>(recipe.input);
             for (Class<? extends Item> itemClass : in) {
                 recipe_to_consume.remove(itemClass);
             }

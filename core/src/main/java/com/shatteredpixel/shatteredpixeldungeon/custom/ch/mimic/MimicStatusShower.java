@@ -24,7 +24,7 @@ public class MimicStatusShower extends Buff {
                 stateFire = GameScene.emitter();
             stateFire.pos(target.sprite);
             double logPower = Math.log(((MimicForChallenge) target).showPower()) / 0.693;
-            stateFire.pour(MimicParticle.FACTORY, (float) (1.15f / (logPower * logPower + 1f)));
+            stateFire.pour(MimicParticle.FACTORY, (float) (1.5f / (logPower * logPower + 1f)));
         } else {
             if (stateFire != null) {
                 stateFire.on = false;

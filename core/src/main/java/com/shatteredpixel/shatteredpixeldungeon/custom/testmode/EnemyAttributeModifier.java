@@ -90,11 +90,11 @@ public class EnemyAttributeModifier extends TestItem{
                     if(index == 0){
                         locked = true;
                         execute(curUser, AC_APPLY);
+                        GLog.i(M.L(this, "lock_on"));
                     }
                     super.onSelect(index);
                 }
             });
-            GLog.i(M.L(this, "lock_on"));
         }else if(action.equals(AC_CLEAR)){
             if(!applied) {
                 for (int i = 0; i < 6; ++i) {

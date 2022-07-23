@@ -22,6 +22,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.levels;
 
 import com.shatteredpixel.shatteredpixeldungeon.Bones;
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
@@ -34,6 +35,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.GoldenMimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Statue;
+import com.shatteredpixel.shatteredpixeldungeon.custom.ch.mimic.GoldenMimicForChallenge;
+import com.shatteredpixel.shatteredpixeldungeon.custom.ch.mimic.MimicForChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -328,6 +331,10 @@ public abstract class RegularLevel extends Level {
 		// drops 3/4/5 items 60%/30%/10% of the time
 		int nItems = 3 + Random.chances(new float[]{6, 3, 1});
 
+		if(Dungeon.isChallenged(Challenges.MIMIC_DUNGEON)){
+			nItems += 3;
+		}
+
 		if (feeling == Feeling.LARGE){
 			nItems += 2;
 		}
@@ -344,45 +351,71 @@ public abstract class RegularLevel extends Level {
 			}
 
 			Heap.Type type = null;
-			switch (Random.Int( 20 )) {
-			case 0:
-				type = Heap.Type.SKELETON;
-				break;
-			case 1:
-			case 2:
-			case 3:
-			case 4:
-				type = Heap.Type.CHEST;
-				break;
-			case 5:
-				if (Dungeon.depth > 1 && findMob(cell) == null){
-					mobs.add(Mimic.spawnAt(cell, toDrop));
+			if (Dungeon.isChallenged(Challenges.MIMIC_DUNGEON)) {
+				if(findMob(cell) == null) {
+					if (toDrop instanceof Artifact || (toDrop.isUpgradable() && toDrop.level() > 1) || Random.Int(10)==0) {
+						mobs.add(GoldenMimicForChallenge.spawnAt(cell, toDrop, GoldenMimicForChallenge.class));
+					}else{
+						mobs.add(MimicForChallenge.spawnAt(cell, toDrop));
+					}
 					continue;
+				}else{
+					type = Heap.Type.CHEST;
 				}
-				type = Heap.Type.CHEST;
-				break;
-			default:
-				type = Heap.Type.HEAP;
-				break;
-			}
 
-			if ((toDrop instanceof Artifact && Random.Int(2) == 0) ||
-					(toDrop.isUpgradable() && Random.Int(4 - toDrop.level()) == 0)){
-
-				if (Dungeon.depth > 1 && Random.Int(10) == 0 && findMob(cell) == null){
-					mobs.add(Mimic.spawnAt(cell, toDrop, GoldenMimic.class));
+				if (toDrop instanceof Artifact ||
+					(toDrop.isUpgradable() && Random.Int(4 - toDrop.level()) == 0)) {
+						Heap dropped = drop(toDrop, cell);
+						if (heaps.get(cell) == dropped) {
+							dropped.type = Heap.Type.LOCKED_CHEST;
+							addItemToSpawn(new GoldenKey(Dungeon.depth));
+						}
 				} else {
 					Heap dropped = drop(toDrop, cell);
-					if (heaps.get(cell) == dropped) {
-						dropped.type = Heap.Type.LOCKED_CHEST;
-						addItemToSpawn(new GoldenKey(Dungeon.depth));
-					}
+					dropped.type = type;
 				}
-			} else {
-				Heap dropped = drop( toDrop, cell );
-				dropped.type = type;
-				if (type == Heap.Type.SKELETON){
-					dropped.setHauntedIfCursed();
+
+			}else {
+				switch (Random.Int(20)) {
+					case 0:
+						type = Heap.Type.SKELETON;
+						break;
+					case 1:
+					case 2:
+					case 3:
+					case 4:
+						type = Heap.Type.CHEST;
+						break;
+					case 5:
+						if (Dungeon.depth > 1 && findMob(cell) == null) {
+							mobs.add(Mimic.spawnAt(cell, toDrop));
+							continue;
+						}
+						type = Heap.Type.CHEST;
+						break;
+					default:
+						type = Heap.Type.HEAP;
+						break;
+				}
+
+				if ((toDrop instanceof Artifact && Random.Int(2) == 0) ||
+					(toDrop.isUpgradable() && Random.Int(4 - toDrop.level()) == 0)) {
+
+					if (Dungeon.depth > 1 && Random.Int(10) == 0 && findMob(cell) == null) {
+						mobs.add(Mimic.spawnAt(cell, toDrop, GoldenMimic.class));
+					} else {
+						Heap dropped = drop(toDrop, cell);
+						if (heaps.get(cell) == dropped) {
+							dropped.type = Heap.Type.LOCKED_CHEST;
+							addItemToSpawn(new GoldenKey(Dungeon.depth));
+						}
+					}
+				} else {
+					Heap dropped = drop(toDrop, cell);
+					dropped.type = type;
+					if (type == Heap.Type.SKELETON) {
+						dropped.setHauntedIfCursed();
+					}
 				}
 			}
 			
