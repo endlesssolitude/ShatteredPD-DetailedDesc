@@ -163,14 +163,11 @@ public enum EnchRecipe{
     public static EnchRecipe searchForRecipe(ArrayList<Class<? extends Item>> in){
         for(EnchRecipe recipe: EnchRecipe.values()) {
             if(in.size()<recipe.input.size()) continue;
-            boolean contain=true;
+            ArrayList<Class<? extends Item>> recipe_to_consume = recipe.input;
             for (Class<? extends Item> itemClass : in) {
-                if(!recipe.input.contains(itemClass)){
-                    contain=false;
-                    break;
-                }
+                recipe_to_consume.remove(itemClass);
             }
-            if(contain){
+            if(recipe_to_consume.isEmpty()){
                 return recipe;
             }
         }

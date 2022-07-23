@@ -2,6 +2,7 @@ package com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.sewer;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Rat;
@@ -16,7 +17,7 @@ import com.watabou.utils.Random;
 
 public class RatH extends Mob {
     {
-        immunities.add(Corruption.class);
+        immunities.add(AllyBuff.class);
 
         spriteClass = RatSprite.class;
 
@@ -65,7 +66,6 @@ public class RatH extends Mob {
         while (toSummon-- > 0) {
             AlbinoH white = new AlbinoH();
             white.pos = Dungeon.level.randomRespawnCell(white);
-            white.setModifier(Dungeon.hero.lvl / 2 , true);
             GameScene.add(white, 1f);
             white.beckon(pos);
 

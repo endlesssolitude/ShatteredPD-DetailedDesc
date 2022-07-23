@@ -3,6 +3,7 @@ package com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.prison;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
@@ -43,7 +44,7 @@ public class SkeletonH extends Mob {
     }
 
     {
-        immunities.add(Corruption.class);
+        immunities.add(AllyBuff.class);
     }
 
     protected int revived = 0;

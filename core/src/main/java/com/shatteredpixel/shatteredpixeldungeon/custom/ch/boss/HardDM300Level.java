@@ -288,8 +288,11 @@ public class HardDM300Level extends Level {
     public int randomRespawnCell(Char ch) {
         //hero should not fall outside of arena.
         if(/*ch instanceof Hero*/true){
-            int[] area = RangeMap.centeredRect(entrance(), 1, 1);
-            return entrance() + area[Random.Int(area.length)];
+            int cell = -1;
+            do {
+                cell = entrance() + PathFinder.NEIGHBOURS8[Random.Int(8)];
+            } while (!passable[cell]);
+            return cell;
         }
         return super.randomRespawnCell(ch);
     }

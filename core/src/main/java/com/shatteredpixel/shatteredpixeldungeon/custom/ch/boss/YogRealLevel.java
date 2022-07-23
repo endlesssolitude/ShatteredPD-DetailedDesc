@@ -24,6 +24,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
 import java.util.HashMap;
@@ -171,8 +172,11 @@ public class YogRealLevel extends Level {
     public int randomRespawnCell(Char ch) {
         //hero should not fall outside of arena.
         if(/*ch instanceof Hero*/true){
-            int[] area = RangeMap.centeredRect(entrance(), 2, 2);
-            return entrance() + area[Random.Int(area.length)];
+            int cell = -1;
+            do {
+                cell = entrance() + PathFinder.NEIGHBOURS8[Random.Int(8)];
+            } while (!passable[cell]);
+            return cell;
         }
         return super.randomRespawnCell(ch);
     }

@@ -3,6 +3,7 @@ package com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.city;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
@@ -40,7 +41,7 @@ public class SeniorMonkH extends MonkH {
         hitsToDisarm = 99999;
     }
     {
-        immunities.add(Corruption.class);
+        immunities.add(AllyBuff.class);
     }
 
     @Override

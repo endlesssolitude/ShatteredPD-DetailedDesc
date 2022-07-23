@@ -1,6 +1,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.sewer;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Snake;
@@ -15,7 +16,7 @@ import com.watabou.utils.Random;
 
 public class SnakeH extends Mob {
     {
-        immunities.add(Corruption.class);
+        immunities.add(AllyBuff.class);
     }
     {
         HT = HP = 5;

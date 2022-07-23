@@ -34,7 +34,7 @@ public class Cursed extends Inscription {
             if(left <=0){
                 detach();
             }
-            if(target.HP <= Math.floor(target.HT * .95)){
+            if(target.HP <= Math.floor(target.HT * .85)){
                 target.HP = 0;
                 if(target == Dungeon.hero){
                     if(!Dungeon.hero.isAlive()) {

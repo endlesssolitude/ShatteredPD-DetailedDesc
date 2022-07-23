@@ -66,14 +66,14 @@ public class YogReal extends Boss{
     {
         initProperty();
         initBaseStatus(0, 0, 1, 0, 1200, 0, 0);
-        initStatus(500);
+        initStatus(666);
 
         spriteClass = YogSprite.class;
         properties.add(Property.IMMOVABLE);
         properties.add(Property.DEMONIC);
 
         //see all the map
-        viewDistance = 16;
+        viewDistance = 99;
         state=HUNTING;
     }
 

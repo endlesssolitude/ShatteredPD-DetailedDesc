@@ -48,7 +48,7 @@ public class ThiefH extends Mob{
     }
 
     {
-        immunities.add(Corruption.class);
+        immunities.add(AllyBuff.class);
     }
 
     @Override

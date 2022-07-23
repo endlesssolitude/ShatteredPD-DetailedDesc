@@ -1,18 +1,18 @@
 package com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.hall;
 
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 
 public class EyeImage extends EyeH{
     {
         maxLvl = -10000;
-        immunities.add(Corruption.class);
         EXP = 25;
         HT = HP = 1;
         spriteClass = EyeImageSprite.class;
     }
 
     {
-        immunities.add(Corruption.class);
+        immunities.add(AllyBuff.class);
     }
 
     @Override

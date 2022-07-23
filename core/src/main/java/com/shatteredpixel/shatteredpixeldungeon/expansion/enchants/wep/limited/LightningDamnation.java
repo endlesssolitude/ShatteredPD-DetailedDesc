@@ -34,8 +34,8 @@ public class LightningDamnation extends CountInscription {
             Char aim = findLowestHealth(attacker);
             if(aim != null) {
                 lightningStrike(aim);
+                consume(weapon, attacker);
             }
-            consume(weapon, attacker);
 
             VirtualActor.delay(Math.max(0.5f, Game.elapsed * Actor.chars().size() * 2f));
         }

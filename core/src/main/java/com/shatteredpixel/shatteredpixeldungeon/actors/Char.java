@@ -40,7 +40,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ChampionEnemy;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Charm;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chill;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corrosion;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Doom;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Dread;
@@ -76,7 +75,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.En
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Elemental;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.MirrorImage;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.PrismaticImage;
-import com.shatteredpixel.shatteredpixeldungeon.expansion.mergeManagers.VirtualProc;
+import com.shatteredpixel.shatteredpixeldungeon.expansion.mergeManagers.CombatModifier;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.AntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Potential;
@@ -86,7 +85,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRetributio
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfPsionicBlast;
-import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAggression;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfFireblast;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfFrost;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLightning;
@@ -381,8 +379,10 @@ public abstract class Char extends Actor {
 			if ( buff(Weakness.class) != null ){
 				dmg *= 0.67f;
 			}
-			
+
+			dmg = CombatModifier.INSTANCE.attackModify(this, enemy, dmg);
 			int effectiveDamage = enemy.defenseProc( this, Math.round(dmg) );
+			dr = CombatModifier.INSTANCE.defenseModify(this, enemy, dr, effectiveDamage);
 			effectiveDamage = Math.max( effectiveDamage - dr, 0 );
 
 			//vulnerable specifically applies after armor reductions
@@ -484,6 +484,8 @@ public abstract class Char extends Actor {
 			acuRoll *= buff.evasionAndAccuracyFactor();
 		}
 		acuRoll *= AscensionChallenge.statModifier(attacker);
+
+		acuRoll = CombatModifier.INSTANCE.accuracyModify(attacker, defender, acuRoll);
 		
 		float defRoll = Random.Float( defStat );
 		if (defender.buff(Bless.class) != null) defRoll *= 1.25f;
@@ -492,6 +494,8 @@ public abstract class Char extends Actor {
 			defRoll *= buff.evasionAndAccuracyFactor();
 		}
 		defRoll *= AscensionChallenge.statModifier(defender);
+
+		defRoll = CombatModifier.INSTANCE.evasionModify(attacker, defender, defRoll);
 		
 		return (acuRoll * accMulti) >= defRoll;
 	}
@@ -638,7 +642,7 @@ public abstract class Char extends Actor {
 			dmg = endure.enforceDamagetakenLimit(dmg);
 		}
 
-		dmg = VirtualProc.INSTANCE.damage(this, dmg, src);
+		dmg = CombatModifier.INSTANCE.damage(this, dmg, src);
 
 		int shielded = dmg;
 		//FIXME: when I add proper damage properties, should add an IGNORES_SHIELDS property to use here.
@@ -765,8 +769,14 @@ public abstract class Char extends Actor {
 			}
 		}
 
+		if(!CombatModifier.INSTANCE.preAddBuff(this, buff)){
+			return;
+		}
+
 		buffs.add( buff );
 		if (Actor.chars().contains(this)) Actor.add( buff );
+
+		CombatModifier.INSTANCE.postAddBuff(this, buff);
 
 		if (sprite != null && buff.announced)
 			switch(buff.type){

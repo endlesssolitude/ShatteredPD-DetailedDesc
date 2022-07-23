@@ -42,6 +42,7 @@ import com.shatteredpixel.shatteredpixeldungeon.custom.ch.boss.HardDKLevel;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.boss.HardDM300Level;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.boss.HardGooLevel;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.boss.HardTenguLevel;
+import com.shatteredpixel.shatteredpixeldungeon.custom.ch.boss.NewHDKLevel;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.boss.YogRealLevel;
 import com.shatteredpixel.shatteredpixeldungeon.items.Amulet;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
@@ -323,7 +324,7 @@ public class Dungeon {
 					level = new CityLevel();
 					break;
 				case 20:
-					if((Statistics.boss_enhance & 0x8) != 0) level = new HardDKLevel();
+					if((Statistics.boss_enhance & 0x8) != 0) level = new NewHDKLevel();//HardDKLevel();
 					else level = new CityBossLevel();
 					break;
 				case 21:

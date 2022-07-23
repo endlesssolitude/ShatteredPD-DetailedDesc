@@ -1,6 +1,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.custom.ch.boss;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Dread;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRetribution;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfPsionicBlast;
@@ -22,6 +23,7 @@ public class Boss extends Mob {
         immunities.add(Grim.class);
         immunities.add(ScrollOfPsionicBlast.class);
         immunities.add(ScrollOfRetribution.class);
+        immunities.add(Dread.class);
     }
 
     protected void initBaseStatus(float min, float max, float acc, float eva, float ht, float mid, float mad) {

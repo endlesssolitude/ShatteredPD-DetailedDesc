@@ -3,6 +3,7 @@ package com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.city;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Degrade;
@@ -33,7 +34,7 @@ import static com.shatteredpixel.shatteredpixeldungeon.items.Item.updateQuickslo
 
 public class WarlockH extends Mob implements Callback {
     {
-        immunities.add(Corruption.class);
+        immunities.add(AllyBuff.class);
 
         spriteClass = WarlockHSprite.class;
 

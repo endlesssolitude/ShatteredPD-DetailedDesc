@@ -42,10 +42,12 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.Sh
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.Endure;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.ChallengeBag;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.boss.BossTome;
+import com.shatteredpixel.shatteredpixeldungeon.custom.ch.boss.HDKItem;
 import com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.EnemyTome;
 import com.shatteredpixel.shatteredpixeldungeon.custom.dict.DictBook;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.BackpackCleaner;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.CustomWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.EnemyAttributeModifier;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.ImmortalShieldAffecter;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.LevelTeleporter;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.MobPlacer;
@@ -398,6 +400,13 @@ public enum HeroClass {
 			Dungeon.LimitedDrops.MAGICAL_HOLSTER.drop();
 
 			new WandOfReflectDisintegration().identify().collect();
+
+			new EnemyAttributeModifier().collect();
+			/*
+			HDKItem.KingAmulet ka = new HDKItem.KingAmulet();
+			ka.setUses(999);
+			ka.collect();
+			 */
 
 		}
 	}

@@ -41,7 +41,6 @@ public class RepeatedCallback extends Visual {
         count = triggerTimes.length;
         simple = false;
         this.callback = callback;
-        VirtualActor.delaySoft(triggerTimes[0] + Game.elapsed, null);
     }
 
     private void initSimple(float step, int repeats, Callback callback){
@@ -68,11 +67,11 @@ public class RepeatedCallback extends Visual {
                 if(callback != null) callback.call();
             }
         }else{
-            time += Game.elapsed;
             float current = times.getFirst();
             if(time>current){
                 --count;
                 if(callback != null) callback.call();
+                times.removeFirst();
             }
         }
     }

@@ -3,6 +3,7 @@ package com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.cave;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chill;
@@ -54,7 +55,7 @@ public abstract class ShamanH extends Mob {
         lootChance = 0.1f; //initially, see rollToDropLoot
     }
     {
-        immunities.add(Corruption.class);
+        immunities.add(AllyBuff.class);
     }
     //avoid interfering with existing zaps.
     protected int zapCate = 0;
@@ -250,7 +251,7 @@ public abstract class ShamanH extends Mob {
             }
         }
 
-        return Math.round(Random.NormalIntRange(6, 12)*(1f+detached*0.47f));
+        return Math.round(Random.NormalIntRange(6, 12)*(1f+detached*0.5f));
     }
 
     public void iceZapFx(Char from, int target){

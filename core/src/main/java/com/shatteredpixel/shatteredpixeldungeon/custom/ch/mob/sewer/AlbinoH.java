@@ -1,6 +1,8 @@
 package com.shatteredpixel.shatteredpixeldungeon.custom.ch.mob.sewer;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
@@ -15,60 +17,30 @@ public class AlbinoH extends Mob {
     {
         spriteClass = AlbinoSprite.class;
 
-        HP = HT = 15;
+        HP = HT = 15 + Dungeon.depth * 4 - 4;
+        defenseSkill = 6 + Dungeon.depth - 1;
         EXP = 3;
 
         loot = new MysteryMeat();
         lootChance = 1f;
     }
+
     {
-        immunities.add(Corruption.class);
+        immunities.add(AllyBuff.class);
     }
-
-    private int modifier = 0;
-
-    public void setModifier(int modifier, boolean init) {
-        this.modifier = Math.min(modifier, 5);
-        setAttribute(init);
-    }
-
-    @Override
-    public void storeInBundle(Bundle bundle) {
-        super.storeInBundle(bundle);
-        bundle.put("modifier", modifier);
-    }
-
-    @Override
-    public void restoreFromBundle(Bundle bundle) {
-        super.restoreFromBundle(bundle);
-        modifier = bundle.getInt("modifier");
-        setAttribute(false);
-    }
-
-    public void setAttribute(boolean init){
-        HT = 15 + 3 * modifier + (modifier > 20? modifier*2-40 : 0);
-        defenseSkill = 4 + modifier;
-        maxLvl = Math.min(4 + modifier, 22);
-        EXP = Math.min(2 + modifier/4, 7);
-
-        if(init){
-            HP = HT;
-        }
-    }
-
     @Override
     public int damageRoll() {
-        return Random.IntRange(1, 4) + modifier;
+        return Random.IntRange(1, 4 + Dungeon.depth);
     }
 
     @Override
     public int attackSkill(Char target) {
-        return 10 + modifier*2;
+        return 12 + 2*Dungeon.depth;
     }
 
     @Override
     public int drRoll() {
-        return Random.IntRange(0, 1) + Random.IntRange(0, modifier);
+        return Random.IntRange(0, 1+Dungeon.depth);
     }
 
     @Override
