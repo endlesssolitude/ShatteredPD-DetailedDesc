@@ -252,7 +252,7 @@ public class TestMelee extends TestGenerator {
             createWeaponImage(all);
 
             t_selectedWeapon = PixelScene.renderTextBlock("", 6);
-            t_selectedWeapon.text(Messages.get(this, "selected", Messages.get(all[weapon_id], "name")));
+            t_selectedWeapon.text(Messages.get(this, "selected", Messages.get(all[Math.min(weapon_id, all.length-1)], "name")));
             t_selectedWeapon.maxWidth(WIDTH);
             add(t_selectedWeapon);
 
@@ -351,7 +351,7 @@ public class TestMelee extends TestGenerator {
         }
 
         private void updateSelectedWeaponText() {
-            t_selectedWeapon.text(Messages.get(this, "selected", Messages.get(all[weapon_id], "name")));
+            t_selectedWeapon.text(Messages.get(this, "selected", Messages.get(all[Math.min(weapon_id, all.length-1)], "name")));
             layout();
         }
 

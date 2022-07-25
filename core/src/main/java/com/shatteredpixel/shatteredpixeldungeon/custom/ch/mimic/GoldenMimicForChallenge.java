@@ -63,7 +63,7 @@ public class GoldenMimicForChallenge extends MimicForChallenge {
 
     @Override
     public float showPower() {
-        return super.showPower()*1.75f;
+        return super.showPower()*1.9f;
     }
 
     @Override

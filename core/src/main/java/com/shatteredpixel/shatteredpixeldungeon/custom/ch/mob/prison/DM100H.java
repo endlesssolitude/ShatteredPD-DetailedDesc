@@ -54,7 +54,7 @@ public class DM100H extends Mob implements Callback {
         maxLvl = 13;
 
         loot = Generator.Category.SCROLL;
-        lootChance = 0.25f;
+        lootChance = 0.2f;
 
         properties.add(Property.ELECTRIC);
         properties.add(Property.INORGANIC);
@@ -131,7 +131,7 @@ public class DM100H extends Mob implements Callback {
         if (Dungeon.hero.lvl <= maxLvl + 2){
             float chance = 0.02f;
             chance *= RingOfWealth.dropChanceMultiplier( Dungeon.hero );
-            chance = Math.max(chance, 0.1f);
+            chance = Math.max(chance, 0.03f);
             if(Random.Float()<chance){
                 WandOfLightning wandOfLightning = new WandOfLightning();
                 wandOfLightning.level(Random.chances(new float[]{0.6f-chance*2, 0.3f + chance, 0.1f+chance}));

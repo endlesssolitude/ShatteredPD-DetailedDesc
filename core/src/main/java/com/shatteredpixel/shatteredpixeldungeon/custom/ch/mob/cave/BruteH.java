@@ -201,9 +201,9 @@ public class BruteH extends Mob {
     @Override
     public void rollToDropLoot(){
         if (Dungeon.hero.lvl <= maxLvl + 2){
-            float chance = 0.03f;
+            float chance = 0.02f;
             chance *= RingOfWealth.dropChanceMultiplier( Dungeon.hero );
-            chance = Math.min(0.06f, chance);
+            chance = Math.min(0.03f, chance);
             if(Random.Float()<chance){
                 Ankh a = new Ankh();
                 if(Random.Int(3)==0) a.bless();

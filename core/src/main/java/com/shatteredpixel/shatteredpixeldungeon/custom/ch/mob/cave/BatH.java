@@ -129,7 +129,7 @@ public class BatH extends Mob {
         if (Dungeon.hero.lvl <= maxLvl + 2){
             float chance = 0.02f;
             chance *= RingOfWealth.dropChanceMultiplier( Dungeon.hero );
-            chance = Math.min(0.06f, chance);
+            chance = Math.min(0.03f, chance);
             if(Random.Float()<chance){
                 Ring r;
                 r = Random.Int(2)==0? new RingOfHaste() : new RingOfEvasion();

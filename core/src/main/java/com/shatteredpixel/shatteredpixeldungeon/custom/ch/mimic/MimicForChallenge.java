@@ -24,6 +24,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Weakness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Tengu;
 import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
@@ -31,13 +32,17 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Stone;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.AlchemicalCatalyst;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.ExoticPotion;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRetribution;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfPsionicBlast;
+import com.shatteredpixel.shatteredpixeldungeon.items.spells.ArcaneCatalyst;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfEnchantment;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
@@ -49,9 +54,11 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.traps.TeleportationTrap;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
+import com.watabou.utils.Reflection;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -844,6 +851,178 @@ public class MimicForChallenge extends Mimic {
         adjustStats();
     }
 
+
+    //stone, seed
+    protected void generateLevelOneConsumable(float power, ArrayList<Item> loots){
+        Item reward = null;
+        float common_chance;
+        float rare_chance;
+        if(power < 2f){
+            common_chance = 0.3f + (power - 1f) * 0.1f;
+            rare_chance = (power - 1f) * 0.05f;
+        }else if(power < 4f){
+            common_chance = 0.4f + (power - 2f) * 0.1f;
+            rare_chance = 0.05f + (power - 2f) * 0.05f;
+        }else if(power < 8f){
+            common_chance = 0.6f + (power - 4f) * 0.05f;
+            rare_chance = 0.15f + (power - 4f) * 0.05f;
+        }else{
+            common_chance = 0.8f;
+            rare_chance = 0.4f;
+        }
+        if(Random.Float()<common_chance) {
+            do {
+                reward = (Random.Int(2) == 0) ?
+                    Generator.randomUsingDefaults(Generator.Category.STONE) : Generator.randomUsingDefaults(Generator.Category.SEED);
+            } while (reward == null || Challenges.isItemBlocked(reward));
+            reward.quantity(Random.Float() < rare_chance ? 2 : 1);
+            loots.add(reward);
+        }
+    }
+
+    //scroll, potion
+    protected void generateLevelTwoConsumable(float power, ArrayList<Item> loots){
+        Item reward = null;
+        float common_chance;
+        float rare_chance;
+        if(power < 2f){
+            common_chance = 0f;
+            rare_chance = 0f;
+        }else if(power < 4f){
+            common_chance = 0.15f + (power - 2f) * 0.1f;
+            rare_chance = (power - 2f) * 0.05f;
+        }else if(power < 8f){
+            common_chance = 0.35f + (power - 4f) * 0.075f;
+            rare_chance = 0.1f + (power - 4f) * 0.05f;
+        }else if(power < 16f){
+            common_chance = 0.65f + (power -8f) * 0.025f;
+            rare_chance = 0.3f;
+        }else{
+            common_chance = 0.95f;
+            rare_chance = 0.4f;
+        }
+        if(Random.Float()<common_chance) {
+            do {
+                reward = (Random.Int(2) == 0) ?
+                    Generator.randomUsingDefaults(Generator.Category.SCROLL) : Generator.randomUsingDefaults(Generator.Category.POTION);
+            } while (reward == null || Challenges.isItemBlocked(reward));
+            reward.quantity(Random.Float() < rare_chance ? 2 : 1);
+            loots.add(reward);
+        }
+    }
+
+    //stone, seed
+    protected void generateMissile(float power, ArrayList<Item> loots){
+        Item reward = null;
+        float common_chance;
+        float rare_chance;
+        if(power < 2f){
+            common_chance = 0.3f;
+            rare_chance = (power - 1f) * 0.4f;
+        }else if(power < 4f){
+            common_chance = 0.4f;
+            rare_chance = 0.4f;
+        }else{
+            common_chance = 0f;
+            rare_chance = 0f;
+        }
+        if(Random.Float()<common_chance) {
+            do {
+                reward = Generator.randomMissile();
+            } while (reward == null || Challenges.isItemBlocked(reward));
+            reward.quantity(Random.Float() < rare_chance ? Random.IntRange(2, 3): 1);
+            loots.add(reward);
+        }
+    }
+
+    //catalyst
+    protected void generateCat(float power, ArrayList<Item> loots){
+        Item reward = null;
+        float common_chance;
+        if(power < 2f){
+            common_chance = 0f;
+        }else if(power < 4f){
+            common_chance = (power-2f)*0.1f;
+        }else if(power < 8f){
+            common_chance = (power-4f)*0.025f + 0.2f;
+        }else{
+            common_chance = 0f;
+        }
+        if(Random.Float()<common_chance) {
+            do {
+                reward = Random.Int(2) == 0 ? new ArcaneCatalyst() : new AlchemicalCatalyst();
+            } while (reward == null || Challenges.isItemBlocked(reward));
+            loots.add(reward);
+        }
+    }
+
+    //scroll, potion
+    protected void generateLevelThreeConsumable(float power, ArrayList<Item> loots){
+        Item reward = null;
+        float common_chance;
+        float rare_chance;
+        if(power < 4f){
+            common_chance = 0f;
+            rare_chance = 0f;
+        }else if(power < 8f){
+            common_chance = 0.1f + (power - 4f) * 0.075f;
+            rare_chance = (power - 4f) * 0.05f;
+        }else if(power < 16f){
+            common_chance = 0.4f + (power - 8f) * 0.02f;
+            rare_chance = 0.2f + (power - 8f) * 0.02f;
+        }else{
+            common_chance = 0.55f;
+            rare_chance = 0.35f;
+        }
+        if(Random.Float()<common_chance) {
+            do {
+                switch (Random.Int(3)) {
+                    case 0:
+                        reward = Generator.randomUsingDefaults(Generator.Category.POTION);
+                        reward = Reflection.newInstance(ExoticPotion.regToExo.get(reward.getClass()));
+                        break;
+                    case 1:
+                        reward = Generator.randomUsingDefaults(Generator.Category.SCROLL);
+                        reward = Reflection.newInstance(ExoticScroll.regToExo.get(reward.getClass()));
+                        break;
+                    case 2:
+                        reward = new Bomb();
+                        break;
+                }
+            } while (reward == null || Challenges.isItemBlocked(reward));
+            reward.quantity(Random.Float() < rare_chance ? 2 : 1);
+            loots.add(reward);
+        }
+    }
+
+    //scroll, potion
+    protected void generateLevelFourConsumable(float power, ArrayList<Item> loots){
+        Item reward = null;
+        float common_chance;
+        if(power < 8f){
+            common_chance = 0f;
+        }else if(power < 16f){
+            common_chance = 0.05f+(power-8f)*0.0125f;
+        }else{
+            common_chance = 0.15f+(power-16f)*0.0125f;
+        }
+        if(Random.Float()<common_chance) {
+            reward = new StoneOfEnchantment();
+            reward.quantity(1);
+            loots.add(reward);
+        }
+        if(Random.Float()<common_chance) {
+            reward = new ScrollOfTransmutation();
+            reward.quantity(1);
+            loots.add(reward);
+        }
+        if(Random.Float()<common_chance) {
+            reward = new PotionOfExperience();
+            reward.quantity(1);
+            loots.add(reward);
+        }
+    }
+
     @Override
     protected void generatePrize(){
 
@@ -851,44 +1030,23 @@ public class MimicForChallenge extends Mimic {
         float power = showPower();
         power = Math.min(power, 32f);
         if(power < 2f){
-            if(Random.Float()<0.15f + (power - 1f)*0.25f){
-                do {
-                    reward = (Random.Int(2)==0)?
-                         Generator.random(Generator.Category.STONE)   :   Generator.random(Generator.Category.SEED);
-                } while (reward == null || Challenges.isItemBlocked(reward));
-                reward.quantity(Random.Float()<(power-1f)*0.05f?2:1);
-                items.add(reward);
-            }
+            generateLevelOneConsumable(power, items);
+            generateLevelTwoConsumable(power, items);
+            generateMissile(power, items);
         }
         else if(power < 4f){
-            do {
-                if(Random.Float()<0.2f + (power-2f)*0.15f){
-                    reward = (Random.Int(2)==0)?
-                        Generator.random(Generator.Category.POTION)   :   Generator.random(Generator.Category.SCROLL);
-                }else{
-                    reward = (Random.Int(2)==0)?
-                        Generator.random(Generator.Category.STONE)   :   Generator.random(Generator.Category.SEED);
-                }
-            } while (reward == null || Challenges.isItemBlocked(reward));
-            reward.quantity(Random.Float()<(power-2f)*0.05f?2:1);
-            items.add(reward);
-            if(Random.Float()<(power-2f)*0.05f){
-                do {
-                    reward = Generator.randomMissile().quantity(Random.Int(1,3));
-                } while (reward == null || Challenges.isItemBlocked(reward));
-            }
-            items.add(reward);
+            generateLevelOneConsumable(power, items);
+            generateLevelTwoConsumable(power, items);
+            generateMissile(power, items);
+            generateCat(power, items);
         }
         else if(power<8f){
-            if(Random.Float()<0.5f + (power-4f)*0.125f) {
-                do {
-                    reward = (Random.Int(2) == 0) ?
-                        Generator.random(Generator.Category.POTION) : Generator.random(Generator.Category.SCROLL);
+            generateLevelOneConsumable(power, items);
+            generateLevelTwoConsumable(power, items);
+            generateCat(power, items);
+            generateLevelThreeConsumable(power, items);
 
-                } while (reward == null || Challenges.isItemBlocked(reward));
-            }
-            items.add(reward);
-            if(Random.Float()<0.05f + (power-4f)*0.025f){
+            if(Random.Float()<0.1f + (power-4f)*0.05f){
                 do {
                     switch(Random.Int(4)) {
                         case 0:
@@ -898,10 +1056,10 @@ public class MimicForChallenge extends Mimic {
                             reward = Generator.randomWeapon();
                             break;
                         case 2:
-                            reward = Generator.random(Generator.Category.RING);
+                            reward = Generator.randomUsingDefaults(Generator.Category.RING);
                             break;
                         case 3:
-                            reward = Generator.random(Generator.Category.WAND);
+                            reward = Generator.randomUsingDefaults(Generator.Category.WAND);
                             break;
                     }
                 } while (reward == null || Challenges.isItemBlocked(reward));
@@ -915,15 +1073,9 @@ public class MimicForChallenge extends Mimic {
                 items.add(reward);
             }
         }else if(power < 16f){
-            do {
-                reward = (Random.Int(2) == 0) ?
-                    Generator.random(Generator.Category.POTION) : Generator.random(Generator.Category.SCROLL);
-
-            } while (reward == null || Challenges.isItemBlocked(reward));
-            items.add(reward);
-            if(Random.Float()<0.05f+(power-8f)*0.025f) {reward = new StoneOfEnchantment();reward.quantity(1);items.add(reward);}
-            if(Random.Float()<0.05f+(power-8f)*0.025f) {reward = new ScrollOfTransmutation();reward.quantity(1);items.add(reward);}
-            if(Random.Float()<0.05f+(power-8f)*0.025f) {reward = new PotionOfExperience();reward.quantity(1);items.add(reward);}
+            generateLevelTwoConsumable(power, items);
+            generateLevelThreeConsumable(power, items);
+            generateLevelFourConsumable(power, items);
             if(Random.Float()<0.05f+(power-8f)*0.025f){
                 do{
                     switch(Random.Int(3)){
@@ -934,18 +1086,18 @@ public class MimicForChallenge extends Mimic {
                             reward = Generator.randomWeapon();
                             break;
                         case 2:
-                            reward = Generator.random(Generator.Category.RING);
+                            reward = Generator.randomUsingDefaults(Generator.Category.RING);
                             break;
                         case 3:
-                            reward = Generator.random(Generator.Category.WAND);
+                            reward = Generator.randomUsingDefaults(Generator.Category.WAND);
                             break;
                     }
                 }while (reward == null || Challenges.isItemBlocked(reward));
                 if(reward.isUpgradable()) {
                     reward.cursed = false;
-                    reward.level(2);
-                    for(int i=0; i<4; ++i){
-                        if(Random.Float()<0.12f+(power-8f)*0.03f){
+                    reward.level(1);
+                    for(int i=0; i<5; ++i){
+                        if(Random.Float()<0.16f+(power-8f)*0.02f){
                             reward.upgrade();
                         }
                     }
@@ -953,16 +1105,10 @@ public class MimicForChallenge extends Mimic {
                 items.add(reward);
             }
         }else{
-            do {
-                reward = (Random.Int(2) == 0) ?
-                    Generator.random(Generator.Category.POTION) : Generator.random(Generator.Category.SCROLL);
-            } while (reward == null || Challenges.isItemBlocked(reward));
-            reward.quantity(2);
-            items.add(reward);
-            if(Random.Float()<0.25f+(power-16f)*0.0125f) {reward = new StoneOfEnchantment();reward.quantity(1);items.add(reward);}
-            if(Random.Float()<0.25f+(power-16f)*0.0125f) {reward = new ScrollOfTransmutation();reward.quantity(1);items.add(reward);}
-            if(Random.Float()<0.25f+(power-16f)*0.0125f) {reward = new PotionOfExperience();reward.quantity(1);items.add(reward);}
-            if(Random.Float()<0.25f+(power-16f)*0.0125f){
+            generateLevelTwoConsumable(power, items);
+            generateLevelThreeConsumable(power, items);
+            generateLevelFourConsumable(power, items);
+            if(Random.Float()<0.33f){
                 do{
                     switch(Random.Int(3)){
                         case 0:
@@ -972,18 +1118,18 @@ public class MimicForChallenge extends Mimic {
                             reward = Generator.randomWeapon();
                             break;
                         case 2:
-                            reward = Generator.random(Generator.Category.RING);
+                            reward = Generator.randomUsingDefaults(Generator.Category.RING);
                             break;
                         case 3:
-                            reward = Generator.random(Generator.Category.WAND);
+                            reward = Generator.randomUsingDefaults(Generator.Category.WAND);
                             break;
                     }
                 }while (reward == null || Challenges.isItemBlocked(reward));
                 if(reward.isUpgradable()) {
                     reward.cursed = false;
-                    reward.level(4);
-                    for(int i=0; i<5; ++i){
-                        if(Random.Float()<0.3f+(power-16f)*0.0125f){
+                    reward.level(3);
+                    for(int i=0; i<6; ++i){
+                        if(Random.Float()<0.32f+(power-16f)*0.0125f){
                             reward.upgrade();
                         }
                     }

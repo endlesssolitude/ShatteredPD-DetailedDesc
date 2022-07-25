@@ -56,6 +56,8 @@ public class ScrollOfUpgradeEater extends InventoryScroll {
                 item.upgrade();
             }
             GLog.p(M.L(this, "upgrade", item.name()));
+            eaten = false;
+            level_stored = 0;
         }
     }
 
