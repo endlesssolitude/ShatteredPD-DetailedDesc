@@ -206,7 +206,7 @@ public class BruteH extends Mob {
             chance = Math.min(0.03f, chance);
             if(Random.Float()<chance){
                 Ankh a = new Ankh();
-                if(Random.Int(3)==0) a.bless();
+                a.bless();
                 Dungeon.level.drop(a, pos).sprite.drop();
             }
         }

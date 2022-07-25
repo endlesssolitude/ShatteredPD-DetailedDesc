@@ -143,12 +143,14 @@ public class NewHDKLevel extends Level {
 
         HDKItem.KingAmulet kingAmulet = new HDKItem.KingAmulet();
         kingAmulet.setUses(3);
-        drop(kingAmulet, HIDDEN_TREASURE);
+        drop(kingAmulet, HIDDEN_TREASURE).type = Heap.Type.LOCKED_CHEST;
 
         Ankh ankh = new Ankh();
         ankh.bless();
         drop(ankh, TREASURE_ROOM_1);
-        drop(new Ankh(), TREASURE_ROOM_1).type= Heap.Type.LOCKED_CHEST;
+        Ankh ankh2 = new Ankh();
+        ankh2.bless();
+        drop(ankh2, TREASURE_ROOM_1).type= Heap.Type.LOCKED_CHEST;
 
         WandOfCorruption woc = new WandOfCorruption();
         woc.level(3);

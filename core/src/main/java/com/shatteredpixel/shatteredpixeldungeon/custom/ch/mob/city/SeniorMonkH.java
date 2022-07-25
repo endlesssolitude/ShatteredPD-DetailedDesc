@@ -36,7 +36,7 @@ public class SeniorMonkH extends MonkH {
     {
         spriteClass = SeniorSprite.class;
         lootChance=1f;
-        loot = new Pasty();
+        loot = new Pasty().quantity(1);
 
         hitsToDisarm = 99999;
     }
@@ -112,9 +112,9 @@ public class SeniorMonkH extends MonkH {
     @Override
     public void rollToDropLoot(){
         if (Dungeon.hero.lvl <= maxLvl + 2){
-            float chance = 0.2f;
+            float chance = 0.1f;
             chance *= RingOfWealth.dropChanceMultiplier( Dungeon.hero );
-            chance = Math.min(0.4f, chance);
+            chance = Math.min(0.15f, chance);
             if(Random.Float()<chance){
                 Ring r;
                 r = Random.Int(2)==0? new RingOfAccuracy() : new RingOfEvasion();

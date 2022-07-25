@@ -806,7 +806,7 @@ public class NewHardDK extends Boss{
         Dungeon.level.drop(key, pos).sprite.drop();
         GoldenKey gkey = new GoldenKey();
         gkey.depth = 20;
-        gkey.quantity(2);
+        gkey.quantity(3);
         Dungeon.level.drop(gkey, pos).sprite.drop();
         Dungeon.level.drop(new KingsCrown(), pos).sprite.drop();
         yell(M.L(this, "defeated"));
