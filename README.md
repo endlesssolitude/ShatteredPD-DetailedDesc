@@ -3,6 +3,8 @@
 
 ## General ##
 
+[THIS PROJECT HAS MOVED TO A NEW REPO!](https://github.com/endlesssolitude/statistical-shattered-pixel-dungeon) So the old repo is deprecated.
+
 A private mod of ShatteredPixelDungeon (Evan) working as a dictionary and a tester.
 
 Aim to help dungeon players know the data and mechanics of game, and have a platform to test game data and mechanics.
